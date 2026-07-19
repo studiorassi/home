@@ -3,903 +3,1947 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio Rassi · Área do Cliente</title>
+  <title>Studio Rassi · Photo & Video</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
+  
+  <!-- OG Image -->
+  <meta property="og:title" content="Studio Rassi · Photo & Video">
+  <meta property="og:description" content="Memórias que começam antes do primeiro abraço">
+  <meta property="og:image" content="https://seudominio.com/assets/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://seudominio.com">
+  <meta property="og:type" content="website">
   
   <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
     /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       background-color: #2C0714;
       color: #f5edea;
       font-family: 'Inter', sans-serif;
-      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #1f0510; }
-    ::-webkit-scrollbar-thumb { background: #D4A3B3; border-radius: 10px; }
-
-    /* ===== HEADER FIXO ===== */
-    .header-dashboard {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(44, 7, 20, 0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
-      padding: 16px 0;
-    }
-    .header-dashboard .container {
-      max-width: 1280px;
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      padding: 0 32px;
     }
-    .header-left {
-      display: flex;
+
+    /* ===== TIPOGRAFIA ===== */
+    .font-script { font-family: 'Great Vibes', cursive; font-weight: 400; }
+    .font-title { font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: -0.3px; }
+    .font-body { font-family: 'Inter', sans-serif; }
+    .text-rose { color: #D4A3B3; }
+    .text-offwhite { color: #f5edea; }
+
+    /* ===== BOTÕES ===== */
+    .btn {
+      display: inline-flex;
       align-items: center;
-      gap: 20px;
-    }
-    .header-left .logo {
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 50px;
       font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: #f5edea;
-      text-decoration: none;
-    }
-    .header-left .logo span { color: #D4A3B3; }
-    .header-left .welcome {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: #d4c5c0;
-    }
-    .header-left .welcome strong {
-      color: #f5edea;
       font-weight: 600;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .credits-badge {
-      background: rgba(212, 163, 179, 0.12);
-      border: 1px solid rgba(212, 163, 179, 0.15);
-      padding: 6px 18px;
-      border-radius: 40px;
       font-size: 0.85rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .credits-badge i {
-      color: #D4A3B3;
-    }
-    .credits-badge strong {
-      color: #D4A3B3;
-      font-size: 1.1rem;
-    }
-    .timer-badge {
-      background: rgba(212, 163, 179, 0.06);
-      border: 1px solid rgba(212, 163, 179, 0.08);
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: #d4c5c0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .timer-badge i {
-      color: #D4A3B3;
-    }
-    .timer-badge .timer {
-      font-weight: 600;
-      color: #f5edea;
-      font-variant-numeric: tabular-nums;
-      min-width: 70px;
-      display: inline-block;
-    }
-    .btn-logout {
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.15);
-      color: #d4c5c0;
-      padding: 6px 18px;
-      border-radius: 40px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
     }
-    .btn-logout:hover {
-      border-color: #D4A3B3;
-      color: #f5edea;
-    }
-
-    /* ===== MAIN ===== */
-    .main-content {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
-    }
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .section-header h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      font-size: 1.4rem;
-      color: #f5edea;
-    }
-    .section-header .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .btn-download {
+    .btn-primary {
       background: #D4A3B3;
       color: #2C0714;
-      border: none;
-      padding: 10px 28px;
-      border-radius: 40px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.4;
-      pointer-events: none;
+      box-shadow: 0 4px 15px rgba(212, 163, 179, 0.3);
     }
-    .btn-download.active {
-      opacity: 1;
-      pointer-events: auto;
-      box-shadow: 0 4px 20px rgba(212, 163, 179, 0.25);
-    }
-    .btn-download.active:hover {
+    .btn-primary:hover {
+      background: #c08b9e;
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.35);
+      box-shadow: 0 8px 25px rgba(212, 163, 179, 0.4);
     }
-    .btn-download i { font-size: 0.9rem; }
-
-    .btn-selecionar-todos {
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.15);
-      color: #d4c5c0;
-      padding: 10px 20px;
-      border-radius: 40px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .btn-selecionar-todos:hover {
-      border-color: #D4A3B3;
+    .btn-outline {
+      border: 2px solid #D4A3B3;
       color: #f5edea;
+      background: rgba(44, 7, 20, 0.5);
+      backdrop-filter: blur(8px);
     }
+    .btn-outline:hover {
+      background: rgba(212, 163, 179, 0.15);
+      border-color: #c08b9e;
+    }
+    .btn-ghost {
+      color: #D4A3B3;
+      background: transparent;
+      padding: 10px 20px;
+    }
+    .btn-ghost:hover { color: #f5edea; }
 
-    /* ===== GRID DE GALERIA (MOSAICO) ===== */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    /* ===== CARD DA GALERIA ===== */
-    .gallery-card {
-      position: relative;
-      background: #1a0510;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      aspect-ratio: 3 / 4;
-      cursor: pointer;
-    }
-    .gallery-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-    }
-    .gallery-card.selected {
-      border-color: #D4A3B3;
-      box-shadow: 0 0 40px rgba(212, 163, 179, 0.12), 0 12px 40px rgba(0,0,0,0.4);
-    }
-
-    /* Imagem com proteção */
-    .gallery-card .img-wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      user-select: none;
-      -webkit-user-select: none;
-      pointer-events: none;
-    }
-    .gallery-card .img-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    /* Marca d'água simulada (pseudo-elemento) */
-    .gallery-card .img-wrapper::after {
-      content: '© Studio Rassi';
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.15);
-      letter-spacing: 1px;
-      background: rgba(0,0,0,0.3);
-      padding: 4px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(4px);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* Overlay de seleção */
-    .gallery-card .select-overlay {
+    /* ===== NAVBAR ===== */
+    .navbar {
+      padding: 16px 0;
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background: linear-gradient(180deg, transparent 50%, rgba(44, 7, 20, 0.7) 100%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      z-index: 100;
+      background: linear-gradient(180deg, rgba(44, 7, 20, 0.85) 0%, transparent 100%);
+    }
+    .navbar-content {
       display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding: 16px;
+      justify-content: space-between;
+      align-items: center;
     }
-    .gallery-card:hover .select-overlay {
-      opacity: 1;
+    
+    /* ===== LOGO ===== */
+    .logo {
+      display: inline-block;
+      line-height: 0;
+      text-decoration: none;
     }
-    .gallery-card.selected .select-overlay {
-      opacity: 1;
+    .logo img {
+      display: block;
+      width: auto;
+      height: 60px;
+      max-width: 200px;
+      transition: all 0.3s ease;
+    }
+    .logo img:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
     }
 
-    .gallery-card .select-btn {
-      background: rgba(212, 163, 179, 0.15);
-      backdrop-filter: blur(8px);
-      border: 1.5px solid rgba(212, 163, 179, 0.3);
-      color: #f5edea;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+    .nav-menu {
       display: flex;
+      gap: 32px;
       align-items: center;
-      justify-content: center;
+    }
+    .nav-menu a {
+      color: #f5edea;
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .nav-menu a:hover { color: #D4A3B3; }
+    .nav-menu .btn-minhas-fotos {
+      background: rgba(212, 163, 179, 0.2);
+      backdrop-filter: blur(8px);
+      border: 2px solid #D4A3B3;
+      color: #f5edea;
+      padding: 8px 24px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1rem;
-      pointer-events: auto;
+      transition: 0.3s;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
-    .gallery-card .select-btn:hover {
-      background: rgba(212, 163, 179, 0.3);
-      transform: scale(1.1);
-    }
-    .gallery-card.selected .select-btn {
+    .nav-menu .btn-minhas-fotos:hover {
       background: #D4A3B3;
       color: #2C0714;
-      border-color: #D4A3B3;
     }
 
-    /* Badge de vídeo */
-    .gallery-card .video-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(44, 7, 20, 0.7);
-      backdrop-filter: blur(8px);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.6rem;
-      color: #D4A3B3;
+    /* ===== MENU HAMBURGUER (MOBILE) ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 101;
+      background: none;
+      border: none;
+      padding: 8px;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 2.5px;
+      background: #f5edea;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 75%;
+      max-width: 320px;
+      height: 100vh;
+      background: rgba(44, 7, 20, 0.98);
+      backdrop-filter: blur(20px);
+      padding: 80px 32px 40px;
+      transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 99;
+      border-left: 1px solid rgba(212, 163, 179, 0.08);
       display: flex;
-      align-items: center;
-      gap: 4px;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      pointer-events: none;
-      user-select: none;
+      flex-direction: column;
+      gap: 24px;
     }
-
-    /* Badge de crédito (custo) */
-    .gallery-card .credit-cost {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(44, 7, 20, 0.7);
-      backdrop-filter: blur(8px);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.6rem;
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #f5edea;
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+    .mobile-menu a:hover {
       color: #D4A3B3;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      pointer-events: none;
-      user-select: none;
+      padding-left: 8px;
+    }
+    .mobile-menu .btn-minhas-fotos-mobile {
+      margin-top: 16px;
+      background: rgba(212, 163, 179, 0.15);
+      border: 2px solid #D4A3B3;
+      color: #f5edea;
+      padding: 14px 24px;
+      border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+    }
+    .mobile-menu .btn-minhas-fotos-mobile:hover {
+      background: #D4A3B3;
+      color: #2C0714;
     }
 
-    /* ===== MODAL ===== */
-    .modal-overlay {
+    /* ===== OVERLAY DO MENU ===== */
+    .menu-overlay {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.6);
+      z-index: 98;
+    }
+    .menu-overlay.active { display: block; }
+
+    /* ===== HERO COM VÍDEO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: #1f0510;
+    }
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(44, 7, 20, 0.75) 0%, 
+        rgba(31, 5, 16, 0.5) 50%,
+        rgba(44, 7, 20, 0.8) 100%
+      );
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 140px 0 60px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .hero-text {
+      flex: 1 1 400px;
+    }
+    .hero-text h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 4rem;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    .hero-text h1 .script {
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      color: #D4A3B3;
+      font-size: 6.5rem;
+      letter-spacing: 2px;
+      text-transform: none;
+      text-shadow: 0 4px 40px rgba(212, 163, 179, 0.25);
+      display: block;
+      line-height: 1.1;
+      margin-bottom: -0.1em;
+    }
+    .hero-text h1 .highlight {
+      color: #D4A3B3;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .hero-text p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: #d4c5c0;
+      max-width: 480px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212, 163, 179, 0.15);
       backdrop-filter: blur(8px);
-      z-index: 999;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #D4A3B3;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== SETA PARA BAIXO ===== */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      color: #D4A3B3;
+      font-size: 2rem;
+      animation: bounceDown 2s ease-in-out infinite;
+      cursor: pointer;
+      text-shadow: 0 0 30px rgba(212, 163, 179, 0.2);
+    }
+    .scroll-down:hover { color: #f5edea; }
+    @keyframes bounceDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(12px); }
+    }
+
+    /* ===== SEÇÕES ===== */
+    .section {
+      padding: 80px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      background: #2C0714;
+    }
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+    .section-title .script {
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      color: #D4A3B3;
+      font-size: 4.8rem;
+      letter-spacing: 2px;
+      text-transform: none;
+      display: block;
+      line-height: 1;
+      margin-bottom: -0.05em;
+      text-shadow: 0 2px 20px rgba(212, 163, 179, 0.15);
+    }
+    .section-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: #d4c5c0;
+      max-width: 640px;
+      line-height: 1.8;
+    }
+
+    /* ===== CARROSSEL ===== */
+    .instagram-section {
+      padding: 80px 0 100px;
+      background: #1f0510;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .instagram-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(212, 163, 179, 0.03) 0%, transparent 60%);
+      animation: rotateGlow 60s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .instagram-header {
+      text-align: center;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 2;
+    }
+    .instagram-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 2.8rem;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      color: #f5edea;
+    }
+    .instagram-header h2 .script {
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      color: #D4A3B3;
+      font-size: 4.5rem;
+      display: block;
+      text-transform: none;
+      line-height: 1;
+      margin-bottom: -0.05em;
+    }
+    .instagram-header .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: #d4c5c0;
+      margin-top: 8px;
+    }
+    .instagram-header .subtitle a {
+      color: #D4A3B3;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .instagram-header .subtitle a:hover {
+      color: #f5edea;
+    }
+
+    /* ===== CARROSSEL (DESKTOP DEFAULT) ===== */
+    .carousel-wrapper {
+      position: relative;
+      max-width: 920px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 12px 0;
+      z-index: 2;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+      gap: 16px;
+      padding: 8px 0;
+    }
+    .carousel-item {
+      position: relative;
+      flex: 0 0 calc(20% - 13px);
+      aspect-ratio: 9 / 16;
+      max-height: 380px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #1a0510;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      transform: translateY(0px) scale(0.92);
+      box-shadow: 0 0 20px rgba(212, 163, 179, 0.05);
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      opacity: 0.7;
+      filter: blur(1px) saturate(0.5);
+    }
+    .carousel-item.active {
+      transform: translateY(0px) scale(1);
+      opacity: 1;
+      filter: blur(0px) saturate(1);
+      border-color: rgba(212, 163, 179, 0.2);
+      box-shadow: 0 0 40px rgba(212, 163, 179, 0.12), 0 8px 30px rgba(0,0,0,0.4);
+      z-index: 3;
+    }
+    .carousel-item.prev, .carousel-item.next {
+      transform: translateY(8px) scale(0.94);
+      opacity: 0.6;
+      filter: blur(0.5px) saturate(0.3);
+    }
+    .carousel-item.far {
+      transform: translateY(16px) scale(0.88);
+      opacity: 0.3;
+      filter: blur(1.5px) saturate(0.1);
+    }
+    .carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .carousel-item:hover img {
+      transform: scale(1.06);
+    }
+    .carousel-item .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 14px 14px;
+      background: linear-gradient(transparent, rgba(44, 7, 20, 0.9) 40%, rgba(44, 7, 20, 0.95));
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .carousel-item.active .overlay {
+      opacity: 1;
+    }
+    .carousel-item .overlay .instagram-icon {
+      color: #D4A3B3;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .carousel-item .overlay .caption {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: #f5edea;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+    }
+
+    /* ===== INDICADORES ===== */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 2;
+    }
+    .carousel-indicators .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(212, 163, 179, 0.12);
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      cursor: pointer;
+      transition: all 0.5s ease;
+    }
+    .carousel-indicators .dot.active {
+      background: #D4A3B3;
+      border-color: #D4A3B3;
+      transform: scale(1.4);
+      box-shadow: 0 0 30px rgba(212, 163, 179, 0.25);
+    }
+
+    /* ===== SETAS ===== */
+    .carousel-arrows {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .carousel-arrows button {
+      pointer-events: auto;
+      background: rgba(44, 7, 20, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      color: #D4A3B3;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .modal-overlay.active {
+    .carousel-arrows button:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      transform: scale(1.1);
+    }
+
+    /* ===== BADGE INSTAGRAM ===== */
+    .instagram-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 8;
+      background: rgba(44, 7, 20, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      border-radius: 40px;
+      padding: 6px 16px;
       display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: #D4A3B3;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    .modal {
-      background: #1f0510;
+    .instagram-badge:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      border-color: #D4A3B3;
+    }
+
+    /* ===== BIOGRAFIA ===== */
+    .biografia-section {
+      padding: 80px 0;
+      background: linear-gradient(180deg, #1f0510 0%, #2C0714 100%);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      position: relative;
+    }
+    .biografia-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(212, 163, 179, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .biografia-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0;
+      background: rgba(31, 5, 16, 0.5);
       border-radius: 28px;
-      max-width: 480px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      position: relative;
+      z-index: 2;
+    }
+    .biografia-image-side {
+      flex: 0 0 35%;
+      min-height: 480px;
+      background: #1a0510;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .biografia-image-side img {
       width: 100%;
-      padding: 40px 32px;
-      border: 1px solid rgba(212, 163, 179, 0.08);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-      animation: modalIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      height: 100%;
+      object-fit: cover;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      transition: all 0.5s ease;
+      display: block;
     }
-    @keyframes modalIn {
-      0% { transform: scale(0.92) translateY(20px); opacity: 0; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
+    .biografia-image-side img:hover {
+      transform: scale(1.02);
     }
-    .modal .modal-icon {
-      font-size: 2.8rem;
+    .biografia-image-side .image-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 24px 20px;
+      background: linear-gradient(transparent, rgba(44, 7, 20, 0.7));
+      pointer-events: none;
+    }
+    .biografia-image-side .image-overlay .badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      color: #D4A3B3;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    .biografia-text-side {
+      flex: 1;
+      padding: 48px 48px 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .biografia-text-side h2 {
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      color: #D4A3B3;
+      font-size: 3.2rem;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .biografia-text-side .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #d4c5c0;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .biografia-text-side .bio-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: #d4c5c0;
+      line-height: 1.9;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .biografia-text-side .bio-text::-webkit-scrollbar {
+      width: 4px;
+    }
+    .biografia-text-side .bio-text::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .biografia-text-side .bio-text::-webkit-scrollbar-thumb {
+      background: #D4A3B3;
+      border-radius: 10px;
+    }
+    .biografia-text-side .bio-text p {
+      margin-bottom: 14px;
+    }
+    .biografia-text-side .bio-text p:last-child {
+      margin-bottom: 0;
+    }
+    .biografia-text-side .bio-text .highlight {
+      color: #D4A3B3;
+      font-weight: 400;
+    }
+    .biografia-text-side .bio-text .quote {
+      font-style: italic;
+      color: #D4A3B3;
+      padding-left: 16px;
+      border-left: 2px solid rgba(212, 163, 179, 0.2);
+    }
+    .biografia-text-side .assinatura-bottom {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .biografia-text-side .assinatura-bottom .sign {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: #D4A3B3;
+      opacity: 0.8;
+    }
+    .biografia-text-side .assinatura-bottom .since {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: #7a5f5a;
+      letter-spacing: 1px;
+    }
+
+    /* ===== BENEFÍCIOS ===== */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 24px;
+    }
+    .benefit-card {
+      background: rgba(31, 5, 16, 0.6);
+      padding: 32px 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      text-align: center;
+      transition: 0.3s;
+    }
+    .benefit-card:hover {
+      border-color: rgba(212, 163, 179, 0.3);
+      background: rgba(44, 7, 20, 0.8);
+      transform: translateY(-4px);
+    }
+    .benefit-card i {
+      font-size: 2.6rem;
       color: #D4A3B3;
       margin-bottom: 12px;
     }
-    .modal h3 {
+    .benefit-card h4 {
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
-      font-size: 1.4rem;
-      color: #f5edea;
+      font-size: 1.2rem;
       margin-bottom: 6px;
     }
-    .modal p {
-      color: #d4c5c0;
+    .benefit-card p {
+      font-family: 'Inter', sans-serif;
       font-weight: 300;
-      font-size: 0.95rem;
-      margin-bottom: 24px;
+      font-size: 0.9rem;
+      color: #d4c5c0;
       line-height: 1.6;
     }
-    .modal .upsell-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 24px;
+
+    /* ===== PACOTES ===== */
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin: 24px 0 16px;
     }
-    .modal .upsell-options button {
-      background: rgba(212, 163, 179, 0.06);
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      color: #f5edea;
-      padding: 14px 20px;
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      cursor: pointer;
+    .package-card {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 32px 20px;
+      text-align: center;
+      border: 1px solid rgba(212, 163, 179, 0.08);
       transition: 0.3s;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
     }
-    .modal .upsell-options button:hover {
-      background: rgba(212, 163, 179, 0.12);
-      border-color: rgba(212, 163, 179, 0.2);
-      transform: translateX(4px);
+    .package-card:hover {
+      border-color: #D4A3B3;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
     }
-    .modal .upsell-options button .price {
+    .package-card .price {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
       color: #D4A3B3;
-      font-weight: 600;
+      letter-spacing: -1px;
     }
-    .modal .btn-cancel {
-      background: transparent;
-      border: none;
-      color: #7a5f5a;
+    .package-card .price small {
       font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.3s;
-      padding: 8px 16px;
-    }
-    .modal .btn-cancel:hover {
+      font-size: 1rem;
+      font-weight: 300;
       color: #d4c5c0;
     }
-    .modal .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      border-top: 1px solid rgba(212, 163, 179, 0.04);
-      padding-top: 16px;
+    .package-card p {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: #d4c5c0;
+    }
+    .package-card .badge {
+      display: inline-block;
+      background: #D4A3B3;
+      color: #2C0714;
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
     }
 
-    /* ===== RESPONSIVO ===== */
+    /* ===== ORDER BUMP ===== */
+    .orderbump-box {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 28px 24px;
+      margin: 24px 0;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+    }
+    .orderbump-box p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      color: #D4A3B3;
+      margin-bottom: 8px;
+    }
+    .orderbump-box label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.04);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      cursor: pointer;
+    }
+    .orderbump-box label:last-child { border-bottom: none; }
+    .orderbump-box input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #D4A3B3;
+    }
+    .orderbump-box .bump-price {
+      margin-left: auto;
+      color: #D4A3B3;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+
+    /* ===== INPUTS ===== */
+    .input-dark {
+      background: #2C0714;
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      padding: 14px 20px;
+      border-radius: 40px;
+      color: #f5edea;
+      font-family: 'Inter', sans-serif;
+      width: 100%;
+      font-size: 0.95rem;
+    }
+    .input-dark::placeholder { color: #7a5f5a; }
+    .input-dark:focus {
+      outline: none;
+      border-color: #D4A3B3;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 40px 0 24px;
+      border-top: 1px solid rgba(212, 163, 179, 0.05);
+      background: #2C0714;
+    }
+    footer .footer-logo {
+      margin-bottom: 16px;
+    }
+    footer .footer-logo img {
+      width: auto;
+      height: 60px;
+      max-width: 200px;
+    }
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #7a5f5a;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       RESPONSIVO (Desktop para Tablet)
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .hero-text h1 { font-size: 3.2rem; }
+      .hero-text h1 .script { font-size: 5rem; }
+      .carousel-item {
+        flex: 0 0 calc(25% - 12px);
+        max-height: 320px;
+      }
+      .biografia-image-side {
+        flex: 0 0 30%;
+        min-height: 380px;
+      }
+      .biografia-text-side {
+        padding: 32px 32px 32px 28px;
+      }
+      .biografia-text-side h2 {
+        font-size: 2.6rem;
+      }
+    }
+    
+    /* ============================================================
+       RESPONSIVO (Mobile - Onde as Mágicas Acontecem)
+    ============================================================ */
     @media (max-width: 768px) {
-      .header-dashboard .container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 0 16px;
+      .container { padding: 0 20px; }
+      
+      .logo img {
+        height: 45px;
+        max-width: 150px;
       }
-      .header-left {
-        flex-wrap: wrap;
-        gap: 8px;
+      
+      .hero-text h1 { font-size: 2.6rem; }
+      .hero-text h1 .script { font-size: 4rem; }
+      .hero-text p { font-size: 1rem; }
+      
+      .hero-buttons .btn-outline {
+        display: none !important;
       }
-      .header-left .logo {
-        font-size: 1rem;
-      }
-      .header-left .welcome {
-        font-size: 0.75rem;
-      }
-      .header-right {
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .credits-badge {
-        font-size: 0.75rem;
-        padding: 4px 14px;
-      }
-      .timer-badge {
-        font-size: 0.7rem;
-        padding: 4px 12px;
-      }
-      .timer-badge .timer {
-        min-width: 60px;
-      }
-      .btn-logout {
-        font-size: 0.7rem;
-        padding: 4px 14px;
-      }
-      .main-content {
-        padding: 20px 16px 60px;
-      }
-      .section-header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .section-header .actions {
-        justify-content: stretch;
-      }
-      .section-header .actions .btn-download,
-      .section-header .actions .btn-selecionar-todos {
-        flex: 1;
+      .hero-buttons .btn-primary {
+        width: 100%;
         justify-content: center;
       }
-      .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 14px;
+      
+      .section-title { 
+        font-size: 2rem; 
+        padding-top: 20px;
       }
-      .modal {
-        padding: 28px 20px;
-        margin: 16px;
+      .section-title .script { 
+        font-size: 3rem; 
       }
-      .modal .upsell-options button {
+      
+      .nav-menu {
+        display: none !important;
+      }
+      
+      .hamburger {
+        display: flex !important;
+      }
+      
+      .biografia-wrapper {
+        flex-direction: column;
+        border-radius: 20px;
+      }
+      
+      .biografia-image-side {
+        flex: 0 0 auto;
+        min-height: 220px;
+        padding: 0;
+        width: 100%;
+        aspect-ratio: 1/1;
+      }
+      
+      .biografia-image-side img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .biografia-image-side .image-overlay {
+        display: none;
+      }
+      
+      .biografia-text-side {
+        padding: 28px 24px 32px;
+      }
+      
+      .biografia-text-side h2 {
+        font-size: 2.4rem;
+        text-align: center;
+      }
+      
+      .biografia-text-side .subtitle {
+        text-align: center;
+      }
+      
+      .biografia-text-side .bio-text {
+        max-height: none;
+        overflow-y: visible;
+        font-size: 0.9rem;
+      }
+      
+      .biografia-text-side .assinatura-bottom {
+        text-align: center;
+      }
+      
+      .section {
+        padding: 60px 0;
+      }
+      
+      .instagram-section {
+        padding: 60px 0 80px;
+      }
+      
+      .biografia-section {
+        padding: 60px 0;
+      }
+      
+      .hero-video-desktop {
+        display: none !important;
+      }
+      .hero-video-mobile {
+        display: block !important;
+      }
+      
+      /* ==========================================================
+         CORREÇÃO: Centralização das dobras "Paixão" e "Escolha"
+         ========================================================== */
+      
+      /* A dobra "Paixão em cada detalhe" */
+      .section#institucional .section-title {
+        text-align: center !important;
+      }
+      
+      .section#institucional .section-title .script {
+        display: block !important;
+        text-align: center !important;
+      }
+      
+      .section#institucional > div {
+        max-width: 100% !important;
+        padding: 0 10px !important;
+      }
+      
+      .section#institucional p {
+        text-align: center !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+      
+      /* A dobra "Escolha seu pacote" */
+      .section#pacotes .section-title {
+        text-align: center !important;
+      }
+      
+      .section#pacotes .section-title .script {
+        display: block !important;
+        text-align: center !important;
+      }
+      
+      .section#pacotes .package-grid {
+        padding: 0 10px !important;
+      }
+      
+      .section#pacotes > div:last-child {
+        text-align: center !important;
+      }
+      
+      /* Ajuste também para a dobra "Sob medida" (personalizado) */
+      .section#personalizado .section-title {
+        text-align: center !important;
+      }
+      
+      .section#personalizado .section-title .script {
+        display: block !important;
+        text-align: center !important;
+      }
+      
+      .section#personalizado > div {
+        margin: 0 10px !important;
+      }
+      
+      /* ==========================================================
+         CARROSSEL MOBILE - TÉCNICA SCROLL SNAP (ISOLADO)
+         ========================================================== */
+      
+      .carousel-wrapper {
+        position: relative;
+        max-width: 100%;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 0;
+        padding: 0;
+        z-index: 2;
+      }
+      
+      .carousel-track {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        gap: 15px;
+        padding: 20px 10%;
+        transform: none !important; 
+        transition: none !important;
+      }
+      
+      .carousel-track::-webkit-scrollbar {
+        display: none;
+      }
+      .carousel-track {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      .carousel-item {
+        flex: 0 0 80%;
+        width: 80%;
+        scroll-snap-align: center;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: scale(1) !important;
+        filter: none !important;
+        border-radius: 18px;
+        margin: 0; 
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      }
+      
+      .carousel-item.active,
+      .carousel-item.prev,
+      .carousel-item.next,
+      .carousel-item.far {
+         flex: 0 0 80% !important;
+         opacity: 1 !important;
+         transform: scale(1) !important;
+         filter: none !important;
+         margin: 0 !important;
+      }
+      
+      .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .carousel-item .overlay {
+        opacity: 1 !important;
+        padding: 16px 14px 14px;
+      }
+      
+      .carousel-item .overlay .caption {
         font-size: 0.8rem;
-        padding: 12px 16px;
+      }
+      
+      .carousel-arrows {
+        padding: 0 10px;
+      }
+      
+      .carousel-arrows button {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      
+      .carousel-indicators {
+        margin-top: 15px;
+      }
+      
+      .instagram-badge {
+        top: 10px;
+        right: 10px;
+        font-size: 0.6rem;
+        padding: 4px 12px;
+      }
+      
+      .instagram-header h2 {
+        font-size: 1.6rem;
+      }
+      .instagram-header h2 .script {
+        font-size: 2.6rem;
       }
     }
-    @media (max-width: 480px) {
-      .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+
+    @media (min-width: 769px) {
+      .hero-video-mobile {
+        display: none !important;
       }
-      .gallery-card .select-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 0.8rem;
-      }
-      .gallery-card .video-badge,
-      .gallery-card .credit-cost {
-        font-size: 0.5rem;
-        padding: 2px 10px;
-      }
-      .gallery-card .img-wrapper::after {
-        font-size: 0.5rem;
-        padding: 2px 10px;
-        bottom: 8px;
-        right: 8px;
-      }
-      .modal h3 {
-        font-size: 1.2rem;
+      .hero-video-desktop {
+        display: block !important;
       }
     }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1f0510; }
+    ::-webkit-scrollbar-thumb { background: #D4A3B3; border-radius: 10px; }
   </style>
 </head>
 <body>
 
-<!-- ===== HEADER FIXO ===== -->
-<header class="header-dashboard">
-  <div class="container">
-    <div class="header-left">
-      <a href="index.html" class="logo">Studio <span>Rassi</span></a>
-      <span class="welcome">Olá, <strong id="clienteNome">Ana Silva</strong></span>
-    </div>
-    <div class="header-right">
-      <div class="credits-badge">
-        <i class="fas fa-coins"></i>
-        <span>Créditos: <strong id="creditsDisplay">30</strong></span>
-      </div>
-      <div class="timer-badge">
-        <i class="far fa-clock"></i>
-        <span>Expira em: <span class="timer" id="timerDisplay">71:59:59</span></span>
-      </div>
-      <button class="btn-logout" onclick="window.location.href='login.html'">
-        <i class="fas fa-sign-out-alt"></i> Sair
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="container navbar-content">
+    <a href="index.html" class="logo">
+      <img src="assets/images/logo/logo-header.png" 
+           alt="Studio Rassi · Photo & Video" 
+           width="200" 
+           height="60"
+           loading="lazy">
+    </a>
+    
+    <!-- Menu Desktop -->
+    <div class="nav-menu">
+      <a href="#pacotes">Pacotes</a>
+      <a href="#personalizado">Personalizado</a>
+      <a href="#instagram">Portfólio</a>
+      <button class="btn-minhas-fotos" onclick="window.location.href='login.html'">
+        <i class="fas fa-images"></i> Minhas Fotos
       </button>
     </div>
+    
+    <!-- Menu Hamburguer (Mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
+</nav>
+
+<!-- ===== MOBILE MENU OVERLAY ===== -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- ===== MOBILE MENU ===== -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#pacotes" onclick="closeMenu()">Pacotes</a>
+  <a href="#personalizado" onclick="closeMenu()">Personalizado</a>
+  <a href="#instagram" onclick="closeMenu()">Portfólio</a>
+  <button class="btn-minhas-fotos-mobile" onclick="window.location.href='login.html'">
+    <i class="fas fa-images"></i> Minhas Fotos
+  </button>
+</div>
+
+<!-- ===== HERO COM VÍDEO ===== -->
+<header class="hero" id="home">
+  <video class="hero-video hero-video-desktop" autoplay loop muted playsinline preload="auto" poster="assets/images/hero-fallback.jpg">
+    <source src="assets/videos/header-desktop.mp4" type="video/mp4">
+    <source src="assets/videos/header-desktop.webm" type="video/webm">
+    <img src="assets/images/hero-fallback.jpg" alt="Studio Rassi" style="width:100%; height:100%; object-fit:cover;">
+  </video>
+  
+  <video class="hero-video hero-video-mobile" autoplay loop muted playsinline preload="auto" poster="assets/images/hero-fallback-mobile.jpg">
+    <source src="assets/videos/header-mobile.mp4" type="video/mp4">
+    <source src="assets/videos/header-mobile.webm" type="video/webm">
+    <img src="assets/images/hero-fallback-mobile.jpg" alt="Studio Rassi" style="width:100%; height:100%; object-fit:cover;">
+  </video>
+  
+  <div class="hero-overlay"></div>
+  
+  <div class="container hero-content">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <i class="fas fa-camera"></i> Eternizando emoções desde 2011
+      </div>
+      <h1>
+        <span class="script">Memórias</span>
+        que começam
+        antes do primeiro
+        <span class="highlight">abraço</span>
+      </h1>
+      <p>Registramos sua história com luz, emoção e autenticidade. 
+      Momentos que merecem ser lembrados para sempre.</p>
+      <div class="hero-buttons">
+        <a href="#pacotes" class="btn btn-primary"><i class="fas fa-crown"></i> Pacotes promocionais</a>
+        <a href="#personalizado" class="btn btn-outline"><i class="fas fa-sliders-h"></i> Personalizado</a>
+        <a href="#instagram" class="btn btn-outline"><i class="fas fa-images"></i> Conheça</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Seta para baixo -->
+  <a href="#instagram" class="scroll-down">
+    <i class="fas fa-chevron-down"></i>
+  </a>
 </header>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main class="main-content">
-  <div class="section-header">
-    <h2>Seu ensaio · <span id="selectedCount">0</span> selecionadas</h2>
-    <div class="actions">
-      <button class="btn-selecionar-todos" id="selecionarTodos">
-        <i class="fas fa-check-double"></i> Selecionar todas
-      </button>
-      <button class="btn-download" id="downloadBtn">
-        <i class="fas fa-download"></i> Baixar selecionadas
-      </button>
+<!-- ===== SEGUNDA DOBRA: CARROSSEL ===== -->
+<section class="instagram-section" id="instagram">
+  <div class="container">
+    <div class="instagram-header">
+      <h2>
+        <span class="script">Memórias</span>
+        que começam antes do primeiro abraço
+      </h2>
+      <p class="subtitle">
+        Acompanhe nosso dia a dia · 
+        <a href="https://www.instagram.com/studio.rassi/" target="_blank" rel="noopener noreferrer">
+          @studio.rassi <i class="fas fa-external-link-alt" style="font-size:0.7rem;"></i>
+        </a>
+      </p>
     </div>
+    
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carouselTrack"></div>
+      
+      <div class="carousel-arrows">
+        <button id="prevSlide" aria-label="Anterior">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="nextSlide" aria-label="Próximo">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <a href="https://www.instagram.com/studio.rassi/" target="_blank" rel="noopener noreferrer" class="instagram-badge">
+        <i class="fab fa-instagram"></i> @studio.rassi
+      </a>
+    </div>
+    
+    <div class="carousel-indicators" id="carouselIndicators"></div>
   </div>
+</section>
 
-  <div class="gallery-grid" id="galleryGrid"></div>
-</main>
-
-<!-- ===== MODAL UPSELL ===== -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-icon"><i class="fas fa-coins"></i></div>
-    <h3>Créditos insuficientes</h3>
-    <p>
-      Você não tem créditos suficientes para selecionar esta imagem.<br>
-      Adquira mais créditos para continuar baixando suas memórias.
+<!-- ===== INSTITUCIONAL + BENEFÍCIOS ===== -->
+<section class="container section" id="institucional">
+  <div style="max-width: 720px;">
+    <h2 class="section-title">
+      <span class="script">Paixão</span>
+      em cada detalhe
+    </h2>
+    <p style="font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 300; color: #d4c5c0; line-height: 1.8; padding-top: 10px;">
+      Mais do que registrar, eternizamos emoções. Nossa equipe transforma instantes em memórias 
+      que aquecem o coração. <span style="color: #D4A3B3; font-style: italic;">“Fotografar é sentir. Não é só registrar.”</span>
     </p>
-    <div class="upsell-options">
-      <button onclick="comprarCredits(1, 18)">
-        <span>📷 1 Foto Extra</span>
-        <span class="price">R$ 18</span>
-      </button>
-      <button onclick="comprarCredits(10, 150)">
-        <span>📷 Pacote +10 Fotos</span>
-        <span class="price">R$ 150</span>
-      </button>
-      <button onclick="comprarCredits(1, 50, 'video')">
-        <span>🎬 1 Vídeo Extra</span>
-        <span class="price">R$ 50</span>
-      </button>
+  </div>
+  <div class="benefit-grid">
+    <div class="benefit-card">
+      <i class="fas fa-crown"></i>
+      <h4>Posicionamento exclusivo</h4>
+      <p>Conteúdo que eleva sua marca e alimenta seu ego com qualidade premium.</p>
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+    <div class="benefit-card">
+      <i class="fas fa-heart"></i>
+      <h4>Emoção eternizada</h4>
+      <p>Registros com significado, intenção e autenticidade.</p>
+    </div>
+    <div class="benefit-card">
+      <i class="fas fa-share-alt"></i>
+      <h4>Conteúdo para redes</h4>
+      <p>Imagens prontas para impactar e engajar seu público.</p>
     </div>
   </div>
-</div>
+</section>
+
+<!-- ===== BIOGRAFIA ===== -->
+<section class="biografia-section" id="biografia">
+  <div class="container">
+    <div class="biografia-wrapper">
+      <div class="biografia-image-side">
+        <img src="assets/images/ana-paula-rassi.jpg" 
+             alt="Ana Paula Rassi - Fotógrafa Studio Rassi" 
+             loading="lazy">
+        <div class="image-overlay">
+          <span class="badge">📸 Fundadora · Studio Rassi</span>
+        </div>
+      </div>
+      
+      <div class="biografia-text-side">
+        <h2>Ana Paula Rassi</h2>
+        <div class="subtitle">Fotógrafa · Studio Rassi</div>
+        
+        <div class="bio-text">
+          <p>
+            Desde 2011, o <span class="highlight">Studio Rassi</span> nasceu com um propósito muito especial: 
+            transformar momentos únicos em <span class="highlight">memórias eternas</span>.
+          </p>
+          
+          <p>
+            Ao longo dessa trajetória, tive o privilégio de registrar histórias carregadas de emoção: 
+            a espera delicada de uma gestante, a alegria e espontaneidade da infância, a beleza singular 
+            dos ensaios femininos, os sonhos de uma debutante e a emoção inesquecível de casamentos e 
+            celebrações especiais.
+          </p>
+          
+          <p>
+            Cada pessoa que passa pelo meu olhar traz consigo uma história única. E é essa essência que 
+            busco revelar através da fotografia: os pequenos gestos, os olhares verdadeiros, os detalhes 
+            que muitas vezes passam despercebidos, mas que no futuro se tornam <span class="highlight">lembranças preciosas</span>.
+          </p>
+          
+          <p>
+            Acredito que uma fotografia vai muito além de uma imagem bonita. 
+            Ela guarda sentimentos, eterniza fases da vida e preserva momentos que jamais voltarão.
+          </p>
+          
+          <p class="quote">
+            "Porque para mim, fotografia não é apenas técnica. É conexão, sensibilidade e arte."
+          </p>
+        </div>
+        
+        <div class="assinatura-bottom">
+          <div class="sign">Studio Rassi</div>
+          <div class="since">desde 2011 transformando histórias em memórias eternas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PACOTES PROMOCIONAIS ===== -->
+<section class="container section" id="pacotes">
+  <h2 class="section-title">
+    <span class="script">Escolha</span>
+    seu pacote
+  </h2>
+  <div class="package-grid">
+    <div class="package-card">
+      <span class="badge">mais pedido</span>
+      <div class="price">R$ 350</div>
+      <p>30 fotos<br><span style="font-size:0.8rem; color:#b09a94;">+ R$ 15/foto extra</span></p>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+    </div>
+    <div class="package-card">
+      <div class="price">R$ 400</div>
+      <p>40 fotos<br><span style="font-size:0.8rem; color:#b09a94;">ideal para festas</span></p>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+    </div>
+    <div class="package-card">
+      <div class="price">R$ 500</div>
+      <p>50 fotos<br><span style="font-size:0.8rem; color:#b09a94;">completo</span></p>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top: 8px;">
+    <a href="#personalizado" class="btn btn-ghost"><i class="fas fa-arrow-right"></i> Quero montar meu pacote personalizado</a>
+  </div>
+</section>
+
+<!-- ===== PERSONALIZADO + ORDER BUMP ===== -->
+<section class="container section" id="personalizado">
+  <h2 class="section-title">
+    <span class="script">Sob medida</span>
+    para você
+  </h2>
+  <div style="background: #1f0510; border-radius: 40px; padding: 32px 28px; border: 1px solid rgba(212,163,179,0.08);">
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end;">
+      <div style="flex: 2; min-width: 180px;">
+        <label style="font-family: 'Inter', sans-serif; font-weight:300; color:#d4c5c0; display:block; margin-bottom:6px;">Número de fotos (mín. 20) · R$ 18 cada</label>
+        <input type="number" id="fotoQty" value="30" min="20" step="1" class="input-dark" style="max-width:140px;">
+      </div>
+      <div style="flex:1; background:#2C0714; border-radius:40px; padding:12px 24px; text-align:center; border:1px solid rgba(212,163,179,0.1);">
+        <span style="font-family: 'Inter', sans-serif; font-weight:300; font-size:0.8rem;">Total</span><br>
+        <span style="font-family: 'Montserrat', sans-serif; font-weight:700; font-size:2.4rem; color:#D4A3B3; letter-spacing:-1px;">R$ <span id="fotoTotal">540</span></span>
+      </div>
+    </div>
+
+    <div class="orderbump-box">
+      <p><i class="fas fa-plus-circle"></i> Turbine seu ensaio</p>
+      <label><input type="checkbox" class="bump-check"> Storymaker em tempo real <span class="bump-price">R$ 250</span></label>
+      <label><input type="checkbox" class="bump-check"> Imagens com Drone (30s) <span class="bump-price">R$ 550</span></label>
+      <label><input type="checkbox" class="bump-check"> Video maker (até 3min) <span class="bump-price">R$ 500</span></label>
+      <label><input type="checkbox" class="bump-check"> Estúdio + bolo 1kg <span class="bump-price">R$ 300</span></label>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:16px;" id="simularCarrinho">
+      <i class="fas fa-shopping-cart"></i> Adicionar ao carrinho · simular
+    </button>
+    <p style="font-family: 'Inter', sans-serif; font-size:0.75rem; color:#7a5f5a; margin-top:10px;">* após seleção, encaminhamos link de pagamento seguro</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="assets/images/logo/logo-full.png" 
+           alt="Studio Rassi · Photo & Video" 
+           width="200" 
+           height="60"
+           loading="lazy">
+    </div>
+    <p>Studio Rassi · Photo & Video · © 2026 · Eternizando emoções</p>
+  </div>
+</footer>
 
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // 1. DADOS SIMULADOS DO ENSAIO (12 fotos + 2 vídeos)
+  // 1. DADOS DAS IMAGENS (13 imagens com novas descrições)
   // ============================================================
-  const mediaItems = [
-    { id: 1, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio1/400/500', label: 'Ensaio 01' },
-    { id: 2, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio2/400/500', label: 'Ensaio 02' },
-    { id: 3, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio3/400/500', label: 'Ensaio 03' },
-    { id: 4, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio4/400/500', label: 'Ensaio 04' },
-    { id: 5, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio5/400/500', label: 'Ensaio 05' },
-    { id: 6, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio6/400/500', label: 'Ensaio 06' },
-    { id: 7, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio7/400/500', label: 'Ensaio 07' },
-    { id: 8, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio8/400/500', label: 'Ensaio 08' },
-    { id: 9, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio9/400/500', label: 'Ensaio 09' },
-    { id: 10, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio10/400/500', label: 'Ensaio 10' },
-    { id: 11, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio11/400/500', label: 'Ensaio 11' },
-    { id: 12, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio12/400/500', label: 'Ensaio 12' },
-    { id: 13, type: 'video', thumbnail: 'https://picsum.photos/seed/studio13/400/500', label: 'Vídeo 01' },
-    { id: 14, type: 'video', thumbnail: 'https://picsum.photos/seed/studio14/400/500', label: 'Vídeo 02' }
+  const instagramPosts = [
+    { 
+      id: 'post_01', 
+      image: 'assets/images/instagram/instagram-01.jpg', 
+      alt: 'Ensaio externo com luz dourada', 
+      caption: 'Esse é o resultado do seu próximo ensaio ✨' 
+    },
+    { 
+      id: 'post_02', 
+      image: 'assets/images/instagram/instagram-02.jpg', 
+      alt: 'Gestante - momentos de ternura', 
+      caption: 'Um momento para você eternizar 🌸' 
+    },
+    { 
+      id: 'post_03', 
+      image: 'assets/images/instagram/instagram-03.jpg', 
+      alt: 'Festa infantil - sorrisos eternizados', 
+      caption: 'Registro de um momento para sua vida toda 🎉' 
+    },
+    { 
+      id: 'post_04', 
+      image: 'assets/images/instagram/instagram-04.jpg', 
+      alt: 'Ensaio de casal - amor em detalhes', 
+      caption: 'Você é o próximo 💍' 
+    },
+    { 
+      id: 'post_05', 
+      image: 'assets/images/instagram/instagram-05.jpg', 
+      alt: 'Newborn - delicadeza e ternura', 
+      caption: 'Cada detalhe feito com amor 👶' 
+    },
+    { 
+      id: 'post_06', 
+      image: 'assets/images/instagram/instagram-06.jpg', 
+      alt: 'Ensaio externo - natureza e luz', 
+      caption: 'Sua história merece ser contada 🌿' 
+    },
+    { 
+      id: 'post_07', 
+      image: 'assets/images/instagram/instagram-07.jpg', 
+      alt: 'Gestante - silhueta e emoção', 
+      caption: 'Esse momento é só seu 🤰' 
+    },
+    { 
+      id: 'post_08', 
+      image: 'assets/images/instagram/instagram-08.jpg', 
+      alt: 'Festa - decoração elegante', 
+      caption: 'Memórias que duram para sempre 🎈' 
+    },
+    { 
+      id: 'post_09', 
+      image: 'assets/images/instagram/instagram-09.jpg', 
+      alt: 'Casal - ensaio romântico', 
+      caption: 'Você merece ser eternizado 💑' 
+    },
+    { 
+      id: 'post_10', 
+      image: 'assets/images/instagram/instagram-10.jpg', 
+      alt: 'Estúdio - bolo de aniversário', 
+      caption: 'Celebre seus momentos especiais 🎂' 
+    },
+    { 
+      id: 'post_11', 
+      image: 'assets/images/instagram/instagram-11.jpg', 
+      alt: 'Ensaio externo - luz da tarde', 
+      caption: 'A luz perfeita para sua história 🌅' 
+    },
+    { 
+      id: 'post_12', 
+      image: 'assets/images/instagram/instagram-12.jpg', 
+      alt: 'Detalhes - amor em cada foto', 
+      caption: 'Seu amor em cada clique 💕' 
+    },
+    { 
+      id: 'post_13', 
+      image: 'assets/images/instagram/instagram-13.jpg', 
+      alt: 'Família - momentos eternizados', 
+      caption: 'Sua família merece ser lembrada 👨‍👩‍👧‍👦' 
+    }
   ];
 
   // ============================================================
-  // 2. ESTADO
+  // 2. CONFIGURAÇÕES
   // ============================================================
-  let credits = 30;
-  const selected = new Set(); // ids selecionados
-  let timerSeconds = 72 * 3600; // 72 horas
-  let isModalOpen = false;
+  let currentIndex = 0;
+  let autoSlideInterval = null;
+  const SLIDE_INTERVAL = 3000;
+  const TRANSITION_SPEED = 0.5;
+
+  const track = document.getElementById('carouselTrack');
+  const indicators = document.getElementById('carouselIndicators');
+  let totalItems = instagramPosts.length;
+  
+  // Função auxiliar para checar se é Mobile
+  const isMobile = () => window.innerWidth <= 768;
 
   // ============================================================
-  // 3. ELEMENTOS DOM
+  // 3. RENDERIZAR
   // ============================================================
-  const grid = document.getElementById('galleryGrid');
-  const creditsDisplay = document.getElementById('creditsDisplay');
-  const timerDisplay = document.getElementById('timerDisplay');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const selectedCount = document.getElementById('selectedCount');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const selecionarTodosBtn = document.getElementById('selecionarTodos');
+  function renderCarousel() {
+    track.innerHTML = '';
+    indicators.innerHTML = '';
 
-  // ============================================================
-  // 4. RENDERIZAR GALERIA
-  // ============================================================
-  function renderGallery() {
-    grid.innerHTML = '';
-    mediaItems.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'gallery-card';
-      if (selected.has(item.id)) card.classList.add('selected');
-      card.dataset.id = item.id;
-
-      const isVideo = item.type === 'video';
-      const cost = isVideo ? 2 : 1;
-
-      card.innerHTML = `
-        <div class="img-wrapper">
-          <img src="${item.thumbnail}" alt="${item.label}" loading="lazy" draggable="false">
-        </div>
-        ${isVideo ? `<div class="video-badge"><i class="fas fa-play"></i> Vídeo</div>` : ''}
-        <div class="credit-cost">${cost} crédito${cost > 1 ? 's' : ''}</div>
-        <div class="select-overlay">
-          <button class="select-btn" data-id="${item.id}">
-            ${selected.has(item.id) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>'}
-          </button>
+    // Clonamos as imagens apenas no Desktop para fazer o loop infinito via JS
+    // No Mobile, renderizamos apenas 1 conjunto (o CSS scroll snap nativo não gosta de loops infinitos sem hacks complexos)
+    const allPosts = isMobile() ? instagramPosts : [...instagramPosts, ...instagramPosts, ...instagramPosts];
+    
+    allPosts.forEach((post, index) => {
+      const item = document.createElement('div');
+      item.className = 'carousel-item';
+      item.dataset.index = index;
+      item.innerHTML = `
+        <img src="${post.image}" alt="${post.alt}" loading="${index < 13 ? 'lazy' : 'eager'}">
+        <div class="overlay">
+          <span class="instagram-icon"><i class="fab fa-instagram"></i> @studio.rassi</span>
+          <span class="caption">${post.caption}</span>
         </div>
       `;
-
-      card.addEventListener('click', (e) => {
-        // Evita que o clique no botão dispare duas vezes
-        if (e.target.closest('.select-btn')) return;
-        toggleSelect(item.id);
-      });
-
-      grid.appendChild(card);
+      track.appendChild(item);
     });
 
-    // Adiciona eventos aos botões de seleção
-    document.querySelectorAll('.select-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = parseInt(btn.dataset.id);
-        toggleSelect(id);
-      });
-    });
+    for (let s = 0; s < totalItems; s++) {
+      const dot = document.createElement('div');
+      dot.className = `dot ${s === 0 ? 'active' : ''}`;
+      dot.dataset.index = s;
+      dot.addEventListener('click', () => goToSlide(s));
+      indicators.appendChild(dot);
+    }
 
-    updateUI();
+    if (!isMobile()) {
+      track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+      const startIndex = totalItems;
+      goToSlide(startIndex, false);
+    }
   }
 
   // ============================================================
-  // 5. LÓGICA DE SELEÇÃO
+  // 4. NAVEGAÇÃO HÍBRIDA (DESKTOP JS vs MOBILE NATIVO)
   // ============================================================
-  function toggleSelect(id) {
-    const item = mediaItems.find(m => m.id === id);
-    if (!item) return;
-
-    const cost = item.type === 'video' ? 2 : 1;
-
-    if (selected.has(id)) {
-      selected.delete(id);
+  function goToSlide(index, animate = true) {
+    const items = track.children;
+    const total = items.length;
+    
+    if (isMobile()) {
+      // ===== LÓGICA MOBILE (SCROLL SNAP) =====
+      if (index < 0) index = totalItems - 1;
+      if (index >= totalItems) index = 0;
+      currentIndex = index;
+      
+      const itemToScroll = items[currentIndex];
+      if (itemToScroll) {
+        track.scrollTo({
+          left: itemToScroll.offsetLeft - track.offsetLeft - (track.clientWidth - itemToScroll.clientWidth) / 2,
+          behavior: animate ? 'smooth' : 'auto'
+        });
+      }
     } else {
-      if (credits < cost) {
-        abrirModal();
-        return;
+      // ===== LÓGICA DESKTOP (TRANSLATEX E CLASSES) =====
+      const half = Math.floor(total / 3);
+      if (index < 0) index = totalItems - 1;
+      if (index >= totalItems) index = 0;
+      const targetIndex = index + half;
+      
+      const itemWidth = items[0]?.offsetWidth || 0;
+      const gap = 16;
+      const offset = targetIndex * (itemWidth + gap) - (itemWidth + gap) * 2;
+      
+      if (!animate) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
       }
-      selected.add(id);
-      credits -= cost;
-      updateCredits();
-    }
-
-    updateUI();
-    renderGallery(); // Re-render para atualizar os estados visuais
-  }
-
-  function selecionarTodos() {
-    const disponiveis = mediaItems.filter(item => {
-      const cost = item.type === 'video' ? 2 : 1;
-      return !selected.has(item.id) && credits >= cost;
-    });
-
-    if (disponiveis.length === 0) {
-      // Verifica se já tem todos selecionados
-      if (selected.size === mediaItems.length) {
-        alert('✅ Todas as imagens já estão selecionadas!');
-        return;
+      
+      track.style.transform = `translateX(-${offset}px)`;
+      
+      if (!animate) {
+        track.offsetHeight;
+        track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
       }
-      abrirModal();
-      return;
+      
+      Array.from(items).forEach((item, i) => {
+        const position = i - targetIndex;
+        item.classList.remove('active', 'prev', 'next', 'far');
+        
+        if (Math.abs(position) <= 2) {
+          if (position === 0) item.classList.add('active');
+          else if (position === -1 || position === 1) item.classList.add(position === -1 ? 'prev' : 'next');
+          else if (position === -2 || position === 2) item.classList.add('far');
+        } else {
+          item.classList.add('far');
+        }
+      });
+      currentIndex = index;
     }
-
-    disponiveis.forEach(item => {
-      const cost = item.type === 'video' ? 2 : 1;
-      if (credits >= cost) {
-        selected.add(item.id);
-        credits -= cost;
-      }
+    
+    // Atualiza os Dots em ambas as versões
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
     });
-
-    updateCredits();
-    updateUI();
-    renderGallery();
   }
 
-  // ============================================================
-  // 6. DOWNLOAD
-  // ============================================================
-  function downloadSelected() {
-    if (selected.size === 0) {
-      alert('Selecione pelo menos uma imagem para baixar.');
-      return;
+  function nextSlide() { goToSlide((currentIndex + 1) % totalItems); }
+  function prevSlide() { goToSlide((currentIndex - 1 + totalItems) % totalItems); }
+
+  // Sincroniza o Scroll Manual no Mobile com os Dots
+  track.addEventListener('scroll', () => {
+    if (isMobile()) {
+      clearTimeout(track.scrollTimeout);
+      track.scrollTimeout = setTimeout(() => {
+        const items = Array.from(track.children);
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        
+        items.forEach((item, index) => {
+          const distance = Math.abs((item.offsetLeft + item.clientWidth / 2) - (track.scrollLeft + track.clientWidth / 2));
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+        
+        if (closestIndex !== currentIndex) {
+          currentIndex = closestIndex;
+          document.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+          });
+        }
+      }, 50);
     }
+  });
 
-    const total = selected.size;
-    const msg = `📸 Baixando ${total} item(ns) selecionado(s)...\n\n`;
-    const items = mediaItems.filter(m => selected.has(m.id));
-    items.forEach((item, i) => {
-      msg += `${i+1}. ${item.label} (${item.type})\n`;
-    });
-    alert(msg + '\n✅ Download iniciado! (Simulação)');
+  // ============================================================
+  // 5. AUTOPLAY
+  // ============================================================
+  function startAutoSlide() {
+    if (autoSlideInterval) clearInterval(autoSlideInterval);
+    autoSlideInterval = setInterval(() => {
+      requestAnimationFrame(() => {
+        nextSlide();
+      });
+    }, SLIDE_INTERVAL);
+  }
 
-    // Na vida real, aqui você faria o download dos arquivos
-    // Simplesmente limpamos a seleção após o download (opcional)
-    // selected.clear();
-    // updateUI();
-    // renderGallery();
+  function stopAutoSlide() {
+    if (autoSlideInterval) {
+      clearInterval(autoSlideInterval);
+      autoSlideInterval = null;
+    }
+  }
+
+  function pauseAutoplay() {
+    stopAutoSlide();
+    setTimeout(startAutoSlide, 5000);
   }
 
   // ============================================================
-  // 7. UPSELL / CRÉDITOS
+  // 6. MENU HAMBURGUER
   // ============================================================
-  function comprarCredits(qty, price, type = 'photo') {
-    const confirmMsg = `🛒 Comprar ${qty} ${type === 'video' ? 'vídeo(s)' : 'foto(s)'} por R$ ${price}?`;
-    if (!confirm(confirmMsg)) return;
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
 
-    credits += qty;
-    updateCredits();
-    fecharModal();
-    renderGallery();
-    alert(`✅ ${qty} crédito(s) adicionado(s)! Total: ${credits}`);
+  function toggleMenu() {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   }
 
-  function updateCredits() {
-    creditsDisplay.textContent = credits;
-  }
-
-  // ============================================================
-  // 8. MODAL
-  // ============================================================
-  function abrirModal() {
-    isModalOpen = true;
-    modalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function fecharModal() {
-    isModalOpen = false;
-    modalOverlay.classList.remove('active');
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    menuOverlay.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  // Fecha modal ao clicar fora
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) fecharModal();
+  hamburger.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+
+  document.querySelectorAll('.mobile-menu a, .mobile-menu button').forEach(el => {
+    el.addEventListener('click', closeMenu);
   });
 
   // ============================================================
-  // 9. TIMER
+  // 7. EVENT LISTENERS
   // ============================================================
-  function updateTimer() {
-    if (timerSeconds <= 0) {
-      timerDisplay.textContent = '00:00:00';
-      alert('⏰ Seu tempo expirou! Entre em contato para renovar seu acesso.');
-      return;
-    }
-    timerSeconds--;
-    const hrs = Math.floor(timerSeconds / 3600);
-    const mins = Math.floor((timerSeconds % 3600) / 60);
-    const secs = timerSeconds % 60;
-    timerDisplay.textContent = 
-      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
+  document.getElementById('prevSlide').addEventListener('click', () => {
+    prevSlide();
+    pauseAutoplay();
+  });
 
-  // ============================================================
-  // 10. UI UPDATE
-  // ============================================================
-  function updateUI() {
-    const count = selected.size;
-    selectedCount.textContent = count;
+  document.getElementById('nextSlide').addEventListener('click', () => {
+    nextSlide();
+    pauseAutoplay();
+  });
 
-    if (count > 0) {
-      downloadBtn.classList.add('active');
-      downloadBtn.innerHTML = `<i class="fas fa-download"></i> Baixar (${count})`;
-    } else {
-      downloadBtn.classList.remove('active');
-      downloadBtn.innerHTML = `<i class="fas fa-download"></i> Baixar selecionadas`;
-    }
-
-    // Atualiza texto do botão selecionar todos
-    if (selected.size === mediaItems.length) {
-      selecionarTodosBtn.innerHTML = `<i class="fas fa-times"></i> Desmarcar todas`;
-      selecionarTodosBtn.onclick = () => {
-        selected.clear();
-        updateCredits();
-        updateUI();
-        renderGallery();
-      };
-    } else {
-      selecionarTodosBtn.innerHTML = `<i class="fas fa-check-double"></i> Selecionar todas`;
-      selecionarTodosBtn.onclick = selecionarTodos;
-    }
-  }
-
-  // ============================================================
-  // 11. PROTEÇÃO CONTRA PRINT/DOWNLOAD
-  // ============================================================
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
-      e.preventDefault();
-      alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
-    }
+    if (e.key === 'ArrowLeft') { prevSlide(); pauseAutoplay(); }
+    if (e.key === 'ArrowRight') { nextSlide(); pauseAutoplay(); }
   });
 
-  document.addEventListener('contextmenu', (e) => {
-    if (e.target.closest('.gallery-card')) {
-      e.preventDefault();
-      alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
+  // Removemos o Touch Swipe customizado no Mobile, pois o CSS nativo (Scroll Snap) já faz isso de forma perfeita
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const wrapper = document.querySelector('.carousel-wrapper');
+  
+  wrapper.addEventListener('touchstart', (e) => {
+    if (!isMobile()) touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  wrapper.addEventListener('touchend', (e) => {
+    if (!isMobile()) {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) { nextSlide(); } else { prevSlide(); }
+        pauseAutoplay();
+      }
     }
+  }, { passive: true });
+
+  wrapper.addEventListener('mouseenter', stopAutoSlide);
+  wrapper.addEventListener('mouseleave', startAutoSlide);
+
+  // ============================================================
+  // 8. INICIALIZAR
+  // ============================================================
+  renderCarousel();
+  
+  setTimeout(() => {
+    startAutoSlide();
+  }, 500);
+
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      // Se a tela mudar de tamanho (virar o celular, por ex), recria a estrutura adequada (Mobile vs Desktop)
+      renderCarousel();
+    }, 200);
   });
 
   // ============================================================
-  // 12. EVENT LISTENERS
+  // 9. SIMULAÇÃO DO CARRINHO
   // ============================================================
-  downloadBtn.addEventListener('click', downloadSelected);
+  const qtyInput = document.getElementById('fotoQty');
+  const fotoTotal = document.getElementById('fotoTotal');
+  qtyInput?.addEventListener('input', function() {
+    const val = parseInt(this.value) || 20;
+    const total = val * 18;
+    fotoTotal.textContent = total;
+  });
 
-  // ============================================================
-  // 13. INICIALIZAR
-  // ============================================================
-  renderGallery();
-  updateCredits();
-  updateTimer();
-  setInterval(updateTimer, 1000);
+  document.getElementById('simularCarrinho')?.addEventListener('click', function() {
+    const qty = parseInt(qtyInput.value) || 20;
+    let total = qty * 18;
+    const bumps = document.querySelectorAll('.bump-check:checked');
+    bumps.forEach(cb => {
+      const priceText = cb.parentElement.querySelector('.bump-price')?.textContent || '0';
+      const price = parseInt(priceText.replace('R$ ', '').replace('.', '')) || 0;
+      total += price;
+    });
+    alert(`🛒 Simulação de carrinho:\nFotos: ${qty} (R$ ${qty*18})\nOrder bumps: ${bumps.length} itens\nTotal: R$ ${total}\n\n(Em produção: integração com pagamento)`);
+  });
 
-  // Salva o estado da seleção no console para debug
-  console.log('📸 Área do cliente carregada!');
-  console.log(`📊 ${mediaItems.length} itens disponíveis (${credits} créditos)`);
-  console.log('💡 Clique nas imagens para selecionar e baixar.');
+  document.addEventListener('DOMContentLoaded', function() {
+    const videos = document.querySelectorAll('.hero-video');
+    videos.forEach(video => {
+      video.play().catch(function(error) {
+        console.log('Autoplay bloqueado:', error);
+      });
+    });
+  });
+
 </script>
 
 </body>
