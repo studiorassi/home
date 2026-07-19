@@ -52,21 +52,13 @@
       gap: 20px;
     }
     .header-left .logo {
-      display: inline-block;
-      line-height: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #f5edea;
       text-decoration: none;
     }
-    .header-left .logo img {
-      display: block;
-      width: auto;
-      height: 50px;
-      max-width: 160px;
-      transition: all 0.3s ease;
-    }
-    .header-left .logo img:hover {
-      opacity: 0.85;
-      transform: scale(1.02);
-    }
+    .header-left .logo span { color: #D4A3B3; }
     .header-left .welcome {
       font-size: 0.85rem;
       font-weight: 300;
@@ -136,43 +128,6 @@
     .btn-logout:hover {
       border-color: #D4A3B3;
       color: #f5edea;
-    }
-
-    /* ===== STATUS BAR (Centralizada) ===== */
-    .status-bar {
-      background: rgba(31, 5, 16, 0.4);
-      border-bottom: 1px solid rgba(212, 163, 179, 0.04);
-      padding: 12px 0;
-    }
-    .status-bar .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-    }
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: #d4c5c0;
-    }
-    .status-item i {
-      color: #D4A3B3;
-      font-size: 1rem;
-    }
-    .status-item strong {
-      color: #f5edea;
-      font-weight: 600;
-    }
-    .status-item .value {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1rem;
     }
 
     /* ===== MAIN ===== */
@@ -508,9 +463,8 @@
         flex-wrap: wrap;
         gap: 8px;
       }
-      .header-left .logo img {
-        height: 40px;
-        max-width: 130px;
+      .header-left .logo {
+        font-size: 1rem;
       }
       .header-left .welcome {
         font-size: 0.75rem;
@@ -534,15 +488,6 @@
         font-size: 0.7rem;
         padding: 4px 14px;
       }
-
-      .status-bar .container {
-        gap: 16px;
-        padding: 0 16px;
-      }
-      .status-item {
-        font-size: 0.75rem;
-      }
-
       .main-content {
         padding: 20px 16px 60px;
       }
@@ -595,10 +540,6 @@
       .modal h3 {
         font-size: 1.2rem;
       }
-      .status-bar .container {
-        flex-direction: column;
-        gap: 8px;
-      }
     }
   </style>
 </head>
@@ -608,36 +549,24 @@
 <header class="header-dashboard">
   <div class="container">
     <div class="header-left">
-      <a href="index.html" class="logo">
-        <img src="assets/images/logo/logo-header.png" 
-             alt="Studio Rassi · Photo & Video" 
-             width="160" 
-             height="50"
-             loading="lazy">
-      </a>
+      <a href="index.html" class="logo">Studio <span>Rassi</span></a>
       <span class="welcome">Olá, <strong id="clienteNome">Ana Silva</strong></span>
     </div>
     <div class="header-right">
+      <div class="credits-badge">
+        <i class="fas fa-coins"></i>
+        <span>Créditos: <strong id="creditsDisplay">30</strong></span>
+      </div>
+      <div class="timer-badge">
+        <i class="far fa-clock"></i>
+        <span>Expira em: <span class="timer" id="timerDisplay">71:59:59</span></span>
+      </div>
       <button class="btn-logout" onclick="window.location.href='login.html'">
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
     </div>
   </div>
 </header>
-
-<!-- ===== STATUS BAR (Centralizada) ===== -->
-<div class="status-bar">
-  <div class="container">
-    <div class="status-item">
-      <i class="fas fa-coins"></i>
-      <span>Créditos disponíveis: <strong class="value" id="creditsDisplay">30</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="far fa-clock"></i>
-      <span>Seu acesso expira em: <strong class="timer" id="timerDisplay">71:59:59</strong></span>
-    </div>
-  </div>
-</div>
 
 <!-- ===== MAIN CONTENT ===== -->
 <main class="main-content">
@@ -838,12 +767,18 @@
     }
 
     const total = selected.size;
-    let msg = `📸 Baixando ${total} item(ns) selecionado(s):\n\n`;
+    const msg = `📸 Baixando ${total} item(ns) selecionado(s)...\n\n`;
     const items = mediaItems.filter(m => selected.has(m.id));
     items.forEach((item, i) => {
       msg += `${i+1}. ${item.label} (${item.type})\n`;
     });
     alert(msg + '\n✅ Download iniciado! (Simulação)');
+
+    // Na vida real, aqui você faria o download dos arquivos
+    // Simplesmente limpamos a seleção após o download (opcional)
+    // selected.clear();
+    // updateUI();
+    // renderGallery();
   }
 
   // ============================================================
@@ -961,6 +896,7 @@
   updateTimer();
   setInterval(updateTimer, 1000);
 
+  // Salva o estado da seleção no console para debug
   console.log('📸 Área do cliente carregada!');
   console.log(`📊 ${mediaItems.length} itens disponíveis (${credits} créditos)`);
   console.log('💡 Clique nas imagens para selecionar e baixar.');
