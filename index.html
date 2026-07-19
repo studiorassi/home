@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Rassi · Área do Cliente</title>
+  
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* ===== RESET ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #2C0714;
+      color: #f5edea;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1f0510; }
+    ::-webkit-scrollbar-thumb { background: #D4A3B3; border-radius: 10px; }
+
+    /* ===== HEADER FIXO ===== */
+    .header-dashboard {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      padding: 16px 0;
+    }
+    .header-dashboard .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-left .logo {
+      display: inline-block;
+      line-height: 0;
+      text-decoration: none;
+    }
+    .header-left .logo img {
+      display: block;
+      width: auto;
+      height: 50px;
+      max-width: 160px;
+      transition: all 0.3s ease;
+    }
+    .header-left .logo img:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+    .header-left .welcome {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: #d4c5c0;
+    }
+    .header-left .welcome strong {
+      color: #f5edea;
+      font-weight: 600;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .credits-badge {
+      background: rgba(212, 163, 179, 0.12);
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .credits-badge i {
+      color: #D4A3B3;
+    }
+    .credits-badge strong {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+    }
+    .timer-badge {
+      background: rgba(212, 163, 179, 0.06);
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #d4c5c0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .timer-badge i {
+      color: #D4A3B3;
+    }
+    .timer-badge .timer {
+      font-weight: 600;
+      color: #f5edea;
+      font-variant-numeric: tabular-nums;
+      min-width: 70px;
+      display: inline-block;
+    }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      color: #d4c5c0;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-logout:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+
+    /* ===== STATUS BAR (Centralizada) ===== */
+    .status-bar {
+      background: rgba(31, 5, 16, 0.4);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.04);
+      padding: 12px 0;
+    }
+    .status-bar .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .status-item i {
+      color: #D4A3B3;
+      font-size: 1rem;
+    }
+    .status-item strong {
+      color: #f5edea;
+      font-weight: 600;
+    }
+    .status-item .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    /* ===== MAIN ===== */
+    .main-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.4rem;
+      color: #f5edea;
+    }
+    .section-header .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      background: #D4A3B3;
+      color: #2C0714;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .btn-download.active {
+      opacity: 1;
+      pointer-events: auto;
+      box-shadow: 0 4px 20px rgba(212, 163, 179, 0.25);
+    }
+    .btn-download.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.35);
+    }
+    .btn-download i { font-size: 0.9rem; }
+
+    .btn-selecionar-todos {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      color: #d4c5c0;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-selecionar-todos:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+
+    /* ===== GRID DE GALERIA (MOSAICO) ===== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    /* ===== CARD DA GALERIA ===== */
+    .gallery-card {
+      position: relative;
+      background: #1a0510;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      aspect-ratio: 3 / 4;
+      cursor: pointer;
+    }
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .gallery-card.selected {
+      border-color: #D4A3B3;
+      box-shadow: 0 0 40px rgba(212, 163, 179, 0.12), 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Imagem com proteção */
+    .gallery-card .img-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+    .gallery-card .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Marca d'água simulada (pseudo-elemento) */
+    .gallery-card .img-wrapper::after {
+      content: '© Studio Rassi';
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 1px;
+      background: rgba(0,0,0,0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Overlay de seleção */
+    .gallery-card .select-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(44, 7, 20, 0.7) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 16px;
+    }
+    .gallery-card:hover .select-overlay {
+      opacity: 1;
+    }
+    .gallery-card.selected .select-overlay {
+      opacity: 1;
+    }
+
+    .gallery-card .select-btn {
+      background: rgba(212, 163, 179, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(212, 163, 179, 0.3);
+      color: #f5edea;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      pointer-events: auto;
+    }
+    .gallery-card .select-btn:hover {
+      background: rgba(212, 163, 179, 0.3);
+      transform: scale(1.1);
+    }
+    .gallery-card.selected .select-btn {
+      background: #D4A3B3;
+      color: #2C0714;
+      border-color: #D4A3B3;
+    }
+
+    /* Badge de vídeo */
+    .gallery-card .video-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(44, 7, 20, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      color: #D4A3B3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Badge de crédito (custo) */
+    .gallery-card .credit-cost {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(44, 7, 20, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: #1f0510;
+      border-radius: 28px;
+      max-width: 480px;
+      width: 100%;
+      padding: 40px 32px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      animation: modalIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    @keyframes modalIn {
+      0% { transform: scale(0.92) translateY(20px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .modal .modal-icon {
+      font-size: 2.8rem;
+      color: #D4A3B3;
+      margin-bottom: 12px;
+    }
+    .modal h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.4rem;
+      color: #f5edea;
+      margin-bottom: 6px;
+    }
+    .modal p {
+      color: #d4c5c0;
+      font-weight: 300;
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .modal .upsell-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .modal .upsell-options button {
+      background: rgba(212, 163, 179, 0.06);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      color: #f5edea;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    .modal .upsell-options button:hover {
+      background: rgba(212, 163, 179, 0.12);
+      border-color: rgba(212, 163, 179, 0.2);
+      transform: translateX(4px);
+    }
+    .modal .upsell-options button .price {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    .modal .btn-cancel {
+      background: transparent;
+      border: none;
+      color: #7a5f5a;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      padding: 8px 16px;
+    }
+    .modal .btn-cancel:hover {
+      color: #d4c5c0;
+    }
+    .modal .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      border-top: 1px solid rgba(212, 163, 179, 0.04);
+      padding-top: 16px;
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 768px) {
+      .header-dashboard .container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 0 16px;
+      }
+      .header-left {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .header-left .logo img {
+        height: 40px;
+        max-width: 130px;
+      }
+      .header-left .welcome {
+        font-size: 0.75rem;
+      }
+      .header-right {
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .credits-badge {
+        font-size: 0.75rem;
+        padding: 4px 14px;
+      }
+      .timer-badge {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+      }
+      .timer-badge .timer {
+        min-width: 60px;
+      }
+      .btn-logout {
+        font-size: 0.7rem;
+        padding: 4px 14px;
+      }
+
+      .status-bar .container {
+        gap: 16px;
+        padding: 0 16px;
+      }
+      .status-item {
+        font-size: 0.75rem;
+      }
+
+      .main-content {
+        padding: 20px 16px 60px;
+      }
+      .section-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .section-header .actions {
+        justify-content: stretch;
+      }
+      .section-header .actions .btn-download,
+      .section-header .actions .btn-selecionar-todos {
+        flex: 1;
+        justify-content: center;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 14px;
+      }
+      .modal {
+        padding: 28px 20px;
+        margin: 16px;
+      }
+      .modal .upsell-options button {
+        font-size: 0.8rem;
+        padding: 12px 16px;
+      }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .gallery-card .select-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+      .gallery-card .video-badge,
+      .gallery-card .credit-cost {
+        font-size: 0.5rem;
+        padding: 2px 10px;
+      }
+      .gallery-card .img-wrapper::after {
+        font-size: 0.5rem;
+        padding: 2px 10px;
+        bottom: 8px;
+        right: 8px;
+      }
+      .modal h3 {
+        font-size: 1.2rem;
+      }
+      .status-bar .container {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER FIXO ===== -->
+<header class="header-dashboard">
+  <div class="container">
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="assets/images/logo/logo-header.png" 
+             alt="Studio Rassi · Photo & Video" 
+             width="160" 
+             height="50"
+             loading="lazy">
+      </a>
+      <span class="welcome">Olá, <strong id="clienteNome">Ana Silva</strong></span>
+    </div>
+    <div class="header-right">
+      <button class="btn-logout" onclick="window.location.href='login.html'">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== STATUS BAR (Centralizada) ===== -->
+<div class="status-bar">
+  <div class="container">
+    <div class="status-item">
+      <i class="fas fa-coins"></i>
+      <span>Créditos disponíveis: <strong class="value" id="creditsDisplay">30</strong></span>
+    </div>
+    <div class="status-item">
+      <i class="far fa-clock"></i>
+      <span>Seu acesso expira em: <strong class="timer" id="timerDisplay">71:59:59</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+  <div class="section-header">
+    <h2>Seu ensaio · <span id="selectedCount">0</span> selecionadas</h2>
+    <div class="actions">
+      <button class="btn-selecionar-todos" id="selecionarTodos">
+        <i class="fas fa-check-double"></i> Selecionar todas
+      </button>
+      <button class="btn-download" id="downloadBtn">
+        <i class="fas fa-download"></i> Baixar selecionadas
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid"></div>
+</main>
+
+<!-- ===== MODAL UPSELL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon"><i class="fas fa-coins"></i></div>
+    <h3>Créditos insuficientes</h3>
+    <p>
+      Você não tem créditos suficientes para selecionar esta imagem.<br>
+      Adquira mais créditos para continuar baixando suas memórias.
+    </p>
+    <div class="upsell-options">
+      <button onclick="comprarCredits(1, 18)">
+        <span>📷 1 Foto Extra</span>
+        <span class="price">R$ 18</span>
+      </button>
+      <button onclick="comprarCredits(10, 150)">
+        <span>📷 Pacote +10 Fotos</span>
+        <span class="price">R$ 150</span>
+      </button>
+      <button onclick="comprarCredits(1, 50, 'video')">
+        <span>🎬 1 Vídeo Extra</span>
+        <span class="price">R$ 50</span>
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+  // ============================================================
+  // 1. DADOS SIMULADOS DO ENSAIO (12 fotos + 2 vídeos)
+  // ============================================================
+  const mediaItems = [
+    { id: 1, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio1/400/500', label: 'Ensaio 01' },
+    { id: 2, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio2/400/500', label: 'Ensaio 02' },
+    { id: 3, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio3/400/500', label: 'Ensaio 03' },
+    { id: 4, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio4/400/500', label: 'Ensaio 04' },
+    { id: 5, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio5/400/500', label: 'Ensaio 05' },
+    { id: 6, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio6/400/500', label: 'Ensaio 06' },
+    { id: 7, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio7/400/500', label: 'Ensaio 07' },
+    { id: 8, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio8/400/500', label: 'Ensaio 08' },
+    { id: 9, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio9/400/500', label: 'Ensaio 09' },
+    { id: 10, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio10/400/500', label: 'Ensaio 10' },
+    { id: 11, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio11/400/500', label: 'Ensaio 11' },
+    { id: 12, type: 'photo', thumbnail: 'https://picsum.photos/seed/studio12/400/500', label: 'Ensaio 12' },
+    { id: 13, type: 'video', thumbnail: 'https://picsum.photos/seed/studio13/400/500', label: 'Vídeo 01' },
+    { id: 14, type: 'video', thumbnail: 'https://picsum.photos/seed/studio14/400/500', label: 'Vídeo 02' }
+  ];
+
+  // ============================================================
+  // 2. ESTADO
+  // ============================================================
+  let credits = 30;
+  const selected = new Set(); // ids selecionados
+  let timerSeconds = 72 * 3600; // 72 horas
+  let isModalOpen = false;
+
+  // ============================================================
+  // 3. ELEMENTOS DOM
+  // ============================================================
+  const grid = document.getElementById('galleryGrid');
+  const creditsDisplay = document.getElementById('creditsDisplay');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const selectedCount = document.getElementById('selectedCount');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const selecionarTodosBtn = document.getElementById('selecionarTodos');
+
+  // ============================================================
+  // 4. RENDERIZAR GALERIA
+  // ============================================================
+  function renderGallery() {
+    grid.innerHTML = '';
+    mediaItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+      if (selected.has(item.id)) card.classList.add('selected');
+      card.dataset.id = item.id;
+
+      const isVideo = item.type === 'video';
+      const cost = isVideo ? 2 : 1;
+
+      card.innerHTML = `
+        <div class="img-wrapper">
+          <img src="${item.thumbnail}" alt="${item.label}" loading="lazy" draggable="false">
+        </div>
+        ${isVideo ? `<div class="video-badge"><i class="fas fa-play"></i> Vídeo</div>` : ''}
+        <div class="credit-cost">${cost} crédito${cost > 1 ? 's' : ''}</div>
+        <div class="select-overlay">
+          <button class="select-btn" data-id="${item.id}">
+            ${selected.has(item.id) ? '<i class="fas fa-check"></i>' : '<i class="fas fa-plus"></i>'}
+          </button>
+        </div>
+      `;
+
+      card.addEventListener('click', (e) => {
+        // Evita que o clique no botão dispare duas vezes
+        if (e.target.closest('.select-btn')) return;
+        toggleSelect(item.id);
+      });
+
+      grid.appendChild(card);
+    });
+
+    // Adiciona eventos aos botões de seleção
+    document.querySelectorAll('.select-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.dataset.id);
+        toggleSelect(id);
+      });
+    });
+
+    updateUI();
+  }
+
+  // ============================================================
+  // 5. LÓGICA DE SELEÇÃO
+  // ============================================================
+  function toggleSelect(id) {
+    const item = mediaItems.find(m => m.id === id);
+    if (!item) return;
+
+    const cost = item.type === 'video' ? 2 : 1;
+
+    if (selected.has(id)) {
+      selected.delete(id);
+    } else {
+      if (credits < cost) {
+        abrirModal();
+        return;
+      }
+      selected.add(id);
+      credits -= cost;
+      updateCredits();
+    }
+
+    updateUI();
+    renderGallery(); // Re-render para atualizar os estados visuais
+  }
+
+  function selecionarTodos() {
+    const disponiveis = mediaItems.filter(item => {
+      const cost = item.type === 'video' ? 2 : 1;
+      return !selected.has(item.id) && credits >= cost;
+    });
+
+    if (disponiveis.length === 0) {
+      // Verifica se já tem todos selecionados
+      if (selected.size === mediaItems.length) {
+        alert('✅ Todas as imagens já estão selecionadas!');
+        return;
+      }
+      abrirModal();
+      return;
+    }
+
+    disponiveis.forEach(item => {
+      const cost = item.type === 'video' ? 2 : 1;
+      if (credits >= cost) {
+        selected.add(item.id);
+        credits -= cost;
+      }
+    });
+
+    updateCredits();
+    updateUI();
+    renderGallery();
+  }
+
+  // ============================================================
+  // 6. DOWNLOAD
+  // ============================================================
+  function downloadSelected() {
+    if (selected.size === 0) {
+      alert('Selecione pelo menos uma imagem para baixar.');
+      return;
+    }
+
+    const total = selected.size;
+    let msg = `📸 Baixando ${total} item(ns) selecionado(s):\n\n`;
+    const items = mediaItems.filter(m => selected.has(m.id));
+    items.forEach((item, i) => {
+      msg += `${i+1}. ${item.label} (${item.type})\n`;
+    });
+    alert(msg + '\n✅ Download iniciado! (Simulação)');
+  }
+
+  // ============================================================
+  // 7. UPSELL / CRÉDITOS
+  // ============================================================
+  function comprarCredits(qty, price, type = 'photo') {
+    const confirmMsg = `🛒 Comprar ${qty} ${type === 'video' ? 'vídeo(s)' : 'foto(s)'} por R$ ${price}?`;
+    if (!confirm(confirmMsg)) return;
+
+    credits += qty;
+    updateCredits();
+    fecharModal();
+    renderGallery();
+    alert(`✅ ${qty} crédito(s) adicionado(s)! Total: ${credits}`);
+  }
+
+  function updateCredits() {
+    creditsDisplay.textContent = credits;
+  }
+
+  // ============================================================
+  // 8. MODAL
+  // ============================================================
+  function abrirModal() {
+    isModalOpen = true;
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharModal() {
+    isModalOpen = false;
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Fecha modal ao clicar fora
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) fecharModal();
+  });
+
+  // ============================================================
+  // 9. TIMER
+  // ============================================================
+  function updateTimer() {
+    if (timerSeconds <= 0) {
+      timerDisplay.textContent = '00:00:00';
+      alert('⏰ Seu tempo expirou! Entre em contato para renovar seu acesso.');
+      return;
+    }
+    timerSeconds--;
+    const hrs = Math.floor(timerSeconds / 3600);
+    const mins = Math.floor((timerSeconds % 3600) / 60);
+    const secs = timerSeconds % 60;
+    timerDisplay.textContent = 
+      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  // ============================================================
+  // 10. UI UPDATE
+  // ============================================================
+  function updateUI() {
+    const count = selected.size;
+    selectedCount.textContent = count;
+
+    if (count > 0) {
+      downloadBtn.classList.add('active');
+      downloadBtn.innerHTML = `<i class="fas fa-download"></i> Baixar (${count})`;
+    } else {
+      downloadBtn.classList.remove('active');
+      downloadBtn.innerHTML = `<i class="fas fa-download"></i> Baixar selecionadas`;
+    }
+
+    // Atualiza texto do botão selecionar todos
+    if (selected.size === mediaItems.length) {
+      selecionarTodosBtn.innerHTML = `<i class="fas fa-times"></i> Desmarcar todas`;
+      selecionarTodosBtn.onclick = () => {
+        selected.clear();
+        updateCredits();
+        updateUI();
+        renderGallery();
+      };
+    } else {
+      selecionarTodosBtn.innerHTML = `<i class="fas fa-check-double"></i> Selecionar todas`;
+      selecionarTodosBtn.onclick = selecionarTodos;
+    }
+  }
+
+  // ============================================================
+  // 11. PROTEÇÃO CONTRA PRINT/DOWNLOAD
+  // ============================================================
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+      e.preventDefault();
+      alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
+    }
+  });
+
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.gallery-card')) {
+      e.preventDefault();
+      alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
+    }
+  });
+
+  // ============================================================
+  // 12. EVENT LISTENERS
+  // ============================================================
+  downloadBtn.addEventListener('click', downloadSelected);
+
+  // ============================================================
+  // 13. INICIALIZAR
+  // ============================================================
+  renderGallery();
+  updateCredits();
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  console.log('📸 Área do cliente carregada!');
+  console.log(`📊 ${mediaItems.length} itens disponíveis (${credits} créditos)`);
+  console.log('💡 Clique nas imagens para selecionar e baixar.');
+</script>
+
+</body>
+</html>
