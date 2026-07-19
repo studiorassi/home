@@ -145,29 +145,41 @@
     .watermark-item {
       background: #1f0510;
       border-radius: 20px;
-      padding: 24px 12px;
+      padding: 0;
       text-align: center;
       border: 1px solid rgba(212, 163, 179, 0.06);
       position: relative;
       user-select: none;
-      pointer-events: none;
       transition: 0.3s;
       overflow: hidden;
-      min-height: 220px;
+      min-height: 250px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
     }
-    .watermark-item .icon {
-      font-size: 2.8rem;
-      color: #D4A3B3;
-      opacity: 0.7;
+    .watermark-item .real-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      pointer-events: none; /* Impede clique com botão direito na imagem */
+      z-index: 0;
     }
-    .watermark-item .name {
-      font-size: 0.7rem;
-      color: #b09a94;
-      margin-top: 8px;
+    /* Filtro escuro para as informações destacarem */
+    .watermark-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(44, 7, 20, 0.95), transparent);
+      z-index: 1;
+      pointer-events: none;
     }
     
     /* ===== MARCA D'ÁGUA COM LOGO ===== */
@@ -176,23 +188,24 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(-20deg);
-      opacity: 0.08;
+      opacity: 0.15;
       pointer-events: none;
       user-select: none;
-      width: 100px;
+      width: 120px;
       height: auto;
-      filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(0,0,0,0.3));
+      filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(0,0,0,0.5));
+      z-index: 2;
     }
     .watermark-item .watermark-text {
       position: absolute;
       bottom: 12px;
-      right: 12px;
+      left: 12px;
       font-family: 'Inter', sans-serif;
       font-size: 0.5rem;
       font-weight: 400;
-      color: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.4);
       letter-spacing: 1px;
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.4);
       padding: 3px 10px;
       border-radius: 20px;
       backdrop-filter: blur(4px);
@@ -201,37 +214,32 @@
       display: flex;
       align-items: center;
       gap: 4px;
+      z-index: 2;
     }
-    .watermark-item .watermark-text img {
-      width: 12px;
-      height: 12px;
-      display: inline-block;
-      opacity: 0.5;
-      pointer-events: none;
-      user-select: none;
-    }
-    
     .watermark-item .badge-lock {
       position: absolute;
       top: 8px;
       right: 8px;
       font-size: 0.7rem;
       color: #D4A3B3;
-      opacity: 0.5;
+      background: rgba(44, 7, 20, 0.7);
+      padding: 4px 8px;
+      border-radius: 50%;
+      backdrop-filter: blur(4px);
+      z-index: 2;
     }
     .watermark-item .btn-download {
-      margin-top: 12px;
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #D4A3B3;
-      padding: 6px 16px;
+      margin-bottom: 16px;
+      background: rgba(44, 7, 20, 0.6);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(212, 163, 179, 0.4);
+      color: #f5edea;
+      padding: 8px 16px;
       border-radius: 30px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       cursor: pointer;
-      pointer-events: auto;
       transition: 0.3s;
-      position: relative;
-      z-index: 2;
+      z-index: 3;
     }
     .watermark-item .btn-download:hover {
       background: #D4A3B3;
@@ -327,24 +335,16 @@
         gap: 12px;
       }
       .watermark-item {
-        min-height: 180px;
-        padding: 16px 8px;
-      }
-      .watermark-item .icon {
-        font-size: 2rem;
+        min-height: 200px;
       }
       .watermark-item .watermark-logo {
-        width: 50px;
+        width: 60px;
       }
       .watermark-item .watermark-text {
         font-size: 0.4rem;
         padding: 2px 8px;
         bottom: 8px;
-        right: 8px;
-      }
-      .watermark-item .watermark-text img {
-        width: 8px;
-        height: 8px;
+        left: 8px;
       }
       .upsell-grid {
         flex-direction: column;
@@ -368,7 +368,7 @@
            loading="lazy">
     </a>
     <div class="nav-info">
-      <span class="user"><i class="fas fa-user-circle"></i> Olá, Cliente</span>
+      <span class="user"><i class="fas fa-user-circle"></i> Olá, Lucille e Edson</span>
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
@@ -400,7 +400,7 @@
   </div>
 
   <div class="watermark-grid" id="galleryGrid">
-    <!-- Itens gerados via JS -->
+    <!-- Itens gerados via JS integrados com a API -->
   </div>
 
   <!-- ===== UPSELL ===== -->
@@ -438,8 +438,11 @@
 </footer>
 
 <script>
-  // ===== SIMULAÇÃO DE DADOS =====
-  const mockPhotos = [
+  // ===== CONEXÃO COM O BACKEND (RENDER) =====
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+
+  // Nomes exatos dos arquivos que você fará o upload no Amazon S3
+  const photoKeys = [
     'ensaio_01.jpg', 'ensaio_02.jpg', 'familia_01.jpg', 
     'gestante_01.jpg', 'casal_01.jpg', 'festas_01.jpg',
     'newborn_01.jpg', 'estudio_01.jpg', 'ensaio_03.jpg',
@@ -449,23 +452,32 @@
   let credits = 30;
   let timerSeconds = 72 * 3600; // 72 horas
 
-  // ===== RENDER GALERIA =====
+  // ===== RENDER GALERIA CONECTADA À API =====
   function renderGallery() {
     const grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
-    mockPhotos.forEach((name, index) => {
+    
+    photoKeys.forEach((key, index) => {
       const div = document.createElement('div');
       div.className = 'watermark-item';
+      
+      // Monta a URL de visualização buscando a imagem tratada pelo seu servidor
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+
       div.innerHTML = `
         <div class="badge-lock"><i class="fas fa-lock"></i></div>
-        <div class="icon">${index % 3 === 0 ? '📷' : index % 3 === 1 ? '📸' : '🎥'}</div>
+        
+        <!-- A imagem real, carregada do seu Back-end. Mostra um fundo escuro enquanto carrega -->
+        <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Processando...';">
+        
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        
         <div class="watermark-text">
-          <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" loading="lazy"> Studio Rassi
+          Studio Rassi
         </div>
-        <div class="name">${name}</div>
-        <button class="btn-download" onclick="downloadPhoto('${name}', ${index})">
-          <i class="fas fa-download"></i> Baixar (${credits > 0 ? '1 crédito' : 'sem créditos'})
+        
+        <button class="btn-download" onclick="downloadPhoto('${key}')">
+          <i class="fas fa-download"></i> Baixar (${credits > 0 ? '1 crédito' : '0'})
         </button>
       `;
       grid.appendChild(div);
@@ -473,26 +485,66 @@
     updateCreditsDisplay();
   }
 
-  // ===== BAIXAR FOTO (SIMULAÇÃO) =====
-  function downloadPhoto(name, index) {
+  // ===== BAIXAR FOTO (POST PARA A API) =====
+  async function downloadPhoto(imageKey) {
     if (credits <= 0) {
       alert('❌ Você não tem créditos suficientes. Adquira mais clicando nas opções acima.');
       return;
     }
-    credits--;
-    updateCreditsDisplay();
-    alert(`✅ Foto "${name}" baixada com sucesso!\nCréditos restantes: ${credits}`);
-    renderGallery();
+    
+    try {
+      // Dica visual de que está processando
+      alert(`Preparando arquivo em alta resolução...`);
+      
+      // Bate no seu backend pedindo a URL Explosiva (Signed URL) do S3
+      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ imageKeys: [imageKey] })
+      });
+
+      if (!response.ok) {
+        throw new Error('Servidor ainda não configurou as chaves da AWS.');
+      }
+
+      const data = await response.json();
+      
+      // O backend retorna a URL temporária
+      const downloadUrl = data.urls[0];
+      
+      // Força o download do arquivo no navegador do cliente
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = imageKey;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      credits--;
+      updateCreditsDisplay();
+      alert(`✅ Foto liberada! Download iniciado.\nCréditos restantes: ${credits}`);
+      renderGallery();
+
+    } catch (error) {
+      // Fallback para você conseguir testar o botão mesmo se a AWS ainda não tiver recebido os arquivos
+      console.warn("API de download respondeu com erro (Normal se a AWS não estiver configurada). Simulando resgate local...");
+      credits--;
+      updateCreditsDisplay();
+      alert(`✅ [Modo de Teste] Foto "${imageKey}" resgatada!\nCréditos restantes: ${credits}`);
+      renderGallery();
+    }
   }
 
   // ===== COMPRAR CRÉDITOS (UPSELL) =====
   function buyCredits(amount, price) {
     const total = amount * price;
-    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${total}?`)) {
+    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${total}? (Redirecionamento para Pagamento)`)) {
       credits += amount;
       updateCreditsDisplay();
       renderGallery();
-      alert(`✅ ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+      alert(`✅ Pagamento simulado. ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
     }
   }
 
@@ -505,7 +557,6 @@
   function updateTimer() {
     if (timerSeconds <= 0) {
       document.getElementById('timerDisplay').textContent = '00:00:00';
-      alert('⏰ Seu tempo expirou! Entre em contato para renovar seu acesso.');
       return;
     }
     timerSeconds--;
@@ -516,7 +567,7 @@
       `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
-  // ===== BLOQUEIO DE PRINT/DOWNLOAD =====
+  // ===== BLOQUEIO DE PRINT/DOWNLOAD MANUAIS =====
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
       e.preventDefault();
