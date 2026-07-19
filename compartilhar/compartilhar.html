@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memórias eternizadas · Studio Rassi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Brittany+Signature&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #2C0714;
+      color: #f5edea;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: radial-gradient(ellipse at 50% 30%, rgba(212,163,179,0.05) 0%, transparent 70%);
+    }
+    .share-container {
+      max-width: 640px;
+      width: 100%;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .share-card {
+      background: #1f0510;
+      border-radius: 48px;
+      padding: 48px 32px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .share-card .icon-heart {
+      font-size: 4rem;
+      color: #D4A3B3;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .share-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .share-card h1 .script {
+      font-family: 'Brittany Signature', cursive;
+      color: #D4A3B3;
+      font-size: 3.4rem;
+      font-weight: 400;
+    }
+    .share-card .sub {
+      color: #d4c5c0;
+      font-weight: 300;
+      font-size: 1.1rem;
+      margin: 12px 0 24px;
+    }
+    .share-card .img-placeholder {
+      background: #2C0714;
+      border-radius: 32px;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      margin: 20px 0;
+      font-weight: 300;
+      color: #D4A3B3;
+      font-size: 1.1rem;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .share-card .img-placeholder i {
+      font-size: 3rem;
+      color: #D4A3B3;
+      opacity: 0.5;
+    }
+    .share-card .img-placeholder .team-label {
+      font-family: 'Brittany Signature', cursive;
+      font-size: 1.8rem;
+      color: #D4A3B3;
+    }
+    .share-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 24px 0 16px;
+    }
+    .btn-share {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: 50px;
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .btn-share-instagram {
+      background: #D4A3B3;
+      color: #2C0714;
+    }
+    .btn-share-instagram:hover {
+      background: #c08b9e;
+      transform: translateY(-2px);
+    }
+    .btn-share-outline {
+      background: transparent;
+      border: 2px solid rgba(212, 163, 179, 0.2);
+      color: #f5edea;
+    }
+    .btn-share-outline:hover {
+      border-color: #D4A3B3;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #7a5f5a;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-top: 16px;
+      transition: 0.3s;
+    }
+    .btn-back:hover { color: #D4A3B3; }
+    .footer-note {
+      margin-top: 20px;
+      font-size: 0.7rem;
+      color: #7a5f5a;
+    }
+    @media (max-width: 480px) {
+      .share-card { padding: 32px 20px; }
+      .share-card h1 { font-size: 2rem; }
+      .share-card h1 .script { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="share-container">
+    <div class="share-card">
+      <i class="fas fa-heart icon-heart"></i>
+      <h1><span class="script">Memórias</span> que ficam<br>para sempre</h1>
+      <p class="sub">Seu ensaio foi eternizado com todo o cuidado e paixão que merece.</p>
+
+      <div class="img-placeholder">
+        <i class="fas fa-camera-retro"></i>
+        <div>
+          <span class="team-label">Studio Rassi</span> <span style="font-weight:300; color:#d4c5c0;">+</span> 
+          <span style="font-weight:300; color:#D4A3B3;">você</span>
+        </div>
+        <div style="font-size:0.7rem; color:#7a5f5a;">📸 bastidores do ensaio</div>
+      </div>
+
+      <p style="font-weight:300; color:#d4c5c0; font-size:0.9rem; margin-bottom:8px;">
+        Sua história merece ser compartilhada. Mostre ao mundo a beleza desses momentos.
+      </p>
+
+      <div class="share-buttons">
+        <button class="btn-share btn-share-instagram" onclick="shareOn('instagram')">
+          <i class="fab fa-instagram"></i> Compartilhar
+        </button>
+        <button class="btn-share btn-share-outline" onclick="shareOn('facebook')">
+          <i class="fab fa-facebook"></i> Facebook
+        </button>
+        <button class="btn-share btn-share-outline" onclick="shareOn('whatsapp')">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </button>
+      </div>
+
+      <a href="cliente.html" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Voltar para minhas fotos
+      </a>
+    </div>
+    <div class="footer-note">
+      💛 Compartilhe gratuitamente · Suas memórias merecem ser vistas
+    </div>
+  </div>
+
+  <script>
+    function shareOn(platform) {
+      const text = '📸 Minhas memórias eternizadas pelo Studio Rassi! Que momento especial! ✨';
+      const url = window.location.href;
+      let shareUrl = '';
+      
+      switch(platform) {
+        case 'instagram':
+          alert('📱 Abra o Instagram e compartilhe sua foto marcando @studiorassi! 💖');
+          return;
+        case 'facebook':
+          shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+          break;
+        case 'whatsapp':
+          shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+          break;
+      }
+      
+      if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=500');
+      }
+    }
+  </script>
+</body>
+</html>
