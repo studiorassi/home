@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Brittany+Signature&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ===== TODO O CSS PERMANECE IGUAL ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -124,6 +123,49 @@
       display: inline-block;
     }
 
+    /* ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== */
+    .credits-info {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 12px auto 8px;
+      max-width: 700px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      text-align: center;
+    }
+    .credits-info .heart {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .credits-info .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: #d4c5c0;
+      font-weight: 300;
+    }
+    .credits-info .label strong {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    .credits-info .highlight {
+      color: #D4A3B3;
+      font-weight: 500;
+    }
+    .credits-info .emoji-heart {
+      display: inline-block;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
     /* ===== SKELETON LOADING ===== */
     .skeleton {
       position: absolute;
@@ -163,7 +205,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      margin: 24px 0 20px;
+      margin: 16px 0 20px;
     }
     .gallery-header h2 {
       font-family: 'Playfair Display', serif;
@@ -452,6 +494,12 @@
       .status-item {
         font-size: 0.75rem;
       }
+      .credits-info {
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 16px;
+        font-size: 0.75rem;
+      }
       .watermark-grid { 
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
       }
@@ -521,6 +569,10 @@
         flex-direction: column;
         align-items: center;
       }
+      .credits-info {
+        font-size: 0.65rem;
+        padding: 10px 12px;
+      }
     }
   </style>
 </head>
@@ -563,6 +615,23 @@
       <i class="far fa-clock"></i>
       <span>Seu acesso expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
     </div>
+  </div>
+</div>
+
+<!-- ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== -->
+<div class="container">
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label">
+      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a 
+      <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e 
+      <strong>sem marca d'água</strong>.
+    </span>
+    <span class="label" style="display: inline-flex; align-items: center; gap: 4px;">
+      <i class="fas fa-clock" style="color: #D4A3B3; font-size: 0.7rem;"></i>
+      <span style="font-size: 0.7rem; color: #7a5f5a;">A primeira carga pode demorar um pouquinho, mas vale a espera!</span>
+    </span>
+    <span class="emoji-heart">🥰</span>
   </div>
 </div>
 
@@ -692,7 +761,7 @@
           onload="this.classList.add('loaded'); document.getElementById('skeleton-${index}').style.display='none';"
           onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; document.getElementById('skeleton-${index}').style.display='none';"
         >
-        <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
 
