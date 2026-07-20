@@ -173,7 +173,6 @@
     .watermark-item .real-image:hover {
       transform: scale(1.03);
     }
-    /* Filtro escuro para as informações destacarem */
     .watermark-item::after {
       content: '';
       position: absolute;
@@ -186,7 +185,6 @@
       pointer-events: none;
     }
     
-    /* ===== MARCA D'ÁGUA COM LOGO ===== */
     .watermark-item .watermark-logo {
       position: absolute;
       top: 50%;
@@ -445,7 +443,7 @@
     // ===== CONEXÃO COM O BACKEND (RENDER) =====
     const API_BASE_URL = 'https://api-studiorassi.onrender.com';
 
-    // Gera automaticamente a lista de 'ensaio_01.jpg' até 'ensaio_116.jpg'
+    // Gera automaticamente a lista de 'ensaio_01.jpg' até 'ensaio_116.jpg' garantindo os dois dígitos exatos (01, 02... 09, 10)
     const allPhotoKeys = [];
     for (let i = 1; i <= 116; i++) {
       const numeroFormatado = String(i).padStart(2, '0');
@@ -454,7 +452,7 @@
 
     let credits = 30;
     let timerSeconds = 72 * 3600; // 72 horas
-    let photosToShow = 24; // Quantidade de fotos exibidas por lote inicial
+    let photosToShow = 24; // Lote inicial leve e rápido
 
     // ===== RENDER GALERIA COM PAGINAÇÃO E TELA CHEIA =====
     function renderGallery() {
@@ -467,20 +465,18 @@
         const div = document.createElement('div');
         div.className = 'watermark-item';
         
-        // URL otimizada e comprimida (carregamento leve e rápido em KB)
-        const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=600`;
+        // URL otimizada com largura de 400px e alta compressão para carregar em KB instantaneamente
+        const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=400`;
 
         div.innerHTML = `
           <div class="badge-lock"><i class="fas fa-lock"></i></div>
           
-          <!-- Clicar na miniatura abre em tela cheia para avaliação -->
           <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy" onclick="openFullscreen('${imageUrl}')" title="Clique para ampliar" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Processando...';">
           
           <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
           
           <div class="watermark-text">Studio Rassi</div>
           
-          <!-- Botão que consome crédito e busca o arquivo original limpo na AWS -->
           <button class="btn-download" onclick="downloadPhoto('${key}')">
             <i class="fas fa-download"></i> Baixar (${credits > 0 ? '1 crédito' : '0'})
           </button>
