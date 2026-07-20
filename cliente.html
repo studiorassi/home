@@ -438,156 +438,185 @@
 </footer>
 
 <script>
-  // ===== CONEXÃO COM O BACKEND (RENDER) =====
-  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+    // ===== CONEXÃO COM O BACKEND (RENDER) =====
+    const API_BASE_URL = 'https://api-studiorassi.onrender.com';
 
-// Nomes exatos dos arquivos que você fez o upload no Amazon S3
- // Gera automaticamente a lista de 'ensaio_01.jpg' até 'ensaio_116.jpg'
-  const photoKeys = [];
-  for (let i = 1; i <= 116; i++) {
-    // Formata o número com zero à esquerda se for menor que 10 (ex: 01, 02... 99, 100)
-    const numeroFormatado = String(i).padStart(2, '0');
-    photoKeys.push(`ensaio_${numeroFormatado}.jpg`);
-  }
-
-  let credits = 30;
-  let timerSeconds = 72 * 3600; // 72 horas
-
-  // ===== RENDER GALERIA CONECTADA À API =====
-  function renderGallery() {
-    const grid = document.getElementById('galleryGrid');
-    grid.innerHTML = '';
-    
-    photoKeys.forEach((key, index) => {
-      const div = document.createElement('div');
-      div.className = 'watermark-item';
-      
-      // Monta a URL de visualização buscando a imagem tratada pelo seu servidor
-      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
-
-      div.innerHTML = `
-        <div class="badge-lock"><i class="fas fa-lock"></i></div>
-        
-        <!-- A imagem real, carregada do seu Back-end. Mostra um fundo escuro enquanto carrega -->
-        <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Processando...';">
-        
-        <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
-        
-        <div class="watermark-text">
-          Studio Rassi
-        </div>
-        
-        <button class="btn-download" onclick="downloadPhoto('${key}')">
-          <i class="fas fa-download"></i> Baixar (${credits > 0 ? '1 crédito' : '0'})
-        </button>
-      `;
-      grid.appendChild(div);
-    });
-    updateCreditsDisplay();
-  }
-
-  // ===== BAIXAR FOTO (POST PARA A API) =====
-  async function downloadPhoto(imageKey) {
-    if (credits <= 0) {
-      alert('❌ Você não tem créditos suficientes. Adquira mais clicando nas opções acima.');
-      return;
+    // Gera automaticamente a lista de 'ensaio_01.jpg' até 'ensaio_116.jpg'
+    const allPhotoKeys = [];
+    for (let i = 1; i <= 116; i++) {
+      const numeroFormatado = String(i).padStart(2, '0');
+      allPhotoKeys.push(`ensaio_${numeroFormatado}.jpg`);
     }
-    
-    try {
-      // Dica visual de que está processando
-      alert(`Preparando arquivo em alta resolução...`);
+
+    let credits = 30;
+    let timerSeconds = 72 * 3600; // 72 horas
+    let photosToShow = 24; // Quantidade de fotos exibidas por lote
+
+    // ===== RENDER GALERIA COM PAGINAÇÃO =====
+    function renderGallery() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
       
-      // Bate no seu backend pedindo a URL Explosiva (Signed URL) do S3
-      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ imageKeys: [imageKey] })
+      // Pega apenas a quantidade atual permitida pelo lote
+      const currentKeys = allPhotoKeys.slice(0, photosToShow);
+
+      currentKeys.forEach((key, index) => {
+        const div = document.createElement('div');
+        div.className = 'watermark-item';
+        
+        const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+
+        div.innerHTML = `
+          <div class="badge-lock"><i class="fas fa-lock"></i></div>
+          <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Processando...';">
+          <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+          <div class="watermark-text">Studio Rassi</div>
+          <button class="btn-download" onclick="downloadPhoto('${key}')">
+            <i class="fas fa-download"></i> Baixar (${credits > 0 ? '1 crédito' : '0'})
+          </button>
+        `;
+        grid.appendChild(div);
       });
 
-      if (!response.ok) {
-        throw new Error('Servidor ainda não configurou as chaves da AWS.');
+      // Gerencia o botão "Carregar mais"
+      renderLoadMoreButton();
+      updateCreditsDisplay();
+    }
+
+    // ===== BOTÃO CARREGAR MAIS =====
+    function renderLoadMoreButton() {
+      let loadMoreContainer = document.getElementById('loadMoreContainer');
+      
+      // Se já chegou ao fim de todas as fotos, remove o botão
+      if (photosToShow >= allPhotoKeys.length) {
+        if (loadMoreContainer) loadMoreContainer.remove();
+        return;
       }
 
-      const data = await response.json();
+      if (!loadMoreContainer) {
+        loadMoreContainer = document.createElement('div');
+        loadMoreContainer.id = 'loadMoreContainer';
+        loadMoreContainer.style.textAlign = 'center';
+        loadMoreContainer.style.margin = '40px 0';
+        
+        loadMoreContainer.innerHTML = `
+          <button id="btnLoadMore" onclick="loadMorePhotos()" style="
+            background: transparent;
+            border: 1px solid #D4A3B3;
+            color: #f5edea;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+          ">Carregar mais fotos (${allPhotoKeys.length - photosToShow} restantes)</button>
+        `;
+        // Insere o botão logo abaixo da grid de fotos
+        document.getElementById('galleryGrid').after(loadMoreContainer);
+      } else {
+        document.getElementById('btnLoadMore').textContent = `Carregar mais fotos (${allPhotoKeys.length - photosToShow} restantes)`;
+      }
+    }
+
+    function loadMorePhotos() {
+      photosToShow += 24; // Adiciona mais 24 fotos por clique
+      renderGallery();
+    }
+
+    // ===== BAIXAR FOTO (POST PARA A API) =====
+    async function downloadPhoto(imageKey) {
+      if (credits <= 0) {
+        alert('❌ Você não tem créditos suficientes. Adquira mais clicando nas opções acima.');
+        return;
+      }
       
-      // O backend retorna a URL temporária
-      const downloadUrl = data.urls[0];
-      
-      // Força o download do arquivo no navegador do cliente
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = imageKey;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      try {
+        alert(`Preparando arquivo em alta resolução...`);
+        
+        const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageKeys: [imageKey] })
+        });
 
-      credits--;
-      updateCreditsDisplay();
-      alert(`✅ Foto liberada! Download iniciado.\nCréditos restantes: ${credits}`);
-      renderGallery();
+        if (!response.ok) {
+          throw new Error('Erro ao gerar link de download.');
+        }
 
-    } catch (error) {
-      // Fallback para você conseguir testar o botão mesmo se a AWS ainda não tiver recebido os arquivos
-      console.warn("API de download respondeu com erro (Normal se a AWS não estiver configurada). Simulando resgate local...");
-      credits--;
-      updateCreditsDisplay();
-      alert(`✅ [Modo de Teste] Foto "${imageKey}" resgatada!\nCréditos restantes: ${credits}`);
-      renderGallery();
+        const data = await response.json();
+        const downloadUrl = data.urls[0];
+        
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = imageKey;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        credits--;
+        updateCreditsDisplay();
+        alert(`✅ Foto liberada! Download iniciado.\nCréditos restantes: ${credits}`);
+        renderGallery();
+
+      } catch (error) {
+        console.warn("Simulando resgate local...");
+        credits--;
+        updateCreditsDisplay();
+        alert(`✅ [Modo de Teste] Foto "${imageKey}" resgatada!\nCréditos restantes: ${credits}`);
+        renderGallery();
+      }
     }
-  }
 
-  // ===== COMPRAR CRÉDITOS (UPSELL) =====
-  function buyCredits(amount, price) {
-    const total = amount * price;
-    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${total}? (Redirecionamento para Pagamento)`)) {
-      credits += amount;
-      updateCreditsDisplay();
-      renderGallery();
-      alert(`✅ Pagamento simulado. ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+    // ===== COMPRAR CRÉDITOS (UPSELL) =====
+    function buyCredits(amount, price) {
+      const total = amount * price;
+      if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${total}? (Redirecionamento para Pagamento)`)) {
+        credits += amount;
+        updateCreditsDisplay();
+        renderGallery();
+        alert(`✅ Pagamento simulado. ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+      }
     }
-  }
 
-  // ===== ATUALIZAR DISPLAY =====
-  function updateCreditsDisplay() {
-    document.getElementById('creditsDisplay').textContent = credits;
-  }
-
-  // ===== TIMER REGRESSIVO =====
-  function updateTimer() {
-    if (timerSeconds <= 0) {
-      document.getElementById('timerDisplay').textContent = '00:00:00';
-      return;
+    // ===== ATUALIZAR DISPLAY =====
+    function updateCreditsDisplay() {
+      document.getElementById('creditsDisplay').textContent = credits;
     }
-    timerSeconds--;
-    const hrs = Math.floor(timerSeconds / 3600);
-    const mins = Math.floor((timerSeconds % 3600) / 60);
-    const secs = timerSeconds % 60;
-    document.getElementById('timerDisplay').textContent = 
-      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
 
-  // ===== BLOQUEIO DE PRINT/DOWNLOAD MANUAIS =====
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
-      e.preventDefault();
-      alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
+    // ===== TIMER REGRESSIVO =====
+    function updateTimer() {
+      if (timerSeconds <= 0) {
+        document.getElementById('timerDisplay').textContent = '00:00:00';
+        return;
+      }
+      timerSeconds--;
+      const hrs = Math.floor(timerSeconds / 3600);
+      const mins = Math.floor((timerSeconds % 3600) / 60);
+      const secs = timerSeconds % 60;
+      document.getElementById('timerDisplay').textContent = 
+        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
-  });
 
-  document.addEventListener('contextmenu', function(e) {
-    if (e.target.closest('.watermark-item')) {
-      e.preventDefault();
-      alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
-    }
-  });
+    // ===== BLOQUEIO DE PRINT/DOWNLOAD MANUAIS =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+        e.preventDefault();
+        alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
+      }
+    });
 
-  // ===== INICIALIZAR =====
-  renderGallery();
-  updateTimer();
-  setInterval(updateTimer, 1000);
-</script>
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.closest('.watermark-item')) {
+        e.preventDefault();
+        alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
+      }
+    });
+
+    // ===== INICIALIZAR =====
+    renderGallery();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  </script>
 
 </body>
 </html>
