@@ -15,21 +15,34 @@
       color: #f5edea;
       font-family: 'Montserrat', sans-serif;
       min-height: 100vh;
+      padding-top: 80px; /* Espaço para o menu flutuante */
     }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px;
     }
 
-    /* ===== NAVBAR ===== */
+    /* ===== NAVBAR FLUTUANTE ===== */
     .navbar {
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
-      background: #2C0714;
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 100;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 12px 0;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      padding: 8px 0;
+      background: rgba(44, 7, 20, 0.96);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
     }
     .navbar-content {
       display: flex;
@@ -46,8 +59,8 @@
     .logo img {
       display: block;
       width: auto;
-      height: 50px;
-      max-width: 160px;
+      height: 45px;
+      max-width: 150px;
       transition: all 0.3s ease;
     }
     .logo img:hover {
@@ -83,13 +96,15 @@
     /* ===== TIMER E CRÉDITOS - FLUTUANTES ===== */
     .floating-status {
       position: sticky;
-      top: 82px;
+      top: 72px;
       z-index: 99;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       padding: 12px 0;
       margin-bottom: 24px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
     }
     .floating-status .container {
       display: flex;
@@ -486,7 +501,19 @@
 
     /* ===== RESPONSIVO ===== */
     @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
       .container { padding: 0 20px; }
+      
+      .navbar {
+        padding: 10px 0;
+      }
+      .navbar .logo img {
+        height: 38px;
+        max-width: 120px;
+      }
+      
       .floating-status .container {
         gap: 16px;
         flex-direction: column;
@@ -517,12 +544,8 @@
       .nav-info {
         justify-content: space-between;
       }
-      .logo img {
-        height: 40px;
-        max-width: 130px;
-      }
       .floating-status {
-        top: 72px;
+        top: 62px;
       }
       .modal-content img {
         max-height: 60vh;
@@ -540,6 +563,9 @@
       }
     }
     @media (max-width: 480px) {
+      body {
+        padding-top: 60px;
+      }
       .watermark-grid { 
         grid-template-columns: repeat(2, 1fr); 
         gap: 12px;
@@ -573,19 +599,41 @@
         font-size: 0.65rem;
         padding: 10px 12px;
       }
+      .navbar .logo img {
+        height: 32px;
+        max-width: 100px;
+      }
+      .floating-status {
+        top: 52px;
+      }
+    }
+
+    /* ===== SCROLL ANIMATION PARA O MENU ===== */
+    @media (min-width: 769px) {
+      .navbar {
+        transition: all 0.3s ease;
+      }
+      .navbar.scrolled {
+        padding: 6px 0;
+        background: rgba(44, 7, 20, 0.96);
+        box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+      }
+      .navbar.scrolled .logo img {
+        height: 40px;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar">
+<!-- ===== NAVBAR FLUTUANTE ===== -->
+<nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="https://studiorassi.github.io/home/index.html" class="logo">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
            alt="Studio Rassi · Photo & Video" 
-           width="160" 
-           height="50"
+           width="150" 
+           height="45"
            loading="lazy">
     </a>
     <div class="nav-info">
@@ -917,6 +965,25 @@
       e.preventDefault();
       alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
     }
+  });
+
+  // ============================================================
+  // NAVBAR SCROLL EFFECT (DESKTOP E MOBILE)
+  // ============================================================
+  const navbar = document.getElementById('mainNavbar');
+  let lastScrollY = 0;
+
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    
+    // Adiciona classe 'scrolled' quando rola mais de 50px
+    if (scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+    
+    lastScrollY = scrollY;
   });
 
   // ============================================================
