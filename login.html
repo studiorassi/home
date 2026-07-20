@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio Rassi · Acesse suas fotos</title>
+  <title>Login · Studio Rassi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Brittany+Signature&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,24 +18,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: radial-gradient(ellipse at 30% 50%, rgba(212,163,179,0.05) 0%, transparent 60%);
+      padding: 20px;
     }
     .login-container {
-      background: #1f0510;
-      border-radius: 40px;
+      background: rgba(31, 5, 16, 0.8);
+      border-radius: 32px;
       padding: 48px 40px;
-      max-width: 440px;
+      max-width: 420px;
       width: 100%;
       border: 1px solid rgba(212, 163, 179, 0.08);
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
     }
     .login-header {
       text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 32px;
     }
     .login-header .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 700;
       color: #f5edea;
       text-decoration: none;
@@ -45,16 +46,16 @@
       color: #d4c5c0;
       font-weight: 300;
       font-size: 0.9rem;
-      margin-top: 8px;
+      margin-top: 6px;
     }
-    .login-header .icon-lock {
+    .login-header .icon {
       font-size: 3rem;
       color: #D4A3B3;
       margin-bottom: 8px;
       display: block;
     }
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .form-group label {
       display: block;
@@ -65,7 +66,7 @@
       letter-spacing: 0.5px;
     }
     .input-dark {
-      background: #2C0714;
+      background: rgba(44, 7, 20, 0.6);
       border: 1px solid rgba(212, 163, 179, 0.15);
       padding: 14px 18px;
       border-radius: 40px;
@@ -100,6 +101,11 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(212, 163, 179, 0.3);
     }
+    .btn-login:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
     .login-footer {
       text-align: center;
       margin-top: 24px;
@@ -110,6 +116,7 @@
       color: #D4A3B3;
       text-decoration: none;
       font-weight: 500;
+      cursor: pointer;
     }
     .login-footer a:hover { text-decoration: underline; }
     .back-home {
@@ -119,49 +126,298 @@
       color: #d4c5c0;
       text-decoration: none;
       font-size: 0.85rem;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       transition: 0.3s;
     }
     .back-home:hover { color: #D4A3B3; }
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-message.show { display: block; }
+    .success-message {
+      color: #2ecc71;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: none;
+    }
+    .success-message.show { display: block; }
+    .toggle-link {
+      cursor: pointer;
+      color: #D4A3B3;
+      font-weight: 500;
+    }
+    .toggle-link:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .login-container { padding: 32px 20px; }
+    }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Voltar ao site</a>
-    
-    <div class="login-header">
-      <i class="fas fa-lock icon-lock"></i>
-      <div class="logo">Studio <span>Rassi</span></div>
-      <p>Acesse suas memórias eternizadas</p>
-    </div>
 
-    <form id="loginForm" onsubmit="return handleLogin(event)">
-      <div class="form-group">
-        <label><i class="fas fa-envelope" style="color:#D4A3B3; margin-right:6px;"></i> E-mail</label>
-        <input type="email" class="input-dark" placeholder="seu@email.com" value="cliente@studio.com" required>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-key" style="color:#D4A3B3; margin-right:6px;"></i> Senha</label>
-        <input type="password" class="input-dark" placeholder="••••••••" value="123456" required>
-      </div>
-      <button type="submit" class="btn-login">
-        <i class="fas fa-sign-in-alt"></i> Entrar e ver minhas fotos
-      </button>
-    </form>
-
-    <div class="login-footer">
-      <p>Esqueceu sua senha? <a href="#">Recuperar acesso</a></p>
-      <p style="margin-top:8px; font-size:0.7rem;">🔒 Ambiente seguro com proteção de imagens</p>
-    </div>
+<div class="login-container">
+  <a href="https://studiorassi.github.io/home/index.html" class="back-home">
+    <i class="fas fa-arrow-left"></i> Voltar ao site
+  </a>
+  
+  <div class="login-header">
+    <i class="fas fa-camera icon"></i>
+    <div class="logo">Studio <span>Rassi</span></div>
+    <p id="formTitle">Acesse suas memórias eternizadas</p>
   </div>
 
-  <script>
-    function handleLogin(e) {
-      e.preventDefault();
-      // Simulação de login - redireciona para a área do cliente
-      window.location.href = 'cliente.html';
-      return false;
+  <!-- ===== FORMULÁRIO ===== -->
+  <form id="authForm">
+    <!-- Nome (apenas para cadastro) -->
+    <div class="form-group" id="nameGroup" style="display:none;">
+      <label><i class="fas fa-user" style="color:#D4A3B3; margin-right:6px;"></i> Nome</label>
+      <input type="text" id="nameInput" class="input-dark" placeholder="Seu nome completo">
+    </div>
+
+    <div class="form-group">
+      <label><i class="fas fa-envelope" style="color:#D4A3B3; margin-right:6px;"></i> E-mail</label>
+      <input type="email" id="emailInput" class="input-dark" placeholder="seu@email.com" required>
+    </div>
+
+    <div class="form-group">
+      <label><i class="fas fa-key" style="color:#D4A3B3; margin-right:6px;"></i> Senha</label>
+      <input type="password" id="passwordInput" class="input-dark" placeholder="••••••••" required minlength="6">
+    </div>
+
+    <div class="form-group" id="confirmGroup" style="display:none;">
+      <label><i class="fas fa-check-circle" style="color:#D4A3B3; margin-right:6px;"></i> Confirmar senha</label>
+      <input type="password" id="confirmInput" class="input-dark" placeholder="••••••••">
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="successMessage" class="success-message"></div>
+
+    <button type="submit" class="btn-login" id="submitBtn">
+      <i class="fas fa-sign-in-alt"></i> Entrar
+    </button>
+  </form>
+
+  <div class="login-footer">
+    <p id="toggleText">
+      Não tem uma conta? <span class="toggle-link" onclick="toggleMode()">Cadastrar-se</span>
+    </p>
+    <p style="margin-top:8px; font-size:0.7rem; color:#7a5f5a;">
+      🔒 Protegido com criptografia e autenticação JWT
+    </p>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIGURAÇÃO
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  let isLoginMode = true;
+
+  // ============================================================
+  // DOM ELEMENTS
+  // ============================================================
+  const form = document.getElementById('authForm');
+  const nameGroup = document.getElementById('nameGroup');
+  const confirmGroup = document.getElementById('confirmGroup');
+  const nameInput = document.getElementById('nameInput');
+  const emailInput = document.getElementById('emailInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const confirmInput = document.getElementById('confirmInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const formTitle = document.getElementById('formTitle');
+  const toggleText = document.getElementById('toggleText');
+  const errorMessage = document.getElementById('errorMessage');
+  const successMessage = document.getElementById('successMessage');
+
+  // ============================================================
+  // TOGGLE ENTRE LOGIN E CADASTRO
+  // ============================================================
+  function toggleMode() {
+    isLoginMode = !isLoginMode;
+    
+    if (isLoginMode) {
+      nameGroup.style.display = 'none';
+      confirmGroup.style.display = 'none';
+      formTitle.textContent = 'Acesse suas memórias eternizadas';
+      submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+      toggleText.innerHTML = 'Não tem uma conta? <span class="toggle-link" onclick="toggleMode()">Cadastrar-se</span>';
+      document.querySelector('.login-header p').textContent = 'Acesse suas memórias eternizadas';
+    } else {
+      nameGroup.style.display = 'block';
+      confirmGroup.style.display = 'block';
+      formTitle.textContent = 'Crie sua conta e eternize momentos';
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+      toggleText.innerHTML = 'Já tem uma conta? <span class="toggle-link" onclick="toggleMode()">Fazer login</span>';
+      document.querySelector('.login-header p').textContent = 'Crie sua conta e eternize momentos';
     }
-  </script>
+    
+    // Limpa mensagens
+    errorMessage.classList.remove('show');
+    successMessage.classList.remove('show');
+  }
+
+  // ============================================================
+  // SUBMISSÃO DO FORMULÁRIO
+  // ============================================================
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Limpa mensagens
+    errorMessage.classList.remove('show');
+    successMessage.classList.remove('show');
+    
+    // Validações
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    
+    if (!email || !password) {
+      showError('Preencha todos os campos obrigatórios.');
+      return;
+    }
+    
+    if (password.length < 6) {
+      showError('A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+    
+    if (!isLoginMode) {
+      const name = nameInput.value.trim();
+      const confirm = confirmInput.value;
+      
+      if (!name) {
+        showError('Por favor, informe seu nome.');
+        return;
+      }
+      
+      if (password !== confirm) {
+        showError('As senhas não coincidem.');
+        return;
+      }
+      
+      await registerUser(name, email, password);
+    } else {
+      await loginUser(email, password);
+    }
+  });
+
+  // ============================================================
+  // FUNÇÕES DE AUTENTICAÇÃO
+  // ============================================================
+  async function registerUser(name, email, password) {
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+      
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao cadastrar');
+      }
+      
+      showSuccess('✅ Cadastro realizado com sucesso! Faça login para continuar.');
+      
+      // Limpa os campos
+      nameInput.value = '';
+      passwordInput.value = '';
+      confirmInput.value = '';
+      
+      // Alterna para o modo login após 2 segundos
+      setTimeout(() => {
+        if (!isLoginMode) toggleMode();
+      }, 2000);
+      
+    } catch (error) {
+      showError(error.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+    }
+  }
+
+  async function loginUser(email, password) {
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+      
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao fazer login');
+      }
+      
+      // Salva o token e os dados do usuário
+      localStorage.setItem('token', data.data.token);
+      localStorage.setItem('user', JSON.stringify(data.data.user));
+      
+      showSuccess('✅ Login realizado com sucesso! Redirecionando...');
+      
+      // Redireciona para a área do cliente
+      setTimeout(() => {
+        window.location.href = 'cliente.html';
+      }, 1500);
+      
+    } catch (error) {
+      showError(error.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+    }
+  }
+
+  // ============================================================
+  // MENSAGENS
+  // ============================================================
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.add('show');
+    successMessage.classList.remove('show');
+  }
+
+  function showSuccess(message) {
+    successMessage.textContent = message;
+    successMessage.classList.add('show');
+    errorMessage.classList.remove('show');
+  }
+
+  // ============================================================
+  // VERIFICAR SE JÁ ESTÁ LOGADO
+  // ============================================================
+  const token = localStorage.getItem('token');
+  if (token) {
+    // Verifica se o token é válido
+    fetch(`${API_BASE_URL}/api/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(response => {
+      if (response.ok) {
+        window.location.href = 'cliente.html';
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    })
+    .catch(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    });
+  }
+</script>
+
 </body>
 </html>
