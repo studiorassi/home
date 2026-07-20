@@ -442,15 +442,13 @@
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
 
 // Nomes exatos dos arquivos que você fez o upload no Amazon S3
-  const photoKeys = [
-    'ensaio_1.jpg', 
-    'ensaio_2.jpg', 
-    'ensaio_3.jpg', 
-    'ensaio_4.jpg', 
-    'ensaio_5.jpg'
-    // Você pode continuar adicionando as vírgulas e os nomes 
-    // até chegar na quantidade exata de fotos que você subiu
-  ];
+ // Gera automaticamente a lista de 'ensaio_01.jpg' até 'ensaio_116.jpg'
+  const photoKeys = [];
+  for (let i = 1; i <= 116; i++) {
+    // Formata o número com zero à esquerda se for menor que 10 (ex: 01, 02... 99, 100)
+    const numeroFormatado = String(i).padStart(2, '0');
+    photoKeys.push(`ensaio_${numeroFormatado}.jpg`);
+  }
 
   let credits = 30;
   let timerSeconds = 72 * 3600; // 72 horas
