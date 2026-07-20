@@ -536,7 +536,13 @@
            loading="lazy">
     </a>
     <div class="nav-info">
-      <span class="user"><i class="fas fa-user-circle"></i> Olá, Lucille e Edson</span>
+      <span class="user">
+        <i class="fas fa-user-circle"></i> 
+        Olá, Lucille e Edson · 
+        <span style="color: #D4A3B3; font-weight: 500;">
+          <i class="fas fa-images"></i> Total: <span id="totalPhotosDisplay">116</span> fotos
+        </span>
+      </span>
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
@@ -868,6 +874,12 @@
   console.log('📸 Galeria Studio Rassi carregada!');
   console.log(`📊 ${allPhotoKeys.length} fotos disponíveis (${credits} créditos)`);
   console.log('💡 Clique em qualquer foto para abrir em tela cheia e baixar em alta definição.');
+
+  // ===== EXIBIR TOTAL DE FOTOS =====
+const totalPhotosDisplay = document.getElementById('totalPhotosDisplay');
+if (totalPhotosDisplay) {
+  totalPhotosDisplay.textContent = allPhotoKeys.length;
+}
 </script>
 
 </body>
