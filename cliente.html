@@ -751,6 +751,27 @@
 
 <script>
   // ============================================================
+// VERIFICAR TOKEN E CARREGAR DADOS DO USUÁRIO
+// ============================================================
+const token = localStorage.getItem('token');
+
+if (!token) {
+  window.location.href = 'login.html';
+}
+
+// Usar o token em todas as requisições
+async function fetchWithAuth(url, options = {}) {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+  
+  // ============================================================
   // CONEXÃO COM O BACKEND (RENDER)
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
