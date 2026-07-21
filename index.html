@@ -21,7 +21,7 @@
   <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Tangerine:wght@400;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
@@ -48,12 +48,39 @@
       padding: 0 32px;
     }
 
-    /* ===== TIPOGRAFIA ===== */
-    .font-script { font-family: 'Tangerine', cursive; font-weight: 700; }
-    .font-title { font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: -0.3px; }
-    .font-body { font-family: 'Inter', sans-serif; }
+    /* ===== TIPOGRAFIA - SEM MANUSCRITA ===== */
+    .font-title { font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-body { font-family: 'Work Sans', sans-serif; }
     .text-rose { color: #D4A3B3; }
     .text-offwhite { color: #f5edea; }
+    
+    /* ===== EFEITO DE DESTAQUE (SUBSTITUI A MANUSCRITA) ===== */
+    .highlight-script {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-style: italic;
+      color: #D4A3B3;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 40px rgba(212, 163, 179, 0.15);
+    }
+    .highlight-ornament {
+      display: inline-block;
+      position: relative;
+    }
+    .highlight-ornament::after {
+      content: '✦';
+      font-size: 0.6em;
+      color: #D4A3B3;
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+    .highlight-ornament::before {
+      content: '✦';
+      font-size: 0.6em;
+      color: #D4A3B3;
+      margin: 0 6px;
+      opacity: 0.5;
+    }
 
     /* ===== BOTÕES ===== */
     .btn {
@@ -364,28 +391,27 @@
     }
     .hero-text h1 {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 2.8rem;
       line-height: 1.05;
       margin-bottom: 4px;
       text-shadow: 0 4px 40px rgba(0,0,0,0.6);
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
-    .hero-text h1 .script {
-      font-family: 'Tangerine', cursive;
+    .hero-text h1 .highlight-script {
+      font-family: 'Fraunces', serif;
       font-weight: 700;
+      font-style: italic;
       color: #D4A3B3;
-      font-size: 4.8rem;
-      letter-spacing: 2px;
-      text-transform: none;
-      text-shadow: 0 4px 50px rgba(212, 163, 179, 0.25);
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 40px rgba(212, 163, 179, 0.15);
       display: block;
-      line-height: 1;
+      font-size: 3.8rem;
       margin-bottom: -0.05em;
     }
     .hero-text h1 .highlight {
       color: #D4A3B3;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.5px;
     }
     .hero-text p {
@@ -452,20 +478,20 @@
     }
     .section-title {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 3rem;
       line-height: 1.15;
       margin-bottom: 20px;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
-    .section-title .script {
-      font-family: 'Tangerine', cursive;
+    .section-title .highlight-script {
+      font-family: 'Fraunces', serif;
       font-weight: 700;
+      font-style: italic;
       color: #D4A3B3;
-      font-size: 4.8rem;
-      letter-spacing: 2px;
-      text-transform: none;
+      letter-spacing: -0.02em;
       display: block;
+      font-size: 4.2rem;
       line-height: 1;
       margin-bottom: -0.05em;
       text-shadow: 0 2px 20px rgba(212, 163, 179, 0.15);
@@ -489,6 +515,9 @@
       flex: 0 0 auto;
       margin-bottom: 0;
     }
+    .institucional-wrapper .section-title .highlight-script {
+      font-size: 3.6rem;
+    }
     .institucional-wrapper .institucional-text {
       flex: 1;
       font-family: 'Work Sans', sans-serif;
@@ -510,6 +539,9 @@
     }
     .pacotes-header .section-title {
       margin-bottom: 12px;
+    }
+    .pacotes-header .section-title .highlight-script {
+      font-size: 4.2rem;
     }
     .pacotes-header .pacotes-description {
       font-family: 'Work Sans', sans-serif;
@@ -556,20 +588,22 @@
     }
     .instagram-header h2 {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 2.8rem;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
       color: #f5edea;
     }
-    .instagram-header h2 .script {
-      font-family: 'Tangerine', cursive;
+    .instagram-header h2 .highlight-script {
+      font-family: 'Fraunces', serif;
       font-weight: 700;
+      font-style: italic;
       color: #D4A3B3;
-      font-size: 4.5rem;
+      font-size: 4.2rem;
       display: block;
       text-transform: none;
       line-height: 1;
       margin-bottom: -0.05em;
+      text-shadow: 0 2px 20px rgba(212, 163, 179, 0.15);
     }
     .instagram-header .subtitle {
       font-family: 'Work Sans', sans-serif;
@@ -587,15 +621,15 @@
     .instagram-header .subtitle a:hover {
       color: #f5edea;
     }
-    /* Frase de desejo abaixo do título */
     .instagram-header .desire-phrase {
-      font-family: 'Tangerine', cursive;
-      font-weight: 700;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-style: italic;
       font-size: 2rem;
       color: #D4A3B3;
       margin-top: 4px;
       opacity: 0.9;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     /* ===== CARROSSEL (DESKTOP DEFAULT) ===== */
@@ -858,12 +892,14 @@
       justify-content: center;
     }
     .biografia-text-side h2 {
-      font-family: 'Tangerine', cursive;
+      font-family: 'Fraunces', serif;
       font-weight: 700;
+      font-style: italic;
       color: #D4A3B3;
       font-size: 3.2rem;
       line-height: 1;
       margin-bottom: 2px;
+      letter-spacing: -0.02em;
     }
     .biografia-text-side .subtitle {
       font-family: 'Work Sans', sans-serif;
@@ -916,11 +952,13 @@
       border-top: 1px solid rgba(212, 163, 179, 0.06);
     }
     .biografia-text-side .assinatura-bottom .sign {
-      font-family: 'Tangerine', cursive;
+      font-family: 'Fraunces', serif;
       font-weight: 700;
+      font-style: italic;
       font-size: 2rem;
       color: #D4A3B3;
       opacity: 0.8;
+      letter-spacing: -0.02em;
     }
     .biografia-text-side .assinatura-bottom .since {
       font-family: 'Work Sans', sans-serif;
@@ -956,9 +994,10 @@
     }
     .benefit-card h4 {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1.2rem;
       margin-bottom: 6px;
+      letter-spacing: -0.02em;
     }
     .benefit-card p {
       font-family: 'Work Sans', sans-serif;
@@ -990,7 +1029,7 @@
     }
     .package-card .price {
       font-family: 'Fraunces', serif;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 3rem;
       color: #D4A3B3;
       letter-spacing: -1px;
@@ -1045,10 +1084,10 @@
     }
     .builder .section-head h2 {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 3rem;
       color: #f5edea;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
     .builder-box {
       display: grid;
@@ -1167,10 +1206,11 @@
     }
     .summary-total {
       font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 3rem;
       margin: 10px 0 26px;
       color: #f5edea;
+      letter-spacing: -0.02em;
     }
     .summary-list {
       font-family: 'Work Sans', sans-serif;
@@ -1246,7 +1286,7 @@
     ============================================================ */
     @media (max-width: 1024px) {
       .hero-text h1 { font-size: 2.4rem; }
-      .hero-text h1 .script { font-size: 4rem; }
+      .hero-text h1 .highlight-script { font-size: 3.2rem; }
       .hero-text p { font-size: 0.9rem; }
       .hero-content { max-height: 35vh; padding: 60px 32px 50px; }
       .carousel-item {
@@ -1277,6 +1317,9 @@
       .institucional-wrapper .section-title {
         text-align: center;
         margin-bottom: 0;
+      }
+      .institucional-wrapper .section-title .highlight-script {
+        font-size: 3rem;
       }
       .institucional-wrapper .institucional-text {
         text-align: center;
@@ -1323,8 +1366,8 @@
         font-size: 2.2rem; 
         letter-spacing: -0.3px;
       }
-      .hero-text h1 .script { 
-        font-size: 3.6rem; 
+      .hero-text h1 .highlight-script { 
+        font-size: 3rem; 
       }
       .hero-text p { 
         font-size: 0.95rem;
@@ -1352,8 +1395,8 @@
         font-size: 2rem; 
         padding-top: 20px;
       }
-      .section-title .script { 
-        font-size: 3.4rem; 
+      .section-title .highlight-script { 
+        font-size: 3rem; 
       }
       
       .nav-menu {
@@ -1453,6 +1496,9 @@
       
       .instagram-header .desire-phrase {
         font-size: 1.6rem;
+      }
+      .instagram-header h2 .highlight-script {
+        font-size: 3.2rem;
       }
       
       .hero-video-desktop {
@@ -1556,9 +1602,6 @@
       .instagram-header h2 {
         font-size: 1.6rem;
       }
-      .instagram-header h2 .script {
-        font-size: 2.8rem;
-      }
     }
 
     @media (max-width: 480px) {
@@ -1584,8 +1627,8 @@
       .hero-text h1 { 
         font-size: 1.8rem; 
       }
-      .hero-text h1 .script { 
-        font-size: 3rem; 
+      .hero-text h1 .highlight-script { 
+        font-size: 2.4rem; 
       }
       .hero-text p { 
         font-size: 0.85rem; 
@@ -1605,8 +1648,8 @@
         font-size: 1.6rem; 
         padding-top: 30px;
       }
-      .section-title .script { 
-        font-size: 2.6rem; 
+      .section-title .highlight-script { 
+        font-size: 2.4rem; 
       }
       
       .package-grid { grid-template-columns: 1fr; }
@@ -1653,6 +1696,9 @@
       
       .instagram-header .desire-phrase {
         font-size: 1.4rem;
+      }
+      .instagram-header h2 .highlight-script {
+        font-size: 2.6rem;
       }
       
       .btn-ghost-custom {
@@ -1742,7 +1788,7 @@
         <i class="fas fa-camera"></i> Eternizando emoções desde 2011
       </div>
       <h1>
-        <span class="script">Memórias</span>
+        <span class="highlight-script">Memórias</span>
         que transformam<br>
         instantes em <span class="highlight">eternidade</span>
       </h1>
@@ -1767,7 +1813,7 @@
   <div class="container">
     <div class="instagram-header">
       <h2>
-        <span class="script">Memórias</span>
+        <span class="highlight-script">Memórias</span>
         que começam antes do primeiro abraço
       </h2>
       <div class="desire-phrase">✨ Seus momentos merecem ser eternizados ✨</div>
@@ -1804,7 +1850,7 @@
 <section class="container section" id="institucional">
   <div class="institucional-wrapper">
     <h2 class="section-title">
-      <span class="script">Paixão</span>
+      <span class="highlight-script">Paixão</span>
       em cada detalhe
     </h2>
     <div class="institucional-text">
@@ -1890,7 +1936,7 @@
 <section class="container section" id="pacotes">
   <div class="pacotes-header">
     <h2 class="section-title">
-      <span class="script">Escolha</span>
+      <span class="highlight-script">Escolha</span>
       seu pacote
     </h2>
     <p class="pacotes-description">
