@@ -589,17 +589,48 @@
       gap: 4px;
       z-index: 4;
     }
-    .watermark-item .badge-lock {
+
+    /* ===== BADGE DE STATUS DA IMAGEM (CADEADO/LOCK) ===== */
+    .watermark-item .badge-status {
       position: absolute;
       top: 8px;
       right: 8px;
-      font-size: 0.7rem;
-      color: #D4A3B3;
-      background: rgba(44, 7, 20, 0.7);
-      padding: 4px 8px;
+      font-size: 0.65rem;
+      padding: 6px 10px;
       border-radius: 50%;
       backdrop-filter: blur(4px);
       z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      border: none;
+      cursor: default;
+      min-width: 32px;
+      min-height: 32px;
+    }
+    .watermark-item .badge-status.locked {
+      background: rgba(44, 7, 20, 0.8);
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+    }
+    .watermark-item .badge-status.downloaded {
+      background: rgba(46, 125, 50, 0.9);
+      color: #ffffff;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.6rem;
+      cursor: default;
+      min-width: auto;
+    }
+    .watermark-item .badge-status.downloaded i {
+      font-size: 0.7rem;
+      margin-right: 4px;
     }
 
     /* ===== MODAL ===== */
@@ -814,6 +845,15 @@
     .modal-btn-download.hidden {
       display: none;
     }
+    .modal-btn-download.downloaded {
+      background: #2E7D32;
+      color: #ffffff;
+      cursor: default;
+    }
+    .modal-btn-download.downloaded:hover {
+      transform: none;
+      box-shadow: none;
+    }
     .modal-btn-close {
       background: transparent;
       border: 1px solid rgba(212, 163, 179, 0.2);
@@ -1020,6 +1060,15 @@
       }
       .watermark-item { min-height: 220px; }
       .watermark-item .watermark-logo { width: 70px; }
+      .watermark-item .badge-status.downloaded {
+        font-size: 0.5rem;
+        padding: 3px 8px;
+        top: 6px;
+        right: 6px;
+      }
+      .watermark-item .badge-status.downloaded i {
+        font-size: 0.6rem;
+      }
       
       .navbar-content {
         flex-direction: row;
@@ -1098,6 +1147,15 @@
         padding: 2px 8px;
         bottom: 8px;
         left: 8px;
+      }
+      .watermark-item .badge-status.downloaded {
+        font-size: 0.4rem;
+        padding: 2px 6px;
+        top: 4px;
+        right: 4px;
+      }
+      .watermark-item .badge-status.downloaded i {
+        font-size: 0.5rem;
       }
       .navbar .logo img {
         height: 32px;
@@ -1224,8 +1282,8 @@
   
   <!-- ===== LINKS DO MENU ===== -->
   <div class="menu-links">
-    <a href="#galeria" onclick="closeMobileMenu()">
-      <i class="fas fa-images"></i> Ver Galeria
+    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;">
+      <i class="fas fa-arrow-up"></i> Ver Galeria
     </a>
     <a href="#upsellSection" onclick="closeMobileMenu()">
       <i class="fas fa-plus-circle"></i> Comprar Créditos
@@ -1435,13 +1493,9 @@
   }
 
   // ============================================================
-  // 4. ESTADO
+  // 4. ESTADO - ARMAZENA FOTOS BAIXADAS
   // ============================================================
-  let currentModalIndex = 0;
-  let imagesLoaded = 0;
-  let isGalleryLoaded = false;
-  let timerSeconds = 72 * 3600;
-  let isMobile = window.innerWidth <= 768;
+  let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
 
   // ============================================================
   // 5. DOM ELEMENTS
@@ -1482,9 +1536,12 @@
     document.body.style.overflow = '';
   }
 
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   hamburgerBtn.addEventListener('click', toggleMobileMenu);
 
-  // Fecha menu ao clicar fora
   document.addEventListener('click', function(e) {
     if (mobileMenu.classList.contains('open') && 
         !mobileMenu.contains(e.target) && 
@@ -1497,20 +1554,18 @@
   // 7. DETECTAR MOBILE
   // ============================================================
   function checkMobile() {
-    isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 768;
     updateMenuCtaVisibility();
   }
 
   function updateMenuCtaVisibility() {
-    // Desktop CTA
-    if (!isMobile && credits <= 0) {
+    if (window.innerWidth > 768 && credits <= 0) {
       menuCreditCta.classList.add('show');
     } else {
       menuCreditCta.classList.remove('show');
     }
     
-    // Mobile CTA
-    if (isMobile && credits <= 0) {
+    if (window.innerWidth <= 768 && credits <= 0) {
       mobileCreditCta.classList.add('show');
     } else {
       mobileCreditCta.classList.remove('show');
@@ -1520,6 +1575,8 @@
   // ============================================================
   // 8. BARRA DE PROGRESSO
   // ============================================================
+  let imagesLoaded = 0;
+
   function updateProgress() {
     const percent = Math.round((imagesLoaded / totalPhotos) * 100);
     progressFill.style.width = percent + '%';
@@ -1527,7 +1584,6 @@
     
     if (imagesLoaded >= totalPhotos) {
       progressContainer.style.display = 'none';
-      isGalleryLoaded = true;
       console.log('✅ Todas as 116 fotos foram carregadas!');
     } else {
       progressContainer.style.display = 'block';
@@ -1543,14 +1599,18 @@
     allPhotoKeys.forEach((key, index) => {
       const div = document.createElement('div');
       div.className = 'watermark-item';
+      div.dataset.key = key;
       
       const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=400`;
+      const isDownloaded = downloadedImages.includes(key);
 
       div.innerHTML = `
         <div class="skeleton" id="skeleton-${index}">
           <div class="spinner"><i class="fas fa-spinner"></i></div>
         </div>
-        <div class="badge-lock"><i class="fas fa-lock"></i></div>
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
+          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
+        </div>
         <img 
           src="${imageUrl}" 
           alt="Foto ${index + 1}" 
@@ -1591,12 +1651,31 @@
   }
 
   // ============================================================
-  // 11. MODAL
+  // 11. ATUALIZAR BADGE DE DOWNLOAD
   // ============================================================
+  function updateDownloadBadge(key) {
+    const items = document.querySelectorAll('.watermark-item');
+    items.forEach(item => {
+      if (item.dataset.key === key) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADA';
+        }
+      }
+    });
+  }
+
+  // ============================================================
+  // 12. MODAL
+  // ============================================================
+  let currentModalIndex = 0;
+
   function openModal(index) {
     currentModalIndex = index;
     const key = allPhotoKeys[index];
     const fullImageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=1200`;
+    const isDownloaded = downloadedImages.includes(key);
     
     modalProgressFill.style.width = '0%';
     modalProgressLabel.textContent = '0%';
@@ -1607,7 +1686,8 @@
     
     document.getElementById('currentIndexDisplay').textContent = index + 1;
     
-    updateModalButtons();
+    // Atualiza botão de download
+    updateModalButtons(isDownloaded);
     updateNavButtons();
     
     modalOverlay.classList.add('active');
@@ -1684,27 +1764,38 @@
   }
 
   // ============================================================
-  // 12. ATUALIZAR BOTÕES DO MODAL
+  // 13. ATUALIZAR BOTÕES DO MODAL
   // ============================================================
-  function updateModalButtons() {
+  function updateModalButtons(isDownloaded = false) {
     modalCreditsCount.textContent = credits;
     
+    if (isDownloaded) {
+      // Já baixada: mostra botão verde
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+      modalBuyCredits.classList.remove('show');
+      modalBuyCredits.style.display = 'none';
+      return;
+    }
+    
     if (credits <= 0) {
-      modalDownloadBtn.classList.add('hidden');
+      modalDownloadBtn.className = 'modal-btn-download hidden';
       modalDownloadBtn.style.display = 'none';
       modalBuyCredits.classList.add('show');
       modalBuyCredits.style.display = 'flex';
     } else {
-      modalDownloadBtn.classList.remove('hidden');
+      modalDownloadBtn.className = 'modal-btn-download';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
       modalDownloadBtn.style.display = 'flex';
+      modalDownloadBtn.disabled = false;
       modalBuyCredits.classList.remove('show');
       modalBuyCredits.style.display = 'none';
-      modalDownloadBtn.disabled = false;
     }
   }
 
   // ============================================================
-  // 13. DOWNLOAD (S3)
+  // 14. DOWNLOAD (S3)
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
@@ -1713,12 +1804,17 @@
       alert('❌ Você não tem créditos suficientes.');
       return;
     }
+    
+    // Verifica se já foi baixada
+    if (downloadedImages.includes(currentKey)) {
+      alert('✅ Esta imagem já foi baixada anteriormente.');
+      return;
+    }
 
     try {
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
-      // Tenta via API com URL assinada
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1747,18 +1843,28 @@
         URL.revokeObjectURL(downloadLink.href);
       }, 1000);
 
+      // Marca como baixada
+      if (!downloadedImages.includes(currentKey)) {
+        downloadedImages.push(currentKey);
+        localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+      }
+
       credits--;
       updateCreditsDisplay();
       modalCreditsCount.textContent = credits;
-      updateModalButtons();
-
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download concluído!';
       
-      setTimeout(() => {
-        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
-        modalDownloadBtn.disabled = credits <= 0;
-        updateModalButtons();
-      }, 3000);
+      // Atualiza badge na galeria
+      updateDownloadBadge(currentKey);
+      
+      // Atualiza botão do modal
+      updateModalButtons(true);
+
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+
+      // Notifica usuário
+      alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
@@ -1783,30 +1889,35 @@
           URL.revokeObjectURL(downloadLink.href);
         }, 1000);
 
+        if (!downloadedImages.includes(currentKey)) {
+          downloadedImages.push(currentKey);
+          localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+        }
+
         credits--;
         updateCreditsDisplay();
         modalCreditsCount.textContent = credits;
-        updateModalButtons();
-
-        modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download concluído!';
         
-        setTimeout(() => {
-          modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
-          modalDownloadBtn.disabled = credits <= 0;
-          updateModalButtons();
-        }, 3000);
+        updateDownloadBadge(currentKey);
+        updateModalButtons(true);
+
+        modalDownloadBtn.className = 'modal-btn-download downloaded';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+        modalDownloadBtn.disabled = true;
+
+        alert('✅ Imagem baixada com sucesso!');
 
       } catch (fallbackError) {
         console.error('❌ Erro no fallback:', fallbackError);
         alert('❌ Não foi possível baixar a imagem. Verifique a configuração do S3.');
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
-        modalDownloadBtn.disabled = credits <= 0;
+        modalDownloadBtn.disabled = false;
       }
     }
   }
 
   // ============================================================
-  // 14. COMPRAR CRÉDITOS
+  // 15. COMPRAR CRÉDITOS
   // ============================================================
   function buyCredits(amount) {
     const price = amount * 8;
@@ -1825,7 +1936,7 @@
   }
 
   // ============================================================
-  // 15. ATUALIZAR DISPLAY
+  // 16. ATUALIZAR DISPLAY
   // ============================================================
   function updateCreditsDisplay() {
     creditsDisplay.textContent = credits;
@@ -1840,8 +1951,10 @@
   }
 
   // ============================================================
-  // 16. TIMER REGRESSIVO
+  // 17. TIMER REGRESSIVO
   // ============================================================
+  let timerSeconds = 72 * 3600;
+
   function updateTimer() {
     if (timerSeconds <= 0) {
       timerDisplay.textContent = '00:00:00';
@@ -1858,7 +1971,7 @@
   }
 
   // ============================================================
-  // 17. NAVBAR SCROLL EFFECT
+  // 18. NAVBAR SCROLL EFFECT
   // ============================================================
   const navbar = document.getElementById('mainNavbar');
   window.addEventListener('scroll', function() {
@@ -1871,7 +1984,7 @@
   });
 
   // ============================================================
-  // 18. BLOQUEIO DE PRINT/DOWNLOAD
+  // 19. BLOQUEIO DE PRINT/DOWNLOAD
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
@@ -1888,7 +2001,7 @@
   });
 
   // ============================================================
-  // 19. INICIALIZAR
+  // 20. INICIALIZAR
   // ============================================================
   renderGallery();
   updateCreditsDisplay();
@@ -1906,6 +2019,7 @@
 
   console.log('📸 Galeria Studio Rassi carregada!');
   console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
+  console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
 </script>
 
 </body>
