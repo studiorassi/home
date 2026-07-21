@@ -168,7 +168,7 @@
       display: inline-block;
     }
 
-    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUANTE (MOBILE E DESKTOP) ===== */
+    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUANTE ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -469,7 +469,7 @@
       transform: rotate(90deg);
     }
 
-    /* ===== MODAL - PROGRESS BAR DA IMAGEM (SÓ APARECE NO MOBILE) ===== */
+    /* ===== MODAL - PROGRESS BAR DA IMAGEM (MOBILE E DESKTOP) ===== */
     .modal-progress {
       position: absolute;
       bottom: 100px;
@@ -783,10 +783,19 @@
       }
       
       .floating-status .container {
-        gap: 16px;
-        flex-direction: column;
+        gap: 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
       }
-      .status-item { font-size: 0.75rem; }
+      .status-item { 
+        font-size: 0.7rem; 
+        gap: 6px;
+      }
+      .status-item .value,
+      .status-item .timer {
+        font-size: 0.9rem;
+      }
       
       .progress-bar-container {
         top: 118px;
@@ -817,7 +826,10 @@
         align-items: stretch;
         gap: 12px;
       }
-      .nav-info { justify-content: space-between; }
+      .nav-info { 
+        justify-content: space-between;
+        gap: 12px;
+      }
       .floating-status { top: 62px; }
       
       .modal-nav {
@@ -907,30 +919,15 @@
         font-size: 0.6rem;
         padding: 4px 12px;
       }
-    }
-
-    /* ===== DESKTOP: esconde CTA do menu ===== */
-    @media (min-width: 769px) {
-      .menu-credit-cta {
-        display: none !important;
+      .floating-status .container {
+        gap: 8px;
       }
-    }
-
-    /* ===== MOBILE: mostra CTA do menu quando sem créditos ===== */
-    @media (max-width: 768px) {
-      .menu-credit-cta.show {
-        display: inline-block;
+      .status-item {
+        font-size: 0.6rem;
       }
-      /* Mobile: progress bar do modal visível apenas durante carregamento */
-      .modal-progress.show {
-        display: flex;
-      }
-    }
-
-    /* ===== DESKTOP: progress bar do modal SEMPRE escondida ===== */
-    @media (min-width: 769px) {
-      .modal-progress {
-        display: none !important;
+      .status-item .value,
+      .status-item .timer {
+        font-size: 0.8rem;
       }
     }
   </style>
@@ -971,16 +968,16 @@
   <div class="container">
     <div class="status-item">
       <i class="fas fa-coins"></i>
-      <span>Créditos disponíveis: <strong class="value" id="creditsDisplay">30</strong></span>
+      <span>Créditos: <strong class="value" id="creditsDisplay">30</strong></span>
     </div>
     <div class="status-item">
       <i class="far fa-clock"></i>
-      <span>Seu acesso expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
+      <span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
     </div>
   </div>
 </div>
 
-<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUA COM O MENU (MOBILE E DESKTOP) ===== -->
+<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUA COM O MENU ===== -->
 <div class="progress-bar-container" id="progressContainer">
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;">
@@ -1055,7 +1052,7 @@
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
-    <!-- Progress Bar da Imagem (SOMENTE MOBILE) -->
+    <!-- Progress Bar da Imagem (MOBILE E DESKTOP) -->
     <div class="modal-progress" id="modalProgress">
       <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
       <div class="track">
@@ -1152,6 +1149,7 @@
   // 2. CONEXÃO COM O BACKEND
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  const S3_BUCKET_URL = 'https://studio-rassi-ensaios-2026.s3.amazonaws.com';
 
   // ============================================================
   // 3. DADOS - 116 FOTOS
@@ -1195,16 +1193,7 @@
   // ============================================================
   function checkMobile() {
     isMobile = window.innerWidth <= 768;
-    updateModalProgressVisibility();
     updateMenuCtaVisibility();
-  }
-
-  function updateModalProgressVisibility() {
-    // Mobile: mostra progress bar no modal durante carregamento
-    // Desktop: sempre esconde
-    if (!isMobile) {
-      modalProgress.classList.remove('show');
-    }
   }
 
   function updateMenuCtaVisibility() {
@@ -1217,7 +1206,7 @@
   }
 
   // ============================================================
-  // 7. BARRA DE PROGRESSO (CARREGAMENTO DAS FOTOS) - MOBILE E DESKTOP
+  // 7. BARRA DE PROGRESSO (CARREGAMENTO DAS FOTOS)
   // ============================================================
   function updateProgress() {
     const percent = Math.round((imagesLoaded / totalPhotos) * 100);
@@ -1243,6 +1232,7 @@
       const div = document.createElement('div');
       div.className = 'watermark-item';
       
+      // Usa a URL com marca d'água para visualização
       const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=400`;
 
       div.innerHTML = `
@@ -1290,21 +1280,18 @@
   }
 
   // ============================================================
-  // 10. MODAL COM PROGRESS BAR DA IMAGEM (SOMENTE MOBILE)
+  // 10. MODAL COM PROGRESS BAR DA IMAGEM (MOBILE E DESKTOP)
   // ============================================================
   function openModal(index) {
     currentModalIndex = index;
     const key = allPhotoKeys[index];
+    // Usa a URL com marca d'água para visualização
     const fullImageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=1200`;
     
-    // Reseta progresso do modal (só mostra no mobile)
+    // Reseta progresso do modal
     modalProgressFill.style.width = '0%';
     modalProgressLabel.textContent = '0%';
-    if (isMobile) {
-      modalProgress.classList.add('show');
-    } else {
-      modalProgress.classList.remove('show');
-    }
+    modalProgress.classList.add('show');
     
     // Reseta imagem
     modalImage.classList.remove('loaded');
@@ -1323,25 +1310,22 @@
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Carrega imagem com progresso (apenas no mobile)
+    // Carrega imagem com progresso
     const img = new Image();
     let progress = 0;
     
-    // Simula progresso enquanto carrega (apenas mobile)
-    let progressInterval = null;
-    if (isMobile) {
-      progressInterval = setInterval(() => {
-        if (progress < 90) {
-          progress += Math.random() * 8;
-          if (progress > 90) progress = 90;
-          modalProgressFill.style.width = progress + '%';
-          modalProgressLabel.textContent = Math.round(progress) + '%';
-        }
-      }, 100);
-    }
+    // Simula progresso enquanto carrega
+    const progressInterval = setInterval(() => {
+      if (progress < 90) {
+        progress += Math.random() * 8;
+        if (progress > 90) progress = 90;
+        modalProgressFill.style.width = progress + '%';
+        modalProgressLabel.textContent = Math.round(progress) + '%';
+      }
+    }, 100);
     
     img.onload = function() {
-      if (progressInterval) clearInterval(progressInterval);
+      clearInterval(progressInterval);
       modalProgressFill.style.width = '100%';
       modalProgressLabel.textContent = '100%';
       modalImage.src = fullImageUrl;
@@ -1349,14 +1333,12 @@
       modalImage.style.opacity = '1';
       
       setTimeout(() => {
-        if (isMobile) {
-          modalProgress.classList.remove('show');
-        }
+        modalProgress.classList.remove('show');
       }, 500);
     };
     
     img.onerror = function() {
-      if (progressInterval) clearInterval(progressInterval);
+      clearInterval(progressInterval);
       modalProgressFill.style.width = '100%';
       modalProgressLabel.textContent = '100%';
       modalImage.src = fullImageUrl;
@@ -1364,9 +1346,7 @@
       modalImage.style.opacity = '1';
       
       setTimeout(() => {
-        if (isMobile) {
-          modalProgress.classList.remove('show');
-        }
+        modalProgress.classList.remove('show');
       }, 500);
     };
     
@@ -1426,7 +1406,7 @@
   }
 
   // ============================================================
-  // 12. DOWNLOAD REAL (INTEGRAÇÃO S3)
+  // 12. DOWNLOAD REAL DO S3 (SEM MARCA D'ÁGUA)
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
@@ -1438,39 +1418,46 @@
 
     try {
       modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
-      // --- CHAMADA REAL PARA O BACKEND (S3) ---
-      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageKeys: [currentKey] })
-      });
-
+      // ============================================================
+      // DOWNLOAD DIRETO DO S3 (SEM MARCA D'ÁGUA)
+      // ============================================================
+      // A URL direta do S3 para a imagem em alta resolução (sem marca d'água)
+      const s3DirectUrl = `${S3_BUCKET_URL}/${currentKey}`;
+      
+      // Faz o download diretamente do S3
+      const response = await fetch(s3DirectUrl);
+      
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erro ao gerar link de download.');
+        throw new Error('Erro ao baixar imagem do S3');
       }
+      
+      const blob = await response.blob();
+      
+      // Cria um link para download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = currentKey;
+      
+      // Adiciona ao body, clica e remove
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
+      // Revoga a URL do objeto após o download
+      setTimeout(() => {
+        URL.revokeObjectURL(downloadLink.href);
+      }, 1000);
 
-      const data = await response.json();
-      const downloadUrl = data.urls[0].url;
-
-      // Consome 1 crédito
+      // Consome 1 crédito (após download bem-sucedido)
       credits--;
       updateCreditsDisplay();
       modalCreditsCount.textContent = credits;
       updateModalButtons();
 
-      // Inicia download
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = currentKey;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download iniciado!';
-
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download concluído!';
+      
       setTimeout(() => {
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
         modalDownloadBtn.disabled = credits <= 0;
@@ -1478,10 +1465,10 @@
       }, 3000);
 
     } catch (error) {
-      console.error('Erro no download:', error);
+      console.error('Erro no download do S3:', error);
       
-      // FALLBACK: modo de teste (baixa diretamente da URL da imagem)
-      alert('⚠️ Modo de teste: baixando imagem diretamente (sem S3).');
+      // FALLBACK: tenta baixar via API (com marca d'água - modo de emergência)
+      alert('⚠️ Erro ao baixar do S3. Tentando via API (modo de emergência)...');
       
       try {
         const fallbackUrl = `${API_BASE_URL}/api/gallery/view/${currentKey}?width=1200`;
@@ -1497,7 +1484,7 @@
         modalCreditsCount.textContent = credits;
         updateModalButtons();
         
-        modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download iniciado (teste)!';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download concluído (fallback)!';
         setTimeout(() => {
           modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
           modalDownloadBtn.disabled = credits <= 0;
@@ -1614,6 +1601,7 @@
   console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
   console.log('💡 Clique em qualquer foto para abrir em tela cheia e baixar em alta definição.');
   console.log('💰 Cada download consome 1 crédito. Recarregue na seção "Quer mais fotos?"');
+  console.log(`📁 Bucket S3: ${S3_BUCKET_URL}`);
 </script>
 
 </body>
