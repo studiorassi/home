@@ -103,17 +103,20 @@
       right: 0;
       z-index: 1000;
       padding: 16px 0;
+      background: transparent; /* Fundo transparente antes do scroll */
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0);
+      box-shadow: none;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .navbar.scrolled {
+      padding: 10px 0;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212, 163, 179, 0.08);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .navbar.scrolled {
-      padding: 10px 0;
-      background: rgba(44, 7, 20, 0.96);
-      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.3);
     }
     .navbar-content {
       display: flex;
@@ -133,9 +136,11 @@
       height: 60px;
       max-width: 200px;
       transition: all 0.3s ease;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));
     }
     .navbar.scrolled .logo img {
       height: 50px;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
     }
     .logo img:hover {
       opacity: 0.85;
@@ -155,11 +160,11 @@
       font-weight: 500;
       letter-spacing: 0.5px;
       transition: 0.3s;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
     }
     .nav-menu a:hover { color: #D4A3B3; }
     .nav-menu .btn-minhas-fotos {
-      background: rgba(212, 163, 179, 0.2);
+      background: rgba(212, 163, 179, 0.15);
       backdrop-filter: blur(8px);
       border: 2px solid #D4A3B3;
       color: #f5edea;
@@ -173,6 +178,13 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
     .nav-menu .btn-minhas-fotos:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+    }
+    .navbar.scrolled .nav-menu .btn-minhas-fotos {
+      background: rgba(212, 163, 179, 0.2);
+    }
+    .navbar.scrolled .nav-menu .btn-minhas-fotos:hover {
       background: #D4A3B3;
       color: #2C0714;
     }
@@ -195,6 +207,7 @@
       background: #f5edea;
       border-radius: 4px;
       transition: all 0.3s ease;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
     .hamburger.active span:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px);
@@ -1023,6 +1036,10 @@
       
       .navbar {
         padding: 12px 0;
+        background: rgba(44, 7, 20, 0.92); /* Fundo no mobile sempre visível */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(212, 163, 179, 0.08);
       }
       .navbar.scrolled {
         padding: 8px 0;
@@ -1134,21 +1151,18 @@
         display: block !important;
       }
       
-      /* ===== CORREÇÃO: Centralização das dobras "Paixão" e "Escolha" ===== */
+      /* ===== CORREÇÃO: Centralização das dobras ===== */
       .section#institucional .section-title {
         text-align: center !important;
       }
-      
       .section#institucional .section-title .script {
         display: block !important;
         text-align: center !important;
       }
-      
       .section#institucional > div {
         max-width: 100% !important;
         padding: 0 10px !important;
       }
-      
       .section#institucional p {
         text-align: center !important;
         padding-left: 10px !important;
@@ -1158,16 +1172,13 @@
       .section#pacotes .section-title {
         text-align: center !important;
       }
-      
       .section#pacotes .section-title .script {
         display: block !important;
         text-align: center !important;
       }
-      
       .section#pacotes .package-grid {
         padding: 0 10px !important;
       }
-      
       .section#pacotes > div:last-child {
         text-align: center !important;
       }
@@ -1175,12 +1186,10 @@
       .section#personalizado .section-title {
         text-align: center !important;
       }
-      
       .section#personalizado .section-title .script {
         display: block !important;
         text-align: center !important;
       }
-      
       .section#personalizado > div {
         margin: 0 10px !important;
       }
@@ -1618,7 +1627,7 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // NAVBAR SCROLL EFFECT
+  // NAVBAR SCROLL EFFECT - MENU TRANSPARENTE ANTES DO SCROLL
   // ============================================================
   const navbar = document.getElementById('mainNavbar');
 
