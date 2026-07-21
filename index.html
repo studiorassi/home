@@ -34,6 +34,7 @@
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
+      padding-top: 80px; /* Espaço para o menu flutuante */
     }
     .container {
       max-width: 1200px;
@@ -94,15 +95,25 @@
     }
     .btn-ghost:hover { color: #f5edea; }
 
-    /* ===== NAVBAR ===== */
+    /* ===== NAVBAR FLUTUANTE ===== */
     .navbar {
-      padding: 16px 0;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 100;
-      background: linear-gradient(180deg, rgba(44, 7, 20, 0.85) 0%, transparent 100%);
+      z-index: 1000;
+      padding: 16px 0;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .navbar.scrolled {
+      padding: 10px 0;
+      background: rgba(44, 7, 20, 0.96);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
     }
     .navbar-content {
       display: flex;
@@ -122,6 +133,9 @@
       height: 60px;
       max-width: 200px;
       transition: all 0.3s ease;
+    }
+    .navbar.scrolled .logo img {
+      height: 50px;
     }
     .logo img:hover {
       opacity: 0.85;
@@ -261,7 +275,7 @@
     /* ===== HERO COM VÍDEO ===== */
     .hero {
       position: relative;
-      min-height: 100vh;
+      min-height: 90vh;
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -293,7 +307,7 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      padding: 140px 0 60px;
+      padding: 120px 0 60px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -979,7 +993,7 @@
     }
 
     /* ============================================================
-       RESPONSIVO (Desktop para Tablet)
+       RESPONSIVO
     ============================================================ */
     @media (max-width: 1024px) {
       .hero-text h1 { font-size: 3.2rem; }
@@ -1000,20 +1014,36 @@
       }
     }
     
-    /* ============================================================
-       RESPONSIVO (Mobile - Onde as Mágicas Acontecem)
-    ============================================================ */
     @media (max-width: 768px) {
       .container { padding: 0 20px; }
       
+      body {
+        padding-top: 70px;
+      }
+      
+      .navbar {
+        padding: 12px 0;
+      }
+      .navbar.scrolled {
+        padding: 8px 0;
+      }
       .logo img {
         height: 45px;
         max-width: 150px;
+      }
+      .navbar.scrolled .logo img {
+        height: 40px;
       }
       
       .hero-text h1 { font-size: 2.6rem; }
       .hero-text h1 .script { font-size: 4rem; }
       .hero-text p { font-size: 1rem; }
+      .hero-content {
+        padding: 100px 0 60px;
+      }
+      .hero {
+        min-height: 80vh;
+      }
       
       .hero-buttons .btn-outline {
         display: none !important;
@@ -1104,10 +1134,7 @@
         display: block !important;
       }
       
-      /* ==========================================================
-         CORREÇÃO: Centralização das dobras "Paixão" e "Escolha"
-         ========================================================== */
-      
+      /* ===== CORREÇÃO: Centralização das dobras "Paixão" e "Escolha" ===== */
       .section#institucional .section-title {
         text-align: center !important;
       }
@@ -1158,10 +1185,7 @@
         margin: 0 10px !important;
       }
       
-      /* ==========================================================
-         CARROSSEL MOBILE - TÉCNICA SCROLL SNAP (ISOLADO)
-         ========================================================== */
-      
+      /* ===== CARROSSEL MOBILE ===== */
       .carousel-wrapper {
         position: relative;
         max-width: 100%;
@@ -1261,6 +1285,35 @@
       }
     }
 
+    @media (max-width: 480px) {
+      body {
+        padding-top: 60px;
+      }
+      .navbar .logo img {
+        height: 35px;
+        max-width: 120px;
+      }
+      .navbar.scrolled .logo img {
+        height: 30px;
+      }
+      .hero-text h1 { font-size: 2rem; }
+      .hero-text h1 .script { font-size: 3rem; }
+      .section-title .script { font-size: 2.8rem; }
+      
+      .package-grid { grid-template-columns: 1fr; }
+      .carousel-item {
+        flex: 0 0 82%;
+      }
+      .carousel-track {
+        padding: 20px 8%;
+      }
+      .carousel-arrows button {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+      }
+    }
+
     @media (min-width: 769px) {
       .hero-video-mobile {
         display: none !important;
@@ -1277,8 +1330,8 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar">
+<!-- ===== NAVBAR FLUTUANTE ===== -->
+<nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="index.html" class="logo">
       <img src="assets/images/logo/logo-header.png" 
@@ -1565,6 +1618,20 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
+  // NAVBAR SCROLL EFFECT
+  // ============================================================
+  const navbar = document.getElementById('mainNavbar');
+
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    if (scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================================
   // 1. DADOS DAS IMAGENS (13 imagens com caminho assets/instagram)
   // ============================================================
   const instagramPosts = [
@@ -1670,8 +1737,6 @@
     track.innerHTML = '';
     indicators.innerHTML = '';
 
-    // Clonamos as imagens apenas no Desktop para fazer o loop infinito via JS
-    // No Mobile, renderizamos apenas 1 conjunto (o CSS scroll snap nativo não gosta de loops infinitos sem hacks complexos)
     const allPosts = isMobile() ? instagramPosts : [...instagramPosts, ...instagramPosts, ...instagramPosts];
     
     allPosts.forEach((post, index) => {
@@ -1704,14 +1769,13 @@
   }
 
   // ============================================================
-  // 4. NAVEGAÇÃO HÍBRIDA (DESKTOP JS vs MOBILE NATIVO)
+  // 4. NAVEGAÇÃO HÍBRIDA
   // ============================================================
   function goToSlide(index, animate = true) {
     const items = track.children;
     const total = items.length;
     
     if (isMobile()) {
-      // ===== LÓGICA MOBILE (SCROLL SNAP) =====
       if (index < 0) index = totalItems - 1;
       if (index >= totalItems) index = 0;
       currentIndex = index;
@@ -1724,7 +1788,6 @@
         });
       }
     } else {
-      // ===== LÓGICA DESKTOP (TRANSLATEX E CLASSES) =====
       const half = Math.floor(total / 3);
       if (index < 0) index = totalItems - 1;
       if (index >= totalItems) index = 0;
@@ -1762,7 +1825,6 @@
       currentIndex = index;
     }
     
-    // Atualiza os Dots em ambas as versões
     document.querySelectorAll('.dot').forEach((dot, i) => {
       dot.classList.toggle('active', i === currentIndex);
     });
@@ -1771,7 +1833,6 @@
   function nextSlide() { goToSlide((currentIndex + 1) % totalItems); }
   function prevSlide() { goToSlide((currentIndex - 1 + totalItems) % totalItems); }
 
-  // Sincroniza o Scroll Manual no Mobile com os Dots
   track.addEventListener('scroll', () => {
     if (isMobile()) {
       clearTimeout(track.scrollTimeout);
@@ -1868,7 +1929,6 @@
     if (e.key === 'ArrowRight') { nextSlide(); pauseAutoplay(); }
   });
 
-  // Removemos o Touch Swipe customizado no Mobile, pois o CSS nativo (Scroll Snap) já faz isso de forma perfeita
   let touchStartX = 0;
   let touchEndX = 0;
   const wrapper = document.querySelector('.carousel-wrapper');
@@ -1904,7 +1964,6 @@
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-      // Se a tela mudar de tamanho (virar o celular, por ex), recria a estrutura adequada (Mobile vs Desktop)
       renderCarousel();
     }, 200);
   });
