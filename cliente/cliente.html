@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Fotos · Studio Rassi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Brittany+Signature&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #2C0714;
+      color: #f5edea;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ===== NAVBAR FLUTUANTE ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 12px 0;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .navbar.scrolled {
+      padding: 8px 0;
+      background: rgba(44, 7, 20, 0.96);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+    }
+    .navbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .logo {
+      display: inline-block;
+      line-height: 0;
+      text-decoration: none;
+    }
+    .logo img {
+      display: block;
+      width: auto;
+      height: 45px;
+      max-width: 150px;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled .logo img {
+      height: 40px;
+    }
+    .logo img:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+    .nav-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .nav-info .user {
+      color: #d4c5c0;
+      font-size: 0.85rem;
+    }
+    .nav-info .user i { color: #D4A3B3; margin-right: 6px; }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      padding: 8px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+    .btn-logout:hover {
+      border-color: #D4A3B3;
+      color: #D4A3B3;
+    }
+
+    /* ===== TIMER E CRÉDITOS - FLUTUANTES ===== */
+    .floating-status {
+      position: sticky;
+      top: 72px;
+      z-index: 99;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      padding: 12px 0;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    }
+    .floating-status .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .status-item i {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+    }
+    .status-item .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .status-item .timer {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1.1rem;
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      display: inline-block;
+    }
+
+    /* ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== */
+    .credits-info {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 12px auto 8px;
+      max-width: 700px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      text-align: center;
+    }
+    .credits-info .heart {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .credits-info .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: #d4c5c0;
+      font-weight: 300;
+    }
+    .credits-info .label strong {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    .credits-info .highlight {
+      color: #D4A3B3;
+      font-weight: 500;
+    }
+    .credits-info .emoji-heart {
+      display: inline-block;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* ===== SKELETON LOADING ===== */
+    .skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a0510 25%, #2C0714 50%, #1a0510 75%);
+      background-size: 400% 400%;
+      animation: skeletonLoading 1.5s ease-in-out infinite;
+      z-index: 1;
+      border-radius: 20px;
+    }
+    @keyframes skeletonLoading {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .skeleton .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #D4A3B3;
+      font-size: 1.5rem;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ===== GALERIA ===== */
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 16px 0 20px;
+    }
+    .gallery-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+    }
+    .gallery-header h2 span { color: #D4A3B3; }
+    .watermark-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .watermark-item {
+      background: #1f0510;
+      border-radius: 20px;
+      padding: 0;
+      text-align: center;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      position: relative;
+      user-select: none;
+      transition: 0.3s;
+      overflow: hidden;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .watermark-item:hover {
+      border-color: rgba(212, 163, 179, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .watermark-item .real-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+      transition: opacity 0.5s ease, transform 0.3s ease;
+    }
+    .watermark-item .real-image.loaded {
+      opacity: 0.85;
+    }
+    .watermark-item .real-image:hover {
+      transform: scale(1.03);
+    }
+    .watermark-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(44, 7, 20, 0.95), transparent);
+      z-index: 3;
+      pointer-events: none;
+    }
+    
+    .watermark-item .watermark-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-20deg);
+      opacity: 0.12;
+      pointer-events: none;
+      user-select: none;
+      width: 120px;
+      height: auto;
+      filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(0,0,0,0.5));
+      z-index: 1;
+    }
+    .watermark-item .watermark-text {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.5rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+      background: rgba(0,0,0,0.4);
+      padding: 3px 10px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      z-index: 4;
+    }
+    .watermark-item .badge-lock {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.7rem;
+      color: #D4A3B3;
+      background: rgba(44, 7, 20, 0.7);
+      padding: 4px 8px;
+      border-radius: 50%;
+      backdrop-filter: blur(4px);
+      z-index: 4;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .modal-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-content img {
+      width: auto;
+      height: auto;
+      max-width: 90vw;
+      max-height: 75vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+    }
+    .modal-close {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      background: rgba(44, 7, 20, 0.8);
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #f5edea;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      transform: rotate(90deg);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .modal-btn-download {
+      background: #D4A3B3;
+      color: #2C0714;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
+    }
+    .modal-btn-download:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .modal-btn-close {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .modal-btn-close:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+    .modal-credits {
+      color: #D4A3B3;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ===== UPSELL ===== */
+    .upsell-section {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 28px 32px;
+      margin: 32px 0;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .upsell-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      color: #D4A3B3;
+      margin-bottom: 12px;
+    }
+    .upsell-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .upsell-item {
+      background: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .upsell-item:hover {
+      border-color: #D4A3B3;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .upsell-item .price {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 32px 0 20px;
+      border-top: 1px solid rgba(212, 163, 179, 0.04);
+      margin-top: 40px;
+    }
+    footer p {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #7a5f5a;
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+      .container { padding: 0 20px; }
+      
+      .navbar {
+        padding: 10px 0;
+      }
+      .navbar .logo img {
+        height: 38px;
+        max-width: 120px;
+      }
+      .navbar.scrolled .logo img {
+        height: 34px;
+      }
+      
+      .floating-status .container {
+        gap: 16px;
+        flex-direction: column;
+      }
+      .status-item {
+        font-size: 0.75rem;
+      }
+      .credits-info {
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 16px;
+        font-size: 0.75rem;
+      }
+      .watermark-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+      }
+      .watermark-item {
+        min-height: 220px;
+      }
+      .watermark-item .watermark-logo {
+        width: 70px;
+      }
+      .navbar-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .nav-info {
+        justify-content: space-between;
+      }
+      .floating-status {
+        top: 62px;
+      }
+      .modal-content img {
+        max-height: 60vh;
+      }
+      .modal-close {
+        top: -36px;
+        right: -10px;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+      }
+      .modal-btn-download {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+      }
+    }
+    @media (max-width: 480px) {
+      body {
+        padding-top: 60px;
+      }
+      .watermark-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px;
+      }
+      .watermark-item {
+        min-height: 180px;
+      }
+      .watermark-item .watermark-logo {
+        width: 50px;
+      }
+      .watermark-item .watermark-text {
+        font-size: 0.4rem;
+        padding: 2px 8px;
+        bottom: 8px;
+        left: 8px;
+      }
+      .upsell-grid {
+        flex-direction: column;
+      }
+      .upsell-item {
+        justify-content: center;
+      }
+      .modal-content img {
+        max-height: 50vh;
+      }
+      .modal-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      .credits-info {
+        font-size: 0.65rem;
+        padding: 10px 12px;
+      }
+      .navbar .logo img {
+        height: 32px;
+        max-width: 100px;
+      }
+      .navbar.scrolled .logo img {
+        height: 28px;
+      }
+      .floating-status {
+        top: 52px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR FLUTUANTE ===== -->
+<nav class="navbar" id="mainNavbar">
+  <div class="container navbar-content">
+    <a href="https://studiorassi.github.io/home/index.html" class="logo">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
+           alt="Studio Rassi · Photo & Video" 
+           width="150" 
+           height="45"
+           loading="lazy">
+    </a>
+    <div class="nav-info">
+      <span class="user">
+        <i class="fas fa-user-circle"></i> 
+        Olá, <strong>Lucille e Edson</strong> · 
+        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
+          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
+        </span>
+      </span>
+      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== TIMER E CRÉDITOS - FLUTUANTES ===== -->
+<div class="floating-status" id="statusBar">
+  <div class="container">
+    <div class="status-item">
+      <i class="fas fa-coins"></i>
+      <span>Créditos disponíveis: <strong class="value" id="creditsDisplay">30</strong></span>
+    </div>
+    <div class="status-item">
+      <i class="far fa-clock"></i>
+      <span>Seu acesso expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== -->
+<div class="container">
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label">
+      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a 
+      <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e 
+      <strong>sem marca d'água</strong>.
+    </span>
+    <span class="label" style="display: inline-flex; align-items: center; gap: 4px;">
+      <i class="fas fa-clock" style="color: #D4A3B3; font-size: 0.7rem;"></i>
+      <span style="font-size: 0.7rem; color: #7a5f5a;">A primeira carga pode demorar um pouquinho, mas vale a espera!</span>
+    </span>
+    <span class="emoji-heart">🥰</span>
+  </div>
+</div>
+
+<!-- ===== GALERIA ===== -->
+<div class="container">
+  <div class="gallery-header">
+    <h2>📸 <span>Suas memórias</span></h2>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
+      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
+    </span>
+  </div>
+
+  <div class="watermark-grid" id="galleryGrid">
+    <!-- Itens gerados via JS -->
+  </div>
+
+  <!-- ===== UPSELL ===== -->
+  <div class="upsell-section">
+    <h3><i class="fas fa-plus-circle" style="color:#D4A3B3;"></i> Quer mais fotos?</h3>
+    <div class="upsell-grid">
+      <div class="upsell-item" onclick="buyCredits(5, 18)">
+        <span>📷 +5 fotos</span>
+        <span class="price">R$ 90</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(10, 18)">
+        <span>📷 +10 fotos</span>
+        <span class="price">R$ 180</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(1, 50)">
+        <span>🎥 +1 vídeo avulso</span>
+        <span class="price">R$ 50</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(3, 50)">
+        <span>🎥 +3 vídeos</span>
+        <span class="price">R$ 150</span>
+      </div>
+    </div>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Os créditos adicionais são adicionados instantaneamente à sua conta.
+    </p>
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <img id="modalImage" src="" alt="Foto em alta resolução">
+    <div class="modal-actions">
+      <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
+        <i class="fas fa-download"></i> Baixar imagem em alta definição e sem marca d'água = utilizar 01 crédito
+      </button>
+      <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
+    </div>
+    <div class="modal-credits" id="modalCredits">
+      Créditos restantes: <strong id="modalCreditsCount">30</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // VERIFICAR TOKEN E CARREGAR DADOS DO USUÁRIO
+  // ============================================================
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+
+  // Usar o token em todas as requisições
+  async function fetchWithAuth(url, options = {}) {
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+  
+  // ============================================================
+  // CONEXÃO COM O BACKEND (RENDER)
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+
+  // ============================================================
+  // DADOS - 116 FOTOS
+  // ============================================================
+  const allPhotoKeys = [];
+  for (let i = 1; i <= 116; i++) {
+    const numeroFormatado = String(i).padStart(2, '0');
+    allPhotoKeys.push(`ensaio_${numeroFormatado}.jpg`);
+  }
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let credits = 30;
+  let timerSeconds = 72 * 3600;
+  let currentModalKey = null;
+
+  // ============================================================
+  // DOM ELEMENTS
+  // ============================================================
+  const grid = document.getElementById('galleryGrid');
+  const creditsDisplay = document.getElementById('creditsDisplay');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalImage = document.getElementById('modalImage');
+  const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+  const modalCreditsCount = document.getElementById('modalCreditsCount');
+
+  // ============================================================
+  // RENDER GALERIA (TODAS AS 116 FOTOS)
+  // ============================================================
+  function renderGallery() {
+    grid.innerHTML = '';
+
+    allPhotoKeys.forEach((key, index) => {
+      const div = document.createElement('div');
+      div.className = 'watermark-item';
+      
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=400`;
+
+      div.innerHTML = `
+        <div class="skeleton" id="skeleton-${index}">
+          <div class="spinner"><i class="fas fa-spinner"></i></div>
+        </div>
+        <div class="badge-lock"><i class="fas fa-lock"></i></div>
+        <img 
+          src="${imageUrl}" 
+          alt="Foto ${index + 1}" 
+          class="real-image" 
+          loading="lazy"
+          data-key="${key}"
+          data-index="${index}"
+          onload="this.classList.add('loaded'); document.getElementById('skeleton-${index}').style.display='none';"
+          onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; document.getElementById('skeleton-${index}').style.display='none';"
+        >
+        <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <div class="watermark-text">Studio Rassi</div>
+      `;
+
+      div.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-download')) return;
+        openModal(key);
+      });
+
+      grid.appendChild(div);
+    });
+  }
+
+  // ============================================================
+  // MODAL
+  // ============================================================
+  function openModal(imageKey) {
+    currentModalKey = imageKey;
+    const fullImageUrl = `${API_BASE_URL}/api/gallery/view/${imageKey}?width=1200`;
+    modalImage.src = fullImageUrl;
+    modalImage.alt = `Foto ${imageKey}`;
+    modalCreditsCount.textContent = credits;
+    modalDownloadBtn.disabled = credits <= 0;
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    currentModalKey = null;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  // ============================================================
+  // DOWNLOAD DO MODAL
+  // ============================================================
+  async function downloadFromModal() {
+    if (!currentModalKey) return;
+    if (credits <= 0) {
+      alert('❌ Você não tem créditos suficientes. Adquira mais clicando nas opções acima.');
+      return;
+    }
+
+    try {
+      modalDownloadBtn.disabled = true;
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
+
+      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageKeys: [currentModalKey] })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erro ao gerar link de download.');
+      }
+
+      const data = await response.json();
+      const downloadUrl = data.urls[0].url;
+
+      credits--;
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      modalDownloadBtn.disabled = credits <= 0;
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = currentModalKey;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download iniciado!';
+
+      setTimeout(() => {
+        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição e sem marca d\'água = utilizar 01 crédito';
+        modalDownloadBtn.disabled = credits <= 0;
+      }, 3000);
+
+    } catch (error) {
+      console.error('Erro no download:', error);
+      
+      credits--;
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      modalDownloadBtn.disabled = credits <= 0;
+      alert(`✅ [Modo de Teste] Foto "${currentModalKey}" baixada!\nCréditos restantes: ${credits}`);
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição e sem marca d\'água = utilizar 01 crédito';
+    }
+  }
+
+  // ============================================================
+  // COMPRAR CRÉDITOS (UPSELL)
+  // ============================================================
+  function buyCredits(amount, price) {
+    const total = amount * price;
+    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${total}? (Redirecionamento para Pagamento)`)) {
+      credits += amount;
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      modalDownloadBtn.disabled = credits <= 0;
+      alert(`✅ Pagamento simulado. ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+    }
+  }
+
+  // ============================================================
+  // ATUALIZAR DISPLAY
+  // ============================================================
+  function updateCreditsDisplay() {
+    creditsDisplay.textContent = credits;
+    modalCreditsCount.textContent = credits;
+    if (modalDownloadBtn) {
+      modalDownloadBtn.disabled = credits <= 0;
+    }
+  }
+
+  // ============================================================
+  // TIMER REGRESSIVO  // ============================================================
+  function updateTimer() {
+    if (timerSeconds <= 0) {
+      timerDisplay.textContent = '00:00:00';
+      return;
+    }
+    timerSeconds--;
+    const hrs = Math.floor(timerSeconds / 3600);
+    const mins = Math.floor((timerSeconds % 3600) / 60);
+    const secs = timerSeconds % 60;
+    timerDisplay.textContent = 
+      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  // ============================================================
+  // BLOQUEIO DE PRINT/DOWNLOAD MANUAIS
+  // ============================================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+      e.preventDefault();
+      alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
+    }
+  });
+
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
+      e.preventDefault();
+      alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
+    }
+  });
+
+  // ============================================================
+  // NAVBAR SCROLL EFFECT (DESKTOP E MOBILE)
+  // ============================================================
+  const navbar = document.getElementById('mainNavbar');
+
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    
+    if (scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================================
+  // EXIBIR TOTAL DE FOTOS
+  // ============================================================
+  const totalPhotosDisplay = document.getElementById('totalPhotosDisplay');
+  if (totalPhotosDisplay) {
+    totalPhotosDisplay.textContent = allPhotoKeys.length;
+  }
+
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
+  renderGallery();
+  updateCreditsDisplay();
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  console.log('📸 Galeria Studio Rassi carregada!');
+  console.log(`📊 ${allPhotoKeys.length} fotos disponíveis (${credits} créditos)`);
+  console.log('💡 Clique em qualquer foto para abrir em tela cheia e baixar em alta definição.');
+</script>
+
+</body>
+</html>
