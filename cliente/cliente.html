@@ -100,7 +100,209 @@
       color: #D4A3B3;
     }
 
-    /* ===== CTA "+ Quer mais fotos?" no Menu (Mobile) ===== */
+    /* ===== BOTÃO HAMBURGUER (MOBILE) ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: #f5edea;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ===== MENU MOBILE SUSPENSO ===== */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 380px;
+      height: 100vh;
+      background: rgba(44, 7, 20, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 999;
+      padding: 80px 28px 40px;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border-left: 1px solid rgba(212, 163, 179, 0.08);
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    .mobile-menu .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+      display: none;
+    }
+    .mobile-menu.open .menu-overlay {
+      display: block;
+    }
+
+    /* ===== INFORMAÇÕES DO MENU MOBILE ===== */
+    .mobile-menu .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+    }
+    .mobile-menu .menu-header .user-info {
+      font-size: 0.9rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-header .user-info strong {
+      color: #f5edea;
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 4px;
+    }
+    .mobile-menu .menu-header .close-menu {
+      background: transparent;
+      border: none;
+      color: #f5edea;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      transition: 0.3s;
+    }
+    .mobile-menu .menu-header .close-menu:hover {
+      color: #D4A3B3;
+      transform: rotate(90deg);
+    }
+
+    /* ===== CRÉDITOS E TIMER NO MENU MOBILE ===== */
+    .mobile-menu .menu-status {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-menu .menu-status .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-status .status-row .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mobile-menu .menu-status .status-row .label i {
+      color: #D4A3B3;
+      font-size: 1rem;
+    }
+    .mobile-menu .menu-status .status-row .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .mobile-menu .menu-status .status-row .value.timer {
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* ===== CTA "+ Quer mais fotos?" no Menu Mobile ===== */
+    .mobile-menu .menu-credit-cta-mobile {
+      background: #D4A3B3;
+      color: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      width: 100%;
+      margin-top: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .mobile-menu .menu-credit-cta-mobile:hover {
+      background: #c08b9e;
+      transform: scale(1.02);
+    }
+    .mobile-menu .menu-credit-cta-mobile.show {
+      display: flex;
+    }
+
+    /* ===== LINKS DO MENU MOBILE ===== */
+    .mobile-menu .menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .mobile-menu .menu-links a {
+      color: #d4c5c0;
+      text-decoration: none;
+      padding: 14px 16px;
+      border-radius: 12px;
+      transition: 0.3s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-menu .menu-links a i {
+      color: #D4A3B3;
+      width: 20px;
+      text-align: center;
+    }
+    .mobile-menu .menu-links a:hover {
+      background: rgba(212, 163, 179, 0.08);
+      color: #f5edea;
+    }
+    .mobile-menu .menu-links .logout-link {
+      margin-top: 12px;
+      border-top: 1px solid rgba(212, 163, 179, 0.06);
+      padding-top: 16px;
+      color: #7a5f5a;
+    }
+    .mobile-menu .menu-links .logout-link:hover {
+      color: #D4A3B3;
+      background: transparent;
+    }
+
+    /* ===== CTA "+ Quer mais fotos?" no Menu (Desktop) ===== */
     .menu-credit-cta {
       display: none;
       background: #D4A3B3;
@@ -123,7 +325,7 @@
       display: inline-block;
     }
 
-    /* ===== TIMER E CRÉDITOS - FLUTUANTES ===== */
+    /* ===== TIMER E CRÉDITOS - FLUTUANTES (Desktop) ===== */
     .floating-status {
       position: sticky;
       top: 72px;
@@ -469,7 +671,7 @@
       transform: rotate(90deg);
     }
 
-    /* ===== MODAL - PROGRESS BAR DA IMAGEM (MOBILE E DESKTOP) ===== */
+    /* ===== MODAL - PROGRESS BAR DA IMAGEM ===== */
     .modal-progress {
       position: absolute;
       bottom: 100px;
@@ -636,7 +838,7 @@
       z-index: 10;
     }
 
-    /* ===== MODAL - COMPRA DE CRÉDITOS (SUBSTITUI O BOTÃO BAIXAR) ===== */
+    /* ===== MODAL - COMPRA DE CRÉDITOS ===== */
     .modal-buy-credits {
       display: none;
       width: 100%;
@@ -767,33 +969,32 @@
       color: #7a5f5a;
     }
 
-    /* ===== RESPONSIVO ===== */
+    /* ============================================================
+       RESPONSIVO
+    ============================================================ */
     @media (max-width: 768px) {
       body {
         padding-top: 70px;
       }
       .container { padding: 0 20px; }
+      
+      /* Mostra botão hamburguer no mobile */
+      .hamburger {
+        display: flex;
+      }
+      
+      /* Esconde informações de crédito do desktop no mobile */
+      .floating-status {
+        display: none;
+      }
+      
       .navbar { padding: 10px 0; }
       .navbar .logo img { height: 38px; max-width: 120px; }
       .navbar.scrolled .logo img { height: 34px; }
       
-      .menu-credit-cta.show {
-        display: inline-block;
-      }
-      
-      .floating-status .container {
-        gap: 12px;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      }
-      .status-item { 
-        font-size: 0.7rem; 
-        gap: 6px;
-      }
-      .status-item .value,
-      .status-item .timer {
-        font-size: 0.9rem;
+      /* Menu mobile */
+      .mobile-menu {
+        display: block;
       }
       
       .progress-bar-container {
@@ -821,15 +1022,27 @@
       .watermark-item .watermark-logo { width: 70px; }
       
       .navbar-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-      .nav-info { 
+        flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         gap: 12px;
       }
-      .floating-status { top: 62px; }
+      .nav-info .user {
+        font-size: 0.7rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .nav-info .user span {
+        display: inline;
+      }
+      .btn-logout {
+        padding: 6px 14px;
+        font-size: 0.7rem;
+      }
+      .menu-credit-cta {
+        display: none !important;
+      }
       
       .modal-nav {
         width: 36px;
@@ -871,6 +1084,7 @@
         justify-content: center;
       }
     }
+    
     @media (max-width: 480px) {
       body { padding-top: 60px; }
       .watermark-grid { 
@@ -890,7 +1104,6 @@
         max-width: 100px;
       }
       .navbar.scrolled .logo img { height: 28px; }
-      .floating-status { top: 52px; }
       .progress-bar-container { top: 98px; }
       .modal-content img { max-height: 50vh; }
       .modal-actions {
@@ -914,19 +1127,17 @@
         min-width: unset;
         width: 100%;
       }
-      .menu-credit-cta {
-        font-size: 0.6rem;
-        padding: 4px 12px;
+      
+      .mobile-menu {
+        max-width: 100%;
+        padding: 70px 20px 30px;
       }
-      .floating-status .container {
-        gap: 8px;
+      .mobile-menu .menu-status .status-row {
+        font-size: 0.75rem;
       }
-      .status-item {
-        font-size: 0.6rem;
-      }
-      .status-item .value,
-      .status-item .timer {
-        font-size: 0.8rem;
+      .mobile-menu .menu-links a {
+        font-size: 0.85rem;
+        padding: 12px 14px;
       }
     }
   </style>
@@ -943,6 +1154,14 @@
            height="45"
            loading="lazy">
     </a>
+    
+    <!-- Botão Hamburguer (Mobile) -->
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
     <div class="nav-info">
       <span class="user">
         <i class="fas fa-user-circle"></i> 
@@ -962,7 +1181,62 @@
   </div>
 </nav>
 
-<!-- ===== TIMER E CRÉDITOS - FLUTUANTES ===== -->
+<!-- ===== MENU MOBILE SUSPENSO ===== -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
+  
+  <div class="menu-header">
+    <div class="user-info">
+      <i class="fas fa-user-circle" style="color: #D4A3B3;"></i>
+      Olá, <strong id="mobileUserName">Lucille e Edson</strong>
+    </div>
+    <button class="close-menu" onclick="closeMobileMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <!-- ===== CRÉDITOS E TIMER NO MENU MOBILE ===== -->
+  <div class="menu-status">
+    <div class="status-row">
+      <span class="label">
+        <i class="fas fa-coins"></i> Créditos disponíveis
+      </span>
+      <span class="value" id="mobileCreditsDisplay">30</span>
+    </div>
+    <div class="status-row">
+      <span class="label">
+        <i class="far fa-clock"></i> Expira em
+      </span>
+      <span class="value timer" id="mobileTimerDisplay">72:00:00</span>
+    </div>
+    <div class="status-row" style="border-top: 1px solid rgba(212,163,179,0.06); padding-top: 12px; margin-top: 4px;">
+      <span class="label">
+        <i class="fas fa-images" style="color: #D4A3B3;"></i> Total de fotos
+      </span>
+      <span class="value" id="mobileTotalPhotos">116</span>
+    </div>
+  </div>
+  
+  <!-- ===== CTA "+ Quer mais fotos?" no Menu Mobile ===== -->
+  <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
+    <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+  </button>
+  
+  <!-- ===== LINKS DO MENU ===== -->
+  <div class="menu-links">
+    <a href="#galeria" onclick="closeMobileMenu()">
+      <i class="fas fa-images"></i> Ver Galeria
+    </a>
+    <a href="#upsellSection" onclick="closeMobileMenu()">
+      <i class="fas fa-plus-circle"></i> Comprar Créditos
+    </a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
+  </div>
+</div>
+
+<!-- ===== TIMER E CRÉDITOS - FLUTUANTES (Desktop) ===== -->
 <div class="floating-status" id="statusBar">
   <div class="container">
     <div class="status-item">
@@ -976,7 +1250,7 @@
   </div>
 </div>
 
-<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUA COM O MENU ===== -->
+<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) ===== -->
 <div class="progress-bar-container" id="progressContainer">
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;">
@@ -1051,7 +1325,7 @@
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
-    <!-- Progress Bar da Imagem (MOBILE E DESKTOP) -->
+    <!-- Progress Bar da Imagem -->
     <div class="modal-progress" id="modalProgress">
       <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
       <div class="track">
@@ -1083,12 +1357,12 @@
     
     <!-- Ações do Modal -->
     <div class="modal-actions">
-      <!-- Botão Baixar (aparece quando tem créditos) -->
+      <!-- Botão Baixar -->
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
       </button>
       
-      <!-- Área de Compra de Créditos (aparece quando NÃO tem créditos) -->
+      <!-- Área de Compra de Créditos -->
       <div class="modal-buy-credits" id="modalBuyCredits">
         <div class="buy-title">
           <i class="fas fa-crown"></i> + Quer mais fotos?
@@ -1131,18 +1405,19 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // 1. CARREGAR DADOS DO USUÁRIO (LOGIN)
+  // 1. CARREGAR DADOS DO USUÁRIO
   // ============================================================
   const userData = JSON.parse(localStorage.getItem('user') || '{}');
   let credits = userData.credits || 30;
   const clientName = userData.name || 'Lucille e Edson';
   const totalPhotos = 116;
 
-  // Atualiza nome do cliente
   document.getElementById('clienteNome').textContent = clientName;
+  document.getElementById('mobileUserName').textContent = clientName;
   document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
   document.getElementById('totalCount').textContent = totalPhotos;
   document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
 
   // ============================================================
   // 2. CONEXÃO COM O BACKEND
@@ -1173,7 +1448,9 @@
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
+  const mobileCreditsDisplay = document.getElementById('mobileCreditsDisplay');
   const timerDisplay = document.getElementById('timerDisplay');
+  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalImage = document.getElementById('modalImage');
   const modalDownloadBtn = document.getElementById('modalDownloadBtn');
@@ -1186,9 +1463,38 @@
   const modalProgressFill = document.getElementById('modalProgressFill');
   const modalProgressLabel = document.getElementById('modalProgressLabel');
   const menuCreditCta = document.getElementById('menuCreditCta');
+  const mobileCreditCta = document.getElementById('mobileCreditCta');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
 
   // ============================================================
-  // 6. DETECTAR MOBILE
+  // 6. MENU MOBILE
+  // ============================================================
+  function toggleMobileMenu() {
+    mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+  // Fecha menu ao clicar fora
+  document.addEventListener('click', function(e) {
+    if (mobileMenu.classList.contains('open') && 
+        !mobileMenu.contains(e.target) && 
+        !hamburgerBtn.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // ============================================================
+  // 7. DETECTAR MOBILE
   // ============================================================
   function checkMobile() {
     isMobile = window.innerWidth <= 768;
@@ -1196,15 +1502,23 @@
   }
 
   function updateMenuCtaVisibility() {
-    if (isMobile && credits <= 0) {
+    // Desktop CTA
+    if (!isMobile && credits <= 0) {
       menuCreditCta.classList.add('show');
     } else {
       menuCreditCta.classList.remove('show');
     }
+    
+    // Mobile CTA
+    if (isMobile && credits <= 0) {
+      mobileCreditCta.classList.add('show');
+    } else {
+      mobileCreditCta.classList.remove('show');
+    }
   }
 
   // ============================================================
-  // 7. BARRA DE PROGRESSO (CARREGAMENTO DAS FOTOS)
+  // 8. BARRA DE PROGRESSO
   // ============================================================
   function updateProgress() {
     const percent = Math.round((imagesLoaded / totalPhotos) * 100);
@@ -1221,7 +1535,7 @@
   }
 
   // ============================================================
-  // 8. RENDER GALERIA
+  // 9. RENDER GALERIA
   // ============================================================
   function renderGallery() {
     grid.innerHTML = '';
@@ -1261,7 +1575,7 @@
   }
 
   // ============================================================
-  // 9. IMAGE LOAD HANDLER
+  // 10. IMAGE LOAD HANDLER
   // ============================================================
   function onImageLoad(index) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
@@ -1277,7 +1591,7 @@
   }
 
   // ============================================================
-  // 10. MODAL COM PROGRESS BAR DA IMAGEM (MOBILE E DESKTOP)
+  // 11. MODAL
   // ============================================================
   function openModal(index) {
     currentModalIndex = index;
@@ -1370,7 +1684,7 @@
   }
 
   // ============================================================
-  // 11. ATUALIZAR BOTÕES DO MODAL
+  // 12. ATUALIZAR BOTÕES DO MODAL
   // ============================================================
   function updateModalButtons() {
     modalCreditsCount.textContent = credits;
@@ -1390,13 +1704,13 @@
   }
 
   // ============================================================
-  // 12. DOWNLOAD REAL DO S3 (SEM MARCA D'ÁGUA) - CORRIGIDO
+  // 13. DOWNLOAD (S3)
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
     if (!currentKey) return;
     if (credits <= 0) {
-      alert('❌ Você não tem créditos suficientes. Adquira mais clicando nas opções abaixo.');
+      alert('❌ Você não tem créditos suficientes.');
       return;
     }
 
@@ -1404,32 +1718,23 @@
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
-      // ============================================================
-      // MÉTODO 1: TENTA BAIXAR DIRETO DO S3 COM CORS
-      // ============================================================
-      const s3DirectUrl = `${S3_BUCKET_URL}/${currentKey}`;
-      
-      console.log('📥 Tentando baixar do S3:', s3DirectUrl);
-      
-      // Tenta fazer fetch da imagem do S3
-      const response = await fetch(s3DirectUrl, {
-        mode: 'cors',
-        cache: 'no-cache'
+      // Tenta via API com URL assinada
+      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageKeys: [currentKey] })
       });
-      
+
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error('API não retornou URL de download');
       }
+
+      const data = await response.json();
+      const signedUrl = data.urls[0].url;
+
+      const downloadResponse = await fetch(signedUrl);
+      const blob = await downloadResponse.blob();
       
-      // Verifica se é uma imagem
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.startsWith('image/')) {
-        throw new Error('Resposta não é uma imagem');
-      }
-      
-      const blob = await response.blob();
-      
-      // Cria link para download
       const downloadLink = document.createElement('a');
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = currentKey;
@@ -1442,7 +1747,6 @@
         URL.revokeObjectURL(downloadLink.href);
       }, 1000);
 
-      // Consome 1 crédito
       credits--;
       updateCreditsDisplay();
       modalCreditsCount.textContent = credits;
@@ -1457,31 +1761,15 @@
       }, 3000);
 
     } catch (error) {
-      console.error('❌ Erro no download do S3:', error);
+      console.error('❌ Erro no download:', error);
       
-      // ============================================================
-      // MÉTODO 2: FALLBACK - TENTA BAIXAR VIA API COM AUTENTICAÇÃO
-      // ============================================================
+      // Fallback: tenta acesso direto ao S3
       try {
-        modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Tentando via API...';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Tentando acesso direto...';
         
-        // Chama a API que deve retornar a URL assinada do S3
-        const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageKeys: [currentKey] })
-        });
-
-        if (!response.ok) {
-          throw new Error('API não retornou URL de download');
-        }
-
-        const data = await response.json();
-        const signedUrl = data.urls[0].url;
-
-        // Faz o download da URL assinada
-        const downloadResponse = await fetch(signedUrl);
-        const blob = await downloadResponse.blob();
+        const s3DirectUrl = `${S3_BUCKET_URL}/${currentKey}`;
+        const directResponse = await fetch(s3DirectUrl);
+        const blob = await directResponse.blob();
         
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);
@@ -1510,27 +1798,7 @@
 
       } catch (fallbackError) {
         console.error('❌ Erro no fallback:', fallbackError);
-        
-        // ============================================================
-        // MÉTODO 3: ÚLTIMO RECURSO - ABRE EM NOVA ABA (NÃO RECOMENDADO)
-        // ============================================================
-        const usarFallback = confirm(
-          '⚠️ Não foi possível baixar diretamente.\n\n' +
-          'Deseja abrir a imagem em uma nova aba para salvar manualmente?\n' +
-          '(A imagem pode ter marca d\'água)'
-        );
-        
-        if (usarFallback) {
-          const fallbackUrl = `${API_BASE_URL}/api/gallery/view/${currentKey}?width=1200`;
-          window.open(fallbackUrl, '_blank');
-          
-          // Consome crédito mesmo assim
-          credits--;
-          updateCreditsDisplay();
-          modalCreditsCount.textContent = credits;
-          updateModalButtons();
-        }
-        
+        alert('❌ Não foi possível baixar a imagem. Verifique a configuração do S3.');
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
         modalDownloadBtn.disabled = credits <= 0;
       }
@@ -1538,17 +1806,17 @@
   }
 
   // ============================================================
-  // 13. COMPRAR CRÉDITOS
+  // 14. COMPRAR CRÉDITOS
   // ============================================================
   function buyCredits(amount) {
     const price = amount * 8;
-    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}? (Redirecionamento para Pagamento)`)) {
+    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}?`)) {
       credits += amount;
       updateCreditsDisplay();
       modalCreditsCount.textContent = credits;
       updateModalButtons();
       updateMenuCtaVisibility();
-      alert(`✅ Pagamento simulado. ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+      alert(`✅ ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
     }
   }
 
@@ -1557,10 +1825,11 @@
   }
 
   // ============================================================
-  // 14. ATUALIZAR DISPLAY
+  // 15. ATUALIZAR DISPLAY
   // ============================================================
   function updateCreditsDisplay() {
     creditsDisplay.textContent = credits;
+    mobileCreditsDisplay.textContent = credits;
     modalCreditsCount.textContent = credits;
     updateModalButtons();
     updateMenuCtaVisibility();
@@ -1571,23 +1840,25 @@
   }
 
   // ============================================================
-  // 15. TIMER REGRESSIVO
+  // 16. TIMER REGRESSIVO
   // ============================================================
   function updateTimer() {
     if (timerSeconds <= 0) {
       timerDisplay.textContent = '00:00:00';
+      mobileTimerDisplay.textContent = '00:00:00';
       return;
     }
     timerSeconds--;
     const hrs = Math.floor(timerSeconds / 3600);
     const mins = Math.floor((timerSeconds % 3600) / 60);
     const secs = timerSeconds % 60;
-    timerDisplay.textContent = 
-      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    timerDisplay.textContent = timeStr;
+    mobileTimerDisplay.textContent = timeStr;
   }
 
   // ============================================================
-  // 16. NAVBAR SCROLL EFFECT
+  // 17. NAVBAR SCROLL EFFECT
   // ============================================================
   const navbar = document.getElementById('mainNavbar');
   window.addEventListener('scroll', function() {
@@ -1600,24 +1871,24 @@
   });
 
   // ============================================================
-  // 17. BLOQUEIO DE PRINT/DOWNLOAD MANUAIS
+  // 18. BLOQUEIO DE PRINT/DOWNLOAD
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
       e.preventDefault();
-      alert('🔒 A proteção de imagens está ativa. Prints não são permitidos.');
+      alert('🔒 A proteção de imagens está ativa.');
     }
   });
 
   document.addEventListener('contextmenu', function(e) {
     if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
       e.preventDefault();
-      alert('🔒 Clique direito bloqueado. As imagens são protegidas.');
+      alert('🔒 Clique direito bloqueado.');
     }
   });
 
   // ============================================================
-  // 18. INICIALIZAR
+  // 19. INICIALIZAR
   // ============================================================
   renderGallery();
   updateCreditsDisplay();
@@ -1635,69 +1906,7 @@
 
   console.log('📸 Galeria Studio Rassi carregada!');
   console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
-  console.log(`📁 Bucket S3: ${S3_BUCKET_URL}`);
-  console.log('💡 Para funcionar corretamente, configure o CORS no bucket S3.');
 </script>
 
 </body>
 </html>
-```
-
-🔧 O que foi corrigido:
-
-1. Três Métodos de Download (Prioridade)
-
-· Método 1: Tenta baixar diretamente do S3 com fetch e CORS
-· Método 2: Fallback via API que retorna URL assinada do S3
-· Método 3: Último recurso - abre em nova aba (com aviso)
-
-2. Verificações Adicionais
-
-· Valida se a resposta é uma imagem (content-type)
-· Tratamento de erros mais detalhado
-· Logs no console para debugging
-
-3. Download Direto no Dispositivo
-
-· Usa URL.createObjectURL(blob) para criar link de download
-· Não abre nova aba
-· Salva diretamente no dispositivo
-
-⚠️ Configuração Necessária no S3
-
-Para o download direto funcionar, você precisa configurar o CORS no bucket S3:
-
-1. Acesse o bucket studio-rassi-ensaios-2026 no AWS S3
-2. Vá em "Permissões" → "Compartilhamento de recursos entre origens (CORS)"
-3. Adicione a seguinte configuração:
-
-```json
-[
-  {
-    "AllowedHeaders": ["*"],
-    "AllowedMethods": ["GET", "HEAD"],
-    "AllowedOrigins": ["https://studiorassi.github.io", "http://localhost:3000"],
-    "ExposeHeaders": []
-  }
-]
-```
-
-📁 Estrutura do Bucket
-
-Os arquivos devem estar no bucket com a seguinte estrutura:
-
-```
-studio-rassi-ensaios-2026/
-  ├── ensaio_01.jpg
-  ├── ensaio_02.jpg
-  ├── ensaio_03.jpg
-  └── ...
-```
-
-🧪 Teste
-
-1. Abra o console do navegador (F12)
-2. Tente baixar uma imagem
-3. Veja os logs para identificar qual método está funcionando
-
-Se ainda houver erro, me avise qual mensagem aparece no console para ajustarmos! 🚀
