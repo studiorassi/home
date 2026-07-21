@@ -15,7 +15,7 @@
       color: #f5edea;
       font-family: 'Montserrat', sans-serif;
       min-height: 100vh;
-      padding-top: 80px; /* Espaço para o menu flutuante */
+      padding-top: 80px;
     }
 
     .container {
@@ -37,7 +37,7 @@
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212, 163, 179, 0.08);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .navbar.scrolled {
       padding: 8px 0;
@@ -62,6 +62,9 @@
       height: 45px;
       max-width: 150px;
       transition: all 0.3s ease;
+    }
+    .navbar.scrolled .logo img {
+      height: 40px;
     }
     .logo img:hover {
       opacity: 0.85;
@@ -513,6 +516,9 @@
         height: 38px;
         max-width: 120px;
       }
+      .navbar.scrolled .logo img {
+        height: 34px;
+      }
       
       .floating-status .container {
         gap: 16px;
@@ -603,23 +609,11 @@
         height: 32px;
         max-width: 100px;
       }
+      .navbar.scrolled .logo img {
+        height: 28px;
+      }
       .floating-status {
         top: 52px;
-      }
-    }
-
-    /* ===== SCROLL ANIMATION PARA O MENU ===== */
-    @media (min-width: 769px) {
-      .navbar {
-        transition: all 0.3s ease;
-      }
-      .navbar.scrolled {
-        padding: 6px 0;
-        background: rgba(44, 7, 20, 0.96);
-        box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
-      }
-      .navbar.scrolled .logo img {
-        height: 40px;
       }
     }
   </style>
@@ -751,25 +745,25 @@
 
 <script>
   // ============================================================
-// VERIFICAR TOKEN E CARREGAR DADOS DO USUÁRIO
-// ============================================================
-const token = localStorage.getItem('token');
+  // VERIFICAR TOKEN E CARREGAR DADOS DO USUÁRIO
+  // ============================================================
+  const token = localStorage.getItem('token');
 
-if (!token) {
-  window.location.href = 'login.html';
-}
+  if (!token) {
+    window.location.href = 'login.html';
+  }
 
-// Usar o token em todas as requisições
-async function fetchWithAuth(url, options = {}) {
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-}
+  // Usar o token em todas as requisições
+  async function fetchWithAuth(url, options = {}) {
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  }
   
   // ============================================================
   // CONEXÃO COM O BACKEND (RENDER)
@@ -956,8 +950,7 @@ async function fetchWithAuth(url, options = {}) {
   }
 
   // ============================================================
-  // TIMER REGRESSIVO
-  // ============================================================
+  // TIMER REGRESSIVO  // ============================================================
   function updateTimer() {
     if (timerSeconds <= 0) {
       timerDisplay.textContent = '00:00:00';
@@ -992,19 +985,15 @@ async function fetchWithAuth(url, options = {}) {
   // NAVBAR SCROLL EFFECT (DESKTOP E MOBILE)
   // ============================================================
   const navbar = document.getElementById('mainNavbar');
-  let lastScrollY = 0;
 
   window.addEventListener('scroll', function() {
     const scrollY = window.scrollY;
     
-    // Adiciona classe 'scrolled' quando rola mais de 50px
     if (scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-    
-    lastScrollY = scrollY;
   });
 
   // ============================================================
