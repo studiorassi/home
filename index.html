@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -52,12 +52,12 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 32px;
+      gap: 8px;
+      padding: 10px 24px;
       border-radius: 50px;
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       border: none;
@@ -80,8 +80,8 @@
     .btn-outline {
       border: 2px solid #D4A3B3;
       color: #f5edea;
-      background: rgba(44, 7, 20, 0.5);
-      backdrop-filter: blur(8px);
+      background: rgba(44, 7, 20, 0.4);
+      backdrop-filter: blur(4px);
     }
     .btn-outline:hover {
       background: rgba(212, 163, 179, 0.15);
@@ -90,7 +90,8 @@
     .btn-ghost {
       color: #D4A3B3;
       background: transparent;
-      padding: 10px 20px;
+      padding: 8px 16px;
+      font-size: 0.7rem;
     }
     .btn-ghost:hover { color: #f5edea; }
 
@@ -101,7 +102,7 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 16px 0;
+      padding: 14px 0;
       background: transparent;
       backdrop-filter: blur(0px);
       -webkit-backdrop-filter: blur(0px);
@@ -110,7 +111,7 @@
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .navbar.scrolled {
-      padding: 10px 0;
+      padding: 8px 0;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -132,13 +133,13 @@
     .logo img {
       display: block;
       width: auto;
-      height: 60px;
-      max-width: 200px;
+      height: 50px;
+      max-width: 170px;
       transition: all 0.3s ease;
       filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));
     }
     .navbar.scrolled .logo img {
-      height: 50px;
+      height: 42px;
       filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
     }
     .logo img:hover {
@@ -148,14 +149,14 @@
 
     .nav-menu {
       display: flex;
-      gap: 32px;
+      gap: 28px;
       align-items: center;
     }
     .nav-menu a {
       color: #f5edea;
       text-decoration: none;
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       letter-spacing: 0.5px;
       transition: 0.3s;
@@ -167,11 +168,11 @@
       backdrop-filter: blur(8px);
       border: 2px solid #D4A3B3;
       color: #f5edea;
-      padding: 8px 24px;
+      padding: 6px 20px;
       border-radius: 50px;
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       cursor: pointer;
       transition: 0.3s;
       text-shadow: 0 2px 10px rgba(0,0,0,0.5);
@@ -192,30 +193,30 @@
     .hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
       z-index: 101;
       background: none;
       border: none;
-      padding: 8px;
+      padding: 6px;
     }
     .hamburger span {
       display: block;
-      width: 28px;
-      height: 2.5px;
+      width: 24px;
+      height: 2px;
       background: #f5edea;
       border-radius: 4px;
       transition: all 0.3s ease;
       text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
     .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(4px, 4px);
     }
     .hamburger.active span:nth-child(2) {
       opacity: 0;
     }
     .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
+      transform: rotate(-45deg) translate(4px, -4px);
     }
 
     .mobile-menu {
@@ -234,16 +235,16 @@
       border-left: 1px solid rgba(212, 163, 179, 0.08);
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
     }
     .mobile-menu.open { right: 0; }
     .mobile-menu a {
       font-family: 'Montserrat', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 500;
       color: #f5edea;
       text-decoration: none;
-      padding: 12px 0;
+      padding: 10px 0;
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       transition: 0.3s;
       letter-spacing: 0.5px;
@@ -253,15 +254,15 @@
       padding-left: 8px;
     }
     .mobile-menu .btn-minhas-fotos-mobile {
-      margin-top: 16px;
+      margin-top: 12px;
       background: rgba(212, 163, 179, 0.15);
       border: 2px solid #D4A3B3;
       color: #f5edea;
-      padding: 14px 24px;
+      padding: 12px 20px;
       border-radius: 50px;
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: 0.3s;
       text-align: center;
@@ -284,7 +285,7 @@
     }
     .menu-overlay.active { display: block; }
 
-    /* ===== HERO COM VÍDEO E TEXTO ALINHADO À ESQUERDA ===== */
+    /* ===== HERO COMPACTADO (30% DO ESPAÇO) ===== */
     .hero {
       position: relative;
       width: 100%;
@@ -324,24 +325,26 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 1200px;
-      padding: 100px 32px 80px;
+      max-width: 1100px;
+      padding: 80px 40px 60px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
+      /* Ocupa apenas 30% da altura do hero */
+      max-height: 30vh;
     }
     .hero-text {
-      max-width: 720px;
+      max-width: 580px;
       text-align: left;
     }
     .hero-text h1 {
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
-      font-size: 4.2rem;
+      font-size: 2.8rem;
       line-height: 1.05;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       text-shadow: 0 4px 40px rgba(0,0,0,0.6);
       letter-spacing: -0.5px;
       text-transform: uppercase;
@@ -350,7 +353,7 @@
       font-family: 'Great Vibes', cursive;
       font-weight: 400;
       color: #D4A3B3;
-      font-size: 6.5rem;
+      font-size: 4.2rem;
       letter-spacing: 2px;
       text-transform: none;
       text-shadow: 0 4px 50px rgba(212, 163, 179, 0.25);
@@ -365,18 +368,18 @@
     }
     .hero-text p {
       font-family: 'Inter', sans-serif;
-      font-size: 1.2rem;
+      font-size: 0.95rem;
       font-weight: 300;
       color: #d4c5c0;
-      max-width: 560px;
+      max-width: 480px;
       text-shadow: 0 2px 20px rgba(0,0,0,0.5);
-      margin-bottom: 28px;
-      line-height: 1.8;
+      margin-bottom: 16px;
+      line-height: 1.6;
     }
     .hero-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 10px;
       justify-content: flex-start;
     }
     .hero-badge {
@@ -384,13 +387,13 @@
       background: rgba(212, 163, 179, 0.12);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 163, 179, 0.15);
-      padding: 6px 24px;
+      padding: 4px 18px;
       border-radius: 40px;
       font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       font-weight: 400;
       color: #D4A3B3;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       text-shadow: 0 2px 10px rgba(0,0,0,0.3);
       letter-spacing: 0.5px;
       display: inline-block;
@@ -404,7 +407,7 @@
       transform: translateX(-50%);
       z-index: 5;
       color: #D4A3B3;
-      font-size: 2.2rem;
+      font-size: 2rem;
       animation: bounceDown 2s ease-in-out infinite;
       cursor: pointer;
       text-shadow: 0 0 30px rgba(212, 163, 179, 0.2);
@@ -1021,9 +1024,10 @@
        RESPONSIVO
     ============================================================ */
     @media (max-width: 1024px) {
-      .hero-text h1 { font-size: 3.5rem; }
-      .hero-text h1 .script { font-size: 5.5rem; }
-      .hero-text p { font-size: 1.1rem; }
+      .hero-text h1 { font-size: 2.4rem; }
+      .hero-text h1 .script { font-size: 3.8rem; }
+      .hero-text p { font-size: 0.9rem; }
+      .hero-content { max-height: 35vh; padding: 60px 32px 50px; }
       .carousel-item {
         flex: 0 0 calc(25% - 12px);
         max-height: 320px;
@@ -1044,36 +1048,38 @@
       .container { padding: 0 20px; }
       
       .navbar {
-        padding: 12px 0;
+        padding: 10px 0;
         background: rgba(44, 7, 20, 0.92);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(212, 163, 179, 0.08);
       }
       .navbar.scrolled {
-        padding: 8px 0;
+        padding: 6px 0;
       }
       .logo img {
-        height: 45px;
-        max-width: 150px;
+        height: 38px;
+        max-width: 130px;
       }
       .navbar.scrolled .logo img {
-        height: 40px;
+        height: 34px;
       }
       
       .hero-content {
-        padding: 80px 20px 60px;
+        max-height: 40vh;
+        padding: 60px 20px 40px;
       }
       .hero-text h1 { 
-        font-size: 2.4rem; 
+        font-size: 2rem; 
         letter-spacing: -0.3px;
       }
       .hero-text h1 .script { 
-        font-size: 3.8rem; 
+        font-size: 3.2rem; 
       }
       .hero-text p { 
-        font-size: 1rem;
+        font-size: 0.85rem;
         max-width: 100%;
+        margin-bottom: 12px;
       }
       .hero-buttons .btn-outline {
         display: none !important;
@@ -1081,6 +1087,11 @@
       .hero-buttons .btn-primary {
         width: 100%;
         justify-content: center;
+      }
+      .hero-badge {
+        font-size: 0.6rem;
+        padding: 3px 14px;
+        margin-bottom: 8px;
       }
       
       .section-title { 
@@ -1164,7 +1175,6 @@
         display: block !important;
       }
       
-      /* ===== CORREÇÃO: Centralização das dobras ===== */
       .section#institucional .section-title {
         text-align: center !important;
       }
@@ -1207,7 +1217,6 @@
         margin: 0 10px !important;
       }
       
-      /* ===== CARROSSEL MOBILE ===== */
       .carousel-wrapper {
         position: relative;
         max-width: 100%;
@@ -1309,31 +1318,38 @@
 
     @media (max-width: 480px) {
       body {
-        padding-top: 60px;
+        padding-top: 56px;
       }
       .navbar .logo img {
-        height: 35px;
-        max-width: 120px;
+        height: 32px;
+        max-width: 110px;
       }
       .navbar.scrolled .logo img {
-        height: 30px;
+        height: 28px;
       }
       
       .hero-content {
-        padding: 60px 16px 50px;
+        max-height: 45vh;
+        padding: 50px 16px 30px;
       }
       .hero-text h1 { 
-        font-size: 1.8rem; 
+        font-size: 1.6rem; 
       }
       .hero-text h1 .script { 
-        font-size: 2.8rem; 
+        font-size: 2.5rem; 
       }
       .hero-text p { 
-        font-size: 0.9rem; 
+        font-size: 0.8rem; 
+        margin-bottom: 10px;
       }
       .hero-badge {
+        font-size: 0.55rem;
+        padding: 2px 12px;
+        margin-bottom: 6px;
+      }
+      .btn {
+        padding: 8px 18px;
         font-size: 0.65rem;
-        padding: 4px 16px;
       }
       
       .section-title { 
@@ -1358,8 +1374,8 @@
       }
       
       .scroll-down {
-        font-size: 1.6rem;
-        bottom: 20px;
+        font-size: 1.4rem;
+        bottom: 16px;
       }
     }
 
@@ -1385,8 +1401,8 @@
     <a href="index.html" class="logo">
       <img src="assets/images/logo/logo-header.png" 
            alt="Studio Rassi · Photo & Video" 
-           width="200" 
-           height="60"
+           width="170" 
+           height="50"
            loading="lazy">
     </a>
     
@@ -1422,7 +1438,7 @@
   </button>
 </div>
 
-<!-- ===== HERO COM VÍDEO E TEXTO ALINHADO À ESQUERDA ===== -->
+<!-- ===== HERO COMPACTADO ===== -->
 <header class="hero" id="home">
   <video class="hero-video hero-video-desktop" autoplay loop muted playsinline preload="auto" poster="assets/images/hero-fallback.jpg">
     <source src="assets/videos/header-desktop.mp4" type="video/mp4">
@@ -1776,7 +1792,6 @@
   const indicators = document.getElementById('carouselIndicators');
   let totalItems = instagramPosts.length;
   
-  // Função auxiliar para checar se é Mobile
   const isMobile = () => window.innerWidth <= 768;
 
   // ============================================================
@@ -1818,7 +1833,7 @@
   }
 
   // ============================================================
-  // 4. NAVEGAÇÃO HÍBRIDA
+  // 4. NAVEGAÇÃO
   // ============================================================
   function goToSlide(index, animate = true) {
     const items = track.children;
