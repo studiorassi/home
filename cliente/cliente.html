@@ -168,7 +168,7 @@
       display: inline-block;
     }
 
-    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - MOBILE FLUTUANTE ===== */
+    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUANTE (MOBILE E DESKTOP) ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -914,10 +914,6 @@
       .menu-credit-cta {
         display: none !important;
       }
-      /* Desktop: progress bar do modal sempre escondida */
-      .modal-progress {
-        display: none !important;
-      }
     }
 
     /* ===== MOBILE: mostra CTA do menu quando sem créditos ===== */
@@ -928,6 +924,13 @@
       /* Mobile: progress bar do modal visível apenas durante carregamento */
       .modal-progress.show {
         display: flex;
+      }
+    }
+
+    /* ===== DESKTOP: progress bar do modal SEMPRE escondida ===== */
+    @media (min-width: 769px) {
+      .modal-progress {
+        display: none !important;
       }
     }
   </style>
@@ -977,7 +980,7 @@
   </div>
 </div>
 
-<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUA COM O MENU NO MOBILE ===== -->
+<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUA COM O MENU (MOBILE E DESKTOP) ===== -->
 <div class="progress-bar-container" id="progressContainer">
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;">
@@ -1214,7 +1217,7 @@
   }
 
   // ============================================================
-  // 7. BARRA DE PROGRESSO (CARREGAMENTO DAS FOTOS)
+  // 7. BARRA DE PROGRESSO (CARREGAMENTO DAS FOTOS) - MOBILE E DESKTOP
   // ============================================================
   function updateProgress() {
     const percent = Math.round((imagesLoaded / totalPhotos) * 100);
