@@ -11,7 +11,7 @@
   
   <!-- OG Image -->
   <meta property="og:title" content="Studio Rassi · Photo & Video">
-  <meta property="og:description" content="Memórias que começam antes do primeiro abraço">
+  <meta property="og:description" content="Memórias que transformam instantes em eternidade">
   <meta property="og:image" content="https://seudominio.com/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -94,13 +94,30 @@
       background: rgba(212, 163, 179, 0.15);
       border-color: #c08b9e;
     }
-    .btn-ghost {
+    .btn-ghost-custom {
       color: #D4A3B3;
       background: transparent;
-      padding: 8px 16px;
-      font-size: 0.7rem;
+      padding: 12px 28px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 2px solid #D4A3B3;
+      border-radius: 50px;
+      transition: 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'Work Sans', sans-serif;
     }
-    .btn-ghost:hover { color: #f5edea; }
+    .btn-ghost-custom:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 163, 179, 0.2);
+    }
 
     /* ===== NAVBAR FLUTUANTE ===== */
     .navbar {
@@ -462,7 +479,7 @@
       line-height: 1.8;
     }
 
-    /* ===== INSTITUCIONAL (Paixão em cada detalhe) - DESKTOP UMA LINHA ===== */
+    /* ===== INSTITUCIONAL ===== */
     .institucional-wrapper {
       display: flex;
       align-items: center;
@@ -569,6 +586,16 @@
     }
     .instagram-header .subtitle a:hover {
       color: #f5edea;
+    }
+    /* Frase de desejo abaixo do título */
+    .instagram-header .desire-phrase {
+      font-family: 'Tangerine', cursive;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #D4A3B3;
+      margin-top: 4px;
+      opacity: 0.9;
+      letter-spacing: 1px;
     }
 
     /* ===== CARROSSEL (DESKTOP DEFAULT) ===== */
@@ -993,6 +1020,11 @@
       margin-bottom: 12px;
     }
 
+    .pacotes-footer {
+      text-align: center;
+      margin-top: 24px;
+    }
+
     /* ===== NOVA SEÇÃO: BUILDER (SOB MEDIDA) ===== */
     .builder {
       padding: 80px 0;
@@ -1273,21 +1305,35 @@
         height: 34px;
       }
       
+      .hero {
+        height: 100vh;
+        min-height: 100vh;
+      }
       .hero-content {
-        max-height: 40vh;
-        padding: 60px 20px 40px;
+        max-height: 100vh;
+        padding: 80px 24px 60px;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-text {
+        max-width: 100%;
+        text-align: center;
       }
       .hero-text h1 { 
-        font-size: 2rem; 
+        font-size: 2.2rem; 
         letter-spacing: -0.3px;
       }
       .hero-text h1 .script { 
-        font-size: 3.4rem; 
+        font-size: 3.6rem; 
       }
       .hero-text p { 
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         max-width: 100%;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
+        text-align: center;
+      }
+      .hero-buttons {
+        justify-content: center;
       }
       .hero-buttons .btn-outline {
         display: none !important;
@@ -1403,6 +1449,10 @@
       .pacotes-header .pacotes-description {
         font-size: 0.9rem;
         padding: 0 10px;
+      }
+      
+      .instagram-header .desire-phrase {
+        font-size: 1.6rem;
       }
       
       .hero-video-desktop {
@@ -1523,19 +1573,23 @@
         height: 28px;
       }
       
+      .hero {
+        height: 100vh;
+        min-height: 100vh;
+      }
       .hero-content {
-        max-height: 45vh;
-        padding: 50px 16px 30px;
+        max-height: 100vh;
+        padding: 70px 16px 50px;
       }
       .hero-text h1 { 
-        font-size: 1.6rem; 
+        font-size: 1.8rem; 
       }
       .hero-text h1 .script { 
-        font-size: 2.8rem; 
+        font-size: 3rem; 
       }
       .hero-text p { 
-        font-size: 0.8rem; 
-        margin-bottom: 10px;
+        font-size: 0.85rem; 
+        margin-bottom: 12px;
       }
       .hero-badge {
         font-size: 0.55rem;
@@ -1569,8 +1623,8 @@
       }
       
       .scroll-down {
-        font-size: 1.4rem;
-        bottom: 16px;
+        font-size: 1.6rem;
+        bottom: 20px;
       }
       
       .builder .section-head h2 {
@@ -1595,6 +1649,15 @@
       }
       .pacotes-header .pacotes-description {
         font-size: 0.8rem;
+      }
+      
+      .instagram-header .desire-phrase {
+        font-size: 1.4rem;
+      }
+      
+      .btn-ghost-custom {
+        padding: 10px 20px;
+        font-size: 0.7rem;
       }
     }
 
@@ -1680,9 +1743,8 @@
       </div>
       <h1>
         <span class="script">Memórias</span>
-        que começam
-        antes do primeiro
-        <span class="highlight">abraço</span>
+        que transformam<br>
+        instantes em <span class="highlight">eternidade</span>
       </h1>
       <p>Registramos sua história com luz, emoção e autenticidade. 
       Momentos que merecem ser lembrados para sempre.</p>
@@ -1708,6 +1770,7 @@
         <span class="script">Memórias</span>
         que começam antes do primeiro abraço
       </h2>
+      <div class="desire-phrase">✨ Seus momentos merecem ser eternizados ✨</div>
       <p class="subtitle">
         Acompanhe nosso dia a dia · 
         <a href="https://www.instagram.com/studio.rassi/" target="_blank" rel="noopener noreferrer">
@@ -1737,7 +1800,7 @@
   </div>
 </section>
 
-<!-- ===== INSTITUCIONAL (Paixão em cada detalhe - UMA LINHA) ===== -->
+<!-- ===== INSTITUCIONAL ===== -->
 <section class="container section" id="institucional">
   <div class="institucional-wrapper">
     <h2 class="section-title">
@@ -1823,14 +1886,17 @@
   </div>
 </section>
 
-<!-- ===== PACOTES PROMOCIONAIS (COM TEXTO EXPLICATIVO) ===== -->
+<!-- ===== PACOTES PROMOCIONAIS ===== -->
 <section class="container section" id="pacotes">
   <div class="pacotes-header">
     <h2 class="section-title">
-      <span class="script">Escolha seu pacote
+      <span class="script">Escolha</span>
+      seu pacote
     </h2>
     <p class="pacotes-description">
-      Você adquire seu pacote de fotos e garante seus <strong>créditos</strong> para baixar a imagem que quiser do seu momento registrado exclusivamente na <strong>Área do cliente</strong>. Pague agora e agende a data do seu ensaio já com tudo garantido.
+      Você adquire seu pacote de fotos e garante seus <strong>créditos</strong> para baixar a imagem que quiser 
+      do seu momento registrado exclusivamente na <strong>Área do cliente</strong>. 
+      Pague agora e agende a data do seu ensaio já com tudo garantido.
     </p>
   </div>
   
@@ -1852,8 +1918,11 @@
       <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
     </div>
   </div>
-  <div style="text-align:center; margin-top: 8px;">
-    <a href="#personalizado" class="btn btn-ghost"><i class="fas fa-arrow-right"></i> Quero montar meu pacote personalizado</a>
+  
+  <div class="pacotes-footer">
+    <a href="#personalizado" class="btn-ghost-custom">
+      <i class="fas fa-arrow-right"></i> Quero montar meu pacote personalizado
+    </a>
   </div>
 </section>
 
