@@ -21,7 +21,8 @@
   <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
@@ -31,9 +32,15 @@
     body {
       background-color: #2C0714;
       color: #f5edea;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
     }
     .container {
       max-width: 1200px;
@@ -55,7 +62,7 @@
       gap: 8px;
       padding: 10px 24px;
       border-radius: 50px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 600;
       font-size: 0.75rem;
       letter-spacing: 0.5px;
@@ -155,7 +162,7 @@
     .nav-menu a {
       color: #f5edea;
       text-decoration: none;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.8rem;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -170,7 +177,7 @@
       color: #f5edea;
       padding: 6px 20px;
       border-radius: 50px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 600;
       font-size: 0.7rem;
       cursor: pointer;
@@ -239,7 +246,7 @@
     }
     .mobile-menu.open { right: 0; }
     .mobile-menu a {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 1.1rem;
       font-weight: 500;
       color: #f5edea;
@@ -260,7 +267,7 @@
       color: #f5edea;
       padding: 12px 20px;
       border-radius: 50px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
@@ -285,7 +292,7 @@
     }
     .menu-overlay.active { display: block; }
 
-    /* ===== HERO COMPACTADO (30% DO ESPAÇO) ===== */
+    /* ===== HERO COMPACTADO ===== */
     .hero {
       position: relative;
       width: 100%;
@@ -332,7 +339,6 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      /* Ocupa apenas 30% da altura do hero */
       max-height: 30vh;
     }
     .hero-text {
@@ -340,14 +346,13 @@
       text-align: left;
     }
     .hero-text h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
       font-size: 2.8rem;
       line-height: 1.05;
       margin-bottom: 4px;
       text-shadow: 0 4px 40px rgba(0,0,0,0.6);
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
+      letter-spacing: -0.01em;
     }
     .hero-text h1 .script {
       font-family: 'Great Vibes', cursive;
@@ -363,11 +368,11 @@
     }
     .hero-text h1 .highlight {
       color: #D4A3B3;
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: -0.5px;
     }
     .hero-text p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.95rem;
       font-weight: 300;
       color: #d4c5c0;
@@ -389,7 +394,7 @@
       border: 1px solid rgba(212, 163, 179, 0.15);
       padding: 4px 18px;
       border-radius: 40px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.65rem;
       font-weight: 400;
       color: #D4A3B3;
@@ -429,13 +434,12 @@
       background: #2C0714;
     }
     .section-title {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
       font-size: 3rem;
       line-height: 1.15;
       margin-bottom: 20px;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
+      letter-spacing: -0.01em;
     }
     .section-title .script {
       font-family: 'Great Vibes', cursive;
@@ -450,7 +454,7 @@
       text-shadow: 0 2px 20px rgba(212, 163, 179, 0.15);
     }
     .section-sub {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 1.1rem;
       font-weight: 300;
       color: #d4c5c0;
@@ -488,11 +492,10 @@
       z-index: 2;
     }
     .instagram-header h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
       font-size: 2.8rem;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
+      letter-spacing: -0.01em;
       color: #f5edea;
     }
     .instagram-header h2 .script {
@@ -506,7 +509,7 @@
       margin-bottom: -0.05em;
     }
     .instagram-header .subtitle {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 1rem;
       font-weight: 300;
       color: #d4c5c0;
@@ -604,7 +607,7 @@
       gap: 6px;
     }
     .carousel-item .overlay .caption {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.65rem;
       font-weight: 400;
       color: #f5edea;
@@ -691,7 +694,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.7rem;
       color: #D4A3B3;
       text-decoration: none;
@@ -767,7 +770,7 @@
       pointer-events: none;
     }
     .biografia-image-side .image-overlay .badge {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.65rem;
       color: #D4A3B3;
       letter-spacing: 3px;
@@ -790,7 +793,7 @@
       margin-bottom: 2px;
     }
     .biografia-text-side .subtitle {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 300;
       font-size: 0.8rem;
       color: #d4c5c0;
@@ -799,7 +802,7 @@
       margin-bottom: 20px;
     }
     .biografia-text-side .bio-text {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.95rem;
       font-weight: 300;
       color: #d4c5c0;
@@ -846,7 +849,7 @@
       opacity: 0.8;
     }
     .biografia-text-side .assinatura-bottom .since {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.7rem;
       color: #7a5f5a;
       letter-spacing: 1px;
@@ -878,13 +881,13 @@
       margin-bottom: 12px;
     }
     .benefit-card h4 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
       font-size: 1.2rem;
       margin-bottom: 6px;
     }
     .benefit-card p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 300;
       font-size: 0.9rem;
       color: #d4c5c0;
@@ -912,20 +915,20 @@
       box-shadow: 0 12px 30px rgba(0,0,0,0.3);
     }
     .package-card .price {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
       font-size: 3rem;
       color: #D4A3B3;
       letter-spacing: -1px;
     }
     .package-card .price small {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 1rem;
       font-weight: 300;
       color: #d4c5c0;
     }
     .package-card p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 300;
       color: #d4c5c0;
     }
@@ -935,7 +938,7 @@
       color: #2C0714;
       padding: 4px 16px;
       border-radius: 40px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-size: 0.65rem;
       font-weight: 700;
       letter-spacing: 0.5px;
@@ -943,7 +946,183 @@
       margin-bottom: 12px;
     }
 
-    /* ===== ORDER BUMP ===== */
+    /* ===== NOVA SEÇÃO: BUILDER (SOB MEDIDA) ===== */
+    .builder {
+      padding: 80px 0;
+      background: #2C0714;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .builder .section-head {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .builder .section-head .eyebrow {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #D4A3B3;
+      margin-bottom: 8px;
+    }
+    .builder .section-head h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 3rem;
+      color: #f5edea;
+      letter-spacing: -0.01em;
+    }
+    .builder-box {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      border: 1px solid rgba(245, 237, 234, 0.12);
+      border-radius: 3px;
+      overflow: hidden;
+      background: #1f0510;
+    }
+    .builder-controls {
+      padding: 44px;
+      border-right: 1px solid rgba(245, 237, 234, 0.12);
+    }
+    .builder-summary {
+      padding: 44px;
+      background: rgba(245, 237, 234, 0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .control-row {
+      margin-bottom: 34px;
+    }
+    .control-row label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      color: rgba(245, 237, 234, 0.85);
+    }
+    .control-row label .val {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 2px;
+      background: rgba(245, 237, 234, 0.2);
+      outline: none;
+      border-radius: 2px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #D4A3B3;
+      cursor: pointer;
+      border: 3px solid #1f0510;
+      box-shadow: 0 0 0 1px #D4A3B3;
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #D4A3B3;
+      cursor: pointer;
+      border: 3px solid #1f0510;
+      box-shadow: 0 0 0 1px #D4A3B3;
+    }
+    .addons {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .addon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(245, 237, 234, 0.08);
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .addon:last-child {
+      border-bottom: none;
+    }
+    .addon:hover {
+      background: rgba(245, 237, 234, 0.02);
+    }
+    .addon-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .checkbox {
+      width: 17px;
+      height: 17px;
+      border: 1px solid rgba(245, 237, 234, 0.3);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      color: #2C0714;
+    }
+    .addon.active .checkbox {
+      background: #D4A3B3;
+      border-color: #D4A3B3;
+    }
+    .addon .price-tag {
+      color: rgba(245, 237, 234, 0.4);
+    }
+    .summary-label {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(245, 237, 234, 0.4);
+    }
+    .summary-total {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 3rem;
+      margin: 10px 0 26px;
+      color: #f5edea;
+    }
+    .summary-list {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.82rem;
+      line-height: 2;
+      color: rgba(245, 237, 234, 0.6);
+      margin-bottom: 20px;
+    }
+    .summary-list div {
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(245, 237, 234, 0.03);
+    }
+    .summary-list div:last-child {
+      border-bottom: none;
+    }
+    .summary-note {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.74rem;
+      color: rgba(245, 237, 234, 0.35);
+      margin-top: 16px;
+    }
+    .builder .btn-primary {
+      display: block;
+      text-align: center;
+      width: 100%;
+      justify-content: center;
+      padding: 14px;
+      font-size: 0.85rem;
+    }
+
+    /* ===== ORDER BUMP (antigo, mantido para compatibilidade) ===== */
     .orderbump-box {
       background: #1f0510;
       border-radius: 28px;
@@ -952,7 +1131,7 @@
       border: 1px solid rgba(212, 163, 179, 0.1);
     }
     .orderbump-box p {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 600;
       color: #D4A3B3;
       margin-bottom: 8px;
@@ -963,7 +1142,7 @@
       gap: 16px;
       padding: 10px 0;
       border-bottom: 1px solid rgba(212, 163, 179, 0.04);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 300;
       cursor: pointer;
     }
@@ -976,7 +1155,7 @@
     .orderbump-box .bump-price {
       margin-left: auto;
       color: #D4A3B3;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 600;
     }
 
@@ -987,7 +1166,7 @@
       padding: 14px 20px;
       border-radius: 40px;
       color: #f5edea;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       width: 100%;
       font-size: 0.95rem;
     }
@@ -1013,7 +1192,7 @@
       max-width: 200px;
     }
     footer p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Work Sans', sans-serif;
       font-weight: 300;
       font-size: 0.8rem;
       color: #7a5f5a;
@@ -1041,6 +1220,13 @@
       }
       .biografia-text-side h2 {
         font-size: 2.6rem;
+      }
+      .builder-box {
+        grid-template-columns: 1fr;
+      }
+      .builder-controls {
+        border-right: none;
+        border-bottom: 1px solid rgba(245, 237, 234, 0.12);
       }
     }
     
@@ -1168,6 +1354,22 @@
         padding: 60px 0;
       }
       
+      .builder {
+        padding: 60px 0;
+      }
+      .builder .section-head h2 {
+        font-size: 2rem;
+      }
+      .builder-controls {
+        padding: 28px 20px;
+      }
+      .builder-summary {
+        padding: 28px 20px;
+      }
+      .summary-total {
+        font-size: 2.4rem;
+      }
+      
       .hero-video-desktop {
         display: none !important;
       }
@@ -1204,17 +1406,6 @@
       }
       .section#pacotes > div:last-child {
         text-align: center !important;
-      }
-      
-      .section#personalizado .section-title {
-        text-align: center !important;
-      }
-      .section#personalizado .section-title .script {
-        display: block !important;
-        text-align: center !important;
-      }
-      .section#personalizado > div {
-        margin: 0 10px !important;
       }
       
       .carousel-wrapper {
@@ -1377,6 +1568,23 @@
         font-size: 1.4rem;
         bottom: 16px;
       }
+      
+      .builder .section-head h2 {
+        font-size: 1.6rem;
+      }
+      .builder-controls {
+        padding: 20px 16px;
+      }
+      .builder-summary {
+        padding: 20px 16px;
+      }
+      .summary-total {
+        font-size: 2rem;
+      }
+      .addon {
+        font-size: 0.8rem;
+        padding: 12px 0;
+      }
     }
 
     @media (min-width: 769px) {
@@ -1525,7 +1733,7 @@
       <span class="script">Paixão</span>
       em cada detalhe
     </h2>
-    <p style="font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 300; color: #d4c5c0; line-height: 1.8; padding-top: 10px;">
+    <p style="font-family: 'Work Sans', sans-serif; font-size: 1.2rem; font-weight: 300; color: #d4c5c0; line-height: 1.8; padding-top: 10px;">
       Mais do que registrar, eternizamos emoções. Nossa equipe transforma instantes em memórias 
       que aquecem o coração. <span style="color: #D4A3B3; font-style: italic;">“Fotografar é sentir. Não é só registrar.”</span>
     </p>
@@ -1633,36 +1841,33 @@
   </div>
 </section>
 
-<!-- ===== PERSONALIZADO + ORDER BUMP ===== -->
-<section class="container section" id="personalizado">
-  <h2 class="section-title">
-    <span class="script">Sob medida</span>
-    para você
-  </h2>
-  <div style="background: #1f0510; border-radius: 40px; padding: 32px 28px; border: 1px solid rgba(212,163,179,0.08);">
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end;">
-      <div style="flex: 2; min-width: 180px;">
-        <label style="font-family: 'Inter', sans-serif; font-weight:300; color:#d4c5c0; display:block; margin-bottom:6px;">Número de fotos (mín. 20) · R$ 18 cada</label>
-        <input type="number" id="fotoQty" value="30" min="20" step="1" class="input-dark" style="max-width:140px;">
+<!-- ===== NOVA SEÇÃO: SOB MEDIDA (PERSONALIZADO) ===== -->
+<section class="builder" id="personalizado">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Sob medida</div>
+      <h2>Monte seu pacote personalizado</h2>
+    </div>
+    <div class="builder-box">
+      <div class="builder-controls">
+        <div class="control-row">
+          <label>Número de fotos (mín. 20) <span class="val" id="photoCountLabel">20 fotos</span></label>
+          <input type="range" id="photoSlider" min="20" max="150" value="20" step="1">
+        </div>
+        <div class="addons" id="addonsList"></div>
       </div>
-      <div style="flex:1; background:#2C0714; border-radius:40px; padding:12px 24px; text-align:center; border:1px solid rgba(212,163,179,0.1);">
-        <span style="font-family: 'Inter', sans-serif; font-weight:300; font-size:0.8rem;">Total</span><br>
-        <span style="font-family: 'Montserrat', sans-serif; font-weight:700; font-size:2.4rem; color:#D4A3B3; letter-spacing:-1px;">R$ <span id="fotoTotal">540</span></span>
+      <div class="builder-summary">
+        <div>
+          <span class="summary-label">Total estimado</span>
+          <div class="summary-total" id="totalPrice">R$360</div>
+          <div class="summary-list" id="summaryList"></div>
+        </div>
+        <div>
+          <a href="#" class="btn-primary" style="display:block; text-align:center;">Adicionar ao carrinho</a>
+          <div class="summary-note">* Simulação — após seleção, enviamos o link de pagamento seguro.</div>
+        </div>
       </div>
     </div>
-
-    <div class="orderbump-box">
-      <p><i class="fas fa-plus-circle"></i> Turbine seu ensaio</p>
-      <label><input type="checkbox" class="bump-check"> Storymaker em tempo real <span class="bump-price">R$ 250</span></label>
-      <label><input type="checkbox" class="bump-check"> Imagens com Drone (30s) <span class="bump-price">R$ 550</span></label>
-      <label><input type="checkbox" class="bump-check"> Video maker (até 3min) <span class="bump-price">R$ 500</span></label>
-      <label><input type="checkbox" class="bump-check"> Estúdio + bolo 1kg <span class="bump-price">R$ 300</span></label>
-    </div>
-
-    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:16px;" id="simularCarrinho">
-      <i class="fas fa-shopping-cart"></i> Adicionar ao carrinho · simular
-    </button>
-    <p style="font-family: 'Inter', sans-serif; font-size:0.75rem; color:#7a5f5a; margin-top:10px;">* após seleção, encaminhamos link de pagamento seguro</p>
   </div>
 </section>
 
@@ -1697,7 +1902,7 @@
   });
 
   // ============================================================
-  // 1. DADOS DAS IMAGENS (13 imagens com caminho assets/instagram)
+  // 1. CARROSSEL - DADOS DAS IMAGENS
   // ============================================================
   const instagramPosts = [
     { 
@@ -1781,7 +1986,7 @@
   ];
 
   // ============================================================
-  // 2. CONFIGURAÇÕES
+  // 2. CARROSSEL - CONFIGURAÇÕES
   // ============================================================
   let currentIndex = 0;
   let autoSlideInterval = null;
@@ -1795,7 +2000,7 @@
   const isMobile = () => window.innerWidth <= 768;
 
   // ============================================================
-  // 3. RENDERIZAR
+  // 3. CARROSSEL - RENDERIZAR
   // ============================================================
   function renderCarousel() {
     track.innerHTML = '';
@@ -1833,7 +2038,7 @@
   }
 
   // ============================================================
-  // 4. NAVEGAÇÃO
+  // 4. CARROSSEL - NAVEGAÇÃO
   // ============================================================
   function goToSlide(index, animate = true) {
     const items = track.children;
@@ -1924,7 +2129,7 @@
   });
 
   // ============================================================
-  // 5. AUTOPLAY
+  // 5. CARROSSEL - AUTOPLAY
   // ============================================================
   function startAutoSlide() {
     if (autoSlideInterval) clearInterval(autoSlideInterval);
@@ -2016,7 +2221,7 @@
   wrapper.addEventListener('mouseleave', startAutoSlide);
 
   // ============================================================
-  // 8. INICIALIZAR
+  // 8. CARROSSEL - INICIALIZAR
   // ============================================================
   renderCarousel();
   
@@ -2033,28 +2238,98 @@
   });
 
   // ============================================================
-  // 9. SIMULAÇÃO DO CARRINHO
+  // 9. BUILDER (SOB MEDIDA) - JAVASCRIPT
+  // ============================================================
+  const addons = [
+    {id:'story', name:'Storymaker em tempo real', price:250},
+    {id:'drone', name:'Imagens com drone (30s)', price:550},
+    {id:'video', name:'Video maker (até 3min)', price:500},
+    {id:'studio', name:'Estúdio + bolo 1kg', price:300},
+  ];
+  const addonsList = document.getElementById('addonsList');
+  const active = new Set();
+  
+  addons.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'addon';
+    el.dataset.id = a.id;
+    el.innerHTML = `
+      <div class="addon-left">
+        <div class="checkbox"></div>
+        <span>${a.name}</span>
+      </div>
+      <span class="price-tag">+R$${a.price}</span>
+    `;
+    el.addEventListener('click', ()=>{
+      if(active.has(a.id)) {
+        active.delete(a.id);
+        el.classList.remove('active');
+        el.querySelector('.checkbox').textContent='';
+      } else {
+        active.add(a.id);
+        el.classList.add('active');
+        el.querySelector('.checkbox').textContent='✓';
+      }
+      updateTotal();
+    });
+    addonsList.appendChild(el);
+  });
+
+  const slider = document.getElementById('photoSlider');
+  const photoLabel = document.getElementById('photoCountLabel');
+  const totalPriceEl = document.getElementById('totalPrice');
+  const summaryList = document.getElementById('summaryList');
+  const PRICE_PER_PHOTO = 18;
+
+  function updateTotal() {
+    const count = parseInt(slider.value, 10);
+    photoLabel.textContent = count + ' fotos';
+    let total = count * PRICE_PER_PHOTO;
+    let lines = [`${count} fotos · R$${PRICE_PER_PHOTO} cada — R$${total}`];
+    addons.forEach(a => {
+      if(active.has(a.id)) {
+        total += a.price;
+        lines.push(`${a.name} — R$${a.price}`);
+      }
+    });
+    totalPriceEl.textContent = 'R$' + total.toLocaleString('pt-BR');
+    summaryList.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+  }
+  
+  slider.addEventListener('input', updateTotal);
+  updateTotal();
+
+  // ============================================================
+  // 10. SIMULAÇÃO DO CARRINHO (antigo, mantido)
   // ============================================================
   const qtyInput = document.getElementById('fotoQty');
   const fotoTotal = document.getElementById('fotoTotal');
-  qtyInput?.addEventListener('input', function() {
-    const val = parseInt(this.value) || 20;
-    const total = val * 18;
-    fotoTotal.textContent = total;
-  });
-
-  document.getElementById('simularCarrinho')?.addEventListener('click', function() {
-    const qty = parseInt(qtyInput.value) || 20;
-    let total = qty * 18;
-    const bumps = document.querySelectorAll('.bump-check:checked');
-    bumps.forEach(cb => {
-      const priceText = cb.parentElement.querySelector('.bump-price')?.textContent || '0';
-      const price = parseInt(priceText.replace('R$ ', '').replace('.', '')) || 0;
-      total += price;
+  if (qtyInput && fotoTotal) {
+    qtyInput.addEventListener('input', function() {
+      const val = parseInt(this.value) || 20;
+      const total = val * 18;
+      fotoTotal.textContent = total;
     });
-    alert(`🛒 Simulação de carrinho:\nFotos: ${qty} (R$ ${qty*18})\nOrder bumps: ${bumps.length} itens\nTotal: R$ ${total}\n\n(Em produção: integração com pagamento)`);
-  });
+  }
 
+  const simularBtn = document.getElementById('simularCarrinho');
+  if (simularBtn) {
+    simularBtn.addEventListener('click', function() {
+      const qty = parseInt(qtyInput?.value) || 20;
+      let total = qty * 18;
+      const bumps = document.querySelectorAll('.bump-check:checked');
+      bumps.forEach(cb => {
+        const priceText = cb.parentElement.querySelector('.bump-price')?.textContent || '0';
+        const price = parseInt(priceText.replace('R$ ', '').replace('.', '')) || 0;
+        total += price;
+      });
+      alert(`🛒 Simulação de carrinho:\nFotos: ${qty} (R$ ${qty*18})\nOrder bumps: ${bumps.length} itens\nTotal: R$ ${total}\n\n(Em produção: integração com pagamento)`);
+    });
+  }
+
+  // ============================================================
+  // 11. VÍDEOS
+  // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
     const videos = document.querySelectorAll('.hero-video');
     videos.forEach(video => {
