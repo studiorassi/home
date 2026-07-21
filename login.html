@@ -273,6 +273,8 @@
   // ============================================================
   const VALID_LOGIN = 'lucille_e_edson';
   const VALID_PASSWORD = '072026_l&e';
+  const INITIAL_CREDITS = 30; // Créditos iniciais para este casal
+  const CLIENT_NAME = 'Lucille e Edson';
 
   // ============================================================
   // DOM ELEMENTS
@@ -325,17 +327,26 @@
       // Login bem-sucedido
       showSuccess('✅ Acesso liberado! Redirecionando...');
       
-      // Armazena um token simples (apenas para controle de sessão)
-      // Em um ambiente real, isso viria do back-end
-      const fakeToken = 'user_' + Date.now();
-      localStorage.setItem('token', fakeToken);
-      localStorage.setItem('user', JSON.stringify({
-        name: 'Lucille e Edson',
+      // ============================================================
+      // REGISTRA OS CRÉDITOS DO CLIENTE
+      // ============================================================
+      const userData = {
+        name: CLIENT_NAME,
         login: login,
-        credits: 30
-      }));
+        credits: INITIAL_CREDITS, // 30 créditos
+        totalPhotos: 116 // Total de fotos disponíveis
+      };
       
-      // Redireciona para a área do cliente após 1.5 segundos
+      // Armazena os dados do usuário no localStorage
+      localStorage.setItem('token', 'user_' + Date.now());
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Registra no console para verificação
+      console.log('✅ Login realizado com sucesso!');
+      console.log(`👤 Cliente: ${CLIENT_NAME}`);
+      console.log(`💰 Créditos: ${INITIAL_CREDITS}`);
+      
+      // Redireciona para a área do cliente
       setTimeout(() => {
         window.location.href = 'https://studiorassi.github.io/home/cliente/cliente.html';
       }, 1500);
@@ -366,7 +377,6 @@
   // ============================================================
   const token = localStorage.getItem('token');
   if (token) {
-    // Verifica se o token é válido (simples verificação local)
     const userData = localStorage.getItem('user');
     if (userData) {
       try {
@@ -400,6 +410,8 @@
   });
 
   console.log('🔐 Sistema de login ativado!');
+  console.log(`👤 Cliente: ${CLIENT_NAME}`);
+  console.log(`💰 Créditos disponíveis: ${INITIAL_CREDITS}`);
   console.log('📝 Use as credenciais fornecidas para acessar.');
 </script>
 
