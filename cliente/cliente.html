@@ -1023,12 +1023,10 @@
       }
       .container { padding: 0 20px; }
       
-      /* Mostra botão hamburguer no mobile */
       .hamburger {
         display: flex;
       }
       
-      /* Esconde informações de crédito do desktop no mobile */
       .floating-status {
         display: none;
       }
@@ -1037,7 +1035,6 @@
       .navbar .logo img { height: 38px; max-width: 120px; }
       .navbar.scrolled .logo img { height: 34px; }
       
-      /* Menu mobile */
       .mobile-menu {
         display: block;
       }
@@ -1218,7 +1215,6 @@
            loading="lazy">
     </a>
     
-    <!-- Botão Hamburguer (Mobile) -->
     <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
       <span></span>
       <span></span>
@@ -1258,7 +1254,6 @@
     </button>
   </div>
   
-  <!-- ===== CRÉDITOS E TIMER NO MENU MOBILE ===== -->
   <div class="menu-status">
     <div class="status-row">
       <span class="label">
@@ -1280,12 +1275,10 @@
     </div>
   </div>
   
-  <!-- ===== CTA "+ Quer mais fotos?" no Menu Mobile ===== -->
   <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
     <i class="fas fa-plus-circle"></i> + Quer mais fotos?
   </button>
   
-  <!-- ===== LINKS DO MENU ===== -->
   <div class="menu-links">
     <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;">
       <i class="fas fa-arrow-up"></i> Ver Galeria
@@ -1313,7 +1306,7 @@
   </div>
 </div>
 
-<!-- ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) ===== -->
+<!-- ===== PROGRESS BAR ===== -->
 <div class="progress-bar-container" id="progressContainer">
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;">
@@ -1388,7 +1381,6 @@
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
-    <!-- Progress Bar da Imagem -->
     <div class="modal-progress" id="modalProgress">
       <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
       <div class="track">
@@ -1397,12 +1389,10 @@
       <span class="label" id="modalProgressLabel">0%</span>
     </div>
     
-    <!-- Contador -->
     <div class="modal-counter" id="modalCounter">
       <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">116</span>
     </div>
     
-    <!-- Navegação -->
     <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
       <i class="fas fa-chevron-left"></i>
     </button>
@@ -1410,22 +1400,17 @@
       <i class="fas fa-chevron-right"></i>
     </button>
     
-    <!-- Fechar -->
     <button class="modal-close" onclick="closeModal()">
       <i class="fas fa-times"></i>
     </button>
     
-    <!-- Imagem -->
     <img id="modalImage" src="" alt="Foto em alta resolução">
     
-    <!-- Ações do Modal -->
     <div class="modal-actions">
-      <!-- Botão Baixar -->
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
       </button>
       
-      <!-- Área de Compra de Créditos -->
       <div class="modal-buy-credits" id="modalBuyCredits">
         <div class="buy-title">
           <i class="fas fa-crown"></i> + Quer mais fotos?
@@ -1468,29 +1453,95 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // 1. CARREGAR DADOS DO USUÁRIO
-  // ============================================================
-  const userData = JSON.parse(localStorage.getItem('user') || '{}');
-  let credits = userData.credits || 30;
-  const clientName = userData.name || 'Lucille e Edson';
-  const totalPhotos = 116;
-
-  document.getElementById('clienteNome').textContent = clientName;
-  document.getElementById('mobileUserName').textContent = clientName;
-  document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
-  document.getElementById('totalCount').textContent = totalPhotos;
-  document.getElementById('totalCountDisplay').textContent = totalPhotos;
-  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
-
-  // ============================================================
-  // 2. CONEXÃO COM O BACKEND
+  // 1. CONFIGURAÇÕES E AUTENTICAÇÃO
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
   const S3_BUCKET_URL = 'https://studio-rassi-ensaios-2026.s3.amazonaws.com';
 
+  // Obtém token e userId do localStorage (definido no login)
+  let authToken = localStorage.getItem('authToken');
+  let userId = parseInt(localStorage.getItem('userId')) || null;
+  let credits = 0;
+  let clientName = localStorage.getItem('userName') || 'Lucille e Edson';
+
+  // Verifica autenticação
+  if (!authToken || !userId) {
+    alert('⚠️ Sessão expirada. Faça login novamente.');
+    window.location.href = '../login.html';
+  }
+
   // ============================================================
-  // 3. DADOS - 116 FOTOS
+  // 2. BUSCAR CRÉDITOS DO SERVIDOR
   // ============================================================
+  async function fetchCreditsFromServer() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token inválido ou expirado
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error('Erro ao buscar créditos');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      localStorage.setItem('userCredits', credits);
+      updateCreditsDisplay();
+      return credits;
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar créditos:', error);
+      // Fallback: usar valor do localStorage
+      credits = parseInt(localStorage.getItem('userCredits')) || 0;
+      updateCreditsDisplay();
+      return credits;
+    }
+  }
+
+  // ============================================================
+  // 3. DEBITAR CRÉDITO NO SERVIDOR
+  // ============================================================
+  async function debitCreditOnServer(imageKey) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKey })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao debitar crédito');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      localStorage.setItem('userCredits', credits);
+      updateCreditsDisplay();
+      return data;
+      
+    } catch (error) {
+      console.error('❌ Erro ao debitar crédito:', error);
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // 4. DADOS - 116 FOTOS
+  // ============================================================
+  const totalPhotos = 116;
   const allPhotoKeys = [];
   for (let i = 1; i <= 116; i++) {
     const numeroFormatado = String(i).padStart(2, '0');
@@ -1498,12 +1549,12 @@
   }
 
   // ============================================================
-  // 4. ESTADO - ARMAZENA FOTOS BAIXADAS
+  // 5. ESTADO - FOTOS BAIXADAS (LOCAL)
   // ============================================================
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
 
   // ============================================================
-  // 5. DOM ELEMENTS
+  // 6. DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
@@ -1527,19 +1578,25 @@
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
 
+  // Atualiza nome do cliente
+  document.getElementById('clienteNome').textContent = clientName;
+  document.getElementById('mobileUserName').textContent = clientName;
+  document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
+  document.getElementById('totalCount').textContent = totalPhotos;
+  document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
+
   // ============================================================
-  // 6. MENU MOBILE - OCULTA NAVBAR QUANDO ABERTO
+  // 7. MENU MOBILE
   // ============================================================
   function toggleMobileMenu() {
     mobileMenu.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
     
     if (mobileMenu.classList.contains('open')) {
-      // Oculta a navbar
       navbar.classList.add('hidden');
       document.body.style.overflow = 'hidden';
     } else {
-      // Mostra a navbar
       navbar.classList.remove('hidden');
       document.body.style.overflow = '';
     }
@@ -1567,7 +1624,7 @@
   });
 
   // ============================================================
-  // 7. DETECTAR MOBILE
+  // 8. DETECTAR MOBILE
   // ============================================================
   function checkMobile() {
     const isMobile = window.innerWidth <= 768;
@@ -1589,7 +1646,7 @@
   }
 
   // ============================================================
-  // 8. BARRA DE PROGRESSO
+  // 9. BARRA DE PROGRESSO
   // ============================================================
   let imagesLoaded = 0;
 
@@ -1607,7 +1664,7 @@
   }
 
   // ============================================================
-  // 9. RENDER GALERIA
+  // 10. RENDER GALERIA
   // ============================================================
   function renderGallery() {
     grid.innerHTML = '';
@@ -1651,7 +1708,7 @@
   }
 
   // ============================================================
-  // 10. IMAGE LOAD HANDLER
+  // 11. IMAGE LOAD HANDLER
   // ============================================================
   function onImageLoad(index) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
@@ -1667,7 +1724,7 @@
   }
 
   // ============================================================
-  // 11. ATUALIZAR BADGE DE DOWNLOAD
+  // 12. ATUALIZAR BADGE DE DOWNLOAD
   // ============================================================
   function updateDownloadBadge(key) {
     const items = document.querySelectorAll('.watermark-item');
@@ -1683,7 +1740,7 @@
   }
 
   // ============================================================
-  // 12. MODAL
+  // 13. MODAL
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1702,7 +1759,6 @@
     
     document.getElementById('currentIndexDisplay').textContent = index + 1;
     
-    // Atualiza botão de download
     updateModalButtons(isDownloaded);
     updateNavButtons();
     
@@ -1780,13 +1836,12 @@
   }
 
   // ============================================================
-  // 13. ATUALIZAR BOTÕES DO MODAL
+  // 14. ATUALIZAR BOTÕES DO MODAL
   // ============================================================
   function updateModalButtons(isDownloaded = false) {
     modalCreditsCount.textContent = credits;
     
     if (isDownloaded) {
-      // Já baixada: mostra botão verde
       modalDownloadBtn.className = 'modal-btn-download downloaded';
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
@@ -1811,11 +1866,13 @@
   }
 
   // ============================================================
-  // 14. DOWNLOAD (S3)
+  // 15. DOWNLOAD COM CRÉDITOS PERSISTENTES (SERVIDOR)
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
     if (!currentKey) return;
+    
+    // Verifica créditos
     if (credits <= 0) {
       alert('❌ Você não tem créditos suficientes.');
       return;
@@ -1831,19 +1888,24 @@
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
+      // 1. Obtém URL assinada do S3
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
         body: JSON.stringify({ imageKeys: [currentKey] })
       });
 
       if (!response.ok) {
-        throw new Error('API não retornou URL de download');
+        throw new Error('Erro ao obter URL de download');
       }
 
       const data = await response.json();
       const signedUrl = data.urls[0].url;
 
+      // 2. Faz o download da imagem
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
       
@@ -1859,81 +1921,43 @@
         URL.revokeObjectURL(downloadLink.href);
       }, 1000);
 
-      // Marca como baixada
+      // 3. DEBITA O CRÉDITO NO SERVIDOR
+      await debitCreditOnServer(currentKey);
+
+      // 4. Marca como baixada localmente
       if (!downloadedImages.includes(currentKey)) {
         downloadedImages.push(currentKey);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
       }
 
-      credits--;
       updateCreditsDisplay();
       modalCreditsCount.textContent = credits;
-      
-      // Atualiza badge na galeria
       updateDownloadBadge(currentKey);
-      
-      // Atualiza botão do modal
       updateModalButtons(true);
 
       modalDownloadBtn.className = 'modal-btn-download downloaded';
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
 
-      // Notifica usuário
       alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
       
-      // Fallback: tenta acesso direto ao S3
-      try {
-        modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Tentando acesso direto...';
-        
-        const s3DirectUrl = `${S3_BUCKET_URL}/${currentKey}`;
-        const directResponse = await fetch(s3DirectUrl);
-        const blob = await directResponse.blob();
-        
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = currentKey;
-        
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        setTimeout(() => {
-          URL.revokeObjectURL(downloadLink.href);
-        }, 1000);
-
-        if (!downloadedImages.includes(currentKey)) {
-          downloadedImages.push(currentKey);
-          localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
-        }
-
-        credits--;
-        updateCreditsDisplay();
-        modalCreditsCount.textContent = credits;
-        
-        updateDownloadBadge(currentKey);
-        updateModalButtons(true);
-
-        modalDownloadBtn.className = 'modal-btn-download downloaded';
-        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
-        modalDownloadBtn.disabled = true;
-
-        alert('✅ Imagem baixada com sucesso!');
-
-      } catch (fallbackError) {
-        console.error('❌ Erro no fallback:', fallbackError);
-        alert('❌ Não foi possível baixar a imagem. Verifique a configuração do S3.');
-        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
-        modalDownloadBtn.disabled = false;
+      if (error.message === 'Créditos insuficientes') {
+        alert('❌ Créditos insuficientes. Adquira mais créditos.');
+        await fetchCreditsFromServer();
+        return;
       }
+      
+      alert('❌ Erro ao baixar a imagem. Tente novamente.');
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.disabled = false;
     }
   }
 
   // ============================================================
-  // 15. COMPRAR CRÉDITOS
+  // 16. COMPRAR CRÉDITOS
   // ============================================================
   function buyCredits(amount) {
     const price = amount * 8;
@@ -1952,7 +1976,7 @@
   }
 
   // ============================================================
-  // 16. ATUALIZAR DISPLAY
+  // 17. ATUALIZAR DISPLAY
   // ============================================================
   function updateCreditsDisplay() {
     creditsDisplay.textContent = credits;
@@ -1961,13 +1985,11 @@
     updateModalButtons();
     updateMenuCtaVisibility();
     
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    userData.credits = credits;
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('userCredits', credits);
   }
 
   // ============================================================
-  // 17. TIMER REGRESSIVO
+  // 18. TIMER REGRESSIVO
   // ============================================================
   let timerSeconds = 72 * 3600;
 
@@ -1987,7 +2009,7 @@
   }
 
   // ============================================================
-  // 18. NAVBAR SCROLL EFFECT
+  // 19. NAVBAR SCROLL EFFECT
   // ============================================================
   window.addEventListener('scroll', function() {
     const scrollY = window.scrollY;
@@ -1999,7 +2021,7 @@
   });
 
   // ============================================================
-  // 19. BLOQUEIO DE PRINT/DOWNLOAD
+  // 20. BLOQUEIO DE PRINT/DOWNLOAD
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
@@ -2016,25 +2038,111 @@
   });
 
   // ============================================================
-  // 20. INICIALIZAR
+  // 21. COMANDO SECRETO PARA RESTAURAR CRÉDITOS (ADMIN)
   // ============================================================
-  renderGallery();
-  updateCreditsDisplay();
-  updateTimer();
-  setInterval(updateTimer, 1000);
-  checkMobile();
-  
-  let resizeTimeout;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      checkMobile();
-    }, 250);
-  });
+  async function adminRestoreCredits(userId, amount = 30) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ userId, amount })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Falha ao restaurar créditos');
+      }
+      
+      const data = await response.json();
+      console.log('✅ Créditos restaurados:', data.message);
+      
+      await fetchCreditsFromServer();
+      alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
+      
+    } catch (error) {
+      console.error('❌ Erro ao restaurar créditos:', error);
+      alert(`❌ Erro ao restaurar créditos: ${error.message}`);
+    }
+  }
 
-  console.log('📸 Galeria Studio Rassi carregada!');
-  console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
-  console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+  // Comandos no console
+  window.restoreCredits = async function(amount = 30) {
+    if (!authToken || !userId) {
+      alert('❌ Você precisa estar logado.');
+      return;
+    }
+    
+    const confirmMsg = `⚠️ ATENÇÃO: Isso irá restaurar ${amount} créditos para o usuário ${userId}.\nDeseja continuar?`;
+    if (!confirm(confirmMsg)) return;
+    
+    await adminRestoreCredits(userId, amount);
+  };
+
+  window.restoreByEmail = async function(email, amount = 30) {
+    if (!authToken) {
+      alert('❌ Você precisa estar logado como admin.');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-by-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ email, amount })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Falha ao restaurar créditos');
+      }
+      
+      const data = await response.json();
+      alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
+      await fetchCreditsFromServer();
+      
+    } catch (error) {
+      console.error('❌ Erro:', error);
+      alert(`❌ ${error.message}`);
+    }
+  };
+
+  // ============================================================
+  // 22. INICIALIZAR
+  // ============================================================
+  async function init() {
+    // Busca créditos do servidor
+    await fetchCreditsFromServer();
+    
+    renderGallery();
+    updateCreditsDisplay();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+    checkMobile();
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkMobile();
+      }, 250);
+    });
+
+    console.log('📸 Galeria Studio Rassi carregada!');
+    console.log(`👤 Usuário ID: ${userId}`);
+    console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
+    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+    console.log('💡 Comando secreto: restoreCredits(30) - Restaura 30 créditos');
+    console.log('💡 Comando secreto: restoreCredits(100) - Restaura 100 créditos');
+    console.log('💡 Comando secreto: restoreByEmail("email@email.com", 30)');
+  }
+
+  init();
 </script>
 
 </body>
