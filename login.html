@@ -83,12 +83,6 @@
       margin-top: 4px;
       letter-spacing: 0.3px;
     }
-    .login-header .icon {
-      font-size: 2.8rem;
-      color: #D4A3B3;
-      margin-bottom: 8px;
-      display: none;
-    }
     .form-group {
       margin-bottom: 18px;
       position: relative;
@@ -183,13 +177,6 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.15); }
     }
-    .login-footer a {
-      color: #D4A3B3;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .login-footer a:hover { text-decoration: underline; }
     .back-home {
       display: inline-flex;
       align-items: center;
@@ -217,34 +204,6 @@
       display: none;
     }
     .success-message.show { display: block; }
-
-    /* ===== FORGOT PASSWORD MODAL ===== */
-    .forgot-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(12px);
-      z-index: 9998;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .forgot-modal.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: scale(0.95); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-    .forgot-modal .login-container {
-      max-width: 400px;
-      padding: 32px 28px;
-    }
 
     @media (max-width: 480px) {
       .login-container { padding: 32px 24px; }
@@ -275,21 +234,18 @@
   <!-- ===== FORMULÁRIO ===== -->
   <form id="authForm">
     <div class="form-group">
-      <label><i class="fas fa-envelope" style="color:#D4A3B3; margin-right:6px;"></i> E-mail</label>
-      <input type="email" id="emailInput" class="input-dark" placeholder="seu@email.com" required>
+      <label><i class="fas fa-user" style="color:#D4A3B3; margin-right:6px;"></i> Login</label>
+      <input type="text" id="loginInput" class="input-dark" placeholder="Digite seu login" required>
     </div>
 
     <div class="form-group">
       <label><i class="fas fa-key" style="color:#D4A3B3; margin-right:6px;"></i> Senha</label>
       <div class="input-wrapper">
-        <input type="password" id="passwordInput" class="input-dark" placeholder="••••••••" required minlength="6">
+        <input type="password" id="passwordInput" class="input-dark" placeholder="••••••••" required>
         <button type="button" class="toggle-password" onclick="togglePassword('passwordInput', this)">
           <i class="fas fa-eye"></i>
         </button>
       </div>
-      <span class="forgot-link" style="display:block; text-align:right; font-size:0.75rem; margin-top:4px; color:#7a5f5a; cursor:pointer; transition:0.3s;" onclick="openForgotModal()">
-        <i class="fas fa-question-circle"></i> Esqueci minha senha
-      </span>
     </div>
 
     <div id="errorMessage" class="error-message"></div>
@@ -306,54 +262,30 @@
       <span class="heart">💖</span>
     </p>
     <p style="margin-top:8px; font-size:0.7rem; color:#7a5f5a;">
-      🔒 Protegido com criptografia e autenticação JWT
+      🔒 Ambiente seguro e exclusivo para suas memórias
     </p>
-  </div>
-</div>
-
-<!-- ===== FORGOT PASSWORD MODAL ===== -->
-<div class="forgot-modal" id="forgotModal">
-  <div class="login-container">
-    <div class="login-header">
-      <i class="fas fa-key icon" style="font-size: 2.5rem; color: #D4A3B3; display: block; margin-bottom: 8px;"></i>
-      <h3 style="font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.4rem; color: #f5edea; margin-top: 4px;">Recuperar senha</h3>
-      <p style="color: #d4c5c0; font-size: 0.85rem; margin-top: 4px;">Digite seu email para receber o link de redefinição</p>
-    </div>
-    <form id="forgotForm">
-      <div class="form-group">
-        <label><i class="fas fa-envelope" style="color:#D4A3B3; margin-right:6px;"></i> E-mail</label>
-        <input type="email" id="forgotEmail" class="input-dark" placeholder="seu@email.com" required>
-      </div>
-      <div id="forgotMessage" class="success-message"></div>
-      <div id="forgotError" class="error-message"></div>
-      <button type="submit" class="btn-login" id="forgotBtn">
-        <i class="fas fa-paper-plane"></i> Enviar link
-      </button>
-      <button type="button" style="display:block; margin-top:12px; background:transparent; border:none; color:#7a5f5a; cursor:pointer; font-size:0.8rem; width:100%; text-align:center;" onclick="closeForgotModal()">
-        <i class="fas fa-arrow-left"></i> Voltar ao login
-      </button>
-    </form>
   </div>
 </div>
 
 <script>
   // ============================================================
-  // CONFIGURAÇÃO
+  // CREDENCIAIS FIXAS (GERADAS POR VOCÊ)
   // ============================================================
-  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  const VALID_LOGIN = 'lucille_e_edson';
+  const VALID_PASSWORD = '072026_l&e';
 
   // ============================================================
   // DOM ELEMENTS
   // ============================================================
   const form = document.getElementById('authForm');
-  const emailInput = document.getElementById('emailInput');
+  const loginInput = document.getElementById('loginInput');
   const passwordInput = document.getElementById('passwordInput');
   const submitBtn = document.getElementById('submitBtn');
   const errorMessage = document.getElementById('errorMessage');
   const successMessage = document.getElementById('successMessage');
 
   // ============================================================
-  // TOGGLE PASSWORD VISIBILITY
+  // TOGGLE PASSWORD
   // ============================================================
   function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
@@ -370,26 +302,7 @@
   }
 
   // ============================================================
-  // FORGOT PASSWORD
-  // ============================================================
-  function openForgotModal() {
-    document.getElementById('forgotModal').classList.add('active');
-    document.getElementById('forgotMessage').classList.remove('show');
-    document.getElementById('forgotError').classList.remove('show');
-    document.getElementById('forgotEmail').value = emailInput.value || '';
-  }
-
-  function closeForgotModal() {
-    document.getElementById('forgotModal').classList.remove('active');
-  }
-
-  // Fecha modal ao clicar fora
-  document.getElementById('forgotModal').addEventListener('click', function(e) {
-    if (e.target === this) closeForgotModal();
-  });
-
-  // ============================================================
-  // SUBMISSÃO DO FORMULÁRIO (apenas login)
+  // SUBMISSÃO DO FORMULÁRIO
   // ============================================================
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -397,116 +310,41 @@
     errorMessage.classList.remove('show');
     successMessage.classList.remove('show');
     
-    const email = emailInput.value.trim();
+    const login = loginInput.value.trim();
     const password = passwordInput.value;
     
-    if (!email || !password) {
+    if (!login || !password) {
       showError('Preencha todos os campos obrigatórios.');
       return;
     }
     
-    if (password.length < 6) {
-      showError('A senha deve ter pelo menos 6 caracteres.');
-      return;
-    }
-    
-    await loginUser(email, password);
-  });
-
-  // ============================================================
-  // FORGOT PASSWORD SUBMISSION
-  // ============================================================
-  document.getElementById('forgotForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const email = document.getElementById('forgotEmail').value.trim();
-    const message = document.getElementById('forgotMessage');
-    const error = document.getElementById('forgotError');
-    const btn = document.getElementById('forgotBtn');
-    
-    message.classList.remove('show');
-    error.classList.remove('show');
-    
-    if (!email) {
-      error.textContent = 'Digite seu email.';
-      error.classList.add('show');
-      return;
-    }
-    
-    try {
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    // ============================================================
+    // VERIFICAÇÃO DAS CREDENCIAIS FIXAS
+    // ============================================================
+    if (login === VALID_LOGIN && password === VALID_PASSWORD) {
+      // Login bem-sucedido
+      showSuccess('✅ Acesso liberado! Redirecionando...');
       
-      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+      // Armazena um token simples (apenas para controle de sessão)
+      // Em um ambiente real, isso viria do back-end
+      const fakeToken = 'user_' + Date.now();
+      localStorage.setItem('token', fakeToken);
+      localStorage.setItem('user', JSON.stringify({
+        name: 'Lucille e Edson',
+        login: login,
+        credits: 30
+      }));
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Erro ao enviar solicitação');
-      }
-      
-      message.textContent = data.message || 'Link de redefinição enviado! Verifique seu email.';
-      message.classList.add('show');
-      
-      if (data.devLink) {
-        message.textContent += `\n\n🔗 Link de teste: ${data.devLink}`;
-      }
-      
-      setTimeout(() => {
-        closeForgotModal();
-      }, 3000);
-      
-    } catch (err) {
-      error.textContent = err.message;
-      error.classList.add('show');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar link';
-    }
-  });
-
-  // ============================================================
-  // FUNÇÕES DE AUTENTICAÇÃO
-  // ============================================================
-  async function loginUser(email, password) {
-    try {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-      
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Erro ao fazer login');
-      }
-      
-      // Salva o token e os dados do usuário
-      localStorage.setItem('token', data.data.token);
-      localStorage.setItem('user', JSON.stringify(data.data.user));
-      
-      showSuccess('✅ Login realizado com sucesso! Redirecionando...');
-      
-      // Redireciona para a área do cliente
+      // Redireciona para a área do cliente após 1.5 segundos
       setTimeout(() => {
         window.location.href = 'https://studiorassi.github.io/home/cliente/cliente.html';
       }, 1500);
       
-    } catch (error) {
-      showError(error.message);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+    } else {
+      // Login ou senha inválidos
+      showError('❌ Login ou senha inválidos. Verifique os dados fornecidos.');
     }
-  }
+  });
 
   // ============================================================
   // MENSAGENS
@@ -528,23 +366,41 @@
   // ============================================================
   const token = localStorage.getItem('token');
   if (token) {
-    // Verifica se o token é válido
-    fetch(`${API_BASE_URL}/api/auth/me`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    })
-    .then(response => {
-      if (response.ok) {
-        window.location.href = 'https://studiorassi.github.io/home/cliente/cliente.html';
-      } else {
+    // Verifica se o token é válido (simples verificação local)
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user && user.login === VALID_LOGIN) {
+          window.location.href = 'https://studiorassi.github.io/home/cliente/cliente.html';
+        }
+      } catch (e) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
-    })
-    .catch(() => {
+    } else {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-    });
+    }
   }
+
+  // ============================================================
+  // ENTER PARA SUBMETER O FORMULÁRIO
+  // ============================================================
+  passwordInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      form.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  loginInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      passwordInput.focus();
+    }
+  });
+
+  console.log('🔐 Sistema de login ativado!');
+  console.log('📝 Use as credenciais fornecidas para acessar.');
 </script>
 
 </body>
