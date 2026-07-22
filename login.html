@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
   
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -29,19 +31,50 @@
       width: 100%;
       border: 1px solid rgba(212, 163, 179, 0.08);
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
     }
+    
+    /* ===== BOTÃO VOLTAR ===== */
+    .btn-back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      color: #d4c5c0;
+      padding: 8px 14px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      font-family: 'Work Sans', sans-serif;
+    }
+    .btn-back:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .btn-back i {
+      font-size: 0.8rem;
+      color: #D4A3B3;
+    }
+    
     .login-container .logo {
       display: block;
-      width: 120px;
+      width: 180px;
       height: auto;
-      margin: 0 auto 24px;
+      margin: 8px auto 20px;
     }
     .login-container h1 {
       font-family: 'Fraunces', serif;
       font-weight: 600;
       font-size: 1.8rem;
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .login-container .subtitle {
       text-align: center;
@@ -54,8 +87,20 @@
       color: #D4A3B3;
       font-weight: 500;
     }
+    
+    /* ===== CAMPOS COM ÍCONES ===== */
     .login-container .form-group {
       margin-bottom: 20px;
+      position: relative;
+    }
+    .login-container .form-group .icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #D4A3B3;
+      font-size: 1rem;
+      opacity: 0.6;
     }
     .login-container label {
       display: block;
@@ -66,7 +111,7 @@
     }
     .login-container input {
       width: 100%;
-      padding: 14px 18px;
+      padding: 14px 18px 14px 48px;
       background: #2C0714;
       border: 1px solid rgba(212, 163, 179, 0.12);
       border-radius: 40px;
@@ -83,6 +128,8 @@
     .login-container input::placeholder {
       color: #7a5f5a;
     }
+    
+    /* ===== BOTÃO LOGIN ===== */
     .login-container .btn-login {
       width: 100%;
       padding: 16px;
@@ -107,6 +154,8 @@
       cursor: not-allowed;
       transform: none;
     }
+    
+    /* ===== MENSAGEM DE ERRO ===== */
     .login-container .error-msg {
       color: #D4A3B3;
       font-size: 0.85rem;
@@ -117,6 +166,7 @@
     .login-container .error-msg.show {
       display: block;
     }
+    
     .login-container .info {
       text-align: center;
       font-size: 0.7rem;
@@ -133,6 +183,12 @@
 <body>
 
 <div class="login-container">
+  <!-- ===== BOTÃO VOLTAR ===== -->
+  <a href="https://studiorassi.github.io/home/index.html" class="btn-back">
+    <i class="fas fa-arrow-left"></i> Voltar
+  </a>
+  
+  <!-- ===== LOGO ===== -->
   <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
        alt="Studio Rassi" 
        class="logo">
@@ -141,18 +197,22 @@
   <p class="subtitle">Acesse suas <span>memórias</span> em alta definição</p>
   
   <form id="loginForm">
+    <!-- ===== CAMPO LOGIN (COM ÍCONE DE USUÁRIO) ===== -->
     <div class="form-group">
-      <label for="email">E-mail</label>
-      <input type="email" id="email" placeholder="seu@email.com" value="lucille_edson@email.com">
+      <label for="login">Login</label>
+      <i class="fas fa-user icon"></i>
+      <input type="text" id="login" placeholder="Digite seu login" value="lucille_e_edson">
     </div>
     
+    <!-- ===== CAMPO SENHA ===== -->
     <div class="form-group">
       <label for="password">Senha</label>
-      <input type="password" id="password" placeholder="••••••••" value="123456">
+      <i class="fas fa-lock icon"></i>
+      <input type="password" id="password" placeholder="Digite sua senha" value="072026_l&e">
     </div>
     
     <button type="submit" class="btn-login" id="loginBtn">
-      <i class="fas fa-lock"></i> Entrar
+      <i class="fas fa-sign-in-alt"></i> Entrar
     </button>
     
     <div class="error-msg" id="loginError">
@@ -165,9 +225,6 @@
   </div>
 </div>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 <script>
   // ============================================================
   // CONFIGURAÇÕES
@@ -178,7 +235,7 @@
   // DOM ELEMENTS
   // ============================================================
   const form = document.getElementById('loginForm');
-  const emailInput = document.getElementById('email');
+  const loginInput = document.getElementById('login');
   const passwordInput = document.getElementById('password');
   const loginBtn = document.getElementById('loginBtn');
   const errorMsg = document.getElementById('loginError');
@@ -189,21 +246,23 @@
   async function handleLogin(e) {
     e.preventDefault();
     
-    const email = emailInput.value.trim();
+    const login = loginInput.value.trim();
     const password = passwordInput.value.trim();
     
-    if (!email || !password) {
+    if (!login || !password) {
       errorMsg.textContent = '⚠️ Preencha todos os campos';
       errorMsg.classList.add('show');
       return;
     }
     
-    // Desabilita botão
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
     errorMsg.classList.remove('show');
     
     try {
+      // O login é o email, então usamos o login como email
+      const email = login;
+      
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -230,9 +289,8 @@
       errorMsg.textContent = error.message || '❌ Credenciais inválidas. Tente novamente.';
       errorMsg.classList.add('show');
       
-      // Reabilita botão
       loginBtn.disabled = false;
-      loginBtn.innerHTML = '<i class="fas fa-lock"></i> Entrar';
+      loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
     }
   }
   
@@ -247,7 +305,7 @@
   });
   
   // Limpa erro ao digitar
-  emailInput.addEventListener('input', () => errorMsg.classList.remove('show'));
+  loginInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   passwordInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   
   // ============================================================
@@ -255,13 +313,12 @@
   // ============================================================
   const token = localStorage.getItem('authToken');
   if (token) {
-    // Se já tem token, tenta redirecionar
     window.location.href = 'cliente/cliente.html';
   }
   
   console.log('🔐 Página de login carregada');
-  console.log('📧 Email padrão: lucille_edson@email.com');
-  console.log('🔑 Senha padrão: 123456');
+  console.log('👤 Login: lucille_e_edson');
+  console.log('🔑 Senha: 072026_l&e');
 </script>
 
 </body>
