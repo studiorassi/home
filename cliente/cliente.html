@@ -1177,7 +1177,9 @@
       <div class="upsell-item" onclick="buyCredits(20)"><span>📷 +20 créditos</span><span class="price">R$ 160</span></div>
       <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
     </div>
-    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;"><i class="fas fa-info-circle"></i> Cada crédito = R$ 8,00 · Adicione instantaneamente à sua conta.</p>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Você será redirecionado para o Mercado Pago para concluir o pagamento.
+    </p>
   </div>
 </div>
 
@@ -1324,6 +1326,146 @@
     } catch (error) {
       console.error('❌ Erro ao debitar crédito:', error);
       throw error;
+    }
+  }
+
+  // ============================================================
+  // COMPRAR CRÉDITOS (COM MERCADO PAGO)
+  // ============================================================
+  async function buyCredits(amount) {
+    const price = amount * 8;
+    
+    if (!confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}? Você será redirecionado para o Mercado Pago para pagamento.`)) {
+      return;
+    }
+    
+    try {
+      // Encontra o botão clicado
+      const btn = event?.target?.closest?.('.upsell-item, .buy-package');
+      if (btn) {
+        btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando pagamento...';
+      }
+      
+      // 1. Cria pedido no backend
+      const response = await fetch(`${API_BASE_URL}/api/payment/create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ planId: amount })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao criar pagamento');
+      }
+      
+      const data = await response.json();
+      
+      // 2. Armazena o plano no localStorage para confirmar depois
+      localStorage.setItem('pendingPayment', JSON.stringify({
+        planId: amount,
+        credits: data.credits,
+        timestamp: Date.now()
+      }));
+      
+      // 3. Redireciona para o Mercado Pago
+      window.location.href = data.payment_url;
+      
+    } catch (error) {
+      console.error('❌ Erro ao iniciar pagamento:', error);
+      alert(`❌ ${error.message}`);
+      
+      // Restaura botão
+      const btn = event?.target?.closest?.('.upsell-item, .buy-package');
+      if (btn) {
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+        btn.innerHTML = `📷 +${amount} créditos <span class="price">R$ ${amount * 8}</span>`;
+      }
+    }
+  }
+
+  // ============================================================
+  // CONFIRMAR PAGAMENTO (após voltar do Mercado Pago)
+  // ============================================================
+  async function confirmPayment() {
+    // Verifica se há um pagamento pendente no localStorage
+    const pendingData = localStorage.getItem('pendingPayment');
+    if (!pendingData) return;
+    
+    const pending = JSON.parse(pendingData);
+    
+    // Verifica se o pagamento foi feito há menos de 1 hora
+    if (Date.now() - pending.timestamp > 3600000) {
+      localStorage.removeItem('pendingPayment');
+      return;
+    }
+    
+    try {
+      console.log('🔍 Verificando pagamento pendente:', pending);
+      
+      // Pergunta ao usuário se o pagamento foi concluído
+      const confirmed = confirm(
+        `Você acabou de comprar ${pending.credits} créditos no Mercado Pago?\n\n` +
+        `Clique em "OK" para confirmar e adicionar os créditos à sua conta.\n` +
+        `Clique em "Cancelar" se ainda não concluiu o pagamento.`
+      );
+      
+      if (!confirmed) {
+        localStorage.removeItem('pendingPayment');
+        return;
+      }
+      
+      // Confirma o pagamento no backend
+      const response = await fetch(`${API_BASE_URL}/api/payment/confirm-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ 
+          planId: pending.planId,
+          paymentId: 'manual_confirmation_' + Date.now()
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao confirmar pagamento');
+      }
+      
+      const data = await response.json();
+      
+      // Remove o pendente
+      localStorage.removeItem('pendingPayment');
+      
+      // Atualiza créditos
+      credits = data.newBalance;
+      localStorage.setItem('userCredits', credits);
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      updateModalButtons();
+      updateMenuCtaVisibility();
+      
+      alert(`✅ ${data.message}\nNovo saldo: ${data.newBalance} créditos`);
+      
+    } catch (error) {
+      console.error('❌ Erro ao confirmar pagamento:', error);
+      alert(`❌ ${error.message}\n\nSe você já pagou, aguarde alguns minutos e recarregue a página. Se o problema persistir, entre em contato.`);
+    }
+  }
+
+  // ============================================================
+  // VERIFICAR PAGAMENTO AO CARREGAR A PÁGINA
+  // ============================================================
+  async function checkPaymentOnLoad() {
+    const pendingData = localStorage.getItem('pendingPayment');
+    if (pendingData) {
+      await confirmPayment();
     }
   }
 
@@ -1728,18 +1870,6 @@
   // ============================================================
   // CRÉDITOS
   // ============================================================
-  function buyCredits(amount) {
-    const price = amount * 8;
-    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}?`)) {
-      credits += amount;
-      updateCreditsDisplay();
-      modalCreditsCount.textContent = credits;
-      updateModalButtons();
-      updateMenuCtaVisibility();
-      alert(`✅ ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
-    }
-  }
-
   function openCreditUpsell() {
     document.getElementById('upsellSection').scrollIntoView({ behavior: 'smooth' });
   }
@@ -1856,6 +1986,7 @@
     updateTimer();
     setInterval(updateTimer, 1000);
     checkMobile();
+    await checkPaymentOnLoad(); // Verifica pagamento pendente ao carregar
     
     let resizeTimeout;
     window.addEventListener('resize', () => {
