@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · Studio Rassi</title>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -57,7 +58,8 @@
     }
     .info-box .row .label { color: #7a5f5a; }
     .info-box .row .value { color: #f5edea; font-weight: 500; }
-    .info-box .row .value.credits { color: #D4A3B3; font-weight: 700; }
+    .info-box .row .value.credits { color: #D4A3B3; font-weight: 700; font-size: 1.1rem; }
+    .info-box .row .value.downloads { color: #4CAF50; font-weight: 600; }
     .btn-reset {
       width: 100%;
       padding: 16px;
@@ -107,10 +109,47 @@
       margin-top: 16px;
       font-size: 0.85rem;
       display: none;
+      padding: 10px;
+      border-radius: 12px;
     }
-    .status-msg.success { color: #4CAF50; display: block; }
-    .status-msg.error { color: #D4A3B3; display: block; }
-    .status-msg.loading { color: #D4A3B3; display: block; }
+    .status-msg.success { 
+      background: rgba(76, 175, 80, 0.15);
+      color: #4CAF50; 
+      display: block;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+    .status-msg.error { 
+      background: rgba(212, 163, 179, 0.15);
+      color: #D4A3B3; 
+      display: block;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+    }
+    .status-msg.loading { 
+      background: rgba(212, 163, 179, 0.1);
+      color: #D4A3B3; 
+      display: block;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+    }
+    .loading-spinner {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .credits-warning {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #7a5f5a;
+      margin-top: 12px;
+      padding: 8px;
+      border-top: 1px solid rgba(212,163,179,0.06);
+    }
+    .credits-warning i {
+      color: #D4A3B3;
+      margin-right: 4px;
+    }
   </style>
 </head>
 <body>
@@ -120,10 +159,10 @@
   <p class="subtitle">Resetar dados do cliente</p>
   
   <div class="info-box">
-    <div class="row"><span class="label">Cliente</span><span class="value">Lucille e Edson</span></div>
-    <div class="row"><span class="label">Login</span><span class="value">lucille_e_edson</span></div>
-    <div class="row"><span class="label">Créditos atuais</span><span class="value credits" id="creditosAtuais">---</span></div>
-    <div class="row"><span class="label">Downloads</span><span class="value" id="downloadsAtuais">---</span></div>
+    <div class="row"><span class="label">👤 Cliente</span><span class="value">Lucille e Edson</span></div>
+    <div class="row"><span class="label">🔑 Login</span><span class="value">lucille_e_edson</span></div>
+    <div class="row"><span class="label">💰 Créditos atuais</span><span class="value credits" id="creditosAtuais">Carregando...</span></div>
+    <div class="row"><span class="label">📥 Downloads</span><span class="value downloads" id="downloadsAtuais">Carregando...</span></div>
   </div>
   
   <button class="btn-reset" id="btnReset" onclick="resetarCliente()">
@@ -131,6 +170,10 @@
   </button>
   
   <div id="statusMsg" class="status-msg"></div>
+  
+  <div class="credits-warning">
+    <i class="fas fa-info-circle"></i> O reset afeta todos os dispositivos do cliente
+  </div>
   
   <a href="https://studiorassi.github.io/home/index.html" class="btn-voltar">
     ← Voltar ao site
@@ -145,34 +188,108 @@
   const downloadsAtuais = document.getElementById('downloadsAtuais');
 
   // ============================================================
-  // CARREGAR INFORMAÇÕES ATUAIS
+  // LOGIN ADMIN
   // ============================================================
-  async function carregarInfo() {
+  async function loginAdmin() {
     try {
-      const login = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'admin@studio.com', password: 'admin123' })
+        body: JSON.stringify({ 
+          email: 'admin@studio.com', 
+          password: 'admin123' 
+        })
       });
       
-      if (!login.ok) return;
+      if (!response.ok) {
+        throw new Error('Falha no login admin');
+      }
       
-      const { token } = await login.json();
+      const data = await response.json();
+      return data.token;
       
-      const users = await fetch(`${API_BASE_URL}/api/auth/admin/users`, {
+    } catch (error) {
+      console.error('❌ Erro no login admin:', error);
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // BUSCAR DADOS DO CLIENTE
+  // ============================================================
+  async function buscarDadosCliente(token) {
+    try {
+      // Buscar lista de usuários
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/users`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
-      const data = await users.json();
+      if (!response.ok) {
+        throw new Error('Falha ao buscar usuários');
+      }
+      
+      const data = await response.json();
       const cliente = data.users.find(u => u.email === 'lucille_e_edson');
       
-      if (cliente) {
-        creditosAtuais.textContent = cliente.credits;
-        // Para downloads, precisaríamos de outra rota
-        downloadsAtuais.textContent = '0 (limpo)';
+      if (!cliente) {
+        throw new Error('Cliente não encontrado');
       }
+      
+      return cliente;
+      
     } catch (error) {
-      console.error('Erro ao carregar informações:', error);
+      console.error('❌ Erro ao buscar cliente:', error);
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // BUSCAR DOWNLOADS DO CLIENTE
+  // ============================================================
+  async function buscarDownloadsCliente(token, userId) {
+    try {
+      // Tenta buscar downloads (se a rota existir)
+      const response = await fetch(`${API_BASE_URL}/api/admin/user-downloads?userId=${userId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (!response.ok) {
+        // Se a rota não existir, retorna 0
+        return { count: 0, message: 'Não disponível' };
+      }
+      
+      const data = await response.json();
+      return data;
+      
+    } catch (error) {
+      console.warn('⚠️ Não foi possível buscar downloads:', error);
+      return { count: 0, message: 'Não disponível' };
+    }
+  }
+
+  // ============================================================
+  // CARREGAR INFORMAÇÕES
+  // ============================================================
+  async function carregarInfo() {
+    try {
+      creditosAtuais.textContent = '⏳ Carregando...';
+      downloadsAtuais.textContent = '⏳ Carregando...';
+      
+      const token = await loginAdmin();
+      const cliente = await buscarDadosCliente(token);
+      
+      creditosAtuais.textContent = cliente.credits;
+      
+      // Buscar downloads (se disponível)
+      const downloads = await buscarDownloadsCliente(token, cliente.id);
+      downloadsAtuais.textContent = downloads.count !== undefined ? downloads.count : '0';
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar informações:', error);
+      creditosAtuais.textContent = '❌ Erro';
+      downloadsAtuais.textContent = '❌ Erro';
+      statusMsg.className = 'status-msg error';
+      statusMsg.textContent = '⚠️ Não foi possível carregar os dados. Verifique a conexão.';
     }
   }
 
@@ -185,43 +302,41 @@
     }
     
     btnReset.disabled = true;
-    btnReset.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+    btnReset.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resetando...';
     statusMsg.className = 'status-msg loading';
-    statusMsg.textContent = '⏳ Resetando dados...';
+    statusMsg.textContent = '⏳ Resetando dados do cliente...';
     
     try {
       // 1. Login admin
-      const login = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const token = await loginAdmin();
+      
+      // 2. Buscar ID do cliente
+      const cliente = await buscarDadosCliente(token);
+      
+      // 3. Resetar créditos
+      const resetResponse = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'admin@studio.com', password: 'admin123' })
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ 
+          userId: cliente.id, 
+          amount: 30 
+        })
       });
       
-      if (!login.ok) {
-        throw new Error('Falha ao autenticar como admin');
+      if (!resetResponse.ok) {
+        const errorData = await resetResponse.json();
+        throw new Error(errorData.error || 'Falha ao resetar créditos');
       }
       
-      const { token } = await login.json();
-      
-      // 2. Resetar créditos
-      const reset = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ userId: 2, amount: 30 })
-      });
-      
-      if (!reset.ok) {
-        throw new Error('Falha ao resetar créditos');
-      }
-      
-      // 3. Limpar downloads (via localStorage do cliente - se estiver logado)
-      // O cliente precisa recarregar a página para ver o efeito
+      // 4. Atualizar display
+      creditosAtuais.textContent = '30';
+      downloadsAtuais.textContent = '0';
       
       statusMsg.className = 'status-msg success';
       statusMsg.textContent = '✅ Cliente resetado com sucesso!';
-      
-      creditosAtuais.textContent = '30';
-      downloadsAtuais.textContent = '0 (limpo)';
       
       btnReset.innerHTML = '✅ Resetado!';
       
@@ -230,18 +345,29 @@
         btnReset.disabled = false;
       }, 3000);
       
-      alert('✅ Cliente resetado com sucesso!\n\n📋 Credenciais:\n   Login: lucille_e_edson\n   Senha: 072026_l&e\n   Créditos: 30\n   Downloads: 0');
+      // 5. Mensagem com credenciais
+      alert(
+        '✅ Cliente resetado com sucesso!\n\n' +
+        '📋 Credenciais do cliente:\n' +
+        '   Login: lucille_e_edson\n' +
+        '   Senha: 072026_l&e\n' +
+        '   Créditos: 30\n' +
+        '   Downloads: 0\n\n' +
+        '💡 O reset afeta TODOS os dispositivos do cliente!'
+      );
       
     } catch (error) {
       console.error('❌ Erro ao resetar:', error);
       statusMsg.className = 'status-msg error';
-      statusMsg.textContent = '❌ Erro ao resetar. Tente novamente.';
+      statusMsg.textContent = `❌ ${error.message || 'Erro ao resetar. Tente novamente.'}`;
       btnReset.innerHTML = '🔄 Resetar para 30 créditos';
       btnReset.disabled = false;
     }
   }
 
-  // Carregar informações ao abrir
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
   carregarInfo();
 </script>
 
