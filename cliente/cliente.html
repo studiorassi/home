@@ -611,7 +611,7 @@
     }
 
     /* =============================================================
-       MARCA D'ÁGUA NO MODAL - CORRIGIDA
+       MARCA D'ÁGUA NO MODAL - SEM OPACIDADE
        ============================================================= */
     .modal-overlay {
       display: none;
@@ -659,7 +659,7 @@
       z-index: 10;
     }
 
-    /* ===== LOGO DA MARCA D'ÁGUA ===== */
+    /* ===== LOGO DA MARCA D'ÁGUA - SEM OPACIDADE ===== */
     .modal-content .watermark-container .watermark-logo-modal {
       width: 80%;
       max-width: 700px;
@@ -667,7 +667,6 @@
       object-fit: contain;
       user-select: none;
       pointer-events: none;
-      opacity: 0.15;
     }
 
     /* Responsivo - mobile */
@@ -675,7 +674,6 @@
       .modal-content .watermark-container .watermark-logo-modal {
         width: 85%;
         max-width: 500px;
-        opacity: 0.18;
       }
     }
 
@@ -683,7 +681,6 @@
       .modal-content .watermark-container .watermark-logo-modal {
         width: 90%;
         max-width: 350px;
-        opacity: 0.20;
       }
     }
 
@@ -1196,7 +1193,7 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
     
-    <!-- ===== MARCA D'ÁGUA ===== -->
+    <!-- ===== MARCA D'ÁGUA - SEM OPACIDADE ===== -->
     <div class="watermark-container">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" 
            alt="Studio Rassi" 
@@ -1684,7 +1681,7 @@
   }
 
   // ============================================================
-  // MODAL (COM MARCA D'ÁGUA)
+  // MODAL (COM MARCA D'ÁGUA - SEM OPACIDADE)
   // ============================================================
   let currentModalIndex = 0;
 
