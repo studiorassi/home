@@ -326,33 +326,30 @@
     errorMsg.classList.remove('show');
     
     try {
-      // O login é o email, então usamos o login como email
-      const email = login;
-      
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: login, password: password }) // Enviando o login no campo que a API espera
       });
       
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.error || 'Login falhou');
+        // Lê a mensagem de erro correta enviada pelo novo backend
+        throw new Error(data.message || 'Credenciais inválidas');
       }
       
-      // Salva dados da sessão
+      // Salva os dados da sessão perfeitamente alinhados com o sistema simplificado
       localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userId', data.user.id);
-      localStorage.setItem('userName', data.user.name);
-      localStorage.setItem('userCredits', data.user.credits);
+      localStorage.setItem('userName', data.data.username);
+      localStorage.setItem('userCredits', data.data.credits);
       
       // Redireciona para a galeria
       window.location.href = 'cliente/cliente.html';
       
     } catch (error) {
       console.error('Erro no login:', error);
-      errorMsg.textContent = error.message || '❌ Credenciais inválidas. Tente novamente.';
+      errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
       errorMsg.classList.add('show');
       
       loginBtn.disabled = false;
@@ -382,10 +379,7 @@
     window.location.href = 'cliente/cliente.html';
   }
   
-  console.log('🔐 Página de login carregada');
-  console.log('👤 Login: lucille_e_edson');
-  console.log('🔑 Senha: 072026_l&e');
-  console.log('📁 Logo: assets/images/logo/logo.png');
+  console.log('🔐 Página de login carregada e pronta para o sistema simplificado');
 </script>
 
 </body>
