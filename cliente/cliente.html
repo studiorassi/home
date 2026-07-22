@@ -1365,7 +1365,7 @@
   }
 
   // ============================================================
-  // COMPRAR CRÉDITOS (COM MERCADO PAGO)
+  // COMPRAR CRÉDITOS (COM MERCADO PAGO) - CORRIGIDO
   // ============================================================
   async function buyCredits(amount) {
     const price = amount * 8;
@@ -1398,9 +1398,11 @@
       
       const data = await response.json();
       
+      // Salva o ID da preferência para verificar depois
       localStorage.setItem('pendingPayment', JSON.stringify({
         planId: amount,
         credits: data.credits,
+        preferenceId: data.preference_id || 'manual',
         timestamp: Date.now()
       }));
       
@@ -1420,7 +1422,7 @@
   }
 
   // ============================================================
-  // CONFIRMAR PAGAMENTO
+  // CONFIRMAR PAGAMENTO (SEM CONFIRMAÇÃO MANUAL)
   // ============================================================
   async function confirmPayment() {
     const pendingData = localStorage.getItem('pendingPayment');
@@ -1434,18 +1436,9 @@
     }
     
     try {
-      const confirmed = confirm(
-        `Você acabou de comprar ${pending.credits} créditos no Mercado Pago?\n\n` +
-        `Clique em "OK" para confirmar e adicionar os créditos à sua conta.\n` +
-        `Clique em "Cancelar" se ainda não concluiu o pagamento.`
-      );
+      console.log('🔍 Verificando pagamento pendente:', pending);
       
-      if (!confirmed) {
-        localStorage.removeItem('pendingPayment');
-        return;
-      }
-      
-      const response = await fetch(`${API_BASE_URL}/api/payment/confirm-payment`, {
+      const response = await fetch(`${API_BASE_URL}/api/payment/check-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1453,31 +1446,39 @@
         },
         body: JSON.stringify({ 
           planId: pending.planId,
-          paymentId: 'manual_confirmation_' + Date.now()
+          preferenceId: pending.preferenceId || 'manual'
         })
       });
       
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Erro ao confirmar pagamento');
+        throw new Error(error.error || 'Erro ao verificar pagamento');
       }
       
       const data = await response.json();
       
+      if (data.status === 'approved') {
+        credits = data.newBalance;
+        localStorage.setItem('userCredits', credits);
+        updateCreditsDisplay();
+        modalCreditsCount.textContent = credits;
+        updateModalButtons();
+        updateMenuCtaVisibility();
+        
+        alert(`✅ Pagamento confirmado! ${pending.credits} créditos adicionados. Novo saldo: ${credits}`);
+        
+      } else if (data.status === 'pending') {
+        alert('⏳ Seu pagamento está sendo processado. Você receberá uma confirmação em breve.');
+        
+      } else if (data.status === 'failed') {
+        alert('❌ O pagamento não foi concluído. Tente novamente.');
+      }
+      
       localStorage.removeItem('pendingPayment');
       
-      credits = data.newBalance;
-      localStorage.setItem('userCredits', credits);
-      updateCreditsDisplay();
-      modalCreditsCount.textContent = credits;
-      updateModalButtons();
-      updateMenuCtaVisibility();
-      
-      alert(`✅ ${data.message}\nNovo saldo: ${data.newBalance} créditos`);
-      
     } catch (error) {
-      console.error('❌ Erro ao confirmar pagamento:', error);
-      alert(`❌ ${error.message}\n\nSe você já pagou, aguarde alguns minutos e recarregue a página. Se o problema persistir, entre em contato.`);
+      console.error('❌ Erro ao verificar pagamento:', error);
+      alert('⚠️ Não foi possível verificar o status do pagamento. Aguarde alguns minutos e recarregue a página.');
     }
   }
 
@@ -1486,9 +1487,16 @@
   // ============================================================
   async function checkPaymentOnLoad() {
     const pendingData = localStorage.getItem('pendingPayment');
-    if (pendingData) {
-      await confirmPayment();
+    if (!pendingData) return;
+    
+    const pending = JSON.parse(pendingData);
+    
+    if (Date.now() - pending.timestamp > 3600000) {
+      localStorage.removeItem('pendingPayment');
+      return;
     }
+    
+    await confirmPayment();
   }
 
   // ============================================================
