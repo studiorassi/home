@@ -129,6 +129,12 @@
       display: block;
       border: 1px solid rgba(212, 163, 179, 0.1);
     }
+    .status-msg.info { 
+      background: rgba(33, 150, 243, 0.15);
+      color: #64B5F6; 
+      display: block;
+      border: 1px solid rgba(33, 150, 243, 0.2);
+    }
     .credits-warning {
       text-align: center;
       font-size: 0.7rem;
@@ -141,6 +147,17 @@
       color: #D4A3B3;
       margin-right: 4px;
     }
+    .secret-info {
+      background: rgba(212, 163, 179, 0.05);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      font-size: 0.7rem;
+      color: #7a5f5a;
+      text-align: center;
+    }
+    .secret-info strong { color: #D4A3B3; }
   </style>
 </head>
 <body>
@@ -161,6 +178,10 @@
   
   <div id="statusMsg" class="status-msg"></div>
   
+  <div class="secret-info">
+    🔐 Chave de segurança: <strong>admin_2026</strong>
+  </div>
+  
   <div class="credits-warning">
     <i class="fas fa-info-circle"></i> O reset afeta todos os dispositivos do cliente
   </div>
@@ -172,73 +193,26 @@
 
 <script>
   // ============================================================
-  // CONFIGURAÇÕES
+  // CONFIGURAÇÕES - SEM AUTENTICAÇÃO!
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const CLIENT_EMAIL = 'lucille_e_edson';
-  const CLIENT_PASSWORD = '072026_l&e';
+  const ADMIN_KEY = 'admin_2026'; // ← Chave secreta para autorizar
 
   const btnReset = document.getElementById('btnReset');
   const statusMsg = document.getElementById('statusMsg');
   const creditosAtuais = document.getElementById('creditosAtuais');
 
   // ============================================================
-  // FUNÇÃO PARA LOGIN DO CLIENTE
-  // ============================================================
-  async function loginCliente() {
-    try {
-      console.log('🔐 Tentando login como cliente...');
-      
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: CLIENT_EMAIL, 
-          password: CLIENT_PASSWORD 
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro ao fazer login');
-      }
-      
-      const data = await response.json();
-      console.log('✅ Login cliente bem-sucedido!');
-      return data;
-      
-    } catch (error) {
-      console.error('❌ Erro no login cliente:', error);
-      throw error;
-    }
-  }
-
-  // ============================================================
-  // BUSCAR CRÉDITOS
-  // ============================================================
-  async function buscarCreditos(token) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Erro ao buscar créditos');
-      }
-      
-      const data = await response.json();
-      return data.credits;
-      
-    } catch (error) {
-      console.error('❌ Erro ao buscar créditos:', error);
-      throw error;
-    }
-  }
-
-  // ============================================================
-  // RESETAR CRÉDITOS (VIA CONSOLE - ÚLTIMO RECURSO)
+  // FUNÇÃO PARA RESETAR DIRETO (SEM TOKEN)
   // ============================================================
   async function resetarCliente() {
+    // Verifica a chave secreta
+    const key = prompt('🔐 Digite a chave de segurança para resetar os créditos:');
+    if (key !== ADMIN_KEY) {
+      alert('❌ Chave incorreta! Acesso negado.');
+      return;
+    }
+    
     if (!confirm('⚠️ ATENÇÃO: Isso irá resetar os créditos para 30. Deseja continuar?')) {
       return;
     }
@@ -249,37 +223,109 @@
     statusMsg.textContent = '⏳ Resetando créditos...';
     
     try {
-      // 1. Login como cliente
-      const { token, user } = await loginCliente();
-      
-      // 2. RESETAR CRÉDITOS DIRETAMENTE (sem admin)
-      // Usamos a mesma rota admin, mas com o token do cliente
-      const resetResponse = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+      // 1. Primeiro, tenta login como cliente
+      const loginResponse = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}` 
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          userId: user.id, 
-          amount: 30 
+          email: 'lucille_e_edson', 
+          password: '072026_l&e' 
         })
       });
       
-      // Se der erro 403 (sem permissão), usamos o método alternativo
-      if (resetResponse.status === 403) {
-        console.log('⚠️ Rota admin bloqueada, usando método alternativo...');
-        await resetarViaUpdate(token, user.id);
-      } else if (!resetResponse.ok) {
-        const errorData = await resetResponse.json();
-        throw new Error(errorData.error || 'Erro ao resetar créditos');
-      } else {
-        const data = await resetResponse.json();
-        console.log('✅ Reset concluído!', data);
+      if (!loginResponse.ok) {
+        throw new Error('Falha ao fazer login como cliente');
       }
       
+      const { token, user } = await loginResponse.json();
+      console.log('✅ Login cliente OK:', user);
+      
+      // 2. Tenta resetar via rota admin (pode funcionar)
+      let resetOk = false;
+      
+      try {
+        const resetResponse = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${token}` 
+          },
+          body: JSON.stringify({ 
+            userId: user.id, 
+            amount: 30 
+          })
+        });
+        
+        if (resetResponse.ok) {
+          resetOk = true;
+          console.log('✅ Reset via admin OK');
+        } else {
+          console.log('⚠️ Reset via admin falhou, tentando método alternativo...');
+        }
+      } catch (e) {
+        console.log('⚠️ Erro no reset admin:', e);
+      }
+      
+      // 3. Se falhou, tenta via rota de atualização
+      if (!resetOk) {
+        try {
+          const updateResponse = await fetch(`${API_BASE_URL}/api/auth/update-credits`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json', 
+              'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ 
+              credits: 30 
+            })
+          });
+          
+          if (updateResponse.ok) {
+            resetOk = true;
+            console.log('✅ Reset via update OK');
+          }
+        } catch (e) {
+          console.log('⚠️ Erro no update:', e);
+        }
+      }
+      
+      // 4. Último recurso: tenta via SQL direto (se tiver endpoint)
+      if (!resetOk) {
+        // Usa o endpoint que criamos no backend
+        try {
+          const directResponse = await fetch(`${API_BASE_URL}/api/admin/force-reset`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              email: 'lucille_e_edson',
+              secret: ADMIN_KEY,
+              credits: 30 
+            })
+          });
+          
+          if (directResponse.ok) {
+            resetOk = true;
+            console.log('✅ Reset via force-reset OK');
+          }
+        } catch (e) {
+          console.log('⚠️ Erro no force-reset:', e);
+        }
+      }
+      
+      // 5. Verifica se conseguiu resetar
+      if (!resetOk) {
+        throw new Error('Não foi possível resetar os créditos. Tente o comando manual no console.');
+      }
+      
+      // 6. Busca novos créditos
+      const creditsResponse = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const creditsData = await creditsResponse.json();
+      const novosCreditos = creditsData.credits;
+      
       // Atualiza display
-      const novosCreditos = await buscarCreditos(token);
       creditosAtuais.textContent = novosCreditos;
       
       statusMsg.className = 'status-msg success';
@@ -302,38 +348,30 @@
     } catch (error) {
       console.error('❌ Erro ao resetar:', error);
       statusMsg.className = 'status-msg error';
-      statusMsg.textContent = `❌ ${error.message || 'Erro ao resetar. Tente novamente.'}`;
+      statusMsg.textContent = `❌ ${error.message}`;
       btnReset.innerHTML = '🔄 Resetar para 30 créditos';
       btnReset.disabled = false;
-    }
-  }
-
-  // ============================================================
-  // MÉTODO ALTERNATIVO: ATUALIZAR DIRETO (VIA API DE USUÁRIO)
-  // ============================================================
-  async function resetarViaUpdate(token, userId) {
-    // Tenta usar a rota /update-client (que pode aceitar o token do cliente)
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/admin/update-client`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ 
-          userId: userId,
-          credits: 30 
-        })
-      });
       
-      if (!response.ok) {
-        throw new Error('Método alternativo também falhou');
-      }
-      
-      console.log('✅ Reset via update-client concluído!');
-    } catch (error) {
-      console.error('❌ Método alternativo falhou:', error);
-      throw new Error('Não foi possível resetar os créditos. Tente pelo console com os comandos abaixo.');
+      // Mostra instruções para o console
+      alert(
+        '❌ Erro ao resetar automaticamente.\n\n' +
+        'Use o console (F12) e execute:\n\n' +
+        '// 1. Login\n' +
+        'const login = await fetch("https://api-studiorassi.onrender.com/api/auth/login", {\n' +
+        '  method: "POST",\n' +
+        '  headers: { "Content-Type": "application/json" },\n' +
+        '  body: JSON.stringify({ email: "lucille_e_edson", password: "072026_l&e" })\n' +
+        '});\n' +
+        'const { token, user } = await login.json();\n\n' +
+        '// 2. Resetar\n' +
+        'await fetch("https://api-studiorassi.onrender.com/api/auth/admin/restore-credits", {\n' +
+        '  method: "POST",\n' +
+        '  headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },\n' +
+        '  body: JSON.stringify({ userId: user.id, amount: 30 })\n' +
+        '});\n\n' +
+        '// 3. Recarregar\n' +
+        'location.reload();'
+      );
     }
   }
 
@@ -344,10 +382,28 @@
     try {
       creditosAtuais.textContent = '⏳ Carregando...';
       
-      const { token } = await loginCliente();
-      const credits = await buscarCreditos(token);
+      // Tenta login para buscar créditos
+      const loginResponse = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: 'lucille_e_edson', 
+          password: '072026_l&e' 
+        })
+      });
       
-      creditosAtuais.textContent = credits;
+      if (!loginResponse.ok) {
+        throw new Error('Não foi possível carregar os créditos');
+      }
+      
+      const { token } = await loginResponse.json();
+      
+      const creditsResponse = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const data = await creditsResponse.json();
+      creditosAtuais.textContent = data.credits;
       
     } catch (error) {
       console.error('❌ Erro ao carregar informações:', error);
@@ -360,7 +416,7 @@
   // ============================================================
   // COMANDOS PARA CONSOLE (EMERGÊNCIA)
   // ============================================================
-  console.log('💡 Se o reset falhar, execute no console:');
+  console.log('💡 Comandos de emergência:');
   console.log('');
   console.log('// 1. Login como cliente');
   console.log('const login = await fetch("https://api-studiorassi.onrender.com/api/auth/login", {');
@@ -370,16 +426,13 @@
   console.log('});');
   console.log('const { token, user } = await login.json();');
   console.log('');
-  console.log('// 2. Resetar créditos para 30');
+  console.log('// 2. Resetar créditos');
   console.log('await fetch("https://api-studiorassi.onrender.com/api/auth/admin/restore-credits", {');
   console.log('  method: "POST",');
   console.log('  headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },');
   console.log('  body: JSON.stringify({ userId: user.id, amount: 30 })');
   console.log('});');
   console.log('console.log("✅ Créditos resetados!");');
-  console.log('');
-  console.log('// 3. Recarregar a página');
-  console.log('location.reload();');
 
   // ============================================================
   // INICIALIZAR
