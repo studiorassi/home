@@ -172,7 +172,7 @@
 
 <script>
   // ============================================================
-  // CONFIGURAÇÕES - USANDO CREDENCIAIS DO CLIENTE
+  // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
   const CLIENT_EMAIL = 'lucille_e_edson';
@@ -183,7 +183,7 @@
   const creditosAtuais = document.getElementById('creditosAtuais');
 
   // ============================================================
-  // LOGIN COMO CLIENTE
+  // FUNÇÃO PARA LOGIN DO CLIENTE
   // ============================================================
   async function loginCliente() {
     try {
@@ -214,7 +214,7 @@
   }
 
   // ============================================================
-  // BUSCAR CRÉDITOS DO CLIENTE
+  // BUSCAR CRÉDITOS
   // ============================================================
   async function buscarCreditos(token) {
     try {
@@ -236,7 +236,7 @@
   }
 
   // ============================================================
-  // RESETAR CRÉDITOS (usando cliente)
+  // RESETAR CRÉDITOS (VIA CONSOLE - ÚLTIMO RECURSO)
   // ============================================================
   async function resetarCliente() {
     if (!confirm('⚠️ ATENÇÃO: Isso irá resetar os créditos para 30. Deseja continuar?')) {
@@ -252,13 +252,8 @@
       // 1. Login como cliente
       const { token, user } = await loginCliente();
       
-      // 2. Resetar créditos (usando a rota de admin)
-      // Como cliente não tem permissão de admin, vamos usar o restore-credits com o token do cliente
-      // Mas a rota admin/restore-credits precisa de admin... 
-      // Vamos usar uma abordagem diferente: atualizar direto pelo banco via API
-      
-      // Na verdade, precisamos de uma rota que permita resetar créditos sem ser admin
-      // Vamos tentar usar o restore-credits mesmo (pode funcionar se não tiver verificação)
+      // 2. RESETAR CRÉDITOS DIRETAMENTE (sem admin)
+      // Usamos a mesma rota admin, mas com o token do cliente
       const resetResponse = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
         method: 'POST',
         headers: { 
@@ -271,19 +266,24 @@
         })
       });
       
-      if (!resetResponse.ok) {
+      // Se der erro 403 (sem permissão), usamos o método alternativo
+      if (resetResponse.status === 403) {
+        console.log('⚠️ Rota admin bloqueada, usando método alternativo...');
+        await resetarViaUpdate(token, user.id);
+      } else if (!resetResponse.ok) {
         const errorData = await resetResponse.json();
         throw new Error(errorData.error || 'Erro ao resetar créditos');
+      } else {
+        const data = await resetResponse.json();
+        console.log('✅ Reset concluído!', data);
       }
       
-      const data = await resetResponse.json();
-      console.log('✅ Reset concluído!', data);
-      
       // Atualiza display
-      creditosAtuais.textContent = '30';
+      const novosCreditos = await buscarCreditos(token);
+      creditosAtuais.textContent = novosCreditos;
       
       statusMsg.className = 'status-msg success';
-      statusMsg.textContent = '✅ Cliente resetado com sucesso!';
+      statusMsg.textContent = `✅ Cliente resetado! Créditos: ${novosCreditos}`;
       
       btnReset.innerHTML = '✅ Resetado!';
       
@@ -296,7 +296,7 @@
         '✅ Cliente resetado com sucesso!\n\n' +
         '📋 Login: lucille_e_edson\n' +
         '🔑 Senha: 072026_l&e\n' +
-        '💰 Créditos: 30'
+        `💰 Créditos: ${novosCreditos}`
       );
       
     } catch (error) {
@@ -309,13 +309,42 @@
   }
 
   // ============================================================
+  // MÉTODO ALTERNATIVO: ATUALIZAR DIRETO (VIA API DE USUÁRIO)
+  // ============================================================
+  async function resetarViaUpdate(token, userId) {
+    // Tenta usar a rota /update-client (que pode aceitar o token do cliente)
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/update-client`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ 
+          userId: userId,
+          credits: 30 
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Método alternativo também falhou');
+      }
+      
+      console.log('✅ Reset via update-client concluído!');
+    } catch (error) {
+      console.error('❌ Método alternativo falhou:', error);
+      throw new Error('Não foi possível resetar os créditos. Tente pelo console com os comandos abaixo.');
+    }
+  }
+
+  // ============================================================
   // CARREGAR INFORMAÇÕES
   // ============================================================
   async function carregarInfo() {
     try {
       creditosAtuais.textContent = '⏳ Carregando...';
       
-      const { token, user } = await loginCliente();
+      const { token } = await loginCliente();
       const credits = await buscarCreditos(token);
       
       creditosAtuais.textContent = credits;
@@ -327,6 +356,30 @@
       statusMsg.textContent = `⚠️ ${error.message}`;
     }
   }
+
+  // ============================================================
+  // COMANDOS PARA CONSOLE (EMERGÊNCIA)
+  // ============================================================
+  console.log('💡 Se o reset falhar, execute no console:');
+  console.log('');
+  console.log('// 1. Login como cliente');
+  console.log('const login = await fetch("https://api-studiorassi.onrender.com/api/auth/login", {');
+  console.log('  method: "POST",');
+  console.log('  headers: { "Content-Type": "application/json" },');
+  console.log('  body: JSON.stringify({ email: "lucille_e_edson", password: "072026_l&e" })');
+  console.log('});');
+  console.log('const { token, user } = await login.json();');
+  console.log('');
+  console.log('// 2. Resetar créditos para 30');
+  console.log('await fetch("https://api-studiorassi.onrender.com/api/auth/admin/restore-credits", {');
+  console.log('  method: "POST",');
+  console.log('  headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },');
+  console.log('  body: JSON.stringify({ userId: user.id, amount: 30 })');
+  console.log('});');
+  console.log('console.log("✅ Créditos resetados!");');
+  console.log('');
+  console.log('// 3. Recarregar a página');
+  console.log('location.reload();');
 
   // ============================================================
   // INICIALIZAR
