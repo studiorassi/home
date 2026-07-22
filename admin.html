@@ -130,13 +130,11 @@
       display: block;
       border: 1px solid rgba(212, 163, 179, 0.1);
     }
-    .loading-spinner {
-      display: inline-block;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .status-msg.info { 
+      background: rgba(33, 150, 243, 0.15);
+      color: #64B5F6; 
+      display: block;
+      border: 1px solid rgba(33, 150, 243, 0.2);
     }
     .credits-warning {
       text-align: center;
@@ -149,6 +147,14 @@
     .credits-warning i {
       color: #D4A3B3;
       margin-right: 4px;
+    }
+    .spinner {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -188,10 +194,12 @@
   const downloadsAtuais = document.getElementById('downloadsAtuais');
 
   // ============================================================
-  // LOGIN ADMIN
+  // LOGIN ADMIN - COM MAIS INFORMAÇÕES DE ERRO
   // ============================================================
   async function loginAdmin() {
     try {
+      console.log('🔐 Tentando login admin...');
+      
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -201,11 +209,16 @@
         })
       });
       
+      console.log('📡 Status da resposta:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Falha no login admin');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Erro no login admin:', errorData);
+        throw new Error(errorData.error || `Erro ${response.status}: Falha no login admin`);
       }
       
       const data = await response.json();
+      console.log('✅ Admin logado com sucesso!');
       return data.token;
       
     } catch (error) {
@@ -219,13 +232,13 @@
   // ============================================================
   async function buscarDadosCliente(token) {
     try {
-      // Buscar lista de usuários
       const response = await fetch(`${API_BASE_URL}/api/auth/admin/users`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (!response.ok) {
-        throw new Error('Falha ao buscar usuários');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erro ${response.status}: Falha ao buscar usuários`);
       }
       
       const data = await response.json();
@@ -244,52 +257,38 @@
   }
 
   // ============================================================
-  // BUSCAR DOWNLOADS DO CLIENTE
-  // ============================================================
-  async function buscarDownloadsCliente(token, userId) {
-    try {
-      // Tenta buscar downloads (se a rota existir)
-      const response = await fetch(`${API_BASE_URL}/api/admin/user-downloads?userId=${userId}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (!response.ok) {
-        // Se a rota não existir, retorna 0
-        return { count: 0, message: 'Não disponível' };
-      }
-      
-      const data = await response.json();
-      return data;
-      
-    } catch (error) {
-      console.warn('⚠️ Não foi possível buscar downloads:', error);
-      return { count: 0, message: 'Não disponível' };
-    }
-  }
-
-  // ============================================================
   // CARREGAR INFORMAÇÕES
   // ============================================================
   async function carregarInfo() {
     try {
       creditosAtuais.textContent = '⏳ Carregando...';
       downloadsAtuais.textContent = '⏳ Carregando...';
+      statusMsg.className = 'status-msg info';
+      statusMsg.textContent = '⏳ Conectando ao servidor...';
       
       const token = await loginAdmin();
+      
+      statusMsg.textContent = '⏳ Buscando dados do cliente...';
+      
       const cliente = await buscarDadosCliente(token);
       
       creditosAtuais.textContent = cliente.credits;
+      downloadsAtuais.textContent = '0';
       
-      // Buscar downloads (se disponível)
-      const downloads = await buscarDownloadsCliente(token, cliente.id);
-      downloadsAtuais.textContent = downloads.count !== undefined ? downloads.count : '0';
+      statusMsg.className = 'status-msg success';
+      statusMsg.textContent = '✅ Dados carregados com sucesso!';
+      
+      setTimeout(() => {
+        statusMsg.className = 'status-msg';
+        statusMsg.textContent = '';
+      }, 3000);
       
     } catch (error) {
       console.error('❌ Erro ao carregar informações:', error);
       creditosAtuais.textContent = '❌ Erro';
       downloadsAtuais.textContent = '❌ Erro';
       statusMsg.className = 'status-msg error';
-      statusMsg.textContent = '⚠️ Não foi possível carregar os dados. Verifique a conexão.';
+      statusMsg.textContent = `⚠️ ${error.message || 'Não foi possível carregar os dados.'}`;
     }
   }
 
@@ -327,9 +326,11 @@
       });
       
       if (!resetResponse.ok) {
-        const errorData = await resetResponse.json();
-        throw new Error(errorData.error || 'Falha ao resetar créditos');
+        const errorData = await resetResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erro ${resetResponse.status}: Falha ao resetar créditos`);
       }
+      
+      const resetData = await resetResponse.json();
       
       // 4. Atualizar display
       creditosAtuais.textContent = '30';
