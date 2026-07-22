@@ -1,3 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Fotos · Studio Rassi</title>
+  
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* ===== RESET ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #2C0714;
+      color: #f5edea;
+      font-family: 'Work Sans', sans-serif;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ===== NAVBAR FLUTUANTE ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 12px 0;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .navbar.scrolled {
+      padding: 8px 0;
+      background: rgba(44, 7, 20, 0.96);
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+    }
+    .navbar.hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .navbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .logo {
+      display: inline-block;
+      line-height: 0;
+      text-decoration: none;
+    }
+    .logo img {
+      display: block;
+      width: auto;
+      height: 45px;
+      max-width: 150px;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled .logo img {
+      height: 40px;
+    }
+    .logo img:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+    .nav-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .nav-info .user {
+      color: #d4c5c0;
+      font-size: 0.85rem;
+    }
+    .nav-info .user i { color: #D4A3B3; margin-right: 6px; }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      padding: 8px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+    .btn-logout:hover {
+      border-color: #D4A3B3;
+      color: #D4A3B3;
+    }
+
+    /* ===== BOTÃO HAMBURGUER (MOBILE) ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: #f5edea;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ===== MENU MOBILE SUSPENSO ===== */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 380px;
+      height: 100vh;
+      background: rgba(44, 7, 20, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 999;
+      padding: 80px 28px 40px;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border-left: 1px solid rgba(212, 163, 179, 0.08);
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    .mobile-menu .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+      display: none;
+    }
+    .mobile-menu.open .menu-overlay {
+      display: block;
+    }
+
+    /* ===== INFORMAÇÕES DO MENU MOBILE ===== */
+    .mobile-menu .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
+    }
+    .mobile-menu .menu-header .user-info {
+      font-size: 0.9rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-header .user-info strong {
+      color: #f5edea;
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 4px;
+    }
+    .mobile-menu .menu-header .close-menu {
+      background: transparent;
+      border: none;
+      color: #f5edea;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      transition: 0.3s;
+    }
+    .mobile-menu .menu-header .close-menu:hover {
+      color: #D4A3B3;
+      transform: rotate(90deg);
+    }
+
+    /* ===== CRÉDITOS E TIMER NO MENU MOBILE ===== */
+    .mobile-menu .menu-status {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-menu .menu-status .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-status .status-row .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mobile-menu .menu-status .status-row .label i {
+      color: #D4A3B3;
+      font-size: 1rem;
+    }
+    .mobile-menu .menu-status .status-row .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .mobile-menu .menu-status .status-row .value.timer {
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* ===== CTA "+ Quer mais fotos?" no Menu Mobile ===== */
+    .mobile-menu .menu-credit-cta-mobile {
+      background: #D4A3B3;
+      color: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      width: 100%;
+      margin-top: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .mobile-menu .menu-credit-cta-mobile:hover {
+      background: #c08b9e;
+      transform: scale(1.02);
+    }
+    .mobile-menu .menu-credit-cta-mobile.show {
+      display: flex;
+    }
+
+    /* ===== LINKS DO MENU MOBILE ===== */
+    .mobile-menu .menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .mobile-menu .menu-links a {
+      color: #d4c5c0;
+      text-decoration: none;
+      padding: 14px 16px;
+      border-radius: 12px;
+      transition: 0.3s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-menu .menu-links a i {
+      color: #D4A3B3;
+      width: 20px;
+      text-align: center;
+    }
+    .mobile-menu .menu-links a:hover {
+      background: rgba(212, 163, 179, 0.08);
+      color: #f5edea;
+    }
+    .mobile-menu .menu-links .logout-link {
+      margin-top: 12px;
+      border-top: 1px solid rgba(212, 163, 179, 0.06);
+      padding-top: 16px;
+      color: #7a5f5a;
+    }
+    .mobile-menu .menu-links .logout-link:hover {
+      color: #D4A3B3;
+      background: transparent;
+    }
+
+    /* ===== CTA "+ Quer mais fotos?" no Menu (Desktop) ===== */
+    .menu-credit-cta {
+      display: none;
+      background: #D4A3B3;
+      color: #2C0714;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.7rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      white-space: nowrap;
+    }
+    .menu-credit-cta:hover {
+      background: #c08b9e;
+      transform: scale(1.05);
+    }
+    .menu-credit-cta.show {
+      display: inline-block;
+    }
+
+    /* ===== TIMER E CRÉDITOS - FLUTUANTES (Desktop) ===== */
+    .floating-status {
+      position: sticky;
+      top: 72px;
+      z-index: 99;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      padding: 12px 0;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    }
+    .floating-status .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .status-item i {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+    }
+    .status-item .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .status-item .timer {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1.1rem;
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      display: inline-block;
+    }
+
+    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUANTE ===== */
+    .progress-bar-container {
+      position: sticky;
+      top: 132px;
+      z-index: 98;
+      background: rgba(31, 5, 16, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 8px 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      display: none;
+    }
+    .progress-bar-container .container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .progress-bar-container .progress-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(212, 163, 179, 0.12);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-container .progress-track .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #D4A3B3, #f5edea);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    .progress-bar-container .progress-label {
+      font-size: 0.75rem;
+      color: #d4c5c0;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: right;
+    }
+    .progress-bar-container .progress-label strong {
+      color: #D4A3B3;
+    }
+
+    /* ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== */
+    .credits-info {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 12px auto 8px;
+      max-width: 700px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      text-align: center;
+    }
+    .credits-info .heart {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .credits-info .label {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #d4c5c0;
+      font-weight: 300;
+    }
+    .credits-info .label strong {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    .credits-info .highlight {
+      color: #D4A3B3;
+      font-weight: 500;
+    }
+
+    /* ===== SKELETON LOADING ===== */
+    .skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a0510 25%, #2C0714 50%, #1a0510 75%);
+      background-size: 400% 400%;
+      animation: skeletonLoading 1.5s ease-in-out infinite;
+      z-index: 1;
+      border-radius: 20px;
+    }
+    @keyframes skeletonLoading {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .skeleton .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #D4A3B3;
+      font-size: 1.5rem;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ===== GALERIA ===== */
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 16px 0 20px;
+    }
+    .gallery-header h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+    }
+    .gallery-header h2 span { color: #D4A3B3; }
+    .watermark-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .watermark-item {
+      background: #1f0510;
+      border-radius: 20px;
+      padding: 0;
+      text-align: center;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      position: relative;
+      user-select: none;
+      transition: 0.3s;
+      overflow: hidden;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .watermark-item:hover {
+      border-color: rgba(212, 163, 179, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .watermark-item .real-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+      transition: opacity 0.5s ease, transform 0.3s ease;
+    }
+    .watermark-item .real-image.loaded {
+      opacity: 0.85;
+    }
+    .watermark-item .real-image:hover {
+      transform: scale(1.03);
+    }
+    .watermark-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(44, 7, 20, 0.95), transparent);
+      z-index: 3;
+      pointer-events: none;
+    }
+    
+    .watermark-item .watermark-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-20deg);
+      opacity: 0.12;
+      pointer-events: none;
+      user-select: none;
+      width: 120px;
+      height: auto;
+      filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(0,0,0,0.5));
+      z-index: 1;
+    }
+    .watermark-item .watermark-text {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.5rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+      background: rgba(0,0,0,0.4);
+      padding: 3px 10px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      z-index: 4;
+    }
+
+    /* ===== BADGE DE STATUS DA IMAGEM (CADEADO/LOCK) ===== */
+    .watermark-item .badge-status {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.65rem;
+      padding: 6px 10px;
+      border-radius: 50%;
+      backdrop-filter: blur(4px);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      border: none;
+      cursor: default;
+      min-width: 32px;
+      min-height: 32px;
+    }
+    .watermark-item .badge-status.locked {
+      background: rgba(44, 7, 20, 0.8);
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+    }
+    .watermark-item .badge-status.downloaded {
+      background: rgba(46, 125, 50, 0.9);
+      color: #ffffff;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.6rem;
+      cursor: default;
+      min-width: auto;
+    }
+    .watermark-item .badge-status.downloaded i {
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .modal-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ===== MARCA D'ÁGUA NO MODAL (90% DA IMAGEM) ===== */
+    .modal-content .watermark-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none; /* Permite clicar através da marca d'água */
+      z-index: 5;
+      opacity: 0.9;
+    }
+
+    .modal-content .watermark-modal .watermark-modal-logo {
+      width: 90%;
+      height: auto;
+      max-width: 800px;
+      opacity: 0.15;
+      filter: brightness(0) invert(1);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Responsivo - ajusta para telas menores */
+    @media (max-width: 768px) {
+      .modal-content .watermark-modal .watermark-modal-logo {
+        width: 95%;
+        opacity: 0.12;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .modal-content .watermark-modal .watermark-modal-logo {
+        width: 98%;
+        opacity: 0.10;
+      }
+    }
+
+    .modal-content img {
+      width: auto;
+      height: auto;
+      max-width: 90vw;
+      max-height: 75vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .modal-content img.loaded {
+      opacity: 1;
+    }
+    .modal-close {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      background: rgba(44, 7, 20, 0.8);
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #f5edea;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-close:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      transform: rotate(90deg);
+    }
+
+    /* ===== MODAL - PROGRESS BAR DA IMAGEM ===== */
+    .modal-progress {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      max-width: 300px;
+      background: rgba(44, 7, 20, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 8px 16px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      z-index: 10;
+    }
+    .modal-progress.show {
+      display: flex;
+    }
+    .modal-progress .track {
+      flex: 1;
+      height: 4px;
+      background: rgba(212, 163, 179, 0.15);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .modal-progress .track .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #D4A3B3, #f5edea);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    .modal-progress .label {
+      font-size: 0.65rem;
+      color: #d4c5c0;
+      white-space: nowrap;
+      min-width: 35px;
+    }
+
+    /* ===== MODAL - NAVEGAÇÃO ===== */
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(44, 7, 20, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 163, 179, 0.15);
+      color: #f5edea;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      z-index: 10;
+    }
+    .modal-nav:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .modal-nav.prev {
+      left: -24px;
+    }
+    .modal-nav.next {
+      right: -24px;
+    }
+    .modal-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: translateY(-50%) scale(1);
+    }
+
+    /* ===== MODAL - CONTADOR ===== */
+    .modal-counter {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 7, 20, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      z-index: 10;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .modal-counter span {
+      color: #f5edea;
+      font-weight: 700;
+    }
+
+    /* ===== MODAL - AÇÕES ===== */
+    .modal-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 10;
+      width: 100%;
+      max-width: 500px;
+    }
+    .modal-btn-download {
+      background: #D4A3B3;
+      color: #2C0714;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      justify-content: center;
+      min-width: 200px;
+    }
+    .modal-btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
+    }
+    .modal-btn-download:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .modal-btn-download.hidden {
+      display: none;
+    }
+    .modal-btn-download.downloaded {
+      background: #2E7D32;
+      color: #ffffff;
+      cursor: default;
+    }
+    .modal-btn-download.downloaded:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .modal-btn-close {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .modal-btn-close:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+    .modal-credits {
+      color: #D4A3B3;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-top: 8px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    /* ===== MODAL - COMPRA DE CRÉDITOS ===== */
+    .modal-buy-credits {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      z-index: 10;
+      padding: 8px 0;
+    }
+    .modal-buy-credits.show {
+      display: flex;
+    }
+    .modal-buy-credits .buy-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      color: #D4A3B3;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-buy-credits .buy-title i {
+      font-size: 1.4rem;
+    }
+    .modal-buy-credits .buy-packages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+    .modal-buy-credits .buy-package {
+      background: #2C0714;
+      padding: 12px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      cursor: pointer;
+      transition: 0.3s;
+      min-width: 100px;
+      text-align: center;
+      flex: 1;
+    }
+    .modal-buy-credits .buy-package:hover {
+      border-color: #D4A3B3;
+      background: #3d0d1f;
+      transform: scale(1.05);
+    }
+    .modal-buy-credits .buy-package .price {
+      font-weight: 700;
+      color: #D4A3B3;
+      font-size: 1.1rem;
+    }
+    .modal-buy-credits .buy-package .label {
+      font-size: 0.75rem;
+      color: #d4c5c0;
+    }
+    .modal-buy-credits .buy-close {
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      padding: 8px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.8rem;
+      transition: 0.3s;
+      margin-top: 4px;
+    }
+    .modal-buy-credits .buy-close:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+
+    /* ===== UPSELL (COMPRA DE CRÉDITOS) ===== */
+    .upsell-section {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 28px 32px;
+      margin: 32px 0;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .upsell-section h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      color: #D4A3B3;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+    .upsell-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .upsell-item {
+      background: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+    }
+    .upsell-item:hover {
+      border-color: #D4A3B3;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .upsell-item .price {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 32px 0 20px;
+      border-top: 1px solid rgba(212, 163, 179, 0.04);
+      margin-top: 40px;
+    }
+    footer p {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #7a5f5a;
+    }
+
+    /* ============================================================
+       RESPONSIVO
+    ============================================================ */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+      .container { padding: 0 20px; }
+      
+      .hamburger {
+        display: flex;
+      }
+      
+      .floating-status {
+        display: none;
+      }
+      
+      .navbar { padding: 10px 0; }
+      .navbar .logo img { height: 38px; max-width: 120px; }
+      .navbar.scrolled .logo img { height: 34px; }
+      
+      .mobile-menu {
+        display: block;
+      }
+      
+      .progress-bar-container {
+        top: 118px;
+      }
+      .progress-bar-container .container {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .progress-bar-container .progress-label {
+        min-width: 70px;
+        font-size: 0.65rem;
+      }
+      
+      .credits-info {
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 16px;
+        font-size: 0.75rem;
+      }
+      .watermark-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+      }
+      .watermark-item { min-height: 220px; }
+      .watermark-item .watermark-logo { width: 70px; }
+      .watermark-item .badge-status.downloaded {
+        font-size: 0.5rem;
+        padding: 3px 8px;
+        top: 6px;
+        right: 6px;
+      }
+      .watermark-item .badge-status.downloaded i {
+        font-size: 0.6rem;
+      }
+      
+      .navbar-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-info .user {
+        font-size: 0.7rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .nav-info .user span {
+        display: inline;
+      }
+      .btn-logout {
+        padding: 6px 14px;
+        font-size: 0.7rem;
+      }
+      .menu-credit-cta {
+        display: none !important;
+      }
+      
+      .modal-nav {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+      }
+      .modal-nav.prev { left: -10px; }
+      .modal-nav.next { right: -10px; }
+      .modal-content img { max-height: 60vh; }
+      .modal-close {
+        top: -36px;
+        right: -10px;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+      }
+      .modal-counter {
+        font-size: 0.7rem;
+        padding: 4px 14px;
+        top: 12px;
+      }
+      .modal-btn-download {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        min-width: 150px;
+      }
+      .modal-progress {
+        width: 80%;
+        bottom: 80px;
+      }
+      .modal-buy-credits .buy-package {
+        min-width: 80px;
+        padding: 10px 14px;
+      }
+      .upsell-grid {
+        flex-direction: column;
+      }
+      .upsell-item {
+        justify-content: center;
+      }
+      .modal-content .watermark-modal .watermark-modal-logo {
+        width: 95%;
+        opacity: 0.12;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body { padding-top: 60px; }
+      .watermark-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px;
+      }
+      .watermark-item { min-height: 180px; }
+      .watermark-item .watermark-logo { width: 50px; }
+      .watermark-item .watermark-text {
+        font-size: 0.4rem;
+        padding: 2px 8px;
+        bottom: 8px;
+        left: 8px;
+      }
+      .watermark-item .badge-status.downloaded {
+        font-size: 0.4rem;
+        padding: 2px 6px;
+        top: 4px;
+        right: 4px;
+      }
+      .watermark-item .badge-status.downloaded i {
+        font-size: 0.5rem;
+      }
+      .navbar .logo img {
+        height: 32px;
+        max-width: 100px;
+      }
+      .navbar.scrolled .logo img { height: 28px; }
+      .progress-bar-container { top: 98px; }
+      .modal-content img { max-height: 50vh; }
+      .modal-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      .modal-nav {
+        width: 30px;
+        height: 30px;
+        font-size: 0.7rem;
+      }
+      .modal-nav.prev { left: -4px; }
+      .modal-nav.next { right: -4px; }
+      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
+      
+      .modal-buy-credits .buy-packages {
+        flex-direction: column;
+        width: 100%;
+      }
+      .modal-buy-credits .buy-package {
+        min-width: unset;
+        width: 100%;
+      }
+      
+      .mobile-menu {
+        max-width: 100%;
+        padding: 70px 20px 30px;
+      }
+      .mobile-menu .menu-status .status-row {
+        font-size: 0.75rem;
+      }
+      .mobile-menu .menu-links a {
+        font-size: 0.85rem;
+        padding: 12px 14px;
+      }
+      .modal-content .watermark-modal .watermark-modal-logo {
+        width: 98%;
+        opacity: 0.10;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR FLUTUANTE ===== -->
+<nav class="navbar" id="mainNavbar">
+  <div class="container navbar-content">
+    <a href="https://studiorassi.github.io/home/index.html" class="logo">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
+           alt="Studio Rassi · Photo & Video" 
+           width="150" 
+           height="45"
+           loading="lazy">
+    </a>
+    
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <div class="nav-info">
+      <span class="user">
+        <i class="fas fa-user-circle"></i> 
+        Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
+        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
+          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
+        </span>
+      </span>
+      <button class="menu-credit-cta" id="menuCreditCta" onclick="openCreditUpsell()">
+        <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+      </button>
+      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MENU MOBILE SUSPENSO ===== -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
+  
+  <div class="menu-header">
+    <div class="user-info">
+      <i class="fas fa-user-circle" style="color: #D4A3B3;"></i>
+      Olá, <strong id="mobileUserName">Lucille e Edson</strong>
+    </div>
+    <button class="close-menu" onclick="closeMobileMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <div class="menu-status">
+    <div class="status-row">
+      <span class="label">
+        <i class="fas fa-coins"></i> Créditos disponíveis
+      </span>
+      <span class="value" id="mobileCreditsDisplay">30</span>
+    </div>
+    <div class="status-row">
+      <span class="label">
+        <i class="far fa-clock"></i> Expira em
+      </span>
+      <span class="value timer" id="mobileTimerDisplay">72:00:00</span>
+    </div>
+    <div class="status-row" style="border-top: 1px solid rgba(212,163,179,0.06); padding-top: 12px; margin-top: 4px;">
+      <span class="label">
+        <i class="fas fa-images" style="color: #D4A3B3;"></i> Total de fotos
+      </span>
+      <span class="value" id="mobileTotalPhotos">116</span>
+    </div>
+  </div>
+  
+  <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
+    <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+  </button>
+  
+  <div class="menu-links">
+    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;">
+      <i class="fas fa-arrow-up"></i> Ver Galeria
+    </a>
+    <a href="#upsellSection" onclick="closeMobileMenu()">
+      <i class="fas fa-plus-circle"></i> Comprar Créditos
+    </a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
+  </div>
+</div>
+
+<!-- ===== TIMER E CRÉDITOS - FLUTUANTES (Desktop) ===== -->
+<div class="floating-status" id="statusBar">
+  <div class="container">
+    <div class="status-item">
+      <i class="fas fa-coins"></i>
+      <span>Créditos: <strong class="value" id="creditsDisplay">30</strong></span>
+    </div>
+    <div class="status-item">
+      <i class="far fa-clock"></i>
+      <span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar-container" id="progressContainer">
+  <div class="container">
+    <span style="font-size:0.8rem; color:#D4A3B3;">
+      <i class="fas fa-spinner fa-spin"></i>
+    </span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label">
+      Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== -->
+<div class="container">
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label">
+      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a 
+      <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e 
+      <strong>sem marca d'água</strong>.
+    </span>
+    <span class="label" style="display: inline-flex; align-items: center; gap: 4px;">
+      <i class="fas fa-clock" style="color: #D4A3B3; font-size: 0.7rem;"></i>
+      <span style="font-size: 0.7rem; color: #7a5f5a;">Aguarde o carregamento completo das fotos!</span>
+    </span>
+    <span class="emoji-heart" style="display:inline-block; animation:pulse 1.5s ease-in-out infinite;">🥰</span>
+  </div>
+</div>
+
+<!-- ===== GALERIA ===== -->
+<div class="container">
+  <div class="gallery-header">
+    <h2>📸 <span>Suas memórias</span></h2>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
+      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
+    </span>
+  </div>
+
+  <div class="watermark-grid" id="galleryGrid">
+    <!-- Itens gerados via JS -->
+  </div>
+
+  <!-- ===== UPSELL (COMPRA DE CRÉDITOS) ===== -->
+  <div class="upsell-section" id="upsellSection">
+    <h3><i class="fas fa-plus-circle" style="color:#D4A3B3;"></i> Quer mais fotos?</h3>
+    <div class="upsell-grid">
+      <div class="upsell-item" onclick="buyCredits(5)">
+        <span>📷 +5 créditos</span>
+        <span class="price">R$ 40</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(10)">
+        <span>📷 +10 créditos</span>
+        <span class="price">R$ 80</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(20)">
+        <span>📷 +20 créditos</span>
+        <span class="price">R$ 160</span>
+      </div>
+      <div class="upsell-item" onclick="buyCredits(50)">
+        <span>📷 +50 créditos</span>
+        <span class="price">R$ 400</span>
+      </div>
+    </div>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Cada crédito = R$ 8,00 · Adicione instantaneamente à sua conta.
+    </p>
+  </div>
+</div>
+
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
@@ -73,3 +1504,754 @@
     </div>
   </div>
 </div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p>
+  </div>
+</footer>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+  // ============================================================
+  // 1. CONFIGURAÇÕES E AUTENTICAÇÃO
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+
+  // Obtém token do localStorage (definido no login)
+  let authToken = localStorage.getItem('authToken');
+  let userId = parseInt(localStorage.getItem('userId')) || null;
+  let credits = 0;
+  let clientName = localStorage.getItem('userName') || 'Lucille e Edson';
+
+  // Verifica autenticação
+  if (!authToken || !userId) {
+    alert('⚠️ Sessão expirada. Faça login novamente.');
+    window.location.href = '../login.html';
+  }
+
+  // ============================================================
+  // 2. FUNÇÃO PARA BUSCAR URL DA IMAGEM COM TOKEN
+  // ============================================================
+  async function getImageUrl(imageKey) {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      console.error('❌ Usuário não autenticado');
+      return null;
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/gallery/view/${imageKey}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token expirado - redireciona para login
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      
+      // A URL da imagem é o redirect (location)
+      return response.url;
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar URL da imagem:', error);
+      return null;
+    }
+  }
+
+  // ============================================================
+  // 3. BUSCAR CRÉDITOS DO SERVIDOR
+  // ============================================================
+  async function fetchCreditsFromServer() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error('Erro ao buscar créditos');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      localStorage.setItem('userCredits', credits);
+      updateCreditsDisplay();
+      return credits;
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar créditos:', error);
+      credits = parseInt(localStorage.getItem('userCredits')) || 0;
+      updateCreditsDisplay();
+      return credits;
+    }
+  }
+
+  // ============================================================
+  // 4. DEBITAR CRÉDITO NO SERVIDOR
+  // ============================================================
+  async function debitCreditOnServer(imageKey) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKey })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao debitar crédito');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      localStorage.setItem('userCredits', credits);
+      updateCreditsDisplay();
+      return data;
+      
+    } catch (error) {
+      console.error('❌ Erro ao debitar crédito:', error);
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // 5. DADOS - 116 FOTOS
+  // ============================================================
+  const totalPhotos = 116;
+  const allPhotoKeys = [];
+  for (let i = 1; i <= 116; i++) {
+    const numeroFormatado = String(i).padStart(2, '0');
+    allPhotoKeys.push(`ensaio_${numeroFormatado}.jpg`);
+  }
+
+  // ============================================================
+  // 6. ESTADO - FOTOS BAIXADAS (LOCAL) - RESETADO PARA TESTE
+  // ============================================================
+  // REMOVA ESTA LINHA DEPOIS DOS TESTES:
+  localStorage.removeItem('downloadedImages');
+  
+  let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
+  console.log('📥 Downloads resetados para teste. Total:', downloadedImages.length);
+
+  // ============================================================
+  // 7. DOM ELEMENTS
+  // ============================================================
+  const grid = document.getElementById('galleryGrid');
+  const creditsDisplay = document.getElementById('creditsDisplay');
+  const mobileCreditsDisplay = document.getElementById('mobileCreditsDisplay');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalImage = document.getElementById('modalImage');
+  const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+  const modalBuyCredits = document.getElementById('modalBuyCredits');
+  const modalCreditsCount = document.getElementById('modalCreditsCount');
+  const progressContainer = document.getElementById('progressContainer');
+  const progressFill = document.getElementById('progressFill');
+  const loadedCount = document.getElementById('loadedCount');
+  const modalProgress = document.getElementById('modalProgress');
+  const modalProgressFill = document.getElementById('modalProgressFill');
+  const modalProgressLabel = document.getElementById('modalProgressLabel');
+  const menuCreditCta = document.getElementById('menuCreditCta');
+  const mobileCreditCta = document.getElementById('mobileCreditCta');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const navbar = document.getElementById('mainNavbar');
+
+  // Atualiza nome do cliente
+  document.getElementById('clienteNome').textContent = clientName;
+  document.getElementById('mobileUserName').textContent = clientName;
+  document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
+  document.getElementById('totalCount').textContent = totalPhotos;
+  document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
+
+  // ============================================================
+  // 8. MENU MOBILE
+  // ============================================================
+  function toggleMobileMenu() {
+    mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    
+    if (mobileMenu.classList.contains('open')) {
+      navbar.classList.add('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      navbar.classList.remove('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    navbar.classList.remove('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+  document.addEventListener('click', function(e) {
+    if (mobileMenu.classList.contains('open') && 
+        !mobileMenu.contains(e.target) && 
+        !hamburgerBtn.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // ============================================================
+  // 9. DETECTAR MOBILE
+  // ============================================================
+  function checkMobile() {
+    const isMobile = window.innerWidth <= 768;
+    updateMenuCtaVisibility();
+  }
+
+  function updateMenuCtaVisibility() {
+    if (window.innerWidth > 768 && credits <= 0) {
+      menuCreditCta.classList.add('show');
+    } else {
+      menuCreditCta.classList.remove('show');
+    }
+    
+    if (window.innerWidth <= 768 && credits <= 0) {
+      mobileCreditCta.classList.add('show');
+    } else {
+      mobileCreditCta.classList.remove('show');
+    }
+  }
+
+  // ============================================================
+  // 10. BARRA DE PROGRESSO
+  // ============================================================
+  let imagesLoaded = 0;
+
+  function updateProgress() {
+    const percent = Math.round((imagesLoaded / totalPhotos) * 100);
+    progressFill.style.width = percent + '%';
+    loadedCount.textContent = imagesLoaded;
+    
+    if (imagesLoaded >= totalPhotos) {
+      progressContainer.style.display = 'none';
+      console.log('✅ Todas as 116 fotos foram carregadas!');
+    } else {
+      progressContainer.style.display = 'block';
+    }
+  }
+
+  // ============================================================
+  // 11. RENDER GALERIA (COM TOKEN)
+  // ============================================================
+  async function renderGallery() {
+    grid.innerHTML = '';
+    
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      alert('⚠️ Sessão expirada. Faça login novamente.');
+      window.location.href = '../login.html';
+      return;
+    }
+
+    // Para cada imagem, busca a URL assinada
+    for (let i = 0; i < allPhotoKeys.length; i++) {
+      const key = allPhotoKeys[i];
+      const isDownloaded = downloadedImages.includes(key);
+      
+      // Cria o card
+      const div = document.createElement('div');
+      div.className = 'watermark-item';
+      div.dataset.key = key;
+      
+      // Busca URL assinada
+      const imageUrl = await getImageUrl(key);
+      
+      div.innerHTML = `
+        <div class="skeleton" id="skeleton-${i}">
+          <div class="spinner"><i class="fas fa-spinner"></i></div>
+        </div>
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
+          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
+        </div>
+        ${imageUrl ? `
+          <img 
+            src="${imageUrl}" 
+            alt="Foto ${i + 1}" 
+            class="real-image" 
+            loading="lazy"
+            data-key="${key}"
+            data-index="${i}"
+            onload="onImageLoad(${i})"
+            onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${i});"
+          >
+        ` : `
+          <div style="padding: 60px 20px; color: #7a5f5a; text-align: center; z-index: 5; position: relative;">
+            <i class="fas fa-exclamation-triangle"></i><br>Erro ao carregar
+          </div>
+        `}
+        <img src="assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <div class="watermark-text">Studio Rassi</div>
+      `;
+      
+      div.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-download')) return;
+        openModal(i);
+      });
+      
+      grid.appendChild(div);
+    }
+  }
+
+  // ============================================================
+  // 12. IMAGE LOAD HANDLER
+  // ============================================================
+  function onImageLoad(index) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img) {
+      img.classList.add('loaded');
+    }
+    const skeleton = document.getElementById(`skeleton-${index}`);
+    if (skeleton) {
+      skeleton.style.display = 'none';
+    }
+    imagesLoaded++;
+    updateProgress();
+  }
+
+  // ============================================================
+  // 13. ATUALIZAR BADGE DE DOWNLOAD
+  // ============================================================
+  function updateDownloadBadge(key) {
+    const items = document.querySelectorAll('.watermark-item');
+    items.forEach(item => {
+      if (item.dataset.key === key) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADA';
+        }
+      }
+    });
+  }
+
+  // ============================================================
+  // 14. MODAL
+  // ============================================================
+  let currentModalIndex = 0;
+
+  async function openModal(index) {
+    currentModalIndex = index;
+    const key = allPhotoKeys[index];
+    const isDownloaded = downloadedImages.includes(key);
+    
+    modalProgressFill.style.width = '0%';
+    modalProgressLabel.textContent = '0%';
+    modalProgress.classList.add('show');
+    
+    modalImage.classList.remove('loaded');
+    modalImage.style.opacity = '0';
+    
+    document.getElementById('currentIndexDisplay').textContent = index + 1;
+    
+    updateModalButtons(isDownloaded);
+    updateNavButtons();
+    
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Busca URL assinada para o modal
+    const imageUrl = await getImageUrl(key);
+    
+    if (imageUrl) {
+      const img = new Image();
+      let progress = 0;
+      
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 8;
+          if (progress > 90) progress = 90;
+          modalProgressFill.style.width = progress + '%';
+          modalProgressLabel.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+      
+      img.onload = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.onerror = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.src = imageUrl;
+    } else {
+      modalImage.src = '';
+      modalImage.alt = 'Erro ao carregar imagem';
+      setTimeout(() => {
+        modalProgress.classList.remove('show');
+      }, 500);
+    }
+    
+    document.addEventListener('keydown', handleModalKeydown);
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleModalKeydown);
+  }
+
+  function handleModalKeydown(e) {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowLeft') navigateModal(-1);
+    if (e.key === 'ArrowRight') navigateModal(1);
+  }
+
+  function navigateModal(direction) {
+    const newIndex = currentModalIndex + direction;
+    if (newIndex < 0 || newIndex >= allPhotoKeys.length) return;
+    openModal(newIndex);
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById('modalPrev');
+    const nextBtn = document.getElementById('modalNext');
+    prevBtn.disabled = currentModalIndex === 0;
+    nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
+    prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
+  }
+
+  // ============================================================
+  // 15. ATUALIZAR BOTÕES DO MODAL
+  // ============================================================
+  function updateModalButtons(isDownloaded = false) {
+    modalCreditsCount.textContent = credits;
+    
+    if (isDownloaded) {
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+      modalBuyCredits.classList.remove('show');
+      modalBuyCredits.style.display = 'none';
+      return;
+    }
+    
+    if (credits <= 0) {
+      modalDownloadBtn.className = 'modal-btn-download hidden';
+      modalDownloadBtn.style.display = 'none';
+      modalBuyCredits.classList.add('show');
+      modalBuyCredits.style.display = 'flex';
+    } else {
+      modalDownloadBtn.className = 'modal-btn-download';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.style.display = 'flex';
+      modalDownloadBtn.disabled = false;
+      modalBuyCredits.classList.remove('show');
+      modalBuyCredits.style.display = 'none';
+    }
+  }
+
+  // ============================================================
+  // 16. DOWNLOAD COM CRÉDITOS PERSISTENTES (SERVIDOR)
+  // ============================================================
+  async function downloadFromModal() {
+    const currentKey = allPhotoKeys[currentModalIndex];
+    if (!currentKey) return;
+    
+    if (credits <= 0) {
+      alert('❌ Você não tem créditos suficientes.');
+      return;
+    }
+    
+    if (downloadedImages.includes(currentKey)) {
+      alert('✅ Esta imagem já foi baixada anteriormente.');
+      return;
+    }
+
+    try {
+      modalDownloadBtn.disabled = true;
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
+
+      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKeys: [currentKey] })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao obter URL de download');
+      }
+
+      const data = await response.json();
+      const signedUrl = data.urls[0].url;
+
+      const downloadResponse = await fetch(signedUrl);
+      const blob = await downloadResponse.blob();
+      
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = currentKey;
+      
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
+      setTimeout(() => {
+        URL.revokeObjectURL(downloadLink.href);
+      }, 1000);
+
+      await debitCreditOnServer(currentKey);
+
+      if (!downloadedImages.includes(currentKey)) {
+        downloadedImages.push(currentKey);
+        localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+      }
+
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      updateDownloadBadge(currentKey);
+      updateModalButtons(true);
+
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+
+      alert('✅ Imagem baixada com sucesso!');
+
+    } catch (error) {
+      console.error('❌ Erro no download:', error);
+      
+      if (error.message === 'Créditos insuficientes') {
+        alert('❌ Créditos insuficientes. Adquira mais créditos.');
+        await fetchCreditsFromServer();
+        return;
+      }
+      
+      alert('❌ Erro ao baixar a imagem. Tente novamente.');
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.disabled = false;
+    }
+  }
+
+  // ============================================================
+  // 17. COMPRAR CRÉDITOS
+  // ============================================================
+  function buyCredits(amount) {
+    const price = amount * 8;
+    if (confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}?`)) {
+      credits += amount;
+      updateCreditsDisplay();
+      modalCreditsCount.textContent = credits;
+      updateModalButtons();
+      updateMenuCtaVisibility();
+      alert(`✅ ${amount} crédito(s) adicionado(s)! Total: ${credits}`);
+    }
+  }
+
+  function openCreditUpsell() {
+    document.getElementById('upsellSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ============================================================
+  // 18. ATUALIZAR DISPLAY
+  // ============================================================
+  function updateCreditsDisplay() {
+    creditsDisplay.textContent = credits;
+    mobileCreditsDisplay.textContent = credits;
+    modalCreditsCount.textContent = credits;
+    updateModalButtons();
+    updateMenuCtaVisibility();
+    
+    localStorage.setItem('userCredits', credits);
+  }
+
+  // ============================================================
+  // 19. TIMER REGRESSIVO
+  // ============================================================
+  let timerSeconds = 72 * 3600;
+
+  function updateTimer() {
+    if (timerSeconds <= 0) {
+      timerDisplay.textContent = '00:00:00';
+      mobileTimerDisplay.textContent = '00:00:00';
+      return;
+    }
+    timerSeconds--;
+    const hrs = Math.floor(timerSeconds / 3600);
+    const mins = Math.floor((timerSeconds % 3600) / 60);
+    const secs = timerSeconds % 60;
+    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    timerDisplay.textContent = timeStr;
+    mobileTimerDisplay.textContent = timeStr;
+  }
+
+  // ============================================================
+  // 20. NAVBAR SCROLL EFFECT
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    if (scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================================
+  // 21. BLOQUEIO DE PRINT/DOWNLOAD
+  // ============================================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+      e.preventDefault();
+      alert('🔒 A proteção de imagens está ativa.');
+    }
+  });
+
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
+      e.preventDefault();
+      alert('🔒 Clique direito bloqueado.');
+    }
+  });
+
+  // ============================================================
+  // 22. COMANDO SECRETO PARA RESTAURAR CRÉDITOS (ADMIN)
+  // ============================================================
+  async function adminRestoreCredits(userId, amount = 30) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ userId, amount })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Falha ao restaurar créditos');
+      }
+      
+      const data = await response.json();
+      console.log('✅ Créditos restaurados:', data.message);
+      
+      await fetchCreditsFromServer();
+      alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
+      
+    } catch (error) {
+      console.error('❌ Erro ao restaurar créditos:', error);
+      alert(`❌ Erro ao restaurar créditos: ${error.message}`);
+    }
+  }
+
+  // Comandos no console
+  window.restoreCredits = async function(amount = 30) {
+    if (!authToken || !userId) {
+      alert('❌ Você precisa estar logado.');
+      return;
+    }
+    
+    const confirmMsg = `⚠️ ATENÇÃO: Isso irá restaurar ${amount} créditos para o usuário ${userId}.\nDeseja continuar?`;
+    if (!confirm(confirmMsg)) return;
+    
+    await adminRestoreCredits(userId, amount);
+  };
+
+  // ============================================================
+  // 23. RESETAR DOWNLOADS (COMANDO SECRETO)
+  // ============================================================
+  window.resetDownloads = function() {
+    if (confirm('⚠️ Isso irá resetar todas as imagens marcadas como "Já Baixada". Deseja continuar?')) {
+      localStorage.removeItem('downloadedImages');
+      downloadedImages = [];
+      console.log('✅ Todas as imagens foram resetadas! Recarregando a página...');
+      location.reload();
+    }
+  };
+
+  console.log('💡 Comando secreto: resetDownloads() - Reseta todas as imagens baixadas');
+
+  // ============================================================
+  // 24. INICIALIZAR
+  // ============================================================
+  async function init() {
+    // Busca créditos do servidor
+    await fetchCreditsFromServer();
+    
+    // Renderiza galeria com token
+    await renderGallery();
+    
+    updateCreditsDisplay();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+    checkMobile();
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkMobile();
+      }, 250);
+    });
+
+    console.log('📸 Galeria Studio Rassi carregada!');
+    console.log(`👤 Usuário ID: ${userId}`);
+    console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
+    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+    console.log('💡 Comando secreto: restoreCredits(30) - Restaura 30 créditos');
+    console.log('💡 Comando secreto: resetDownloads() - Reseta todas as imagens baixadas');
+  }
+
+  init();
+</script>
+
+</body>
+</html>
