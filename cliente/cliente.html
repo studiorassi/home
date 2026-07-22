@@ -1456,9 +1456,8 @@
   // 1. CONFIGURAÇÕES E AUTENTICAÇÃO
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const S3_BUCKET_URL = 'https://studio-rassi-ensaios-2026.s3.amazonaws.com';
 
-  // Obtém token e userId do localStorage (definido no login)
+  // Obtém token do localStorage (definido no login)
   let authToken = localStorage.getItem('authToken');
   let userId = parseInt(localStorage.getItem('userId')) || null;
   let credits = 0;
@@ -1471,7 +1470,45 @@
   }
 
   // ============================================================
-  // 2. BUSCAR CRÉDITOS DO SERVIDOR
+  // 2. FUNÇÃO PARA BUSCAR URL DA IMAGEM COM TOKEN
+  // ============================================================
+  async function getImageUrl(imageKey) {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      console.error('❌ Usuário não autenticado');
+      return null;
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/gallery/view/${imageKey}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token expirado - redireciona para login
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      
+      // A URL da imagem é o redirect (location)
+      return response.url;
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar URL da imagem:', error);
+      return null;
+    }
+  }
+
+  // ============================================================
+  // 3. BUSCAR CRÉDITOS DO SERVIDOR
   // ============================================================
   async function fetchCreditsFromServer() {
     try {
@@ -1483,7 +1520,6 @@
       
       if (!response.ok) {
         if (response.status === 401) {
-          // Token inválido ou expirado
           localStorage.removeItem('authToken');
           localStorage.removeItem('userId');
           window.location.href = '../login.html';
@@ -1500,7 +1536,6 @@
       
     } catch (error) {
       console.error('❌ Erro ao buscar créditos:', error);
-      // Fallback: usar valor do localStorage
       credits = parseInt(localStorage.getItem('userCredits')) || 0;
       updateCreditsDisplay();
       return credits;
@@ -1508,7 +1543,7 @@
   }
 
   // ============================================================
-  // 3. DEBITAR CRÉDITO NO SERVIDOR
+  // 4. DEBITAR CRÉDITO NO SERVIDOR
   // ============================================================
   async function debitCreditOnServer(imageKey) {
     try {
@@ -1539,7 +1574,7 @@
   }
 
   // ============================================================
-  // 4. DADOS - 116 FOTOS
+  // 5. DADOS - 116 FOTOS
   // ============================================================
   const totalPhotos = 116;
   const allPhotoKeys = [];
@@ -1549,12 +1584,12 @@
   }
 
   // ============================================================
-  // 5. ESTADO - FOTOS BAIXADAS (LOCAL)
+  // 6. ESTADO - FOTOS BAIXADAS (LOCAL)
   // ============================================================
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
 
   // ============================================================
-  // 6. DOM ELEMENTS
+  // 7. DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
@@ -1587,7 +1622,7 @@
   document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
 
   // ============================================================
-  // 7. MENU MOBILE
+  // 8. MENU MOBILE
   // ============================================================
   function toggleMobileMenu() {
     mobileMenu.classList.toggle('open');
@@ -1624,7 +1659,7 @@
   });
 
   // ============================================================
-  // 8. DETECTAR MOBILE
+  // 9. DETECTAR MOBILE
   // ============================================================
   function checkMobile() {
     const isMobile = window.innerWidth <= 768;
@@ -1646,7 +1681,7 @@
   }
 
   // ============================================================
-  // 9. BARRA DE PROGRESSO
+  // 10. BARRA DE PROGRESSO
   // ============================================================
   let imagesLoaded = 0;
 
@@ -1664,51 +1699,70 @@
   }
 
   // ============================================================
-  // 10. RENDER GALERIA
+  // 11. RENDER GALERIA (COM TOKEN)
   // ============================================================
-  function renderGallery() {
+  async function renderGallery() {
     grid.innerHTML = '';
+    
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      alert('⚠️ Sessão expirada. Faça login novamente.');
+      window.location.href = '../login.html';
+      return;
+    }
 
-    allPhotoKeys.forEach((key, index) => {
+    // Para cada imagem, busca a URL assinada
+    for (let i = 0; i < allPhotoKeys.length; i++) {
+      const key = allPhotoKeys[i];
+      const isDownloaded = downloadedImages.includes(key);
+      
+      // Cria o card
       const div = document.createElement('div');
       div.className = 'watermark-item';
       div.dataset.key = key;
       
-      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=400`;
-      const isDownloaded = downloadedImages.includes(key);
-
+      // Busca URL assinada
+      const imageUrl = await getImageUrl(key);
+      
       div.innerHTML = `
-        <div class="skeleton" id="skeleton-${index}">
+        <div class="skeleton" id="skeleton-${i}">
           <div class="spinner"><i class="fas fa-spinner"></i></div>
         </div>
-        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
           ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
         </div>
-        <img 
-          src="${imageUrl}" 
-          alt="Foto ${index + 1}" 
-          class="real-image" 
-          loading="lazy"
-          data-key="${key}"
-          data-index="${index}"
-          onload="onImageLoad(${index})"
-          onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${index});"
-        >
+        ${imageUrl ? `
+          <img 
+            src="${imageUrl}" 
+            alt="Foto ${i + 1}" 
+            class="real-image" 
+            loading="lazy"
+            data-key="${key}"
+            data-index="${i}"
+            onload="onImageLoad(${i})"
+            onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${i});"
+          >
+        ` : `
+          <div style="padding: 60px 20px; color: #7a5f5a; text-align: center; z-index: 5; position: relative;">
+            <i class="fas fa-exclamation-triangle"></i><br>Erro ao carregar
+          </div>
+        `}
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
-
+      
       div.addEventListener('click', (e) => {
         if (e.target.closest('.btn-download')) return;
-        openModal(index);
+        openModal(i);
       });
-
+      
       grid.appendChild(div);
-    });
+    }
   }
 
   // ============================================================
-  // 11. IMAGE LOAD HANDLER
+  // 12. IMAGE LOAD HANDLER
   // ============================================================
   function onImageLoad(index) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
@@ -1724,7 +1778,7 @@
   }
 
   // ============================================================
-  // 12. ATUALIZAR BADGE DE DOWNLOAD
+  // 13. ATUALIZAR BADGE DE DOWNLOAD
   // ============================================================
   function updateDownloadBadge(key) {
     const items = document.querySelectorAll('.watermark-item');
@@ -1740,14 +1794,13 @@
   }
 
   // ============================================================
-  // 13. MODAL
+  // 14. MODAL
   // ============================================================
   let currentModalIndex = 0;
 
-  function openModal(index) {
+  async function openModal(index) {
     currentModalIndex = index;
     const key = allPhotoKeys[index];
-    const fullImageUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=1200`;
     const isDownloaded = downloadedImages.includes(key);
     
     modalProgressFill.style.width = '0%';
@@ -1765,45 +1818,56 @@
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    const img = new Image();
-    let progress = 0;
+    // Busca URL assinada para o modal
+    const imageUrl = await getImageUrl(key);
     
-    const progressInterval = setInterval(() => {
-      if (progress < 90) {
-        progress += Math.random() * 8;
-        if (progress > 90) progress = 90;
-        modalProgressFill.style.width = progress + '%';
-        modalProgressLabel.textContent = Math.round(progress) + '%';
-      }
-    }, 100);
-    
-    img.onload = function() {
-      clearInterval(progressInterval);
-      modalProgressFill.style.width = '100%';
-      modalProgressLabel.textContent = '100%';
-      modalImage.src = fullImageUrl;
-      modalImage.classList.add('loaded');
-      modalImage.style.opacity = '1';
+    if (imageUrl) {
+      const img = new Image();
+      let progress = 0;
       
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 8;
+          if (progress > 90) progress = 90;
+          modalProgressFill.style.width = progress + '%';
+          modalProgressLabel.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+      
+      img.onload = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.onerror = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.src = imageUrl;
+    } else {
+      modalImage.src = '';
+      modalImage.alt = 'Erro ao carregar imagem';
       setTimeout(() => {
         modalProgress.classList.remove('show');
       }, 500);
-    };
-    
-    img.onerror = function() {
-      clearInterval(progressInterval);
-      modalProgressFill.style.width = '100%';
-      modalProgressLabel.textContent = '100%';
-      modalImage.src = fullImageUrl;
-      modalImage.classList.add('loaded');
-      modalImage.style.opacity = '1';
-      
-      setTimeout(() => {
-        modalProgress.classList.remove('show');
-      }, 500);
-    };
-    
-    img.src = fullImageUrl;
+    }
     
     document.addEventListener('keydown', handleModalKeydown);
   }
@@ -1836,7 +1900,7 @@
   }
 
   // ============================================================
-  // 14. ATUALIZAR BOTÕES DO MODAL
+  // 15. ATUALIZAR BOTÕES DO MODAL
   // ============================================================
   function updateModalButtons(isDownloaded = false) {
     modalCreditsCount.textContent = credits;
@@ -1866,19 +1930,17 @@
   }
 
   // ============================================================
-  // 15. DOWNLOAD COM CRÉDITOS PERSISTENTES (SERVIDOR)
+  // 16. DOWNLOAD COM CRÉDITOS PERSISTENTES (SERVIDOR)
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
     if (!currentKey) return;
     
-    // Verifica créditos
     if (credits <= 0) {
       alert('❌ Você não tem créditos suficientes.');
       return;
     }
     
-    // Verifica se já foi baixada
     if (downloadedImages.includes(currentKey)) {
       alert('✅ Esta imagem já foi baixada anteriormente.');
       return;
@@ -1888,7 +1950,6 @@
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
-      // 1. Obtém URL assinada do S3
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
         headers: {
@@ -1905,7 +1966,6 @@
       const data = await response.json();
       const signedUrl = data.urls[0].url;
 
-      // 2. Faz o download da imagem
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
       
@@ -1921,10 +1981,8 @@
         URL.revokeObjectURL(downloadLink.href);
       }, 1000);
 
-      // 3. DEBITA O CRÉDITO NO SERVIDOR
       await debitCreditOnServer(currentKey);
 
-      // 4. Marca como baixada localmente
       if (!downloadedImages.includes(currentKey)) {
         downloadedImages.push(currentKey);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1957,7 +2015,7 @@
   }
 
   // ============================================================
-  // 16. COMPRAR CRÉDITOS
+  // 17. COMPRAR CRÉDITOS
   // ============================================================
   function buyCredits(amount) {
     const price = amount * 8;
@@ -1976,7 +2034,7 @@
   }
 
   // ============================================================
-  // 17. ATUALIZAR DISPLAY
+  // 18. ATUALIZAR DISPLAY
   // ============================================================
   function updateCreditsDisplay() {
     creditsDisplay.textContent = credits;
@@ -1989,7 +2047,7 @@
   }
 
   // ============================================================
-  // 18. TIMER REGRESSIVO
+  // 19. TIMER REGRESSIVO
   // ============================================================
   let timerSeconds = 72 * 3600;
 
@@ -2009,7 +2067,7 @@
   }
 
   // ============================================================
-  // 19. NAVBAR SCROLL EFFECT
+  // 20. NAVBAR SCROLL EFFECT
   // ============================================================
   window.addEventListener('scroll', function() {
     const scrollY = window.scrollY;
@@ -2021,7 +2079,7 @@
   });
 
   // ============================================================
-  // 20. BLOQUEIO DE PRINT/DOWNLOAD
+  // 21. BLOQUEIO DE PRINT/DOWNLOAD
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
@@ -2038,7 +2096,7 @@
   });
 
   // ============================================================
-  // 21. COMANDO SECRETO PARA RESTAURAR CRÉDITOS (ADMIN)
+  // 22. COMANDO SECRETO PARA RESTAURAR CRÉDITOS (ADMIN)
   // ============================================================
   async function adminRestoreCredits(userId, amount = 30) {
     try {
@@ -2081,45 +2139,16 @@
     await adminRestoreCredits(userId, amount);
   };
 
-  window.restoreByEmail = async function(email, amount = 30) {
-    if (!authToken) {
-      alert('❌ Você precisa estar logado como admin.');
-      return;
-    }
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-by-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({ email, amount })
-      });
-      
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Falha ao restaurar créditos');
-      }
-      
-      const data = await response.json();
-      alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
-      await fetchCreditsFromServer();
-      
-    } catch (error) {
-      console.error('❌ Erro:', error);
-      alert(`❌ ${error.message}`);
-    }
-  };
-
   // ============================================================
-  // 22. INICIALIZAR
+  // 23. INICIALIZAR
   // ============================================================
   async function init() {
     // Busca créditos do servidor
     await fetchCreditsFromServer();
     
-    renderGallery();
+    // Renderiza galeria com token
+    await renderGallery();
+    
     updateCreditsDisplay();
     updateTimer();
     setInterval(updateTimer, 1000);
@@ -2138,8 +2167,6 @@
     console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
     console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
     console.log('💡 Comando secreto: restoreCredits(30) - Restaura 30 créditos');
-    console.log('💡 Comando secreto: restoreCredits(100) - Restaura 100 créditos');
-    console.log('💡 Comando secreto: restoreByEmail("email@email.com", 30)');
   }
 
   init();
