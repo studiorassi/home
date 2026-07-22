@@ -982,4 +982,1110 @@
       letter-spacing: -0.02em;
     }
     .upsell-grid {
-      display: flex
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .upsell-item {
+      background: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+    }
+    .upsell-item:hover {
+      border-color: #D4A3B3;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .upsell-item .price {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 0 20px;
+      border-top: 1px solid rgba(212, 163, 179, 0.04);
+      margin-top: 40px;
+    }
+    footer p {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #7a5f5a;
+    }
+
+    /* ============================================================
+       RESPONSIVO
+    ============================================================ */
+    @media (max-width: 768px) {
+      body { padding-top: 70px; }
+      .container { padding: 0 20px; }
+      .hamburger { display: flex; }
+      .floating-status { display: none; }
+      .navbar { padding: 10px 0; }
+      .navbar .logo img { height: 38px; max-width: 120px; }
+      .navbar.scrolled .logo img { height: 34px; }
+      .mobile-menu { display: block; }
+      .progress-bar-container { top: 118px; }
+      .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
+      .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
+      .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
+      .watermark-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .watermark-item { min-height: 220px; }
+      .watermark-item .watermark-logo { width: 70px; }
+      .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
+      .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
+      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
+      .nav-info .user span { display: inline; }
+      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
+      .menu-credit-cta { display: none !important; }
+      .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
+      .modal-nav.prev { left: -10px; }
+      .modal-nav.next { right: -10px; }
+      .modal-content .modal-image { max-height: 60vh; }
+      .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
+      .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
+      .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
+      .modal-progress { width: 80%; bottom: 80px; }
+      .modal-buy-credits .buy-package { min-width: 80px; padding: 10px 14px; }
+      .upsell-grid { flex-direction: column; }
+      .upsell-item { justify-content: center; }
+    }
+    
+    @media (max-width: 480px) {
+      body { padding-top: 60px; }
+      .watermark-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .watermark-item { min-height: 180px; }
+      .watermark-item .watermark-logo { width: 50px; }
+      .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
+      .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
+      .navbar .logo img { height: 32px; max-width: 100px; }
+      .navbar.scrolled .logo img { height: 28px; }
+      .progress-bar-container { top: 98px; }
+      .modal-content .modal-image { max-height: 50vh; }
+      .modal-actions { flex-direction: column; align-items: center; }
+      .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
+      .modal-nav.prev { left: -4px; }
+      .modal-nav.next { right: -4px; }
+      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
+      .modal-buy-credits .buy-packages { flex-direction: column; width: 100%; }
+      .modal-buy-credits .buy-package { min-width: unset; width: 100%; }
+      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
+      .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
+      .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="mainNavbar">
+  <div class="container navbar-content">
+    <a href="https://studiorassi.github.io/home/index.html" class="logo">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
+           alt="Studio Rassi · Photo & Video" width="150" height="45" loading="lazy">
+    </a>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-info">
+      <span class="user">
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
+        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
+          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
+        </span>
+      </span>
+      <button class="menu-credit-cta" id="menuCreditCta" onclick="openCreditUpsell()">
+        <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+      </button>
+      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MENU MOBILE ===== -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
+  <div class="menu-header">
+    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Lucille e Edson</strong></div>
+    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="menu-status">
+    <div class="status-row"><span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span><span class="value" id="mobileCreditsDisplay">30</span></div>
+    <div class="status-row"><span class="label"><i class="far fa-clock"></i> Expira em</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
+    <div class="status-row" style="border-top:1px solid rgba(212,163,179,0.06); padding-top:12px; margin-top:4px;">
+      <span class="label"><i class="fas fa-images" style="color:#D4A3B3;"></i> Total de fotos</span>
+      <span class="value" id="mobileTotalPhotos">116</span>
+    </div>
+  </div>
+  <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
+    <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+  </button>
+  <div class="menu-links">
+    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
+    <a href="#upsellSection" onclick="closeMobileMenu()"><i class="fas fa-plus-circle"></i> Comprar Créditos</a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
+  </div>
+</div>
+
+<!-- ===== STATUS DESKTOP ===== -->
+<div class="floating-status" id="statusBar">
+  <div class="container">
+    <div class="status-item"><i class="fas fa-coins"></i><span>Créditos: <strong class="value" id="creditsDisplay">30</strong></span></div>
+    <div class="status-item"><i class="far fa-clock"></i><span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span></div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar-container" id="progressContainer">
+  <div class="container">
+    <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span></div>
+  </div>
+</div>
+
+<!-- ===== CRÉDITOS INFO ===== -->
+<div class="container">
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label"><strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.</span>
+    <span class="label" style="display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i><span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo das fotos!</span></span>
+    <span class="emoji-heart" style="display:inline-block; animation:pulse 1.5s ease-in-out infinite;">🥰</span>
+  </div>
+</div>
+
+<!-- ===== GALERIA ===== -->
+<div class="container">
+  <div class="gallery-header">
+    <h2>📸 <span>Suas memórias</span></h2>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;"><i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água</span>
+  </div>
+  <div class="watermark-grid" id="galleryGrid"></div>
+
+  <!-- ===== UPSELL ===== -->
+  <div class="upsell-section" id="upsellSection">
+    <h3><i class="fas fa-plus-circle" style="color:#D4A3B3;"></i> Quer mais fotos?</h3>
+    <div class="upsell-grid">
+      <div class="upsell-item" onclick="buyCredits(5)"><span>📷 +5 créditos</span><span class="price">R$ 40</span></div>
+      <div class="upsell-item" onclick="buyCredits(10)"><span>📷 +10 créditos</span><span class="price">R$ 80</span></div>
+      <div class="upsell-item" onclick="buyCredits(20)"><span>📷 +20 créditos</span><span class="price">R$ 160</span></div>
+      <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
+    </div>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Você será redirecionado para o Mercado Pago para concluir o pagamento.
+    </p>
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    
+    <!-- ===== MARCA D'ÁGUA - SEM OPACIDADE ===== -->
+    <div class="watermark-container">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" 
+           alt="Studio Rassi" 
+           class="watermark-logo-modal">
+    </div>
+    
+    <!-- ===== PROGRESS BAR ===== -->
+    <div class="modal-progress" id="modalProgress">
+      <span style="font-size:0.7rem; color:#D4A3B3;">
+        <i class="fas fa-spinner fa-spin"></i>
+      </span>
+      <div class="track">
+        <div class="fill" id="modalProgressFill"></div>
+      </div>
+      <span class="label" id="modalProgressLabel">0%</span>
+    </div>
+    
+    <!-- ===== CONTADOR ===== -->
+    <div class="modal-counter" id="modalCounter">
+      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">116</span>
+    </div>
+    
+    <!-- ===== NAVEGAÇÃO ===== -->
+    <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="modal-nav next" id="modalNext" onclick="navigateModal(1)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- ===== FECHAR ===== -->
+    <button class="modal-close" onclick="closeModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    
+    <!-- ===== IMAGEM ===== -->
+    <img id="modalImage" class="modal-image" src="" alt="Foto em alta resolução">
+    
+    <!-- ===== AÇÕES ===== -->
+    <div class="modal-actions">
+      <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
+        <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
+      </button>
+      <div class="modal-buy-credits" id="modalBuyCredits">
+        <div class="buy-title"><i class="fas fa-crown"></i> + Quer mais fotos?</div>
+        <div class="buy-packages">
+          <div class="buy-package" onclick="buyCredits(5)">
+            <div class="label">5 créditos</div>
+            <div class="price">R$ 40</div>
+          </div>
+          <div class="buy-package" onclick="buyCredits(10)">
+            <div class="label">10 créditos</div>
+            <div class="price">R$ 80</div>
+          </div>
+          <div class="buy-package" onclick="buyCredits(20)">
+            <div class="label">20 créditos</div>
+            <div class="price">R$ 160</div>
+          </div>
+          <div class="buy-package" onclick="buyCredits(50)">
+            <div class="label">50 créditos</div>
+            <div class="price">R$ 400</div>
+          </div>
+        </div>
+        <button class="buy-close" onclick="closeModal()">Fechar</button>
+      </div>
+    </div>
+    <div class="modal-credits" id="modalCredits">
+      Créditos restantes: <strong id="modalCreditsCount">30</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p></div></footer>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+  // ============================================================
+  // CONFIGURAÇÕES
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+
+  let authToken = localStorage.getItem('authToken');
+  let userId = parseInt(localStorage.getItem('userId')) || null;
+  let credits = 0; // SEMPRE buscar do servidor
+  let clientName = localStorage.getItem('userName') || 'Lucille e Edson';
+
+  if (!authToken || !userId) {
+    alert('⚠️ Sessão expirada. Faça login novamente.');
+    window.location.href = '../login.html';
+  }
+
+  // ============================================================
+  // FUNÇÕES DA API
+  // ============================================================
+  async function getImageUrl(imageKey) {
+    const token = localStorage.getItem('authToken');
+    if (!token) { console.error('❌ Usuário não autenticado'); return null; }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/gallery/view/${imageKey}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
+      return response.url;
+    } catch (error) {
+      console.error('❌ Erro ao buscar URL da imagem:', error);
+      return null;
+    }
+  }
+
+  // ============================================================
+  // BUSCAR CRÉDITOS DO SERVIDOR (SEMPRE)
+  // ============================================================
+  async function fetchCreditsFromServer() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userId');
+          window.location.href = '../login.html';
+          return null;
+        }
+        throw new Error('Erro ao buscar créditos');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      
+      // Atualiza display
+      updateCreditsDisplay();
+      return credits;
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar créditos:', error);
+      credits = 0;
+      updateCreditsDisplay();
+      return credits;
+    }
+  }
+
+  // ============================================================
+  // DEBITAR CRÉDITO NO SERVIDOR
+  // ============================================================
+  async function debitCreditOnServer(imageKey) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKey })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        if (response.status === 403 && error.error === 'Créditos insuficientes') {
+          throw new Error('Créditos insuficientes');
+        }
+        throw new Error(error.error || 'Erro ao debitar crédito');
+      }
+      
+      const data = await response.json();
+      credits = data.credits;
+      
+      // Atualiza display
+      updateCreditsDisplay();
+      return data;
+      
+    } catch (error) {
+      console.error('❌ Erro ao debitar crédito:', error);
+      throw error;
+    }
+  }
+
+  // ============================================================
+  // ATUALIZAR DISPLAY DOS CRÉDITOS
+  // ============================================================
+  function updateCreditsDisplay() {
+    const elements = [
+      document.getElementById('creditsDisplay'),
+      document.getElementById('mobileCreditsDisplay'),
+      document.getElementById('modalCreditsCount')
+    ];
+    
+    elements.forEach(el => {
+      if (el) el.textContent = credits;
+    });
+    
+    updateModalButtons();
+    updateMenuCtaVisibility();
+  }
+
+  // ============================================================
+  // COMPRAR CRÉDITOS (COM MERCADO PAGO)
+  // ============================================================
+  async function buyCredits(amount) {
+    const price = amount * 8;
+    
+    if (!confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}? Você será redirecionado para o Mercado Pago para pagamento.`)) {
+      return;
+    }
+    
+    try {
+      const btn = event?.target?.closest?.('.upsell-item, .buy-package');
+      if (btn) {
+        btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando pagamento...';
+      }
+      
+      const response = await fetch(`${API_BASE_URL}/api/payment/create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ planId: amount })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao criar pagamento');
+      }
+      
+      const data = await response.json();
+      
+      localStorage.setItem('pendingPayment', JSON.stringify({
+        planId: amount,
+        credits: data.credits,
+        preferenceId: data.preference_id || 'manual',
+        timestamp: Date.now()
+      }));
+      
+      window.location.href = data.payment_url;
+      
+    } catch (error) {
+      console.error('❌ Erro ao iniciar pagamento:', error);
+      alert(`❌ ${error.message}`);
+      
+      const btn = event?.target?.closest?.('.upsell-item, .buy-package');
+      if (btn) {
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+        btn.innerHTML = `📷 +${amount} créditos <span class="price">R$ ${amount * 8}</span>`;
+      }
+    }
+  }
+
+  // ============================================================
+  // CONFIRMAR PAGAMENTO (SEM CONFIRMAÇÃO MANUAL)
+  // ============================================================
+  async function confirmPayment() {
+    const pendingData = localStorage.getItem('pendingPayment');
+    if (!pendingData) return;
+    
+    const pending = JSON.parse(pendingData);
+    
+    if (Date.now() - pending.timestamp > 3600000) {
+      localStorage.removeItem('pendingPayment');
+      return;
+    }
+    
+    try {
+      console.log('🔍 Verificando pagamento pendente:', pending);
+      
+      const response = await fetch(`${API_BASE_URL}/api/payment/check-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ 
+          planId: pending.planId,
+          preferenceId: pending.preferenceId || 'manual'
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao verificar pagamento');
+      }
+      
+      const data = await response.json();
+      
+      if (data.status === 'approved') {
+        await fetchCreditsFromServer();
+        alert(`✅ Pagamento confirmado! Seus créditos foram atualizados. Novo saldo: ${credits}`);
+      } else if (data.status === 'pending') {
+        alert('⏳ Seu pagamento está sendo processado. Você receberá uma confirmação em breve.');
+      } else if (data.status === 'failed') {
+        alert('❌ O pagamento não foi concluído. Tente novamente.');
+      }
+      
+      localStorage.removeItem('pendingPayment');
+      
+    } catch (error) {
+      console.error('❌ Erro ao verificar pagamento:', error);
+      alert('⚠️ Não foi possível verificar o status do pagamento. Aguarde alguns minutos e recarregue a página.');
+    }
+  }
+
+  // ============================================================
+  // VERIFICAR PAGAMENTO AO CARREGAR
+  // ============================================================
+  async function checkPaymentOnLoad() {
+    const pendingData = localStorage.getItem('pendingPayment');
+    if (!pendingData) return;
+    
+    const pending = JSON.parse(pendingData);
+    
+    if (Date.now() - pending.timestamp > 3600000) {
+      localStorage.removeItem('pendingPayment');
+      return;
+    }
+    
+    await confirmPayment();
+  }
+
+  // ============================================================
+  // DADOS
+  // ============================================================
+  const totalPhotos = 116;
+  const allPhotoKeys = [];
+  for (let i = 1; i <= 116; i++) {
+    const numeroFormatado = String(i).padStart(2, '0');
+    allPhotoKeys.push(`ensaio_${numeroFormatado}.jpg`);
+  }
+
+  let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
+  console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+
+  // ============================================================
+  // DOM ELEMENTS
+  // ============================================================
+  const grid = document.getElementById('galleryGrid');
+  const creditsDisplay = document.getElementById('creditsDisplay');
+  const mobileCreditsDisplay = document.getElementById('mobileCreditsDisplay');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalImage = document.getElementById('modalImage');
+  const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+  const modalBuyCredits = document.getElementById('modalBuyCredits');
+  const modalCreditsCount = document.getElementById('modalCreditsCount');
+  const progressContainer = document.getElementById('progressContainer');
+  const progressFill = document.getElementById('progressFill');
+  const loadedCount = document.getElementById('loadedCount');
+  const modalProgress = document.getElementById('modalProgress');
+  const modalProgressFill = document.getElementById('modalProgressFill');
+  const modalProgressLabel = document.getElementById('modalProgressLabel');
+  const menuCreditCta = document.getElementById('menuCreditCta');
+  const mobileCreditCta = document.getElementById('mobileCreditCta');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const navbar = document.getElementById('mainNavbar');
+
+  document.getElementById('clienteNome').textContent = clientName;
+  document.getElementById('mobileUserName').textContent = clientName;
+  document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
+  document.getElementById('totalCount').textContent = totalPhotos;
+  document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
+
+  // ============================================================
+  // MENU MOBILE
+  // ============================================================
+  function toggleMobileMenu() {
+    mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    if (mobileMenu.classList.contains('open')) {
+      navbar.classList.add('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      navbar.classList.remove('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    navbar.classList.remove('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  hamburgerBtn.addEventListener('click', toggleMobileMenu);
+  document.addEventListener('click', function(e) {
+    if (mobileMenu.classList.contains('open') && 
+        !mobileMenu.contains(e.target) && 
+        !hamburgerBtn.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // ============================================================
+  // DETECTAR MOBILE
+  // ============================================================
+  function checkMobile() {
+    const isMobile = window.innerWidth <= 768;
+    updateMenuCtaVisibility();
+  }
+
+  function updateMenuCtaVisibility() {
+    if (window.innerWidth > 768 && credits <= 0) {
+      menuCreditCta.classList.add('show');
+    } else {
+      menuCreditCta.classList.remove('show');
+    }
+    if (window.innerWidth <= 768 && credits <= 0) {
+      mobileCreditCta.classList.add('show');
+    } else {
+      mobileCreditCta.classList.remove('show');
+    }
+  }
+
+  // ============================================================
+  // PROGRESS BAR
+  // ============================================================
+  let imagesLoaded = 0;
+
+  function updateProgress() {
+    const percent = Math.round((imagesLoaded / totalPhotos) * 100);
+    progressFill.style.width = percent + '%';
+    loadedCount.textContent = imagesLoaded;
+    if (imagesLoaded >= totalPhotos) {
+      progressContainer.style.display = 'none';
+      console.log('✅ Todas as 116 fotos foram carregadas!');
+    } else {
+      progressContainer.style.display = 'block';
+    }
+  }
+
+  // ============================================================
+  // RENDER GALERIA
+  // ============================================================
+  async function renderGallery() {
+    grid.innerHTML = '';
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      alert('⚠️ Sessão expirada. Faça login novamente.');
+      window.location.href = '../login.html';
+      return;
+    }
+
+    for (let i = 0; i < allPhotoKeys.length; i++) {
+      const key = allPhotoKeys[i];
+      const isDownloaded = downloadedImages.includes(key);
+      const div = document.createElement('div');
+      div.className = 'watermark-item';
+      div.dataset.key = key;
+      const imageUrl = await getImageUrl(key);
+      
+      div.innerHTML = `
+        <div class="skeleton" id="skeleton-${i}">
+          <div class="spinner"><i class="fas fa-spinner"></i></div>
+        </div>
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
+          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
+        </div>
+        ${imageUrl ? `
+          <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
+               data-key="${key}" data-index="${i}"
+               onload="onImageLoad(${i})"
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${i});">
+        ` : `
+          <div style="padding:60px 20px; color:#7a5f5a; text-align:center; z-index:5; position:relative;">
+            <i class="fas fa-exclamation-triangle"></i><br>Erro ao carregar
+          </div>
+        `}
+        <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <div class="watermark-text">Studio Rassi</div>
+      `;
+      
+      div.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-download')) return;
+        openModal(i);
+      });
+      grid.appendChild(div);
+    }
+  }
+
+  function onImageLoad(index) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img) img.classList.add('loaded');
+    const skeleton = document.getElementById(`skeleton-${index}`);
+    if (skeleton) skeleton.style.display = 'none';
+    imagesLoaded++;
+    updateProgress();
+  }
+
+  function updateDownloadBadge(key) {
+    const items = document.querySelectorAll('.watermark-item');
+    items.forEach(item => {
+      if (item.dataset.key === key) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADA';
+        }
+      }
+    });
+  }
+
+  // ============================================================
+  // MODAL (COM MARCA D'ÁGUA - SEM OPACIDADE)
+  // ============================================================
+  let currentModalIndex = 0;
+
+  async function openModal(index) {
+    currentModalIndex = index;
+    const key = allPhotoKeys[index];
+    const isDownloaded = downloadedImages.includes(key);
+    
+    modalProgressFill.style.width = '0%';
+    modalProgressLabel.textContent = '0%';
+    modalProgress.classList.add('show');
+    
+    modalImage.classList.remove('loaded');
+    modalImage.style.opacity = '0';
+    
+    document.getElementById('currentIndexDisplay').textContent = index + 1;
+    
+    updateModalButtons(isDownloaded);
+    updateNavButtons();
+    
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    const imageUrl = await getImageUrl(key);
+    
+    if (imageUrl) {
+      const img = new Image();
+      let progress = 0;
+      
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 8;
+          if (progress > 90) progress = 90;
+          modalProgressFill.style.width = progress + '%';
+          modalProgressLabel.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+      
+      img.onload = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.onerror = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        
+        setTimeout(() => {
+          modalProgress.classList.remove('show');
+        }, 500);
+      };
+      
+      img.src = imageUrl;
+    } else {
+      modalImage.src = '';
+      modalImage.alt = 'Erro ao carregar imagem';
+      setTimeout(() => {
+        modalProgress.classList.remove('show');
+      }, 500);
+    }
+    
+    document.addEventListener('keydown', handleModalKeydown);
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleModalKeydown);
+  }
+
+  function handleModalKeydown(e) {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowLeft') navigateModal(-1);
+    if (e.key === 'ArrowRight') navigateModal(1);
+  }
+
+  function navigateModal(direction) {
+    const newIndex = currentModalIndex + direction;
+    if (newIndex < 0 || newIndex >= allPhotoKeys.length) return;
+    openModal(newIndex);
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById('modalPrev');
+    const nextBtn = document.getElementById('modalNext');
+    prevBtn.disabled = currentModalIndex === 0;
+    nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
+    prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
+  }
+
+  // ============================================================
+  // ATUALIZAR BOTÕES DO MODAL
+  // ============================================================
+  function updateModalButtons(isDownloaded = false) {
+    modalCreditsCount.textContent = credits;
+    if (isDownloaded) {
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+      modalBuyCredits.classList.remove('show');
+      modalBuyCredits.style.display = 'none';
+      return;
+    }
+    if (credits <= 0) {
+      modalDownloadBtn.className = 'modal-btn-download hidden';
+      modalDownloadBtn.style.display = 'none';
+      modalBuyCredits.classList.add('show');
+      modalBuyCredits.style.display = 'flex';
+    } else {
+      modalDownloadBtn.className = 'modal-btn-download';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.style.display = 'flex';
+      modalDownloadBtn.disabled = false;
+      modalBuyCredits.classList.remove('show');
+      modalBuyCredits.style.display = 'none';
+    }
+  }
+
+  // ============================================================
+  // DOWNLOAD
+  // ============================================================
+  async function downloadFromModal() {
+    const currentKey = allPhotoKeys[currentModalIndex];
+    if (!currentKey) return;
+    
+    // SEMPRE buscar créditos atualizados do servidor antes de baixar
+    await fetchCreditsFromServer();
+    
+    if (credits <= 0) {
+      alert('❌ Você não tem créditos suficientes.');
+      return;
+    }
+    
+    if (downloadedImages.includes(currentKey)) {
+      alert('✅ Esta imagem já foi baixada anteriormente.');
+      return;
+    }
+
+    try {
+      modalDownloadBtn.disabled = true;
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
+
+      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKeys: [currentKey] })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao obter URL de download');
+      }
+
+      const data = await response.json();
+      const signedUrl = data.urls[0].url;
+
+      const downloadResponse = await fetch(signedUrl);
+      const blob = await downloadResponse.blob();
+      
+      const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const link = document.createElement('a');
+          link.href = e.target.result;
+          link.download = currentKey;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        };
+        reader.readAsDataURL(blob);
+      } else {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = currentKey;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        setTimeout(() => { URL.revokeObjectURL(downloadLink.href); }, 1000);
+      }
+
+      // DEBITA O CRÉDITO NO SERVIDOR (já atualiza credits)
+      await debitCreditOnServer(currentKey);
+
+      if (!downloadedImages.includes(currentKey)) {
+        downloadedImages.push(currentKey);
+        localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+      }
+
+      updateCreditsDisplay();
+      updateDownloadBadge(currentKey);
+      updateModalButtons(true);
+
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+
+      alert('✅ Imagem baixada com sucesso!');
+
+    } catch (error) {
+      console.error('❌ Erro no download:', error);
+      
+      if (error.message === 'Créditos insuficientes') {
+        alert('❌ Créditos insuficientes. Adquira mais créditos.');
+        await fetchCreditsFromServer();
+        return;
+      }
+      
+      alert('❌ Erro ao baixar a imagem. Tente novamente.');
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.disabled = false;
+    }
+  }
+
+  // ============================================================
+  // CRÉDITOS
+  // ============================================================
+  function openCreditUpsell() {
+    document.getElementById('upsellSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function updateCreditsDisplay() {
+    creditsDisplay.textContent = credits;
+    mobileCreditsDisplay.textContent = credits;
+    modalCreditsCount.textContent = credits;
+    updateModalButtons();
+    updateMenuCtaVisibility();
+  }
+
+  // ============================================================
+  // TIMER
+  // ============================================================
+  let timerSeconds = 72 * 3600;
+
+  function updateTimer() {
+    if (timerSeconds <= 0) {
+      timerDisplay.textContent = '00:00:00';
+      mobileTimerDisplay.textContent = '00:00:00';
+      return;
+    }
+    timerSeconds--;
+    const hrs = Math.floor(timerSeconds / 3600);
+    const mins = Math.floor((timerSeconds % 3600) / 60);
+    const secs = timerSeconds % 60;
+    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    timerDisplay.textContent = timeStr;
+    mobileTimerDisplay.textContent = timeStr;
+  }
+
+  // ============================================================
+  // SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    if (scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================================
+  // BLOQUEIOS
+  // ============================================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+      e.preventDefault();
+      alert('🔒 A proteção de imagens está ativa.');
+    }
+  });
+
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
+      e.preventDefault();
+      alert('🔒 Clique direito bloqueado.');
+    }
+  });
+
+  // ============================================================
+  // COMANDOS SECRETOS
+  // ============================================================
+  window.restoreCredits = async function(amount = 30) {
+    if (!authToken || !userId) {
+      alert('❌ Você precisa estar logado.');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ userId, amount })
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Falha ao restaurar créditos');
+      }
+      const data = await response.json();
+      console.log('✅ Créditos restaurados:', data.message);
+      await fetchCreditsFromServer();
+      alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
+    } catch (error) {
+      console.error('❌ Erro ao restaurar créditos:', error);
+      alert(`❌ Erro ao restaurar créditos: ${error.message}`);
+    }
+  };
+
+  window.resetDownloads = function() {
+    if (confirm('⚠️ Isso irá resetar todas as imagens marcadas como "Já Baixada". Deseja continuar?')) {
+      localStorage.removeItem('downloadedImages');
+      downloadedImages = [];
+      console.log('✅ Todas as imagens foram resetadas! Recarregando a página...');
+      location.reload();
+    }
+  };
+
+  console.log('💡 Comandos secretos:');
+  console.log('  restoreCredits(30) - Restaura 30 créditos (admin)');
+  console.log('  resetDownloads() - Reseta todas as imagens baixadas');
+
+  // ============================================================
+  // INICIALIZAR
+  // ============================================================
+  async function init() {
+    // SEMPRE buscar créditos do servidor ao carregar
+    await fetchCreditsFromServer();
+    
+    await renderGallery();
+    updateCreditsDisplay();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+    checkMobile();
+    await checkPaymentOnLoad();
+    
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkMobile();
+      }, 250);
+    });
+
+    console.log('📸 Galeria Studio Rassi carregada!');
+    console.log(`👤 Usuário ID: ${userId}`);
+    console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
+    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+  }
+
+  init();
+</script>
+
+</body>
+</html>
