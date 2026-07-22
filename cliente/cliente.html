@@ -682,31 +682,29 @@
       justify-content: center;
       pointer-events: none; /* Permite clicar através da marca d'água */
       z-index: 5;
-      opacity: 0.9;
     }
 
     .modal-content .watermark-modal .watermark-modal-logo {
       width: 90%;
       height: auto;
       max-width: 800px;
-      opacity: 0.15;
-      filter: brightness(0) invert(1);
       user-select: none;
       pointer-events: none;
+      object-fit: contain;
     }
 
-    /* Responsivo - ajusta para telas menores */
+    /* Responsivo - ajusta para telas menores mantendo 90% */
     @media (max-width: 768px) {
       .modal-content .watermark-modal .watermark-modal-logo {
-        width: 95%;
-        opacity: 0.12;
+        width: 90%;
+        max-width: 600px;
       }
     }
 
     @media (max-width: 480px) {
       .modal-content .watermark-modal .watermark-modal-logo {
-        width: 98%;
-        opacity: 0.10;
+        width: 90%;
+        max-width: 400px;
       }
     }
 
@@ -1177,10 +1175,6 @@
       .upsell-item {
         justify-content: center;
       }
-      .modal-content .watermark-modal .watermark-modal-logo {
-        width: 95%;
-        opacity: 0.12;
-      }
     }
     
     @media (max-width: 480px) {
@@ -1245,10 +1239,6 @@
       .mobile-menu .menu-links a {
         font-size: 0.85rem;
         padding: 12px 14px;
-      }
-      .modal-content .watermark-modal .watermark-modal-logo {
-        width: 98%;
-        opacity: 0.10;
       }
     }
   </style>
@@ -1646,13 +1636,10 @@
   }
 
   // ============================================================
-  // 6. ESTADO - FOTOS BAIXADAS (LOCAL) - RESETADO PARA TESTE
+  // 6. ESTADO - FOTOS BAIXADAS (LOCAL) - SEM RESET AUTOMÁTICO
   // ============================================================
-  // REMOVA ESTA LINHA DEPOIS DOS TESTES:
-  localStorage.removeItem('downloadedImages');
-  
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
-  console.log('📥 Downloads resetados para teste. Total:', downloadedImages.length);
+  console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
 
   // ============================================================
   // 7. DOM ELEMENTS
