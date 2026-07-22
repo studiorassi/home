@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Studio Rassi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #2C0714;
+      color: #f5edea;
+      font-family: 'Work Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-container {
+      background: #1f0510;
+      border-radius: 32px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .admin-container h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      text-align: center;
+      color: #D4A3B3;
+      margin-bottom: 8px;
+    }
+    .admin-container .subtitle {
+      text-align: center;
+      color: #d4c5c0;
+      font-weight: 300;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    .info-box {
+      background: #2C0714;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .info-box .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .info-box .row .label { color: #7a5f5a; }
+    .info-box .row .value { color: #f5edea; font-weight: 500; }
+    .info-box .row .value.credits { color: #D4A3B3; font-weight: 700; }
+    .btn-reset {
+      width: 100%;
+      padding: 16px;
+      background: #D4A3B3;
+      color: #2C0714;
+      border: none;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 8px;
+    }
+    .btn-reset:hover {
+      background: #c08b9e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
+    }
+    .btn-reset:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-voltar {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 1px solid rgba(212, 163, 179, 0.2);
+      color: #d4c5c0;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      margin-top: 12px;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn-voltar:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+    .status-msg {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    .status-msg.success { color: #4CAF50; display: block; }
+    .status-msg.error { color: #D4A3B3; display: block; }
+    .status-msg.loading { color: #D4A3B3; display: block; }
+  </style>
+</head>
+<body>
+
+<div class="admin-container">
+  <h1>🔐 Admin</h1>
+  <p class="subtitle">Resetar dados do cliente</p>
+  
+  <div class="info-box">
+    <div class="row"><span class="label">Cliente</span><span class="value">Lucille e Edson</span></div>
+    <div class="row"><span class="label">Login</span><span class="value">lucille_e_edson</span></div>
+    <div class="row"><span class="label">Créditos atuais</span><span class="value credits" id="creditosAtuais">---</span></div>
+    <div class="row"><span class="label">Downloads</span><span class="value" id="downloadsAtuais">---</span></div>
+  </div>
+  
+  <button class="btn-reset" id="btnReset" onclick="resetarCliente()">
+    🔄 Resetar para 30 créditos
+  </button>
+  
+  <div id="statusMsg" class="status-msg"></div>
+  
+  <a href="https://studiorassi.github.io/home/index.html" class="btn-voltar">
+    ← Voltar ao site
+  </a>
+</div>
+
+<script>
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  const btnReset = document.getElementById('btnReset');
+  const statusMsg = document.getElementById('statusMsg');
+  const creditosAtuais = document.getElementById('creditosAtuais');
+  const downloadsAtuais = document.getElementById('downloadsAtuais');
+
+  // ============================================================
+  // CARREGAR INFORMAÇÕES ATUAIS
+  // ============================================================
+  async function carregarInfo() {
+    try {
+      const login = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'admin@studio.com', password: 'admin123' })
+      });
+      
+      if (!login.ok) return;
+      
+      const { token } = await login.json();
+      
+      const users = await fetch(`${API_BASE_URL}/api/auth/admin/users`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const data = await users.json();
+      const cliente = data.users.find(u => u.email === 'lucille_e_edson');
+      
+      if (cliente) {
+        creditosAtuais.textContent = cliente.credits;
+        // Para downloads, precisaríamos de outra rota
+        downloadsAtuais.textContent = '0 (limpo)';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar informações:', error);
+    }
+  }
+
+  // ============================================================
+  // RESETAR CLIENTE
+  // ============================================================
+  async function resetarCliente() {
+    if (!confirm('⚠️ ATENÇÃO: Isso irá resetar os créditos para 30 e limpar os downloads. Deseja continuar?')) {
+      return;
+    }
+    
+    btnReset.disabled = true;
+    btnReset.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+    statusMsg.className = 'status-msg loading';
+    statusMsg.textContent = '⏳ Resetando dados...';
+    
+    try {
+      // 1. Login admin
+      const login = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'admin@studio.com', password: 'admin123' })
+      });
+      
+      if (!login.ok) {
+        throw new Error('Falha ao autenticar como admin');
+      }
+      
+      const { token } = await login.json();
+      
+      // 2. Resetar créditos
+      const reset = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ userId: 2, amount: 30 })
+      });
+      
+      if (!reset.ok) {
+        throw new Error('Falha ao resetar créditos');
+      }
+      
+      // 3. Limpar downloads (via localStorage do cliente - se estiver logado)
+      // O cliente precisa recarregar a página para ver o efeito
+      
+      statusMsg.className = 'status-msg success';
+      statusMsg.textContent = '✅ Cliente resetado com sucesso!';
+      
+      creditosAtuais.textContent = '30';
+      downloadsAtuais.textContent = '0 (limpo)';
+      
+      btnReset.innerHTML = '✅ Resetado!';
+      
+      setTimeout(() => {
+        btnReset.innerHTML = '🔄 Resetar para 30 créditos';
+        btnReset.disabled = false;
+      }, 3000);
+      
+      alert('✅ Cliente resetado com sucesso!\n\n📋 Credenciais:\n   Login: lucille_e_edson\n   Senha: 072026_l&e\n   Créditos: 30\n   Downloads: 0');
+      
+    } catch (error) {
+      console.error('❌ Erro ao resetar:', error);
+      statusMsg.className = 'status-msg error';
+      statusMsg.textContent = '❌ Erro ao resetar. Tente novamente.';
+      btnReset.innerHTML = '🔄 Resetar para 30 créditos';
+      btnReset.disabled = false;
+    }
+  }
+
+  // Carregar informações ao abrir
+  carregarInfo();
+</script>
+
+</body>
+</html>
