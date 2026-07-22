@@ -26,7 +26,6 @@
       padding: 0 32px;
     }
 
-    /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
       top: 0;
@@ -124,7 +123,6 @@
       transform: rotate(-45deg) translate(5px, -5px);
     }
 
-    /* ===== MENU MOBILE ===== */
     .mobile-menu {
       display: none;
       position: fixed;
@@ -307,7 +305,6 @@
     }
     .menu-credit-cta.show { display: inline-block; }
 
-    /* ===== STATUS FLUTUANTE ===== */
     .floating-status {
       position: sticky;
       top: 72px;
@@ -352,7 +349,6 @@
       display: inline-block;
     }
 
-    /* ===== PROGRESS BAR ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -394,7 +390,6 @@
       color: #D4A3B3;
     }
 
-    /* ===== CRÉDITOS INFO ===== */
     .credits-info {
       background: rgba(31, 5, 16, 0.6);
       border-radius: 16px;
@@ -433,7 +428,6 @@
       font-weight: 500;
     }
 
-    /* ===== SKELETON ===== */
     .skeleton {
       position: absolute;
       top: 0;
@@ -465,7 +459,6 @@
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* ===== GALERIA ===== */
     .gallery-header {
       display: flex;
       justify-content: space-between;
@@ -567,7 +560,6 @@
       z-index: 4;
     }
 
-    /* ===== BADGE STATUS ===== */
     .watermark-item .badge-status {
       position: absolute;
       top: 8px;
@@ -610,9 +602,6 @@
       margin-right: 4px;
     }
 
-    /* =============================================================
-       MARCA D'ÁGUA NO MODAL - SEM OPACIDADE
-       ============================================================= */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -645,7 +634,6 @@
       align-items: center;
     }
 
-    /* ===== CONTAINER DA MARCA D'ÁGUA ===== */
     .modal-content .watermark-container {
       position: absolute;
       top: 0;
@@ -659,7 +647,6 @@
       z-index: 10;
     }
 
-    /* ===== LOGO DA MARCA D'ÁGUA - SEM OPACIDADE ===== */
     .modal-content .watermark-container .watermark-logo-modal {
       width: 80%;
       max-width: 700px;
@@ -669,7 +656,6 @@
       pointer-events: none;
     }
 
-    /* Responsivo - mobile */
     @media (max-width: 768px) {
       .modal-content .watermark-container .watermark-logo-modal {
         width: 85%;
@@ -684,7 +670,6 @@
       }
     }
 
-    /* ===== IMAGEM DO MODAL ===== */
     .modal-content .modal-image {
       width: auto;
       height: auto;
@@ -726,7 +711,6 @@
       transform: rotate(90deg);
     }
 
-    /* ===== MODAL PROGRESS ===== */
     .modal-progress {
       position: absolute;
       bottom: 100px;
@@ -766,7 +750,6 @@
       min-width: 35px;
     }
 
-    /* ===== MODAL NAV ===== */
     .modal-nav {
       position: absolute;
       top: 50%;
@@ -799,7 +782,6 @@
       transform: translateY(-50%) scale(1);
     }
 
-    /* ===== MODAL COUNTER ===== */
     .modal-counter {
       position: absolute;
       top: 16px;
@@ -821,7 +803,6 @@
       font-weight: 700;
     }
 
-    /* ===== MODAL ACTIONS ===== */
     .modal-actions {
       display: flex;
       gap: 16px;
@@ -894,7 +875,6 @@
       z-index: 10;
     }
 
-    /* ===== MODAL BUY CREDITS ===== */
     .modal-buy-credits {
       display: none;
       width: 100%;
@@ -965,7 +945,6 @@
       color: #f5edea;
     }
 
-    /* ===== UPSELL ===== */
     .upsell-section {
       background: #1f0510;
       border-radius: 28px;
@@ -1020,9 +999,6 @@
       color: #7a5f5a;
     }
 
-    /* ============================================================
-       RESPONSIVO
-    ============================================================ */
     @media (max-width: 768px) {
       body { padding-top: 70px; }
       .container { padding: 0 20px; }
@@ -1090,8 +1066,7 @@
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="https://studiorassi.github.io/home/index.html" class="logo">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
-           alt="Studio Rassi · Photo & Video" width="150" height="45" loading="lazy">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" width="150" height="45" loading="lazy">
     </a>
     <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
       <span></span><span></span><span></span>
@@ -1193,14 +1168,12 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
     
-    <!-- ===== MARCA D'ÁGUA - SEM OPACIDADE ===== -->
+    <!-- MARCA D'ÁGUA - SEM OPACIDADE -->
     <div class="watermark-container">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" 
-           alt="Studio Rassi" 
-           class="watermark-logo-modal">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
     </div>
     
-    <!-- ===== PROGRESS BAR ===== -->
+    <!-- PROGRESS BAR -->
     <div class="modal-progress" id="modalProgress">
       <span style="font-size:0.7rem; color:#D4A3B3;">
         <i class="fas fa-spinner fa-spin"></i>
@@ -1211,12 +1184,12 @@
       <span class="label" id="modalProgressLabel">0%</span>
     </div>
     
-    <!-- ===== CONTADOR ===== -->
+    <!-- CONTADOR -->
     <div class="modal-counter" id="modalCounter">
       <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">116</span>
     </div>
     
-    <!-- ===== NAVEGAÇÃO ===== -->
+    <!-- NAVEGAÇÃO -->
     <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
       <i class="fas fa-chevron-left"></i>
     </button>
@@ -1224,15 +1197,15 @@
       <i class="fas fa-chevron-right"></i>
     </button>
     
-    <!-- ===== FECHAR ===== -->
+    <!-- FECHAR -->
     <button class="modal-close" onclick="closeModal()">
       <i class="fas fa-times"></i>
     </button>
     
-    <!-- ===== IMAGEM ===== -->
+    <!-- IMAGEM -->
     <img id="modalImage" class="modal-image" src="" alt="Foto em alta resolução">
     
-    <!-- ===== AÇÕES ===== -->
+    <!-- AÇÕES -->
     <div class="modal-actions">
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
@@ -1278,7 +1251,7 @@
 
   let authToken = localStorage.getItem('authToken');
   let userId = parseInt(localStorage.getItem('userId')) || null;
-  let credits = 0; // SEMPRE buscar do servidor
+  let credits = 0;
   let clientName = localStorage.getItem('userName') || 'Lucille e Edson';
 
   if (!authToken || !userId) {
@@ -1312,17 +1285,11 @@
     }
   }
 
-  // ============================================================
-  // BUSCAR CRÉDITOS DO SERVIDOR (SEMPRE)
-  // ============================================================
   async function fetchCreditsFromServer() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
-        headers: {
-          'Authorization': `Bearer ${authToken}`
-        }
+        headers: { 'Authorization': `Bearer ${authToken}` }
       });
-      
       if (!response.ok) {
         if (response.status === 401) {
           localStorage.removeItem('authToken');
@@ -1332,14 +1299,10 @@
         }
         throw new Error('Erro ao buscar créditos');
       }
-      
       const data = await response.json();
       credits = data.credits;
-      
-      // Atualiza display
       updateCreditsDisplay();
       return credits;
-      
     } catch (error) {
       console.error('❌ Erro ao buscar créditos:', error);
       credits = 0;
@@ -1348,9 +1311,6 @@
     }
   }
 
-  // ============================================================
-  // DEBITAR CRÉDITO NO SERVIDOR
-  // ============================================================
   async function debitCreditOnServer(imageKey) {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
@@ -1361,7 +1321,6 @@
         },
         body: JSON.stringify({ imageKey })
       });
-      
       if (!response.ok) {
         const error = await response.json();
         if (response.status === 403 && error.error === 'Créditos insuficientes') {
@@ -1369,48 +1328,37 @@
         }
         throw new Error(error.error || 'Erro ao debitar crédito');
       }
-      
       const data = await response.json();
       credits = data.credits;
-      
-      // Atualiza display
       updateCreditsDisplay();
       return data;
-      
     } catch (error) {
       console.error('❌ Erro ao debitar crédito:', error);
       throw error;
     }
   }
 
-  // ============================================================
-  // ATUALIZAR DISPLAY DOS CRÉDITOS
-  // ============================================================
   function updateCreditsDisplay() {
     const elements = [
       document.getElementById('creditsDisplay'),
       document.getElementById('mobileCreditsDisplay'),
       document.getElementById('modalCreditsCount')
     ];
-    
     elements.forEach(el => {
       if (el) el.textContent = credits;
     });
-    
     updateModalButtons();
     updateMenuCtaVisibility();
   }
 
   // ============================================================
-  // COMPRAR CRÉDITOS (COM MERCADO PAGO)
+  // COMPRAR CRÉDITOS
   // ============================================================
   async function buyCredits(amount) {
     const price = amount * 8;
-    
     if (!confirm(`🛒 Adicionar ${amount} crédito(s) por R$ ${price}? Você será redirecionado para o Mercado Pago para pagamento.`)) {
       return;
     }
-    
     try {
       const btn = event?.target?.closest?.('.upsell-item, .buy-package');
       if (btn) {
@@ -1418,7 +1366,6 @@
         btn.style.pointerEvents = 'none';
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando pagamento...';
       }
-      
       const response = await fetch(`${API_BASE_URL}/api/payment/create-payment`, {
         method: 'POST',
         headers: {
@@ -1427,27 +1374,21 @@
         },
         body: JSON.stringify({ planId: amount })
       });
-      
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao criar pagamento');
       }
-      
       const data = await response.json();
-      
       localStorage.setItem('pendingPayment', JSON.stringify({
         planId: amount,
         credits: data.credits,
         preferenceId: data.preference_id || 'manual',
         timestamp: Date.now()
       }));
-      
       window.location.href = data.payment_url;
-      
     } catch (error) {
       console.error('❌ Erro ao iniciar pagamento:', error);
       alert(`❌ ${error.message}`);
-      
       const btn = event?.target?.closest?.('.upsell-item, .buy-package');
       if (btn) {
         btn.style.opacity = '1';
@@ -1458,41 +1399,30 @@
   }
 
   // ============================================================
-  // CONFIRMAR PAGAMENTO (SEM CONFIRMAÇÃO MANUAL)
+  // CONFIRMAR PAGAMENTO
   // ============================================================
   async function confirmPayment() {
     const pendingData = localStorage.getItem('pendingPayment');
     if (!pendingData) return;
-    
     const pending = JSON.parse(pendingData);
-    
     if (Date.now() - pending.timestamp > 3600000) {
       localStorage.removeItem('pendingPayment');
       return;
     }
-    
     try {
-      console.log('🔍 Verificando pagamento pendente:', pending);
-      
       const response = await fetch(`${API_BASE_URL}/api/payment/check-status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`
         },
-        body: JSON.stringify({ 
-          planId: pending.planId,
-          preferenceId: pending.preferenceId || 'manual'
-        })
+        body: JSON.stringify({ planId: pending.planId, preferenceId: pending.preferenceId || 'manual' })
       });
-      
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao verificar pagamento');
       }
-      
       const data = await response.json();
-      
       if (data.status === 'approved') {
         await fetchCreditsFromServer();
         alert(`✅ Pagamento confirmado! Seus créditos foram atualizados. Novo saldo: ${credits}`);
@@ -1501,29 +1431,21 @@
       } else if (data.status === 'failed') {
         alert('❌ O pagamento não foi concluído. Tente novamente.');
       }
-      
       localStorage.removeItem('pendingPayment');
-      
     } catch (error) {
       console.error('❌ Erro ao verificar pagamento:', error);
       alert('⚠️ Não foi possível verificar o status do pagamento. Aguarde alguns minutos e recarregue a página.');
     }
   }
 
-  // ============================================================
-  // VERIFICAR PAGAMENTO AO CARREGAR
-  // ============================================================
   async function checkPaymentOnLoad() {
     const pendingData = localStorage.getItem('pendingPayment');
     if (!pendingData) return;
-    
     const pending = JSON.parse(pendingData);
-    
     if (Date.now() - pending.timestamp > 3600000) {
       localStorage.removeItem('pendingPayment');
       return;
     }
-    
     await confirmPayment();
   }
 
@@ -1717,7 +1639,7 @@
   }
 
   // ============================================================
-  // MODAL (COM MARCA D'ÁGUA - SEM OPACIDADE)
+  // MODAL
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1850,7 +1772,7 @@
   }
 
   // ============================================================
-  // DOWNLOAD
+  // DOWNLOAD - CORRIGIDO PARA MOBILE
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
@@ -1892,20 +1814,57 @@
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
       
+      // VERIFICA SE É MOBILE
       const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       
+      let downloadSuccess = false;
+      
       if (isMobile) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
+        // ===== MÉTODO PARA MOBILE =====
+        try {
+          // Cria um link para download no mobile
           const link = document.createElement('a');
-          link.href = e.target.result;
+          link.href = URL.createObjectURL(blob);
           link.download = currentKey;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-        };
-        reader.readAsDataURL(blob);
+          
+          // Aguarda um pouco para o download iniciar
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          downloadSuccess = true;
+          
+        } catch (mobileError) {
+          console.error('❌ Erro no download mobile:', mobileError);
+          
+          // Tenta método alternativo para mobile
+          try {
+            // Usa FileReader para mobile
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const link = document.createElement('a');
+              link.href = e.target.result;
+              link.download = currentKey;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            };
+            reader.readAsDataURL(blob);
+            downloadSuccess = true;
+          } catch (fallbackError) {
+            console.error('❌ Fallback mobile falhou:', fallbackError);
+            // Se tudo falhar, oferece abrir em nova aba
+            if (confirm('⚠️ Não foi possível baixar automaticamente. Deseja abrir a imagem no navegador para salvar?')) {
+              const newWindow = window.open(signedUrl, '_blank');
+              if (newWindow) {
+                downloadSuccess = true;
+              }
+            }
+          }
+        }
       } else {
+        // ===== MÉTODO PARA DESKTOP =====
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = currentKey;
@@ -1913,25 +1872,30 @@
         downloadLink.click();
         document.body.removeChild(downloadLink);
         setTimeout(() => { URL.revokeObjectURL(downloadLink.href); }, 1000);
+        downloadSuccess = true;
       }
 
-      // DEBITA O CRÉDITO NO SERVIDOR (já atualiza credits)
-      await debitCreditOnServer(currentKey);
+      // SÓ DEBITA O CRÉDITO SE O DOWNLOAD FOI BEM SUCEDIDO
+      if (downloadSuccess) {
+        await debitCreditOnServer(currentKey);
 
-      if (!downloadedImages.includes(currentKey)) {
-        downloadedImages.push(currentKey);
-        localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+        if (!downloadedImages.includes(currentKey)) {
+          downloadedImages.push(currentKey);
+          localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+        }
+
+        updateCreditsDisplay();
+        updateDownloadBadge(currentKey);
+        updateModalButtons(true);
+
+        modalDownloadBtn.className = 'modal-btn-download downloaded';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+        modalDownloadBtn.disabled = true;
+
+        alert('✅ Imagem baixada com sucesso!');
+      } else {
+        throw new Error('Download não foi concluído');
       }
-
-      updateCreditsDisplay();
-      updateDownloadBadge(currentKey);
-      updateModalButtons(true);
-
-      modalDownloadBtn.className = 'modal-btn-download downloaded';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
-      modalDownloadBtn.disabled = true;
-
-      alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
@@ -2053,16 +2017,14 @@
   };
 
   console.log('💡 Comandos secretos:');
-  console.log('  restoreCredits(30) - Restaura 30 créditos (admin)');
+  console.log('  restoreCredits(30) - Restaura 30 créditos');
   console.log('  resetDownloads() - Reseta todas as imagens baixadas');
 
   // ============================================================
   // INICIALIZAR
   // ============================================================
   async function init() {
-    // SEMPRE buscar créditos do servidor ao carregar
     await fetchCreditsFromServer();
-    
     await renderGallery();
     updateCreditsDisplay();
     updateTimer();
