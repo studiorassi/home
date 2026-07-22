@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minhas Fotos · Studio Rassi</title>
   
-  <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +12,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -28,7 +26,7 @@
       padding: 0 32px;
     }
 
-    /* ===== NAVBAR FLUTUANTE ===== */
+    /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
       top: 0;
@@ -72,13 +70,8 @@
       max-width: 150px;
       transition: all 0.3s ease;
     }
-    .navbar.scrolled .logo img {
-      height: 40px;
-    }
-    .logo img:hover {
-      opacity: 0.85;
-      transform: scale(1.02);
-    }
+    .navbar.scrolled .logo img { height: 40px; }
+    .logo img:hover { opacity: 0.85; transform: scale(1.02); }
     .nav-info {
       display: flex;
       align-items: center;
@@ -105,7 +98,6 @@
       color: #D4A3B3;
     }
 
-    /* ===== BOTÃO HAMBURGUER (MOBILE) ===== */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -127,14 +119,12 @@
     .hamburger.active span:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px);
     }
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
     .hamburger.active span:nth-child(3) {
       transform: rotate(-45deg) translate(5px, -5px);
     }
 
-    /* ===== MENU MOBILE SUSPENSO ===== */
+    /* ===== MENU MOBILE ===== */
     .mobile-menu {
       display: none;
       position: fixed;
@@ -154,9 +144,7 @@
       transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       border-left: 1px solid rgba(212, 163, 179, 0.08);
     }
-    .mobile-menu.open {
-      transform: translateX(0);
-    }
+    .mobile-menu.open { transform: translateX(0); }
     .mobile-menu .menu-overlay {
       position: fixed;
       top: 0;
@@ -167,11 +155,8 @@
       z-index: -1;
       display: none;
     }
-    .mobile-menu.open .menu-overlay {
-      display: block;
-    }
+    .mobile-menu.open .menu-overlay { display: block; }
 
-    /* ===== INFORMAÇÕES DO MENU MOBILE ===== */
     .mobile-menu .menu-header {
       display: flex;
       justify-content: space-between;
@@ -204,7 +189,6 @@
       transform: rotate(90deg);
     }
 
-    /* ===== CRÉDITOS E TIMER NO MENU MOBILE ===== */
     .mobile-menu .menu-status {
       background: rgba(31, 5, 16, 0.6);
       border-radius: 16px;
@@ -242,7 +226,6 @@
       text-align: right;
     }
 
-    /* ===== CTA "+ Quer mais fotos?" no Menu Mobile ===== */
     .mobile-menu .menu-credit-cta-mobile {
       background: #D4A3B3;
       color: #2C0714;
@@ -265,11 +248,8 @@
       background: #c08b9e;
       transform: scale(1.02);
     }
-    .mobile-menu .menu-credit-cta-mobile.show {
-      display: flex;
-    }
+    .mobile-menu .menu-credit-cta-mobile.show { display: flex; }
 
-    /* ===== LINKS DO MENU MOBILE ===== */
     .mobile-menu .menu-links {
       display: flex;
       flex-direction: column;
@@ -307,7 +287,6 @@
       background: transparent;
     }
 
-    /* ===== CTA "+ Quer mais fotos?" no Menu (Desktop) ===== */
     .menu-credit-cta {
       display: none;
       background: #D4A3B3;
@@ -326,11 +305,9 @@
       background: #c08b9e;
       transform: scale(1.05);
     }
-    .menu-credit-cta.show {
-      display: inline-block;
-    }
+    .menu-credit-cta.show { display: inline-block; }
 
-    /* ===== TIMER E CRÉDITOS - FLUTUANTES (Desktop) ===== */
+    /* ===== STATUS FLUTUANTE ===== */
     .floating-status {
       position: sticky;
       top: 72px;
@@ -375,7 +352,7 @@
       display: inline-block;
     }
 
-    /* ===== PROGRESS BAR (CARREGAMENTO DAS FOTOS) - FLUTUANTE ===== */
+    /* ===== PROGRESS BAR ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -417,7 +394,7 @@
       color: #D4A3B3;
     }
 
-    /* ===== ORIENTAÇÕES SOBRE CRÉDITOS ===== */
+    /* ===== CRÉDITOS INFO ===== */
     .credits-info {
       background: rgba(31, 5, 16, 0.6);
       border-radius: 16px;
@@ -456,7 +433,7 @@
       font-weight: 500;
     }
 
-    /* ===== SKELETON LOADING ===== */
+    /* ===== SKELETON ===== */
     .skeleton {
       position: absolute;
       top: 0;
@@ -543,12 +520,8 @@
       z-index: 2;
       transition: opacity 0.5s ease, transform 0.3s ease;
     }
-    .watermark-item .real-image.loaded {
-      opacity: 0.85;
-    }
-    .watermark-item .real-image:hover {
-      transform: scale(1.03);
-    }
+    .watermark-item .real-image.loaded { opacity: 0.85; }
+    .watermark-item .real-image:hover { transform: scale(1.03); }
     .watermark-item::after {
       content: '';
       position: absolute;
@@ -560,7 +533,6 @@
       z-index: 3;
       pointer-events: none;
     }
-    
     .watermark-item .watermark-logo {
       position: absolute;
       top: 50%;
@@ -595,7 +567,7 @@
       z-index: 4;
     }
 
-    /* ===== BADGE DE STATUS DA IMAGEM (CADEADO/LOCK) ===== */
+    /* ===== BADGE STATUS ===== */
     .watermark-item .badge-status {
       position: absolute;
       top: 8px;
@@ -638,39 +610,10 @@
       margin-right: 4px;
     }
 
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.92);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(8px);
-      padding: 20px;
-    }
-    .modal-overlay.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    .modal-content {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* ===== MARCA D'ÁGUA NO MODAL (90% DA IMAGEM) ===== */
+    /* =============================================================
+       MARCA D'ÁGUA NO MODAL - CORRIGIDA
+       SEM OPACIDADE, APENAS PROPORÇÃO 90% RESPONSIVA
+    ============================================================= */
     .modal-content .watermark-modal {
       position: absolute;
       top: 0;
@@ -686,20 +629,18 @@
 
     .modal-content .watermark-modal .watermark-modal-logo {
       width: 90%;
-      height: auto;
       max-width: 800px;
+      height: auto;
+      object-fit: contain;
       user-select: none;
       pointer-events: none;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-      opacity: 0.15;
     }
 
+    /* Responsivo - mantém 90% em todas as telas */
     @media (max-width: 768px) {
       .modal-content .watermark-modal .watermark-modal-logo {
         width: 90%;
         max-width: 600px;
-        opacity: 0.18;
       }
     }
 
@@ -707,7 +648,6 @@
       .modal-content .watermark-modal .watermark-modal-logo {
         width: 90%;
         max-width: 400px;
-        opacity: 0.20;
       }
     }
 
@@ -724,9 +664,8 @@
       position: relative;
       z-index: 1;
     }
-    .modal-content img.loaded {
-      opacity: 1;
-    }
+    .modal-content img.loaded { opacity: 1; }
+
     .modal-close {
       position: absolute;
       top: -40px;
@@ -751,7 +690,7 @@
       transform: rotate(90deg);
     }
 
-    /* ===== MODAL - PROGRESS BAR DA IMAGEM ===== */
+    /* ===== MODAL PROGRESS ===== */
     .modal-progress {
       position: absolute;
       bottom: 100px;
@@ -769,9 +708,7 @@
       border: 1px solid rgba(212, 163, 179, 0.1);
       z-index: 10;
     }
-    .modal-progress.show {
-      display: flex;
-    }
+    .modal-progress.show { display: flex; }
     .modal-progress .track {
       flex: 1;
       height: 4px;
@@ -793,7 +730,7 @@
       min-width: 35px;
     }
 
-    /* ===== MODAL - NAVEGAÇÃO ===== */
+    /* ===== MODAL NAV ===== */
     .modal-nav {
       position: absolute;
       top: 50%;
@@ -818,19 +755,15 @@
       color: #2C0714;
       transform: translateY(-50%) scale(1.1);
     }
-    .modal-nav.prev {
-      left: -24px;
-    }
-    .modal-nav.next {
-      right: -24px;
-    }
+    .modal-nav.prev { left: -24px; }
+    .modal-nav.next { right: -24px; }
     .modal-nav:disabled {
       opacity: 0.3;
       cursor: not-allowed;
       transform: translateY(-50%) scale(1);
     }
 
-    /* ===== MODAL - CONTADOR ===== */
+    /* ===== MODAL COUNTER ===== */
     .modal-counter {
       position: absolute;
       top: 16px;
@@ -852,7 +785,7 @@
       font-weight: 700;
     }
 
-    /* ===== MODAL - AÇÕES ===== */
+    /* ===== MODAL ACTIONS ===== */
     .modal-actions {
       display: flex;
       gap: 16px;
@@ -891,9 +824,7 @@
       transform: none;
       box-shadow: none;
     }
-    .modal-btn-download.hidden {
-      display: none;
-    }
+    .modal-btn-download.hidden { display: none; }
     .modal-btn-download.downloaded {
       background: #2E7D32;
       color: #ffffff;
@@ -927,7 +858,7 @@
       z-index: 10;
     }
 
-    /* ===== MODAL - COMPRA DE CRÉDITOS ===== */
+    /* ===== MODAL BUY CREDITS ===== */
     .modal-buy-credits {
       display: none;
       width: 100%;
@@ -938,9 +869,7 @@
       z-index: 10;
       padding: 8px 0;
     }
-    .modal-buy-credits.show {
-      display: flex;
-    }
+    .modal-buy-credits.show { display: flex; }
     .modal-buy-credits .buy-title {
       font-family: 'Fraunces', serif;
       font-weight: 600;
@@ -950,9 +879,7 @@
       align-items: center;
       gap: 8px;
     }
-    .modal-buy-credits .buy-title i {
-      font-size: 1.4rem;
-    }
+    .modal-buy-credits .buy-title i { font-size: 1.4rem; }
     .modal-buy-credits .buy-packages {
       display: flex;
       flex-wrap: wrap;
@@ -1002,7 +929,7 @@
       color: #f5edea;
     }
 
-    /* ===== UPSELL (COMPRA DE CRÉDITOS) ===== */
+    /* ===== UPSELL ===== */
     .upsell-section {
       background: #1f0510;
       border-radius: 28px;
@@ -1045,7 +972,6 @@
       font-weight: 600;
     }
 
-    /* ===== FOOTER ===== */
     footer {
       text-align: center;
       padding: 32px 0 20px;
@@ -1124,23 +1050,19 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR FLUTUANTE ===== -->
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="https://studiorassi.github.io/home/index.html" class="logo">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
-           alt="Studio Rassi · Photo & Video" 
-           width="150" height="45" loading="lazy">
+           alt="Studio Rassi · Photo & Video" width="150" height="45" loading="lazy">
     </a>
-    
     <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
-    
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> 
-        Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
           Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
@@ -1160,58 +1082,32 @@
 <div class="mobile-menu" id="mobileMenu">
   <div class="menu-overlay" onclick="closeMobileMenu()"></div>
   <div class="menu-header">
-    <div class="user-info">
-      <i class="fas fa-user-circle" style="color: #D4A3B3;"></i>
-      Olá, <strong id="mobileUserName">Lucille e Edson</strong>
-    </div>
-    <button class="close-menu" onclick="closeMobileMenu()">
-      <i class="fas fa-times"></i>
-    </button>
+    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Lucille e Edson</strong></div>
+    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
-  
   <div class="menu-status">
-    <div class="status-row">
-      <span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span>
-      <span class="value" id="mobileCreditsDisplay">30</span>
-    </div>
-    <div class="status-row">
-      <span class="label"><i class="far fa-clock"></i> Expira em</span>
-      <span class="value timer" id="mobileTimerDisplay">72:00:00</span>
-    </div>
-    <div class="status-row" style="border-top: 1px solid rgba(212,163,179,0.06); padding-top: 12px; margin-top: 4px;">
-      <span class="label"><i class="fas fa-images" style="color: #D4A3B3;"></i> Total de fotos</span>
+    <div class="status-row"><span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span><span class="value" id="mobileCreditsDisplay">30</span></div>
+    <div class="status-row"><span class="label"><i class="far fa-clock"></i> Expira em</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
+    <div class="status-row" style="border-top:1px solid rgba(212,163,179,0.06); padding-top:12px; margin-top:4px;">
+      <span class="label"><i class="fas fa-images" style="color:#D4A3B3;"></i> Total de fotos</span>
       <span class="value" id="mobileTotalPhotos">116</span>
     </div>
   </div>
-  
   <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
     <i class="fas fa-plus-circle"></i> + Quer mais fotos?
   </button>
-  
   <div class="menu-links">
-    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;">
-      <i class="fas fa-arrow-up"></i> Ver Galeria
-    </a>
-    <a href="#upsellSection" onclick="closeMobileMenu()">
-      <i class="fas fa-plus-circle"></i> Comprar Créditos
-    </a>
-    <a href="https://studiorassi.github.io/home/index.html" class="logout-link">
-      <i class="fas fa-sign-out-alt"></i> Sair
-    </a>
+    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
+    <a href="#upsellSection" onclick="closeMobileMenu()"><i class="fas fa-plus-circle"></i> Comprar Créditos</a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
   </div>
 </div>
 
-<!-- ===== TIMER E CRÉDITOS - DESKTOP ===== -->
+<!-- ===== STATUS DESKTOP ===== -->
 <div class="floating-status" id="statusBar">
   <div class="container">
-    <div class="status-item">
-      <i class="fas fa-coins"></i>
-      <span>Créditos: <strong class="value" id="creditsDisplay">30</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="far fa-clock"></i>
-      <span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span>
-    </div>
+    <div class="status-item"><i class="fas fa-coins"></i><span>Créditos: <strong class="value" id="creditsDisplay">30</strong></span></div>
+    <div class="status-item"><i class="far fa-clock"></i><span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span></div>
   </div>
 </div>
 
@@ -1219,12 +1115,8 @@
 <div class="progress-bar-container" id="progressContainer">
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-label">
-      Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span>
-    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span></div>
   </div>
 </div>
 
@@ -1232,15 +1124,8 @@
 <div class="container">
   <div class="credits-info">
     <span class="heart">💖</span>
-    <span class="label">
-      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a 
-      <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e 
-      <strong>sem marca d'água</strong>.
-    </span>
-    <span class="label" style="display: inline-flex; align-items: center; gap: 4px;">
-      <i class="fas fa-clock" style="color: #D4A3B3; font-size: 0.7rem;"></i>
-      <span style="font-size: 0.7rem; color: #7a5f5a;">Aguarde o carregamento completo das fotos!</span>
-    </span>
+    <span class="label"><strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.</span>
+    <span class="label" style="display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i><span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo das fotos!</span></span>
     <span class="emoji-heart" style="display:inline-block; animation:pulse 1.5s ease-in-out infinite;">🥰</span>
   </div>
 </div>
@@ -1249,11 +1134,8 @@
 <div class="container">
   <div class="gallery-header">
     <h2>📸 <span>Suas memórias</span></h2>
-    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
-      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
-    </span>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;"><i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água</span>
   </div>
-
   <div class="watermark-grid" id="galleryGrid"></div>
 
   <!-- ===== UPSELL ===== -->
@@ -1265,15 +1147,14 @@
       <div class="upsell-item" onclick="buyCredits(20)"><span>📷 +20 créditos</span><span class="price">R$ 160</span></div>
       <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
     </div>
-    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Cada crédito = R$ 8,00 · Adicione instantaneamente à sua conta.
-    </p>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;"><i class="fas fa-info-circle"></i> Cada crédito = R$ 8,00 · Adicione instantaneamente à sua conta.</p>
   </div>
 </div>
 
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
+    <!-- MARCA D'ÁGUA - SEM OPACIDADE, APENAS 90% -->
     <div class="watermark-modal">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-modal-logo">
     </div>
@@ -1295,9 +1176,7 @@
       <i class="fas fa-chevron-right"></i>
     </button>
     
-    <button class="modal-close" onclick="closeModal()">
-      <i class="fas fa-times"></i>
-    </button>
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
     
     <img id="modalImage" src="" alt="Foto em alta resolução">
     
@@ -1305,7 +1184,6 @@
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
       </button>
-      
       <div class="modal-buy-credits" id="modalBuyCredits">
         <div class="buy-title"><i class="fas fa-crown"></i> + Quer mais fotos?</div>
         <div class="buy-packages">
@@ -1317,24 +1195,17 @@
         <button class="buy-close" onclick="closeModal()">Fechar</button>
       </div>
     </div>
-    
-    <div class="modal-credits" id="modalCredits">
-      Créditos restantes: <strong id="modalCreditsCount">30</strong>
-    </div>
+    <div class="modal-credits" id="modalCredits">Créditos restantes: <strong id="modalCreditsCount">30</strong></div>
   </div>
 </div>
 
 <!-- ===== FOOTER ===== -->
-<footer>
-  <div class="container">
-    <p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p>
-  </div>
-</footer>
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p></div></footer>
 
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // 1. CONFIGURAÇÕES E AUTENTICAÇÃO
+  // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
 
@@ -1349,20 +1220,15 @@
   }
 
   // ============================================================
-  // 2. FUNÇÃO PARA BUSCAR URL DA IMAGEM COM TOKEN
+  // FUNÇÕES DA API
   // ============================================================
   async function getImageUrl(imageKey) {
     const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.error('❌ Usuário não autenticado');
-      return null;
-    }
-    
+    if (!token) { console.error('❌ Usuário não autenticado'); return null; }
     try {
       const response = await fetch(`${API_BASE_URL}/api/gallery/view/${imageKey}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
       if (!response.ok) {
         if (response.status === 401) {
           localStorage.removeItem('authToken');
@@ -1372,24 +1238,18 @@
         }
         throw new Error(`Erro ${response.status}: ${response.statusText}`);
       }
-      
       return response.url;
-      
     } catch (error) {
       console.error('❌ Erro ao buscar URL da imagem:', error);
       return null;
     }
   }
 
-  // ============================================================
-  // 3. BUSCAR CRÉDITOS DO SERVIDOR
-  // ============================================================
   async function fetchCreditsFromServer() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
-      
       if (!response.ok) {
         if (response.status === 401) {
           localStorage.removeItem('authToken');
@@ -1399,13 +1259,11 @@
         }
         throw new Error('Erro ao buscar créditos');
       }
-      
       const data = await response.json();
       credits = data.credits;
       localStorage.setItem('userCredits', credits);
       updateCreditsDisplay();
       return credits;
-      
     } catch (error) {
       console.error('❌ Erro ao buscar créditos:', error);
       credits = parseInt(localStorage.getItem('userCredits')) || 0;
@@ -1414,9 +1272,6 @@
     }
   }
 
-  // ============================================================
-  // 4. DEBITAR CRÉDITO NO SERVIDOR
-  // ============================================================
   async function debitCreditOnServer(imageKey) {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
@@ -1427,18 +1282,15 @@
         },
         body: JSON.stringify({ imageKey })
       });
-      
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Erro ao debitar crédito');
       }
-      
       const data = await response.json();
       credits = data.credits;
       localStorage.setItem('userCredits', credits);
       updateCreditsDisplay();
       return data;
-      
     } catch (error) {
       console.error('❌ Erro ao debitar crédito:', error);
       throw error;
@@ -1446,7 +1298,7 @@
   }
 
   // ============================================================
-  // 5. DADOS - 116 FOTOS
+  // DADOS
   // ============================================================
   const totalPhotos = 116;
   const allPhotoKeys = [];
@@ -1455,14 +1307,11 @@
     allPhotoKeys.push(`ensaio_${numeroFormatado}.jpg`);
   }
 
-  // ============================================================
-  // 6. ESTADO - FOTOS BAIXADAS
-  // ============================================================
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
   console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
 
   // ============================================================
-  // 7. DOM ELEMENTS
+  // DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
@@ -1494,7 +1343,7 @@
   document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
 
   // ============================================================
-  // 8. MENU MOBILE
+  // MENU MOBILE
   // ============================================================
   function toggleMobileMenu() {
     mobileMenu.classList.toggle('open');
@@ -1520,7 +1369,6 @@
   }
 
   hamburgerBtn.addEventListener('click', toggleMobileMenu);
-
   document.addEventListener('click', function(e) {
     if (mobileMenu.classList.contains('open') && 
         !mobileMenu.contains(e.target) && 
@@ -1530,7 +1378,7 @@
   });
 
   // ============================================================
-  // 9. DETECTAR MOBILE
+  // DETECTAR MOBILE
   // ============================================================
   function checkMobile() {
     const isMobile = window.innerWidth <= 768;
@@ -1543,7 +1391,6 @@
     } else {
       menuCreditCta.classList.remove('show');
     }
-    
     if (window.innerWidth <= 768 && credits <= 0) {
       mobileCreditCta.classList.add('show');
     } else {
@@ -1552,7 +1399,7 @@
   }
 
   // ============================================================
-  // 10. BARRA DE PROGRESSO
+  // PROGRESS BAR
   // ============================================================
   let imagesLoaded = 0;
 
@@ -1560,7 +1407,6 @@
     const percent = Math.round((imagesLoaded / totalPhotos) * 100);
     progressFill.style.width = percent + '%';
     loadedCount.textContent = imagesLoaded;
-    
     if (imagesLoaded >= totalPhotos) {
       progressContainer.style.display = 'none';
       console.log('✅ Todas as 116 fotos foram carregadas!');
@@ -1570,11 +1416,10 @@
   }
 
   // ============================================================
-  // 11. RENDER GALERIA (COM TOKEN)
+  // RENDER GALERIA
   // ============================================================
   async function renderGallery() {
     grid.innerHTML = '';
-    
     const token = localStorage.getItem('authToken');
     if (!token) {
       alert('⚠️ Sessão expirada. Faça login novamente.');
@@ -1585,11 +1430,9 @@
     for (let i = 0; i < allPhotoKeys.length; i++) {
       const key = allPhotoKeys[i];
       const isDownloaded = downloadedImages.includes(key);
-      
       const div = document.createElement('div');
       div.className = 'watermark-item';
       div.dataset.key = key;
-      
       const imageUrl = await getImageUrl(key);
       
       div.innerHTML = `
@@ -1600,22 +1443,16 @@
           ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
         </div>
         ${imageUrl ? `
-          <img 
-            src="${imageUrl}" 
-            alt="Foto ${i + 1}" 
-            class="real-image" 
-            loading="lazy"
-            data-key="${key}"
-            data-index="${i}"
-            onload="onImageLoad(${i})"
-            onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${i});"
-          >
+          <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
+               data-key="${key}" data-index="${i}"
+               onload="onImageLoad(${i})"
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/400x600/2C0714/D4A3B3?text=Erro+ao+carregar'; onImageLoad(${i});">
         ` : `
-          <div style="padding: 60px 20px; color: #7a5f5a; text-align: center; z-index: 5; position: relative;">
+          <div style="padding:60px 20px; color:#7a5f5a; text-align:center; z-index:5; position:relative;">
             <i class="fas fa-exclamation-triangle"></i><br>Erro ao carregar
           </div>
         `}
-        <img src="assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
       
@@ -1623,30 +1460,19 @@
         if (e.target.closest('.btn-download')) return;
         openModal(i);
       });
-      
       grid.appendChild(div);
     }
   }
 
-  // ============================================================
-  // 12. IMAGE LOAD HANDLER
-  // ============================================================
   function onImageLoad(index) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
-    if (img) {
-      img.classList.add('loaded');
-    }
+    if (img) img.classList.add('loaded');
     const skeleton = document.getElementById(`skeleton-${index}`);
-    if (skeleton) {
-      skeleton.style.display = 'none';
-    }
+    if (skeleton) skeleton.style.display = 'none';
     imagesLoaded++;
     updateProgress();
   }
 
-  // ============================================================
-  // 13. ATUALIZAR BADGE DE DOWNLOAD
-  // ============================================================
   function updateDownloadBadge(key) {
     const items = document.querySelectorAll('.watermark-item');
     items.forEach(item => {
@@ -1661,7 +1487,7 @@
   }
 
   // ============================================================
-  // 14. MODAL
+  // MODAL
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1673,24 +1499,19 @@
     modalProgressFill.style.width = '0%';
     modalProgressLabel.textContent = '0%';
     modalProgress.classList.add('show');
-    
     modalImage.classList.remove('loaded');
     modalImage.style.opacity = '0';
-    
     document.getElementById('currentIndexDisplay').textContent = index + 1;
     
     updateModalButtons(isDownloaded);
     updateNavButtons();
-    
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     
     const imageUrl = await getImageUrl(key);
-    
     if (imageUrl) {
       const img = new Image();
       let progress = 0;
-      
       const progressInterval = setInterval(() => {
         if (progress < 90) {
           progress += Math.random() * 8;
@@ -1699,7 +1520,6 @@
           modalProgressLabel.textContent = Math.round(progress) + '%';
         }
       }, 100);
-      
       img.onload = function() {
         clearInterval(progressInterval);
         modalProgressFill.style.width = '100%';
@@ -1707,12 +1527,8 @@
         modalImage.src = imageUrl;
         modalImage.classList.add('loaded');
         modalImage.style.opacity = '1';
-        
-        setTimeout(() => {
-          modalProgress.classList.remove('show');
-        }, 500);
+        setTimeout(() => { modalProgress.classList.remove('show'); }, 500);
       };
-      
       img.onerror = function() {
         clearInterval(progressInterval);
         modalProgressFill.style.width = '100%';
@@ -1720,21 +1536,14 @@
         modalImage.src = imageUrl;
         modalImage.classList.add('loaded');
         modalImage.style.opacity = '1';
-        
-        setTimeout(() => {
-          modalProgress.classList.remove('show');
-        }, 500);
+        setTimeout(() => { modalProgress.classList.remove('show'); }, 500);
       };
-      
       img.src = imageUrl;
     } else {
       modalImage.src = '';
       modalImage.alt = 'Erro ao carregar imagem';
-      setTimeout(() => {
-        modalProgress.classList.remove('show');
-      }, 500);
+      setTimeout(() => { modalProgress.classList.remove('show'); }, 500);
     }
-    
     document.addEventListener('keydown', handleModalKeydown);
   }
 
@@ -1765,12 +1574,8 @@
     nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
   }
 
-  // ============================================================
-  // 15. ATUALIZAR BOTÕES DO MODAL
-  // ============================================================
   function updateModalButtons(isDownloaded = false) {
     modalCreditsCount.textContent = credits;
-    
     if (isDownloaded) {
       modalDownloadBtn.className = 'modal-btn-download downloaded';
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
@@ -1779,7 +1584,6 @@
       modalBuyCredits.style.display = 'none';
       return;
     }
-    
     if (credits <= 0) {
       modalDownloadBtn.className = 'modal-btn-download hidden';
       modalDownloadBtn.style.display = 'none';
@@ -1796,17 +1600,15 @@
   }
 
   // ============================================================
-  // 16. DOWNLOAD - CORRIGIDO PARA MOBILE
+  // DOWNLOAD
   // ============================================================
   async function downloadFromModal() {
     const currentKey = allPhotoKeys[currentModalIndex];
     if (!currentKey) return;
-    
     if (credits <= 0) {
       alert('❌ Você não tem créditos suficientes.');
       return;
     }
-    
     if (downloadedImages.includes(currentKey)) {
       alert('✅ Esta imagem já foi baixada anteriormente.');
       return;
@@ -1816,7 +1618,6 @@
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
 
-      // 1. Obtém URL assinada do S3
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
         headers: {
@@ -1833,16 +1634,12 @@
       const data = await response.json();
       const signedUrl = data.urls[0].url;
 
-      // 2. Baixa a imagem como blob
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
       
-      // 3. Verifica se é mobile
       const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       
       if (isMobile) {
-        // === MÉTODO PARA MOBILE ===
-        // Usa o FileReader para criar um link de download que funciona no mobile
         const reader = new FileReader();
         reader.onload = function(e) {
           const link = document.createElement('a');
@@ -1854,23 +1651,17 @@
         };
         reader.readAsDataURL(blob);
       } else {
-        // === MÉTODO PARA DESKTOP ===
         const downloadLink = document.createElement('a');
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = currentKey;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
-        
-        setTimeout(() => {
-          URL.revokeObjectURL(downloadLink.href);
-        }, 1000);
+        setTimeout(() => { URL.revokeObjectURL(downloadLink.href); }, 1000);
       }
 
-      // 4. Debito do crédito
       await debitCreditOnServer(currentKey);
 
-      // 5. Marca como baixada
       if (!downloadedImages.includes(currentKey)) {
         downloadedImages.push(currentKey);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1885,20 +1676,15 @@
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
 
-      // 6. Feedback para o usuário
       alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
-      
       if (error.message === 'Créditos insuficientes') {
         alert('❌ Créditos insuficientes. Adquira mais créditos.');
         await fetchCreditsFromServer();
         return;
       }
-      
-      // Se houve erro mas o download pode ter funcionado parcialmente,
-      // oferece uma segunda chance
       if (confirm('⚠️ Ocorreu um erro, mas você pode tentar baixar novamente. Deseja tentar?')) {
         modalDownloadBtn.disabled = false;
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
@@ -1910,7 +1696,7 @@
   }
 
   // ============================================================
-  // 17. COMPRAR CRÉDITOS
+  // CRÉDITOS
   // ============================================================
   function buyCredits(amount) {
     const price = amount * 8;
@@ -1928,9 +1714,6 @@
     document.getElementById('upsellSection').scrollIntoView({ behavior: 'smooth' });
   }
 
-  // ============================================================
-  // 18. ATUALIZAR DISPLAY
-  // ============================================================
   function updateCreditsDisplay() {
     creditsDisplay.textContent = credits;
     mobileCreditsDisplay.textContent = credits;
@@ -1941,7 +1724,7 @@
   }
 
   // ============================================================
-  // 19. TIMER REGRESSIVO
+  // TIMER
   // ============================================================
   let timerSeconds = 72 * 3600;
 
@@ -1961,7 +1744,7 @@
   }
 
   // ============================================================
-  // 20. NAVBAR SCROLL EFFECT
+  // SCROLL
   // ============================================================
   window.addEventListener('scroll', function() {
     const scrollY = window.scrollY;
@@ -1973,7 +1756,7 @@
   });
 
   // ============================================================
-  // 21. BLOQUEIO DE PRINT/DOWNLOAD
+  // BLOQUEIOS
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
@@ -1990,14 +1773,13 @@
   });
 
   // ============================================================
-  // 22. COMANDOS SECRETOS
+  // COMANDOS SECRETOS
   // ============================================================
   window.restoreCredits = async function(amount = 30) {
     if (!authToken || !userId) {
       alert('❌ Você precisa estar logado.');
       return;
     }
-    
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/admin/restore-credits`, {
         method: 'POST',
@@ -2007,17 +1789,14 @@
         },
         body: JSON.stringify({ userId, amount })
       });
-      
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Falha ao restaurar créditos');
       }
-      
       const data = await response.json();
       console.log('✅ Créditos restaurados:', data.message);
       await fetchCreditsFromServer();
       alert(`✅ ${data.message}\nNovo saldo: ${data.newCredits} créditos`);
-      
     } catch (error) {
       console.error('❌ Erro ao restaurar créditos:', error);
       alert(`❌ Erro ao restaurar créditos: ${error.message}`);
@@ -2038,7 +1817,7 @@
   console.log('  resetDownloads() - Reseta todas as imagens baixadas');
 
   // ============================================================
-  // 23. INICIALIZAR
+  // INICIALIZAR
   // ============================================================
   async function init() {
     await fetchCreditsFromServer();
