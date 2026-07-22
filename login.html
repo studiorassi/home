@@ -101,6 +101,27 @@
       color: #D4A3B3;
       font-size: 1rem;
       opacity: 0.6;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .login-container .form-group .toggle-password {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #D4A3B3;
+      font-size: 1rem;
+      opacity: 0.6;
+      cursor: pointer;
+      z-index: 2;
+      transition: 0.3s;
+      background: transparent;
+      border: none;
+      padding: 4px;
+    }
+    .login-container .form-group .toggle-password:hover {
+      opacity: 1;
+      color: #f5edea;
     }
     .login-container label {
       display: block;
@@ -111,7 +132,7 @@
     }
     .login-container input {
       width: 100%;
-      padding: 14px 18px 14px 48px;
+      padding: 14px 48px 14px 48px;
       background: #2C0714;
       border: 1px solid rgba(212, 163, 179, 0.12);
       border-radius: 40px;
@@ -119,6 +140,8 @@
       font-family: 'Work Sans', sans-serif;
       font-size: 0.95rem;
       transition: 0.3s;
+      position: relative;
+      z-index: 1;
     }
     .login-container input:focus {
       outline: none;
@@ -189,7 +212,7 @@
   </a>
   
   <!-- ===== LOGO ===== -->
-  <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
+  <img src="assets/images/logo/logo.png" 
        alt="Studio Rassi" 
        class="logo">
   
@@ -197,7 +220,7 @@
   <p class="subtitle">Acesse suas <span>memórias</span> em alta definição</p>
   
   <form id="loginForm">
-    <!-- ===== CAMPO LOGIN (COM ÍCONE DE USUÁRIO) ===== -->
+    <!-- ===== CAMPO LOGIN ===== -->
     <div class="form-group">
       <label for="login">Login</label>
       <i class="fas fa-user icon"></i>
@@ -209,6 +232,9 @@
       <label for="password">Senha</label>
       <i class="fas fa-lock icon"></i>
       <input type="password" id="password" placeholder="Digite sua senha" value="072026_l&e">
+      <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar senha">
+        <i class="fas fa-eye"></i>
+      </button>
     </div>
     
     <button type="submit" class="btn-login" id="loginBtn">
@@ -237,8 +263,27 @@
   const form = document.getElementById('loginForm');
   const loginInput = document.getElementById('login');
   const passwordInput = document.getElementById('password');
+  const togglePassword = document.getElementById('togglePassword');
   const loginBtn = document.getElementById('loginBtn');
   const errorMsg = document.getElementById('loginError');
+  
+  // ============================================================
+  // MOSTRAR/ESCONDER SENHA
+  // ============================================================
+  togglePassword.addEventListener('click', function() {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    
+    // Troca o ícone
+    const icon = this.querySelector('i');
+    if (type === 'text') {
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  });
   
   // ============================================================
   // FUNÇÃO DE LOGIN
@@ -319,6 +364,7 @@
   console.log('🔐 Página de login carregada');
   console.log('👤 Login: lucille_e_edson');
   console.log('🔑 Senha: 072026_l&e');
+  console.log('📁 Logo: assets/images/logo/logo.png');
 </script>
 
 </body>
