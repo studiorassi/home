@@ -1294,7 +1294,7 @@
   document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
 
   // ============================================================
-  // 1. CARREGAR CRÉDITOS DO SERVIDOR
+  // CARREGAR CRÉDITOS DO SERVIDOR
   // ============================================================
   async function fetchCreditsFromServer() {
     try {
@@ -1313,15 +1313,15 @@
   }
 
   function updateCreditsDisplay() {
-    creditsDisplay.textContent = credits;
-    mobileCreditsDisplay.textContent = credits;
-    modalCreditsCount.textContent = credits;
+    // Atualiza apenas se os elementos existirem na tela
+    if (creditsDisplay) creditsDisplay.textContent = credits;
+    if (mobileCreditsDisplay) mobileCreditsDisplay.textContent = credits;
+    if (modalCreditsCount) modalCreditsCount.textContent = credits;
     
-    // Contabiliza e exibe o número de fotos baixadas
     const baixadasCount = downloadedImages.length;
-    downloadedCountDisplay.textContent = baixadasCount;
-    mobileDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
-    desktopDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
+    if (downloadedCountDisplay) downloadedCountDisplay.textContent = baixadasCount;
+    if (mobileDownloadedDisplay) mobileDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
+    if (desktopDownloadedDisplay) desktopDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
 
     updateModalButtons();
     updateMenuCtaVisibility();
