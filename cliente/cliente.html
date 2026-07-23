@@ -1381,7 +1381,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO NO DISPOSITIVO (SEM SAIR DA PÁGINA)
+  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO (CONTORNANDO CORS)
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1505,18 +1505,12 @@
 
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      // Baixa diretamente via Blob / fetch invisível para forçar o salvamento local sem abrir abas
-      const imageResponse = await fetch(signedUrl);
-      const blob = await imageResponse.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = key;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
+      // Criação de um link embutido oculto para download forçado direto no dispositivo sem sair da página
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = signedUrl;
+      document.body.appendChild(iframe);
+      setTimeout(() => document.body.removeChild(iframe), 15000);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1533,7 +1527,7 @@
         modalDownloadBtn.disabled = true;
       }
 
-      alert('✅ Imagem salva no seu dispositivo com sucesso!');
+      alert('✅ Download iniciado no seu dispositivo!');
 
     } catch (error) {
       console.error('Erro no download:', error);
