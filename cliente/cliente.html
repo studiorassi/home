@@ -1477,7 +1477,7 @@
   }
 
   // ============================================================
-  // 3. MODAL E DOWNLOAD (NOVA ABA BLOQUEADA)
+  // 3. MODAL E DOWNLOAD (SEM ABRIR NOVA ABA OU RECARREGAR)
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1559,7 +1559,7 @@
   }
 
   // ============================================================
-  // DOWNLOAD - SEM ABRIR NOVA ABA
+  // DOWNLOAD - CORRIGIDO: SEM ABRIR NOVA ABA, SEM RECARREGAR
   // ============================================================
   async function downloadFromModal() {
     const key = allPhotoKeys[currentModalIndex];
@@ -1601,22 +1601,23 @@
       const data = await response.json();
       const signedUrl = data.urls[0].url;
 
-      // 2. Baixa a imagem original via fetch
+      // 2. Baixa a imagem original via fetch (sem abrir nova aba)
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
 
-      // 3. Cria link para download (NÃO ABRE NOVA ABA)
+      // 3. Cria link invisível para download (NÃO ABRE NOVA ABA)
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = key;
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-
-      // 4. Limpa a URL do objeto após o download
+      
+      // 4. Remove o link após o clique
       setTimeout(() => {
+        document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
-      }, 1000);
+      }, 100);
 
       // 5. DEBITA O CRÉDITO (apenas após download bem-sucedido)
       const debitResponse = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
