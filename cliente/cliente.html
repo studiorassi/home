@@ -1495,7 +1495,8 @@
     if (!key) return;
 
     if (credits <= 0) {
-      alert('❌ Você não tem créditos suficientes.');
+      alert('❌ Seus créditos acabaram! Adquira mais créditos para continuar baixando.');
+      openCreditUpsell();
       return;
     }
 
@@ -1505,7 +1506,7 @@
     }
 
     modalDownloadBtn.disabled = true;
-    modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando arquivo na Amazon AWS...';
+    modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando na Amazon AWS...';
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
@@ -1519,12 +1520,19 @@
 
       const data = await response.json();
       
-      if (!response.ok || !data.urls || data.urls.length === 0) {
+      if (!response.ok || !data.success) {
         throw new Error(data.message || 'Erro ao processar download.');
       }
 
-      const signedUrl = data.urls[0].url;
+      // Atualiza o saldo real baseado estritamente na resposta oficial do servidor
+      if (data.data && typeof data.data.creditsRemaining === 'number') {
+        credits = data.data.creditsRemaining;
+        updateCreditsDisplay();
+      } else {
+        await fetchCreditsFromServer();
+      }
 
+      const signedUrl = data.urls[0].url || data.urls[0];
       const downloadResponse = await fetch(signedUrl);
       const blob = await downloadResponse.blob();
 
@@ -1537,10 +1545,7 @@
       document.body.removeChild(link);
       setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
 
-      // Debita o crédito localmente e atualiza
-      credits -= 1;
-      updateCreditsDisplay();
-
+      // Salva no navegador apenas o histórico visual das fotos já baixadas (verde)
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1553,13 +1558,15 @@
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
 
-      alert('✅ Imagem baixada com sucesso! 1 crédito foi consumido.');
+      alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('Erro no download:', error);
-      alert('❌ Erro ao baixar a imagem. Tente novamente.');
+      alert('❌ ' + (error.message || 'Erro ao baixar a imagem.'));
       modalDownloadBtn.disabled = false;
       modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      
+      await fetchCreditsFromServer();
     }
   }
 
