@@ -1369,6 +1369,10 @@
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
+      div.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-download')) return;
+        openModal(i);
+      });
       grid.appendChild(div);
     }
   }
@@ -1396,7 +1400,7 @@
   // ============================================================
   let currentModalIndex = 0;
 
-  function openModal(index) {
+  async function openModal(index) {
     currentModalIndex = index;
     const key = allPhotoKeys[index];
     const isDownloaded = downloadedImages.includes(key);
@@ -1407,6 +1411,7 @@
     
     modalImage.classList.remove('loaded');
     modalImage.style.opacity = '0';
+    modalImage.src = '';
     
     document.getElementById('currentIndexDisplay').textContent = index + 1;
     updateModalButtons(isDownloaded);
@@ -1415,45 +1420,66 @@
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Aumenta a resolução para a tela cheia
-    const highResUrl = `${API_BASE_URL}/api/gallery/view/${key}?width=1200`;
-    
-    const img = new Image();
-    let progress = 0;
-    
-    const progressInterval = setInterval(() => {
-      if (progress < 90) {
-        progress += Math.random() * 8;
-        if (progress > 90) progress = 90;
-        modalProgressFill.style.width = progress + '%';
-        modalProgressLabel.textContent = Math.round(progress) + '%';
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      const json = await res.json();
+      
+      if (!json.success || !json.url) {
+        throw new Error('Erro ao carregar imagem');
       }
-    }, 100);
+
+      const imageUrl = json.url;
+      const img = new Image();
+      let progress = 0;
+      
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 8;
+          if (progress > 90) progress = 90;
+          modalProgressFill.style.width = progress + '%';
+          modalProgressLabel.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+      
+      img.onload = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        setTimeout(() => modalProgress.classList.remove('show'), 500);
+      };
+      
+      img.onerror = function() {
+        clearInterval(progressInterval);
+        modalProgress.classList.remove('show');
+        modalImage.alt = 'Erro ao carregar';
+      };
+      
+      img.src = imageUrl;
+
+    } catch (error) {
+      console.error('Erro ao abrir modal:', error);
+      modalProgress.classList.remove('show');
+    }
     
-    img.onload = function() {
-      clearInterval(progressInterval);
-      modalProgressFill.style.width = '100%';
-      modalProgressLabel.textContent = '100%';
-      modalImage.src = highResUrl;
-      modalImage.classList.add('loaded');
-      modalImage.style.opacity = '1';
-      setTimeout(() => modalProgress.classList.remove('show'), 500);
-    };
-    
-    img.onerror = function() {
-      clearInterval(progressInterval);
-      modalImage.alt = 'Erro ao carregar';
-      setTimeout(() => modalProgress.classList.remove('show'), 500);
-    };
-    
-    img.src = highResUrl;
     document.addEventListener('keydown', handleModalKeydown);
   }
 
   async function downloadFromModal() {
     const key = allPhotoKeys[currentModalIndex];
+    if (!key) return;
+
     if (credits <= 0) {
       alert('❌ Você não tem créditos suficientes.');
+      return;
+    }
+
+    if (downloadedImages.includes(key)) {
+      alert('✅ Esta imagem já foi baixada anteriormente.');
       return;
     }
 
@@ -1472,15 +1498,28 @@
 
       const data = await response.json();
       
-      if (!response.ok || !data.success) {
+      if (!response.ok || !data.urls || data.urls.length === 0) {
         throw new Error(data.message || 'Erro ao processar download.');
       }
 
-      // Atualiza os créditos na tela com o que voltou do servidor
-      credits = data.data.creditsRemaining;
+      const signedUrl = data.urls[0].url;
+
+      const downloadResponse = await fetch(signedUrl);
+      const blob = await downloadResponse.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = key;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+
+      // Debita o crédito localmente e atualiza
+      credits -= 1;
       updateCreditsDisplay();
 
-      // Salva o histórico no navegador para ficar verde
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1489,17 +1528,15 @@
       updateDownloadBadge(key);
       updateModalButtons(true);
 
-      // Dispara o download real
-      const link = document.createElement('a');
-      link.href = data.urls[0];
-      link.download = key;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      modalDownloadBtn.className = 'modal-btn-download downloaded';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.disabled = true;
+
+      alert('✅ Imagem baixada com sucesso! 1 crédito foi consumido.');
 
     } catch (error) {
       console.error('Erro no download:', error);
-      alert('❌ Erro: ' + error.message);
+      alert('❌ Erro ao baixar a imagem. Tente novamente.');
       modalDownloadBtn.disabled = false;
       modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
     }
