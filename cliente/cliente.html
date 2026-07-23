@@ -1159,7 +1159,7 @@
       <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
     </div>
     <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Entre em contato com o Studio Rassi para adicionar saldo à sua conta.
+      <i class="fas fa-info-circle"></i> Escolha um pacote para ser redirecionado ao checkout seguro do Mercado Pago.
     </p>
   </div>
 </div>
@@ -1556,16 +1556,22 @@
   }
 
   // ============================================================
-  // 4. PAGAMENTO ESTÁVEL (CONTORNA BLOQUEIO DE API DO MERCADO PAGO)
+  // 4. LINKS DIRETOS DO MERCADO PAGO POR PACOTE
   // ============================================================
   function buyCredits(amount) {
-    const prices = { 5: 40, 10: 80, 20: 160, 50: 400 };
-    const price = prices[amount] || (amount * 8);
+    const paymentLinks = {
+      5: 'https://mpago.la/28Aw32a',
+      10: 'https://mpago.la/28Aw32a',
+      20: 'https://mpago.la/2ZCXNZq',
+      50: 'https://mpago.la/1H3q1Rk'
+    };
 
-    if (confirm(`🛒 Deseja adquirir o pacote de +${amount} créditos por R$ ${price}?\n\nVocê será direcionado para finalizar o pagamento com o Studio Rassi.`)) {
-      // Se preferir, você pode substituir o link abaixo pelo link direto gerado no seu painel do Mercado Pago
-      const directCheckoutUrl = `https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20adicionar%20mais%20${amount}%20créditos%20(${clientName}).`;
-      window.open(directCheckoutUrl, '_blank');
+    const targetUrl = paymentLinks[amount];
+
+    if (targetUrl) {
+      window.open(targetUrl, '_blank');
+    } else {
+      alert('⚠️ Pacote não encontrado.');
     }
   }
 
