@@ -875,39 +875,108 @@
       z-index: 10;
     }
 
+    /* POP-UP / BOX BRANCO REFINADO COM PACOTES RÁPIDOS DE COMPRA */
     .modal-buy-credits {
       display: none;
       width: 100%;
-      max-width: 500px;
+      max-width: 460px;
+      background: #fdfbfb;
+      color: #2C0714;
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
       flex-direction: column;
       gap: 12px;
       align-items: center;
       z-index: 10;
-      padding: 8px 0;
+      text-align: center;
+      animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popUpScale {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
     .modal-buy-credits.show { display: flex; }
     .modal-buy-credits .buy-title {
       font-family: 'Fraunces', serif;
-      font-weight: 600;
-      color: #D4A3B3;
-      font-size: 1rem;
-      text-align: center;
+      font-weight: 700;
+      color: #2C0714;
+      font-size: 1.1rem;
       line-height: 1.4;
+    }
+    .modal-buy-credits .buy-subtitle {
+      font-size: 0.85rem;
+      color: #55444a;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+    .modal-buy-credits .quick-packages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .modal-buy-credits .quick-pkg {
+      background: #2C0714;
+      color: #f5edea;
+      padding: 8px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+      flex: 1;
+      min-width: 70px;
+      text-align: center;
+      border: none;
+      font-family: 'Work Sans', sans-serif;
+    }
+    .modal-buy-credits .quick-pkg:hover {
+      background: #460c21;
+      transform: scale(1.05);
+    }
+    .modal-buy-credits .quick-pkg .pkg-label {
+      font-size: 0.65rem;
+      color: #D4A3B3;
+      display: block;
+    }
+    .modal-buy-credits .quick-pkg .pkg-price {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .modal-buy-credits .btn-sync-action {
+      background: transparent;
+      color: #2C0714;
+      border: 1px solid rgba(44, 7, 20, 0.2);
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .modal-buy-credits .btn-sync-action:hover {
+      background: rgba(44, 7, 20, 0.05);
+      border-color: #2C0714;
     }
     .modal-buy-credits .buy-close {
       background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #d4c5c0;
-      padding: 6px 20px;
-      border-radius: 40px;
+      border: none;
+      color: #7a5f5a;
+      padding: 2px 10px;
       cursor: pointer;
-      font-family: 'Work Sans', sans-serif;
       font-size: 0.8rem;
       transition: 0.3s;
+      text-decoration: underline;
     }
     .modal-buy-credits .buy-close:hover {
-      border-color: #D4A3B3;
-      color: #f5edea;
+      color: #2C0714;
     }
 
     .upsell-section {
@@ -1058,7 +1127,7 @@
     <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Lucille e Edson</strong></div>
     <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
-  <div class="menu-status">
+  <div class="mobile-menu menu-status" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-direction: column; gap: 12px;">
     <div class="status-row"><span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span><span class="value" id="mobileCreditsDisplay">0</span></div>
     <div class="status-row"><span class="label"><i class="fas fa-images"></i> Fotos baixadas</span><span class="value" id="mobileDownloadedDisplay">0 / 116</span></div>
     <div class="status-row"><span class="label"><i class="far fa-clock"></i> Expira em</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
@@ -1167,23 +1236,41 @@
     
     <!-- AÇÕES -->
     <div class="modal-actions">
+      <!-- BOTÃO DE DOWNLOAD NORMAL (Visível quando há créditos) -->
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
       </button>
       
+      <!-- POP-UP CLARO E REFINADO COM PACOTES RÁPIDOS (Visível quando créditos = 0) -->
       <div class="modal-buy-credits" id="modalBuyCredits">
-        <div class="buy-title" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
-          🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖<br>
-          <span style="font-size: 0.95rem; font-weight: 400; color: #f5edea;">
-            Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, clique no botão abaixo e garanta o seu próximo pacote de créditos:
-          </span>
+        <div class="buy-title">
+          🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖
+        </div>
+        <div class="buy-subtitle">
+          Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, escolha um pacote abaixo:
         </div>
         
-        <button class="modal-btn-download" onclick="openCreditUpsell(); closeModal();" style="background: #D4A3B3; color: #2C0714; width: 100%; margin-top: 8px;">
-          <i class="fas fa-plus-circle"></i> + Comprar mais créditos
+        <!-- PACOTES DE COMPRA RÁPIDA DIRETO NO POP-UP -->
+        <div class="quick-packages">
+          <button class="quick-pkg" onclick="buyCredits(5)">
+            <span class="pkg-label">+5 Créditos</span>
+            <span class="pkg-price">R$ 40</span>
+          </button>
+          <button class="quick-pkg" onclick="buyCredits(10)">
+            <span class="pkg-label">+10 Créditos</span>
+            <span class="pkg-price">R$ 80</span>
+          </button>
+          <button class="quick-pkg" onclick="buyCredits(20)">
+            <span class="pkg-label">+20 Créditos</span>
+            <span class="pkg-price">R$ 160</span>
+          </button>
+        </div>
+
+        <button class="btn-sync-action" onclick="fetchCreditsFromServer(); alert('🔄 Verificando novos créditos...');">
+          <i class="fas fa-sync-alt"></i> Já realizei o pagamento, atualizar créditos
         </button>
         
-        <button class="buy-close" onclick="closeModal()" style="margin-top: 10px;">Ver galeria</button>
+        <button class="buy-close" onclick="closeModal()">Continuar navegando na galeria</button>
       </div>
     </div>
     
@@ -1381,7 +1468,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO (CONTORNANDO CORS)
+  // 3. TELA CHEIA (MODAL) E DOWNLOAD AUTOMÁTICO NO DISPOSITIVO
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1503,16 +1590,14 @@
         await fetchCreditsFromServer();
       }
 
-      // Dispara o download real forçando o link direto para o navegador salvar o arquivo localmente
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      const link = document.createElement('a');
-      link.href = signedUrl;
-      link.setAttribute('download', key);
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Gatilho invisível de download automático integrado mantendo o usuário na página
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = signedUrl;
+      document.body.appendChild(iframe);
+      setTimeout(() => document.body.removeChild(iframe), 15000);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1528,6 +1613,8 @@
         modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
         modalDownloadBtn.disabled = true;
       }
+
+      alert('✅ Download iniciado no seu dispositivo!');
 
     } catch (error) {
       console.error('Erro no download:', error);
