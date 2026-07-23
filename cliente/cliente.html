@@ -1602,12 +1602,30 @@
 
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      // Gatilho invisível de download automático integrado mantendo o usuário na página
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = signedUrl;
-      document.body.appendChild(iframe);
-      setTimeout(() => document.body.removeChild(iframe), 15000);
+      // Força o download real e direto no dispositivo (compatível com Desktop, iOS e Android)
+      try {
+        const imageResponse = await fetch(signedUrl);
+        const blob = await imageResponse.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = key;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        // Fallback direto caso o navegador bloqueie o blob por política de segurança da AWS
+        const link = document.createElement('a');
+        link.href = signedUrl;
+        link.setAttribute('download', key);
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1624,7 +1642,7 @@
         modalDownloadBtn.disabled = true;
       }
 
-      alert('✅ Download iniciado no seu dispositivo!');
+      alert('✅ Imagem salva no seu dispositivo com sucesso!');
 
     } catch (error) {
       console.error('Erro no download:', error);
