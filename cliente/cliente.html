@@ -875,11 +875,13 @@
       z-index: 10;
     }
 
-    /* POP-UP / BOX BRANCO REFINADO COM PACOTES RÁPIDOS DE COMPRA */
+    /* POP-UP / BOX BRANCO REFINADO COM SCROLL INTERNO PARA NÃO CORTAR */
     .modal-buy-credits {
       display: none;
       width: 100%;
       max-width: 460px;
+      max-height: 80vh; /* Limita a altura para caber na tela com folga */
+      overflow-y: auto;  /* Adiciona scroll suave se o conteúdo for maior */
       background: #fdfbfb;
       color: #2C0714;
       border-radius: 24px;
@@ -891,6 +893,14 @@
       z-index: 10;
       text-align: center;
       animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    /* Estilização da barra de rolagem interna */
+    .modal-buy-credits::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-buy-credits::-webkit-scrollbar-thumb {
+      background: rgba(44, 7, 20, 0.2);
+      border-radius: 10px;
     }
     @keyframes popUpScale {
       0% { transform: scale(0.9); opacity: 0; }
