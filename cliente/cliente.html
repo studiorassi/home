@@ -894,38 +894,6 @@
       text-align: center;
       line-height: 1.4;
     }
-    .modal-buy-credits .buy-packages {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      width: 100%;
-    }
-    .modal-buy-credits .buy-package {
-      background: #2C0714;
-      padding: 10px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      cursor: pointer;
-      transition: 0.3s;
-      min-width: 90px;
-      text-align: center;
-      flex: 1;
-    }
-    .modal-buy-credits .buy-package:hover {
-      border-color: #D4A3B3;
-      background: #3d0d1f;
-      transform: scale(1.05);
-    }
-    .modal-buy-credits .buy-package .price {
-      font-weight: 700;
-      color: #D4A3B3;
-      font-size: 1rem;
-    }
-    .modal-buy-credits .buy-package .label {
-      font-size: 0.7rem;
-      color: #d4c5c0;
-    }
     .modal-buy-credits .buy-close {
       background: transparent;
       border: 1px solid rgba(212, 163, 179, 0.2);
@@ -1027,7 +995,6 @@
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
       .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
       .modal-progress { width: 80%; bottom: 80px; }
-      .modal-buy-credits .buy-package { min-width: 80px; padding: 10px 14px; }
       .upsell-grid { flex-direction: column; }
       .upsell-item { justify-content: center; }
     }
@@ -1049,8 +1016,6 @@
       .modal-nav.prev { left: -4px; }
       .modal-nav.next { right: -4px; }
       .credits-info { font-size: 0.65rem; padding: 10px 12px; }
-      .modal-buy-credits .buy-packages { flex-direction: column; width: 100%; }
-      .modal-buy-credits .buy-package { min-width: unset; width: 100%; }
       .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
       .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
       .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
@@ -1201,26 +1166,32 @@
     <img id="modalImage" class="modal-image" src="" alt="Foto em alta resolução">
     
     <!-- AÇÕES -->
-      <div class="modal-actions">
-        <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
-          <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
+    <div class="modal-actions">
+      <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
+        <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
+      </button>
+      
+      <div class="modal-buy-credits" id="modalBuyCredits">
+        <div class="buy-title" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
+          🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖<br>
+          <span style="font-size: 0.95rem; font-weight: 400; color: #f5edea;">
+            Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, clique no botão abaixo e garanta o seu próximo pacote de créditos:
+          </span>
+        </div>
+        
+        <button class="modal-btn-download" onclick="openCreditUpsell(); closeModal();" style="background: #D4A3B3; color: #2C0714; width: 100%; margin-top: 8px;">
+          <i class="fas fa-plus-circle"></i> + Comprar mais créditos
         </button>
         
-        <div class="modal-buy-credits" id="modalBuyCredits">
-          <div class="buy-title" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
-            🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖<br>
-            <span style="font-size: 0.95rem; font-weight: 400; color: #f5edea;">
-              Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, clique no botão abaixo e garanta o seu próximo pacote de créditos:
-            </span>
-          </div>
-          
-          <button class="modal-btn-download" onclick="openCreditUpsell()" style="background: #D4A3B3; color: #2C0714; width: 100%; margin-top: 8px;">
-            <i class="fas fa-plus-circle"></i> + Comprar mais créditos
-          </button>
-          
-          <button class="buy-close" onclick="closeModal()" style="margin-top: 10px;">Ver galeria</button>
-        </div>
+        <button class="buy-close" onclick="closeModal()" style="margin-top: 10px;">Ver galeria</button>
       </div>
+    </div>
+    
+    <div class="modal-credits" id="modalCredits">
+      Créditos restantes: <strong id="modalCreditsCount">0</strong>
+    </div>
+  </div>
+</div>
 
 <!-- ===== FOOTER ===== -->
 <footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p></div></footer>
@@ -1410,7 +1381,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD DA AWS
+  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO SEM CORS
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1533,17 +1504,15 @@
       }
 
       const signedUrl = data.urls[0].url || data.urls[0];
-      const downloadResponse = await fetch(signedUrl);
-      const blob = await downloadResponse.blob();
-
-      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Abordagem direta corrigindo o erro de CORS (Failed to fetch)
       const link = document.createElement('a');
-      link.href = blobUrl;
+      link.href = signedUrl;
+      link.target = '_blank';
       link.download = key;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1560,7 +1529,7 @@
         modalDownloadBtn.disabled = true;
       }
 
-      alert('✅ Imagem baixada com sucesso!');
+      alert('✅ Download iniciado com sucesso!');
 
     } catch (error) {
       console.error('Erro no download:', error);
