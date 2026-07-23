@@ -875,22 +875,26 @@
       z-index: 10;
     }
 
-    /* POP-UP / BOX BRANCO REFINADO COM SCROLL INTERNO PARA NÃO CORTAR */
+    /* POP-UP / BOX BRANCO CENTRALIZADO E POR CIMA DE TUDO QUANDO CRÉDITOS = 0 */
     .modal-buy-credits {
       display: none;
-      width: 100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
       max-width: 460px;
-      max-height: 80vh; 
+      max-height: 85vh; 
       overflow-y: auto;  
       background: #fdfbfb;
       color: #2C0714;
       border-radius: 24px;
-      padding: 24px 20px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      padding: 28px 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
-      z-index: 10;
+      z-index: 10005; /* Garante que fica por cima da imagem e dos botões do modal */
       text-align: center;
       animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -902,19 +906,19 @@
       border-radius: 10px;
     }
     @keyframes popUpScale {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
     .modal-buy-credits.show { display: flex; }
     .modal-buy-credits .buy-title {
       font-family: 'Fraunces', serif;
       font-weight: 700;
       color: #2C0714;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       line-height: 1.4;
     }
     .modal-buy-credits .buy-subtitle {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: #55444a;
       line-height: 1.4;
       font-weight: 400;
@@ -922,7 +926,7 @@
     .modal-buy-credits .quick-packages {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       justify-content: center;
       width: 100%;
       margin-top: 4px;
@@ -930,12 +934,12 @@
     .modal-buy-credits .quick-pkg {
       background: #2C0714;
       color: #f5edea;
-      padding: 8px 12px;
-      border-radius: 14px;
+      padding: 10px 14px;
+      border-radius: 16px;
       cursor: pointer;
       transition: 0.3s;
       flex: 1;
-      min-width: 70px;
+      min-width: 80px;
       text-align: center;
       border: none;
       font-family: 'Work Sans', sans-serif;
@@ -945,12 +949,12 @@
       transform: scale(1.05);
     }
     .modal-buy-credits .quick-pkg .pkg-label {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: #D4A3B3;
       display: block;
     }
     .modal-buy-credits .quick-pkg .pkg-price {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
     }
     .modal-buy-credits .btn-sync-action {
@@ -958,10 +962,10 @@
       color: #2C0714;
       border: 1px solid rgba(44, 7, 20, 0.2);
       width: 100%;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border-radius: 40px;
       font-weight: 500;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: 0.3s;
       display: flex;
@@ -978,9 +982,9 @@
       background: transparent;
       border: none;
       color: #7a5f5a;
-      padding: 2px 10px;
+      padding: 4px 12px;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       transition: 0.3s;
       text-decoration: underline;
     }
@@ -1249,38 +1253,38 @@
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
       </button>
-      
-      <!-- POP-UP CLARO E REFINADO COM PACOTES RÁPIDOS (Visível quando créditos = 0) -->
-      <div class="modal-buy-credits" id="modalBuyCredits">
-        <div class="buy-title">
-          🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖
-        </div>
-        <div class="buy-subtitle">
-          Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, escolha um pacote abaixo:
-        </div>
-        
-        <!-- PACOTES DE COMPRA RÁPIDA DIRETO NO POP-UP -->
-        <div class="quick-packages">
-          <button class="quick-pkg" onclick="buyCredits(5)">
-            <span class="pkg-label">+5 Créditos</span>
-            <span class="pkg-price">R$ 40</span>
-          </button>
-          <button class="quick-pkg" onclick="buyCredits(10)">
-            <span class="pkg-label">+10 Créditos</span>
-            <span class="pkg-price">R$ 80</span>
-          </button>
-          <button class="quick-pkg" onclick="buyCredits(20)">
-            <span class="pkg-label">+20 Créditos</span>
-            <span class="pkg-price">R$ 160</span>
-          </button>
-        </div>
+    </div>
 
-        <button class="btn-sync-action" onclick="fetchCreditsFromServer(); alert('🔄 Verificando novos créditos...');">
-          <i class="fas fa-sync-alt"></i> Já realizei o pagamento, atualizar créditos
-        </button>
-        
-        <button class="buy-close" onclick="closeModal()">Continuar navegando na galeria</button>
+    <!-- POP-UP CLARO E REFINADO CENTRALIZADO (Visível quando créditos = 0) -->
+    <div class="modal-buy-credits" id="modalBuyCredits">
+      <div class="buy-title">
+        🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖
       </div>
+      <div class="buy-subtitle">
+        Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, escolha um pacote abaixo:
+      </div>
+      
+      <!-- PACOTES DE COMPRA RÁPIDA DIRETO NO POP-UP -->
+      <div class="quick-packages">
+        <button class="quick-pkg" onclick="buyCredits(5)">
+          <span class="pkg-label">+5 Créditos</span>
+          <span class="pkg-price">R$ 40</span>
+        </button>
+        <button class="quick-pkg" onclick="buyCredits(10)">
+          <span class="pkg-label">+10 Créditos</span>
+          <span class="pkg-price">R$ 80</span>
+        </button>
+        <button class="quick-pkg" onclick="buyCredits(20)">
+          <span class="pkg-label">+20 Créditos</span>
+          <span class="pkg-price">R$ 160</span>
+        </button>
+      </div>
+
+      <button class="btn-sync-action" onclick="fetchCreditsFromServer(); alert('🔄 Verificando novos créditos...');">
+        <i class="fas fa-sync-alt"></i> Já realizei o pagamento, atualizar créditos
+      </button>
+      
+      <button class="buy-close" onclick="closeModal()">Continuar navegando na galeria</button>
     </div>
     
     <div class="modal-credits" id="modalCredits">
@@ -1405,7 +1409,6 @@
       div.className = 'watermark-item';
       div.dataset.key = key;
 
-      // Busca a URL da imagem com marca d'água
       let imageUrl = '';
       try {
         const res = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
@@ -1477,7 +1480,7 @@
   }
 
   // ============================================================
-  // 3. MODAL E DOWNLOAD (SEM ABRIR NOVA ABA OU RECARREGAR)
+  // 3. MODAL E DOWNLOAD AUTOMÁTICO SEGURO (SEM ERRO DE CORS)
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1558,20 +1561,15 @@
     document.addEventListener('keydown', handleModalKeydown);
   }
 
-  // ============================================================
-  // DOWNLOAD - CORRIGIDO: SEM ABRIR NOVA ABA, SEM RECARREGAR
-  // ============================================================
   async function downloadFromModal() {
     const key = allPhotoKeys[currentModalIndex];
     if (!key) return;
 
-    // Verifica créditos
     if (credits <= 0) {
       updateModalButtons(false);
       return;
     }
 
-    // Verifica se já foi baixada
     if (downloadedImages.includes(key)) {
       alert('✅ Esta imagem já foi baixada anteriormente.');
       return;
@@ -1579,11 +1577,10 @@
 
     if (modalDownloadBtn) {
       modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando...';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando para o dispositivo...';
     }
 
     try {
-      // 1. Obtém URL assinada da imagem original (sem marca d'água)
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
         headers: {
@@ -1599,27 +1596,18 @@
       }
 
       const data = await response.json();
-      const signedUrl = data.urls[0].url;
+      const signedUrl = data.urls[0].url || data.urls[0];
 
-      // 2. Baixa a imagem original via fetch (sem abrir nova aba)
-      const downloadResponse = await fetch(signedUrl);
-      const blob = await downloadResponse.blob();
-
-      // 3. Cria link invisível para download (NÃO ABRE NOVA ABA)
+      // Dispara o download nativo na mesma página utilizando link programático
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = key;
+      link.href = signedUrl;
+      link.setAttribute('download', key);
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      
-      // 4. Remove o link após o clique
-      setTimeout(() => {
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
-      }, 100);
+      document.body.removeChild(link);
 
-      // 5. DEBITA O CRÉDITO (apenas após download bem-sucedido)
+      // Debita o crédito no servidor após iniciar o download
       const debitResponse = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
         method: 'POST',
         headers: {
@@ -1637,7 +1625,6 @@
       const debitData = await debitResponse.json();
       credits = debitData.credits || 0;
 
-      // 6. Marca como baixada
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1653,7 +1640,7 @@
         modalDownloadBtn.disabled = true;
       }
 
-      alert('✅ Imagem baixada com sucesso!');
+      alert('✅ Download iniciado no seu dispositivo!');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
@@ -1664,7 +1651,6 @@
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
       }
       
-      // Recarrega os créditos para garantir consistência
       await fetchCreditsFromServer();
     }
   }
@@ -1683,7 +1669,7 @@
   }
 
   // ============================================================
-  // 4. LINKS DIRETOS DO MERCADO PAGO POR PACOTE
+  // 4. LINKS DO MERCADO PAGO POR PACOTE
   // ============================================================
   function buyCredits(amount) {
     const paymentLinks = {
