@@ -1390,7 +1390,7 @@
   }
 
   // ============================================================
-  // 2. RENDERIZAR GALERIA (Otimizado sem fetch em loop massivo)
+  // 2. RENDERIZAR GALERIA
   // ============================================================
   let imagesLoaded = 0;
 
@@ -1409,7 +1409,6 @@
       div.className = 'watermark-item';
       div.dataset.key = key;
 
-      // Aponta direto para a rota de visualização da API que redireciona o S3
       const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
       
       div.innerHTML = `
@@ -1466,7 +1465,7 @@
   }
 
   // ============================================================
-  // 3. MODAL E DOWNLOAD AUTOMÁTICO SEGURO
+  // 3. MODAL E DOWNLOAD SEGURO CORRIGIDO
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1555,22 +1554,28 @@
 
     if (modalDownloadBtn) {
       modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando para o dispositivo...';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
     }
 
     try {
-      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+      // 1. Solicita a URL assinada direta da imagem em alta para o servidor
+      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
 
-      // Dispara o download nativo na mesma página utilizando link programático
+      // Como o servidor agora redireciona com res.redirect(url), pegamos a URL final do S3
+      const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${key}`;
+
+      // 2. Dispara o download nativo do arquivo real
       const link = document.createElement('a');
-      link.href = imageUrl;
+      link.href = downloadFinalUrl;
       link.setAttribute('download', key);
-      link.style.display = 'none';
+      link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      // Debita o crédito no servidor após iniciar o download
+      // 3. Debita o crédito no servidor
       const debitResponse = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
         method: 'POST',
         headers: {
