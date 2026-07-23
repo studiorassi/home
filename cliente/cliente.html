@@ -1159,7 +1159,7 @@
       <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
     </div>
     <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Entre em contato com o Studio Rassi para adicionar saldo à sua conta.
+      <i class="fas fa-info-circle"></i> Você será redirecionado para o Mercado Pago para concluir o pagamento.
     </p>
   </div>
 </div>
@@ -1556,10 +1556,43 @@
   }
 
   // ============================================================
-  // 4. SIMULAÇÃO DE PAGAMENTO (COMPRAR CRÉDITOS)
+  // 4. PAGAMENTO COM MERCADO PAGO
   // ============================================================
-  function buyCredits(amount) {
-    alert(`🚧 SISTEMA SIMPLIFICADO\n\nO sistema de pagamento automático foi desativado temporariamente para garantir a estabilidade da galeria.\n\nPara liberar mais ${amount} créditos, por favor entre em contato direto com o Studio Rassi para adicionar saldo ao seu login.`);
+  async function buyCredits(amount) {
+    const prices = { 5: 40, 10: 80, 20: 160, 50: 400 };
+    const price = prices[amount] || (amount * 8);
+
+    if (!confirm(`🛒 Deseja adicionar +${amount} créditos por R$ ${price}? Você será redirecionado para o Mercado Pago.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/payment/create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ planId: amount })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erro ao gerar pagamento.');
+      }
+
+      localStorage.setItem('pendingPayment', JSON.stringify({
+        planId: amount,
+        timestamp: Date.now()
+      }));
+
+      window.location.href = data.payment_url;
+
+    } catch (error) {
+      console.error('Erro no pagamento:', error);
+      alert('❌ Erro ao iniciar pagamento: ' + error.message);
+    }
   }
 
   // ============================================================
