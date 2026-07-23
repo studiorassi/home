@@ -1311,7 +1311,7 @@
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
 
   // ============================================================
-  // DOM ELEMENTS (Vinculação segura com verificação de nulos)
+  // DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
@@ -1338,7 +1338,7 @@
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
 
-  // Setar Textos na Tela com segurança
+  // Setar Textos na Tela
   if (document.getElementById('clienteNome')) document.getElementById('clienteNome').textContent = clientName;
   if (document.getElementById('mobileUserName')) document.getElementById('mobileUserName').textContent = clientName;
   if (document.getElementById('totalPhotosDisplay')) document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
@@ -1354,14 +1354,20 @@
       const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
-      const data = await response.json();
       
-      if (data.success) {
-        credits = data.data.credits;
-        updateCreditsDisplay();
+      if (!response.ok) {
+        throw new Error('Erro ao buscar créditos');
       }
+      
+      const data = await response.json();
+      credits = data.credits || 0;
+      updateCreditsDisplay();
+      return credits;
     } catch (error) {
-      console.error('Erro ao buscar créditos:', error);
+      console.error('❌ Erro ao buscar créditos:', error);
+      credits = 0;
+      updateCreditsDisplay();
+      return 0;
     }
   }
 
@@ -1380,7 +1386,7 @@
   }
 
   // ============================================================
-  // 2. RENDERIZAR GALERIA COM BARRA DE PROGRESSO OTIMIZADA
+  // 2. RENDERIZAR GALERIA
   // ============================================================
   let imagesLoaded = 0;
 
@@ -1399,13 +1405,14 @@
       div.className = 'watermark-item';
       div.dataset.key = key;
 
+      // Busca a URL da imagem com marca d'água
       let imageUrl = '';
       try {
         const res = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
           headers: { 'Authorization': `Bearer ${authToken}` }
         });
         const json = await res.json();
-        if (json.success) imageUrl = json.url;
+        imageUrl = json.url || '';
       } catch (e) {
         console.error('Erro ao buscar url da foto', key);
       }
@@ -1417,7 +1424,6 @@
         <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
           ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
         </div>
-        
         ${imageUrl ? `
           <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
                data-key="${key}" data-index="${i}"
@@ -1428,7 +1434,6 @@
             <i class="fas fa-exclamation-triangle"></i><br>Indisponível
           </div>
         `}
-             
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
@@ -1439,11 +1444,6 @@
       });
       
       grid.appendChild(div);
-
-      const imgElement = div.querySelector('.real-image');
-      if (imgElement && imgElement.complete) {
-        onImageLoad(i);
-      }
     }
     updateCreditsDisplay();
   }
@@ -1477,7 +1477,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD AUTOMÁTICO SEGURO
+  // 3. MODAL E DOWNLOAD (NOVA ABA BLOQUEADA)
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1510,12 +1510,12 @@
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
       const json = await res.json();
+      const imageUrl = json.url || '';
       
-      if (!json.success || !json.url) {
+      if (!imageUrl) {
         throw new Error('Erro ao carregar imagem');
       }
 
-      const imageUrl = json.url;
       const img = new Image();
       let progress = 0;
       
@@ -1558,15 +1558,20 @@
     document.addEventListener('keydown', handleModalKeydown);
   }
 
+  // ============================================================
+  // DOWNLOAD - SEM ABRIR NOVA ABA
+  // ============================================================
   async function downloadFromModal() {
     const key = allPhotoKeys[currentModalIndex];
     if (!key) return;
 
+    // Verifica créditos
     if (credits <= 0) {
       updateModalButtons(false);
       return;
     }
 
+    // Verifica se já foi baixada
     if (downloadedImages.includes(key)) {
       alert('✅ Esta imagem já foi baixada anteriormente.');
       return;
@@ -1574,10 +1579,11 @@
 
     if (modalDownloadBtn) {
       modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando para o dispositivo...';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando...';
     }
 
     try {
+      // 1. Obtém URL assinada da imagem original (sem marca d'água)
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
         method: 'POST',
         headers: {
@@ -1587,29 +1593,50 @@
         body: JSON.stringify({ imageKeys: [key] })
       });
 
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro ao obter URL de download');
+      }
+
       const data = await response.json();
-      
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Erro ao processar download.');
-      }
+      const signedUrl = data.urls[0].url;
 
-      if (data.data && typeof data.data.creditsRemaining === 'number') {
-        credits = data.data.creditsRemaining;
-      } else {
-        await fetchCreditsFromServer();
-      }
+      // 2. Baixa a imagem original via fetch
+      const downloadResponse = await fetch(signedUrl);
+      const blob = await downloadResponse.blob();
 
-      const signedUrl = data.urls[0].url || data.urls[0];
-      
-      // Correção definitiva contornando CORS: Cria link invisível na mesma página com atributo download forçado
+      // 3. Cria link para download (NÃO ABRE NOVA ABA)
       const link = document.createElement('a');
-      link.href = signedUrl;
-      link.setAttribute('download', key);
-      link.style.display = 'none';
+      link.href = URL.createObjectURL(blob);
+      link.download = key;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
+      // 4. Limpa a URL do objeto após o download
+      setTimeout(() => {
+        URL.revokeObjectURL(link.href);
+      }, 1000);
+
+      // 5. DEBITA O CRÉDITO (apenas após download bem-sucedido)
+      const debitResponse = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ imageKey: key })
+      });
+
+      if (!debitResponse.ok) {
+        const error = await debitResponse.json();
+        throw new Error(error.error || 'Erro ao debitar crédito');
+      }
+
+      const debitData = await debitResponse.json();
+      credits = debitData.credits || 0;
+
+      // 6. Marca como baixada
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
         localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
@@ -1625,13 +1652,18 @@
         modalDownloadBtn.disabled = true;
       }
 
+      alert('✅ Imagem baixada com sucesso!');
+
     } catch (error) {
-      console.error('Erro no download:', error);
-      alert('❌ ' + (error.message || 'Erro ao baixar a imagem.'));
+      console.error('❌ Erro no download:', error);
+      alert('❌ ' + (error.message || 'Erro ao baixar a imagem. Tente novamente.'));
+      
       if (modalDownloadBtn) {
         modalDownloadBtn.disabled = false;
         modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
       }
+      
+      // Recarrega os créditos para garantir consistência
       await fetchCreditsFromServer();
     }
   }
@@ -1654,14 +1686,13 @@
   // ============================================================
   function buyCredits(amount) {
     const paymentLinks = {
-      5: 'https://mpago.la/28Aw32a',
+      5: 'https://mpago.la/2fSQufA',
       10: 'https://mpago.la/28Aw32a',
       20: 'https://mpago.la/2ZCXNZq',
       50: 'https://mpago.la/1H3q1Rk'
     };
 
     const targetUrl = paymentLinks[amount];
-
     if (targetUrl) {
       localStorage.setItem('pendingPayment', JSON.stringify({ planId: amount, timestamp: Date.now() }));
       window.open(targetUrl, '_blank');
@@ -1707,10 +1738,12 @@
 
   function updateModalButtons(isDownloaded = false) {
     if (!modalDownloadBtn || !modalBuyCredits) return;
+    
     if (isDownloaded) {
       modalDownloadBtn.className = 'modal-btn-download downloaded';
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
+      modalDownloadBtn.style.display = 'flex';
       modalBuyCredits.classList.remove('show');
     } else if (credits <= 0) {
       modalDownloadBtn.style.display = 'none';
@@ -1826,7 +1859,9 @@
     checkMobile();
     
     window.addEventListener('resize', checkMobile);
-    console.log('📸 Galeria Studio Rassi carregada e otimizada!');
+    console.log('📸 Galeria Studio Rassi carregada!');
+    console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
+    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
   }
 
   init();
