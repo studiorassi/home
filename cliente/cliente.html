@@ -880,8 +880,8 @@
       display: none;
       width: 100%;
       max-width: 460px;
-      max-height: 80vh; /* Limita a altura para caber na tela com folga */
-      overflow-y: auto;  /* Adiciona scroll suave se o conteúdo for maior */
+      max-height: 80vh; 
+      overflow-y: auto;  
       background: #fdfbfb;
       color: #2C0714;
       border-radius: 24px;
@@ -894,7 +894,6 @@
       text-align: center;
       animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    /* Estilização da barra de rolagem interna */
     .modal-buy-credits::-webkit-scrollbar {
       width: 6px;
     }
@@ -1478,7 +1477,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD AUTOMÁTICO NO DISPOSITIVO
+  // 3. TELA CHEIA (MODAL) E DOWNLOAD AUTOMÁTICO SEGURO
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1602,19 +1601,14 @@
 
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      // Baixa o arquivo em segundo plano via fetch (invisível ao usuário) e converte para Blob para download local automático
-      const imageResponse = await fetch(signedUrl);
-      const blob = await imageResponse.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      
+      // Correção definitiva contornando CORS: Cria link invisível na mesma página com atributo download forçado
       const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = key;
+      link.href = signedUrl;
+      link.setAttribute('download', key);
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
