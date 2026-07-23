@@ -1258,7 +1258,7 @@
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
 
   // ============================================================
-  // DOM ELEMENTS (Vinculação)
+  // DOM ELEMENTS (Vinculação segura com verificação de nulos)
   // ============================================================
   const grid = document.getElementById('galleryGrid');
   const creditsDisplay = document.getElementById('creditsDisplay');
@@ -1285,16 +1285,16 @@
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
 
-  // Setar Textos na Tela
-  document.getElementById('clienteNome').textContent = clientName;
-  document.getElementById('mobileUserName').textContent = clientName;
-  document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
-  document.getElementById('totalCount').textContent = totalPhotos;
-  document.getElementById('totalCountDisplay').textContent = totalPhotos;
-  document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
+  // Setar Textos na Tela com segurança
+  if (document.getElementById('clienteNome')) document.getElementById('clienteNome').textContent = clientName;
+  if (document.getElementById('mobileUserName')) document.getElementById('mobileUserName').textContent = clientName;
+  if (document.getElementById('totalPhotosDisplay')) document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
+  if (document.getElementById('totalCount')) document.getElementById('totalCount').textContent = totalPhotos;
+  if (document.getElementById('totalCountDisplay')) document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  if (document.getElementById('mobileTotalPhotos')) document.getElementById('mobileTotalPhotos').textContent = totalPhotos;
 
   // ============================================================
-  // CARREGAR CRÉDITOS DO SERVIDOR
+  // 1. CARREGAR CRÉDITOS DO SERVIDOR
   // ============================================================
   async function fetchCreditsFromServer() {
     try {
@@ -1313,7 +1313,6 @@
   }
 
   function updateCreditsDisplay() {
-    // Atualiza apenas se os elementos existirem na tela
     if (creditsDisplay) creditsDisplay.textContent = credits;
     if (mobileCreditsDisplay) mobileCreditsDisplay.textContent = credits;
     if (modalCreditsCount) modalCreditsCount.textContent = credits;
@@ -1333,11 +1332,12 @@
   let imagesLoaded = 0;
 
   async function renderGallery() {
+    if (!grid) return;
     grid.innerHTML = '';
     imagesLoaded = 0;
-    progressContainer.style.display = 'block';
-    progressFill.style.width = '0%';
-    loadedCount.textContent = '0';
+    if (progressContainer) progressContainer.style.display = 'block';
+    if (progressFill) progressFill.style.width = '0%';
+    if (loadedCount) loadedCount.textContent = '0';
     
     for (let i = 0; i < allPhotoKeys.length; i++) {
       const key = allPhotoKeys[i];
@@ -1404,12 +1404,12 @@
       
       imagesLoaded++;
       const percent = Math.round((imagesLoaded / totalPhotos) * 100);
-      progressFill.style.width = percent + '%';
-      loadedCount.textContent = imagesLoaded;
+      if (progressFill) progressFill.style.width = percent + '%';
+      if (loadedCount) loadedCount.textContent = imagesLoaded;
       
       if (imagesLoaded >= totalPhotos) {
         setTimeout(() => {
-          progressContainer.style.display = 'none';
+          if (progressContainer) progressContainer.style.display = 'none';
         }, 400);
       }
     }
@@ -1433,19 +1433,23 @@
     const key = allPhotoKeys[index];
     const isDownloaded = downloadedImages.includes(key);
     
-    modalProgressFill.style.width = '0%';
-    modalProgressLabel.textContent = '0%';
-    modalProgress.classList.add('show');
+    if (modalProgressFill) modalProgressFill.style.width = '0%';
+    if (modalProgressLabel) modalProgressLabel.textContent = '0%';
+    if (modalProgress) modalProgress.classList.add('show');
     
-    modalImage.classList.remove('loaded');
-    modalImage.style.opacity = '0';
-    modalImage.src = '';
+    if (modalImage) {
+      modalImage.classList.remove('loaded');
+      modalImage.style.opacity = '0';
+      modalImage.src = '';
+    }
     
-    document.getElementById('currentIndexDisplay').textContent = index + 1;
+    if (document.getElementById('currentIndexDisplay')) {
+      document.getElementById('currentIndexDisplay').textContent = index + 1;
+    }
     updateModalButtons(isDownloaded);
     updateNavButtons();
     
-    modalOverlay.classList.add('active');
+    if (modalOverlay) modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     
     try {
@@ -1466,32 +1470,36 @@
         if (progress < 90) {
           progress += Math.random() * 8;
           if (progress > 90) progress = 90;
-          modalProgressFill.style.width = progress + '%';
-          modalProgressLabel.textContent = Math.round(progress) + '%';
+          if (modalProgressFill) modalProgressFill.style.width = progress + '%';
+          if (modalProgressLabel) modalProgressLabel.textContent = Math.round(progress) + '%';
         }
       }, 100);
       
       img.onload = function() {
         clearInterval(progressInterval);
-        modalProgressFill.style.width = '100%';
-        modalProgressLabel.textContent = '100%';
-        modalImage.src = imageUrl;
-        modalImage.classList.add('loaded');
-        modalImage.style.opacity = '1';
-        setTimeout(() => modalProgress.classList.remove('show'), 500);
+        if (modalProgressFill) modalProgressFill.style.width = '100%';
+        if (modalProgressLabel) modalProgressLabel.textContent = '100%';
+        if (modalImage) {
+          modalImage.src = imageUrl;
+          modalImage.classList.add('loaded');
+          modalImage.style.opacity = '1';
+        }
+        setTimeout(() => {
+          if (modalProgress) modalProgress.classList.remove('show');
+        }, 500);
       };
       
       img.onerror = function() {
         clearInterval(progressInterval);
-        modalProgress.classList.remove('show');
-        modalImage.alt = 'Erro ao carregar';
+        if (modalProgress) modalProgress.classList.remove('show');
+        if (modalImage) modalImage.alt = 'Erro ao carregar';
       };
       
       img.src = imageUrl;
 
     } catch (error) {
       console.error('Erro ao abrir modal:', error);
-      modalProgress.classList.remove('show');
+      if (modalProgress) modalProgress.classList.remove('show');
     }
     
     document.addEventListener('keydown', handleModalKeydown);
@@ -1511,8 +1519,10 @@
       return;
     }
 
-    modalDownloadBtn.disabled = true;
-    modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando na Amazon AWS...';
+    if (modalDownloadBtn) {
+      modalDownloadBtn.disabled = true;
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando na Amazon AWS...';
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
@@ -1558,18 +1568,21 @@
       updateDownloadBadge(key);
       updateModalButtons(true);
 
-      modalDownloadBtn.className = 'modal-btn-download downloaded';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
-      modalDownloadBtn.disabled = true;
+      if (modalDownloadBtn) {
+        modalDownloadBtn.className = 'modal-btn-download downloaded';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+        modalDownloadBtn.disabled = true;
+      }
 
       alert('✅ Imagem baixada com sucesso!');
 
     } catch (error) {
       console.error('Erro no download:', error);
       alert('❌ ' + (error.message || 'Erro ao baixar a imagem.'));
-      modalDownloadBtn.disabled = false;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
-      
+      if (modalDownloadBtn) {
+        modalDownloadBtn.disabled = false;
+        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      }
       await fetchCreditsFromServer();
     }
   }
@@ -1612,7 +1625,7 @@
   // FUNÇÕES DE NAVEGAÇÃO DO MODAL
   // ============================================================
   function closeModal() {
-    modalOverlay.classList.remove('active');
+    if (modalOverlay) modalOverlay.classList.remove('active');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', handleModalKeydown);
   }
@@ -1633,20 +1646,24 @@
   function updateNavButtons() {
     const prevBtn = document.getElementById('modalPrev');
     const nextBtn = document.getElementById('modalNext');
-    prevBtn.disabled = currentModalIndex === 0;
-    nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
-    prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
-    nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
+    if (prevBtn) {
+      prevBtn.disabled = currentModalIndex === 0;
+      prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
+    }
+    if (nextBtn) {
+      nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
+      nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
+    }
   }
 
   function updateModalButtons(isDownloaded = false) {
+    if (!modalDownloadBtn || !modalBuyCredits) return;
     if (isDownloaded) {
       modalDownloadBtn.className = 'modal-btn-download downloaded';
       modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
       modalDownloadBtn.disabled = true;
       modalBuyCredits.classList.remove('show');
     } else if (credits <= 0) {
-      // Oculta o botão de download e exibe a mensagem de créditos esgotados com os botões de compra
       modalDownloadBtn.style.display = 'none';
       modalBuyCredits.classList.add('show');
     } else {
@@ -1659,13 +1676,15 @@
   }
 
   function openCreditUpsell() {
-    document.getElementById('upsellSection').scrollIntoView({ behavior: 'smooth' });
+    const upsell = document.getElementById('upsellSection');
+    if (upsell) upsell.scrollIntoView({ behavior: 'smooth' });
   }
 
   // ============================================================
   // MENU MOBILE E UI GERAL
   // ============================================================
   function toggleMobileMenu() {
+    if (!mobileMenu || !hamburgerBtn || !navbar) return;
     mobileMenu.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
     if (mobileMenu.classList.contains('open')) {
@@ -1678,6 +1697,7 @@
   }
 
   function closeMobileMenu() {
+    if (!mobileMenu || !hamburgerBtn || !navbar) return;
     mobileMenu.classList.remove('open');
     hamburgerBtn.classList.remove('active');
     navbar.classList.remove('hidden');
@@ -1688,7 +1708,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  hamburgerBtn.addEventListener('click', toggleMobileMenu);
+  if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
   
   function checkMobile() {
     updateMenuCtaVisibility();
@@ -1696,22 +1716,22 @@
 
   function updateMenuCtaVisibility() {
     if (window.innerWidth > 768 && credits <= 0) {
-      menuCreditCta.classList.add('show');
+      if (menuCreditCta) menuCreditCta.classList.add('show');
     } else {
-      menuCreditCta.classList.remove('show');
+      if (menuCreditCta) menuCreditCta.classList.remove('show');
     }
     if (window.innerWidth <= 768 && credits <= 0) {
-      mobileCreditCta.classList.add('show');
+      if (mobileCreditCta) mobileCreditCta.classList.add('show');
     } else {
-      mobileCreditCta.classList.remove('show');
+      if (mobileCreditCta) mobileCreditCta.classList.remove('show');
     }
   }
 
   let timerSeconds = 72 * 3600;
   function updateTimer() {
     if (timerSeconds <= 0) {
-      timerDisplay.textContent = '00:00:00';
-      mobileTimerDisplay.textContent = '00:00:00';
+      if (timerDisplay) timerDisplay.textContent = '00:00:00';
+      if (mobileTimerDisplay) mobileTimerDisplay.textContent = '00:00:00';
       return;
     }
     timerSeconds--;
@@ -1719,11 +1739,12 @@
     const mins = Math.floor((timerSeconds % 3600) / 60);
     const secs = timerSeconds % 60;
     const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    timerDisplay.textContent = timeStr;
-    mobileTimerDisplay.textContent = timeStr;
+    if (timerDisplay) timerDisplay.textContent = timeStr;
+    if (mobileTimerDisplay) mobileTimerDisplay.textContent = timeStr;
   }
 
   window.addEventListener('scroll', function() {
+    if (!navbar) return;
     if (window.scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
@@ -1750,7 +1771,7 @@
   // ============================================================
   async function init() {
     await fetchCreditsFromServer();
-    renderGallery();
+    await renderGallery();
     updateTimer();
     setInterval(updateTimer, 1000);
     checkMobile();
