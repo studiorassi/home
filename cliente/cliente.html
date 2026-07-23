@@ -1503,14 +1503,16 @@
         await fetchCreditsFromServer();
       }
 
+      // Dispara o download real forçando o link direto para o navegador salvar o arquivo localmente
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      // Criação de um link embutido oculto para download forçado direto no dispositivo sem sair da página
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = signedUrl;
-      document.body.appendChild(iframe);
-      setTimeout(() => document.body.removeChild(iframe), 15000);
+      const link = document.createElement('a');
+      link.href = signedUrl;
+      link.setAttribute('download', key);
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1526,8 +1528,6 @@
         modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
         modalDownloadBtn.disabled = true;
       }
-
-      alert('✅ Download iniciado no seu dispositivo!');
 
     } catch (error) {
       console.error('Erro no download:', error);
