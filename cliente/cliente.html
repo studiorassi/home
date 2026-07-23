@@ -1201,40 +1201,26 @@
     <img id="modalImage" class="modal-image" src="" alt="Foto em alta resolução">
     
     <!-- AÇÕES -->
-    <div class="modal-actions">
-      <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
-        <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
-      </button>
-      <div class="modal-buy-credits" id="modalBuyCredits">
-        <div class="buy-title">
-          ❌ Seus créditos acabaram!<br>Adquira mais créditos para continuar baixando:
+      <div class="modal-actions">
+        <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
+          <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
+        </button>
+        
+        <div class="modal-buy-credits" id="modalBuyCredits">
+          <div class="buy-title" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px;">
+            🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖<br>
+            <span style="font-size: 0.95rem; font-weight: 400; color: #f5edea;">
+              Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, clique no botão abaixo e garanta o seu próximo pacote de créditos:
+            </span>
+          </div>
+          
+          <button class="modal-btn-download" onclick="openCreditUpsell()" style="background: #D4A3B3; color: #2C0714; width: 100%; margin-top: 8px;">
+            <i class="fas fa-plus-circle"></i> + Comprar mais créditos
+          </button>
+          
+          <button class="buy-close" onclick="closeModal()" style="margin-top: 10px;">Ver galeria</button>
         </div>
-        <div class="buy-packages">
-          <div class="buy-package" onclick="buyCredits(5)">
-            <div class="label">5 créditos</div>
-            <div class="price">R$ 40</div>
-          </div>
-          <div class="buy-package" onclick="buyCredits(10)">
-            <div class="label">10 créditos</div>
-            <div class="price">R$ 80</div>
-          </div>
-          <div class="buy-package" onclick="buyCredits(20)">
-            <div class="label">20 créditos</div>
-            <div class="price">R$ 160</div>
-          </div>
-          <div class="buy-package" onclick="buyCredits(50)">
-            <div class="label">50 créditos</div>
-            <div class="price">R$ 400</div>
-          </div>
-        </div>
-        <button class="buy-close" onclick="closeModal()">Fechar</button>
       </div>
-    </div>
-    <div class="modal-credits" id="modalCredits">
-      Créditos restantes: <strong id="modalCreditsCount">0</strong>
-    </div>
-  </div>
-</div>
 
 <!-- ===== FOOTER ===== -->
 <footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p></div></footer>
