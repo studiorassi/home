@@ -1390,11 +1390,11 @@
   }
 
   // ============================================================
-  // 2. RENDERIZAR GALERIA
+  // 2. RENDERIZAR GALERIA (Otimizado sem fetch em loop massivo)
   // ============================================================
   let imagesLoaded = 0;
 
-  async function renderGallery() {
+  function renderGallery() {
     if (!grid) return;
     grid.innerHTML = '';
     imagesLoaded = 0;
@@ -1409,16 +1409,8 @@
       div.className = 'watermark-item';
       div.dataset.key = key;
 
-      let imageUrl = '';
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
-          headers: { 'Authorization': `Bearer ${authToken}` }
-        });
-        const json = await res.json();
-        imageUrl = json.url || '';
-      } catch (e) {
-        console.error('Erro ao buscar url da foto', key);
-      }
+      // Aponta direto para a rota de visualização da API que redireciona o S3
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
       
       div.innerHTML = `
         <div class="skeleton" id="skeleton-${i}">
@@ -1427,16 +1419,10 @@
         <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
           ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
         </div>
-        ${imageUrl ? `
-          <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
-               data-key="${key}" data-index="${i}"
-               onload="onImageLoad(${i})"
-               onerror="onImageError(${i})">
-        ` : `
-          <div style="padding:60px 20px; color:#7a5f5a; text-align:center; z-index:5; position:relative;">
-            <i class="fas fa-exclamation-triangle"></i><br>Indisponível
-          </div>
-        `}
+        <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
+             data-key="${key}" data-index="${i}"
+             onload="onImageLoad(${i})"
+             onerror="onImageError(${i})">
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
@@ -1474,13 +1460,13 @@
   function onImageError(index) {
     const container = document.querySelector(`.real-image[data-index="${index}"]`)?.parentElement;
     if (container) {
-      container.innerHTML = '<div style="padding:60px 20px; color:#D4A3B3; z-index:10; position:relative; text-align:center;">Erro ao carregar</div>';
+      container.innerHTML = '<div style="padding:60px 20px; color:#D4A3B3; z-index:10; position:relative; text-align:center;">Indisponível</div>';
     }
     onImageLoad(index);
   }
 
   // ============================================================
-  // 3. MODAL E DOWNLOAD AUTOMÁTICO SEGURO (SEM ERRO DE CORS)
+  // 3. MODAL E DOWNLOAD AUTOMÁTICO SEGURO
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1509,15 +1495,7 @@
     document.body.style.overflow = 'hidden';
     
     try {
-      const res = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      const json = await res.json();
-      const imageUrl = json.url || '';
-      
-      if (!imageUrl) {
-        throw new Error('Erro ao carregar imagem');
-      }
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
 
       const img = new Image();
       let progress = 0;
@@ -1581,26 +1559,11 @@
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({ imageKeys: [key] })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Erro ao obter URL de download');
-      }
-
-      const data = await response.json();
-      const signedUrl = data.urls[0].url || data.urls[0];
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
 
       // Dispara o download nativo na mesma página utilizando link programático
       const link = document.createElement('a');
-      link.href = signedUrl;
+      link.href = imageUrl;
       link.setAttribute('download', key);
       link.style.display = 'none';
       document.body.appendChild(link);
@@ -1840,7 +1803,7 @@
   // ============================================================
   async function init() {
     await fetchCreditsFromServer();
-    await renderGallery();
+    renderGallery();
     updateTimer();
     setInterval(updateTimer, 1000);
     checkMobile();
