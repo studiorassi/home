@@ -1381,7 +1381,7 @@
   }
 
   // ============================================================
-  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO SEM CORS
+  // 3. TELA CHEIA (MODAL) E DOWNLOAD DIRETO NO DISPOSITIVO (SEM SAIR DA PÁGINA)
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1478,7 +1478,7 @@
 
     if (modalDownloadBtn) {
       modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando na Amazon AWS...';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Baixando para o dispositivo...';
     }
 
     try {
@@ -1505,14 +1505,18 @@
 
       const signedUrl = data.urls[0].url || data.urls[0];
       
-      // Abordagem direta corrigindo o erro de CORS (Failed to fetch)
+      // Baixa diretamente via Blob / fetch invisível para forçar o salvamento local sem abrir abas
+      const imageResponse = await fetch(signedUrl);
+      const blob = await imageResponse.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
       const link = document.createElement('a');
-      link.href = signedUrl;
-      link.target = '_blank';
+      link.href = blobUrl;
       link.download = key;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
 
       if (!downloadedImages.includes(key)) {
         downloadedImages.push(key);
@@ -1529,7 +1533,7 @@
         modalDownloadBtn.disabled = true;
       }
 
-      alert('✅ Download iniciado com sucesso!');
+      alert('✅ Imagem salva no seu dispositivo com sucesso!');
 
     } catch (error) {
       console.error('Erro no download:', error);
