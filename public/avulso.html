@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
+    /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -249,35 +249,6 @@
       background: transparent;
     }
 
-    /* ===== FILTROS ===== */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 16px 0 24px;
-      justify-content: center;
-    }
-    .filter-btn {
-      background: rgba(31, 5, 16, 0.6);
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      color: #d4c5c0;
-      padding: 8px 24px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .filter-btn:hover {
-      border-color: #D4A3B3;
-      color: #f5edea;
-    }
-    .filter-btn.active {
-      background: #D4A3B3;
-      color: #2C0714;
-      border-color: #D4A3B3;
-    }
-
     /* ===== STATUS FLUTUANTE ===== */
     .floating-status {
       position: sticky;
@@ -313,20 +284,6 @@
       font-weight: 600;
       font-size: 1.1rem;
     }
-    .status-item .badge-photo {
-      background: rgba(212, 163, 179, 0.15);
-      padding: 2px 10px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      color: #D4A3B3;
-    }
-    .status-item .badge-video {
-      background: rgba(46, 125, 50, 0.2);
-      padding: 2px 10px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      color: #4CAF50;
-    }
 
     /* ===== PROGRESS BAR ===== */
     .progress-bar-container {
@@ -336,7 +293,7 @@
       background: rgba(31, 5, 16, 0.6);
       backdrop-filter: blur(8px);
       padding: 8px 0;
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       display: none;
     }
@@ -368,6 +325,44 @@
     }
     .progress-bar-container .progress-label strong {
       color: #D4A3B3;
+    }
+
+    /* ===== FILTROS (ABAIXO DA BARRA DE PROGRESSO) ===== */
+    .filter-bar {
+      position: sticky;
+      top: 174px;
+      z-index: 97;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      margin-bottom: 16px;
+    }
+    .filter-bar .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .filter-btn {
+      background: rgba(31, 5, 16, 0.6);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      color: #d4c5c0;
+      padding: 8px 24px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .filter-btn:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+    .filter-btn.active {
+      background: #D4A3B3;
+      color: #2C0714;
+      border-color: #D4A3B3;
     }
 
     /* ===== INFO ===== */
@@ -984,6 +979,7 @@
       .navbar.scrolled .logo img { height: 34px; }
       .mobile-menu { display: block; }
       .progress-bar-container { top: 118px; }
+      .filter-bar { top: 160px; }
       .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
       .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
       .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
@@ -1008,7 +1004,7 @@
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
       .modal-btn-buy { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
       .modal-progress { width: 80%; bottom: 80px; }
-      .filter-bar { gap: 8px; }
+      .filter-bar { padding: 8px 0; }
       .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
     }
     @media (max-width: 480px) {
@@ -1025,6 +1021,7 @@
       .navbar .logo img { height: 32px; max-width: 100px; }
       .navbar.scrolled .logo img { height: 28px; }
       .progress-bar-container { top: 98px; }
+      .filter-bar { top: 140px; }
       .modal-content .modal-image { max-height: 50vh; }
       .modal-content .modal-video { max-height: 50vh; }
       .modal-actions { flex-direction: column; align-items: center; }
@@ -1035,7 +1032,7 @@
       .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
       .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
       .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
-      .filter-bar { gap: 6px; }
+      .filter-bar { padding: 6px 0; }
       .filter-btn { padding: 4px 12px; font-size: 0.65rem; }
     }
   </style>
@@ -1075,7 +1072,7 @@
   </div>
   <div class="mobile-menu menu-status">
     <div class="status-row">
-      <span class="label"><i class="fas fa-tag"></i> Fotos</span>
+      <span class="label"><i class="fas fa-camera"></i> Fotos</span>
       <span class="value">R$ 15,00</span>
     </div>
     <div class="status-row">
@@ -1099,12 +1096,10 @@
     <div class="status-item">
       <i class="fas fa-camera"></i>
       <span>Fotos: <strong class="value">R$ 15,00</strong></span>
-      <span class="badge-photo">116 fotos</span>
     </div>
     <div class="status-item">
       <i class="fas fa-video"></i>
       <span>Vídeos: <strong class="value">R$ 40,00</strong></span>
-      <span class="badge-video">10 vídeos</span>
     </div>
     <div class="status-item">
       <i class="fas fa-images"></i>
@@ -1122,9 +1117,9 @@
   </div>
 </div>
 
-<!-- ===== FILTROS ===== -->
-<div class="container">
-  <div class="filter-bar">
+<!-- ===== FILTROS (ABAIXO DA BARRA DE PROGRESSO) ===== -->
+<div class="filter-bar" id="filterBar">
+  <div class="container">
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">
       <i class="fas fa-th"></i> Todos
     </button>
@@ -1145,10 +1140,6 @@
       <strong>Como funciona:</strong> Fotos <span class="highlight">R$ 15,00</span> · 
       Vídeos <span class="highlight">R$ 40,00</span> · 
       Clique no item, visualize com marca d'água e compre a versão em <span class="highlight">alta definição</span>
-    </span>
-    <span class="label" style="display:inline-flex; align-items:center; gap:4px;">
-      <i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i>
-      <span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo!</span>
     </span>
   </div>
 </div>
@@ -1239,36 +1230,43 @@
   const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
 
   // ============================================================
+  // CAMINHOS CORRETOS PARA FOTOS E VÍDEOS
+  // ============================================================
+  // Fotos: /fotos/ensaio_XX.jpg
+  // Vídeos: /videos/video_XX.mp4
+  // ============================================================
+
+  // ============================================================
   // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
   // ============================================================
   const allMedia = [];
 
-  // Fotos (116)
+  // Fotos (116) - caminho: /fotos/ensaio_XX.jpg
   for (let i = 1; i <= 116; i++) {
     const num = String(i).padStart(2, '0');
     allMedia.push({
       id: `foto_${num}`,
       type: 'foto',
-      key: `ensaio_${num}.jpg`,
+      key: `fotos/ensaio_${num}.jpg`,
       price: PHOTO_PRICE,
       title: `Foto ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/ensaio_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/ensaio_${num}.jpg`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/ensaio_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/ensaio_${num}.jpg`,
       isVideo: false
     });
   }
 
-  // Vídeos (10)
+  // Vídeos (10) - caminho: /videos/video_XX.mp4
   for (let i = 1; i <= 10; i++) {
     const num = String(i).padStart(2, '0');
     allMedia.push({
       id: `video_${num}`,
       type: 'video',
-      key: `video_${num}.mp4`,
+      key: `videos/video_${num}.mp4`,
       price: VIDEO_PRICE,
       title: `Vídeo ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/video_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/video_${num}.mp4`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/video_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/video_${num}.mp4`,
       isVideo: true
     });
   }
@@ -1755,6 +1753,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
+    console.log(`📁 Caminhos: fotos/ e videos/ dentro do bucket ${BUCKET_NAME}`);
   }
 
   init();
