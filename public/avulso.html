@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== RESET ===== */
+    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -1053,7 +1053,7 @@
         <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Convidado</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
-          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">126</span> itens
+          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
         </span>
       </span>
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
@@ -1081,7 +1081,7 @@
     </div>
     <div class="status-row">
       <span class="label"><i class="fas fa-images"></i> Baixados</span>
-      <span class="value" id="mobileDownloadedDisplay">0 / 126</span>
+      <span class="value" id="mobileDownloadedDisplay">0 / 0</span>
     </div>
   </div>
   <div class="menu-links">
@@ -1103,7 +1103,7 @@
     </div>
     <div class="status-item">
       <i class="fas fa-images"></i>
-      <span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 126</strong></span>
+      <span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 0</strong></span>
     </div>
   </div>
 </div>
@@ -1113,7 +1113,7 @@
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">126</span></div>
+    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">0</span></div>
   </div>
 </div>
 
@@ -1173,7 +1173,7 @@
     
     <!-- CONTADOR -->
     <div class="modal-counter" id="modalCounter">
-      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">126</span>
+      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">0</span>
     </div>
     
     <!-- NAVEGAÇÃO -->
@@ -1229,51 +1229,98 @@
   const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
 
   // ============================================================
-  // CAMINHOS CORRETOS (MINÚSCULOS)
-  // FOTOS: /fotos/ensaio_XX.jpg
-  // VIDEOS: /videos/video_XX.mp4
-  // ============================================================
-
-  // ============================================================
   // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
   // ============================================================
-  const allMedia = [];
+  let allMedia = [];
+  let totalItems = 0;
 
   // ============================================================
-  // FOTOS (116) - PASTA: fotos/ (MINÚSCULO)
+  // CARREGAR LISTA DE ARQUIVOS DO S3
   // ============================================================
-  for (let i = 1; i <= 116; i++) {
-    const num = String(i).padStart(2, '0');
-    allMedia.push({
-      id: `foto_${num}`,
-      type: 'foto',
-      key: `fotos/ensaio_${num}.jpg`,
-      price: PHOTO_PRICE,
-      title: `Foto ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
-      isVideo: false
-    });
+  async function loadMediaFromS3() {
+    try {
+      // 1. Carregar fotos (lista fixa de 116)
+      const fotos = [];
+      for (let i = 1; i <= 116; i++) {
+        const num = String(i).padStart(2, '0');
+        fotos.push({
+          id: `foto_${num}`,
+          type: 'foto',
+          key: `fotos/ensaio_${num}.jpg`,
+          price: PHOTO_PRICE,
+          title: `Foto ${i}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+          isVideo: false
+        });
+      }
+
+      // 2. Carregar vídeos dinamicamente do S3
+      console.log('📡 Buscando lista de vídeos no S3...');
+      const response = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao buscar lista de vídeos');
+      }
+      
+      const data = await response.json();
+      console.log(`📹 Encontrados ${data.count} vídeos na pasta videos/`);
+      
+      // 3. Filtrar apenas arquivos .mp4
+      const videoFiles = data.files.filter(file => 
+        file.filename.endsWith('.mp4') && 
+        file.filename.startsWith('video_')
+      );
+      
+      const videos = videoFiles.map((file, index) => {
+        const num = String(index + 1).padStart(2, '0');
+        const filename = file.filename;
+        return {
+          id: `video_${num}`,
+          type: 'video',
+          key: `videos/${filename}`,
+          price: VIDEO_PRICE,
+          title: `Vídeo ${index + 1}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/videos/${filename.replace('.mp4', '.jpg')}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
+          isVideo: true
+        };
+      });
+
+      // 4. Combinar tudo
+      allMedia = [...fotos, ...videos];
+      totalItems = allMedia.length;
+      
+      console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
+      
+      // 5. Atualizar contadores na UI
+      updateCounters();
+      
+      // 6. Renderizar galeria
+      renderGallery();
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar mídias:', error);
+      alert('Erro ao carregar a galeria. Tente novamente.');
+    }
   }
 
   // ============================================================
-  // VIDEOS (10) - PASTA: videos/ (MINÚSCULO)
+  // ATUALIZAR CONTADORES
   // ============================================================
-  for (let i = 1; i <= 10; i++) {
-    const num = String(i).padStart(2, '0');
-    allMedia.push({
-      id: `video_${num}`,
-      type: 'video',
-      key: `videos/video_${num}.mp4`,
-      price: VIDEO_PRICE,
-      title: `Vídeo ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.mp4`,
-      isVideo: true
+  function updateCounters() {
+    const elements = [
+      document.getElementById('totalCount'),
+      document.getElementById('totalCountDisplay'),
+      document.getElementById('totalPhotosDisplay')
+    ];
+    elements.forEach(el => {
+      if (el) el.textContent = totalItems;
     });
+    
+    // Atualiza contador de baixados
+    updateDownloadedDisplay();
   }
-
-  const TOTAL_ITEMS = allMedia.length;
 
   // ============================================================
   // ESTADO
@@ -1307,11 +1354,6 @@
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
 
-  // Atualiza contadores
-  if (totalCount) totalCount.textContent = TOTAL_ITEMS;
-  if (document.getElementById('totalCountDisplay')) document.getElementById('totalCountDisplay').textContent = TOTAL_ITEMS;
-  if (document.getElementById('totalPhotosDisplay')) document.getElementById('totalPhotosDisplay').textContent = TOTAL_ITEMS;
-
   // ============================================================
   // FUNÇÕES DE UI
   // ============================================================
@@ -1322,7 +1364,7 @@
       document.getElementById('mobileDownloadedDisplay')
     ];
     displayElements.forEach(el => {
-      if (el) el.textContent = `${count} / ${TOTAL_ITEMS}`;
+      if (el) el.textContent = `${count} / ${totalItems}`;
     });
   }
 
@@ -1434,12 +1476,12 @@
       imagesLoaded++;
       
       // Só atualiza progresso se for o carregamento inicial (todas as mídias)
-      if (!window._progressComplete) {
-        const percent = Math.round((imagesLoaded / TOTAL_ITEMS) * 100);
+      if (!window._progressComplete && totalItems > 0) {
+        const percent = Math.round((imagesLoaded / totalItems) * 100);
         if (progressFill) progressFill.style.width = percent + '%';
         if (loadedCount) loadedCount.textContent = imagesLoaded;
 
-        if (imagesLoaded >= TOTAL_ITEMS) {
+        if (imagesLoaded >= totalItems) {
           window._progressComplete = true;
           setTimeout(() => {
             if (progressContainer) progressContainer.style.display = 'none';
@@ -1620,7 +1662,7 @@
 
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
-    const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${TOTAL_ITEMS} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
+    const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${totalItems} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
 
     if (confirm(confirmMsg)) {
       // Abre o link do Nubank
@@ -1746,8 +1788,8 @@
   // ============================================================
   // INICIALIZAÇÃO
   // ============================================================
-  function init() {
-    renderGallery();
+  async function init() {
+    await loadMediaFromS3();
     checkPendingPurchase();
     setInterval(checkPendingPurchase, 10000);
 
@@ -1755,7 +1797,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas)`);
+    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - Detecção dinâmica de vídeos`);
   }
 
   init();
