@@ -1235,6 +1235,32 @@
   let totalItems = 0;
 
   // ============================================================
+ // VIDEOS - COM THUMBNAIL (usando um frame do vídeo)
+ // ============================================================
+const videos = videoFiles.map((file, index) => {
+  const filename = file.filename;
+  const numMatch = filename.match(/video_(\d+)\.mp4/);
+  const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+  
+  // Tenta usar thumbnail no S3, se existir
+  // Caso contrário, usa um placeholder ou o próprio vídeo
+  return {
+    id: `video_${num}`,
+    type: 'video',
+    key: `videos/${filename}`,
+    price: VIDEO_PRICE,
+    title: `Vídeo ${parseInt(num)}`,
+    // Tenta carregar thumbnail com mesmo nome (video_01.jpg)
+    // Se não existir, usa um placeholder com fundo escuro e ícone de play
+    thumbnail: `${API_BASE_URL}/api/gallery/view/videos/${filename.replace('.mp4', '.jpg')}`,
+    mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
+    isVideo: true,
+    // Fallback: usa o próprio vídeo como thumbnail (alguns navegadores suportam)
+    useVideoAsThumb: false
+  };
+});
+  
+  // ============================================================
   // CARREGAR LISTA DE ARQUIVOS DO S3 (FOTOS E VÍDEOS)
   // ============================================================
   async function loadMediaFromS3() {
