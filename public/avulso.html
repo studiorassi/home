@@ -1723,8 +1723,8 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
     }
   }
 
-  // ============================================================
-  // COMPRA (REDIRECIONA PARA O NUBANK)
+    // ============================================================
+  // COMPRA (REDIRECIONA PARA O NUBANK COM LINK CORRETO)
   // ============================================================
   function buyMedia() {
     const item = allMedia[currentModalIndex];
@@ -1737,31 +1737,40 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
 
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
+    
+    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO
+    const paymentUrl = item.isVideo ? NUBANK_URL_VIDEO : NUBANK_URL_PHOTO;
+    
     const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${totalItems} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
 
     if (confirm(confirmMsg)) {
-      window.open(NUBANK_URL, '_blank');
+      // Abre o link correto
+      window.open(paymentUrl, '_blank');
 
+      // Feedback visual
       modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
       modalBuyBtn.style.background = '#2ecc71';
       modalBuyBtn.disabled = true;
 
+      // Salva a intenção de compra
       const pendingPurchase = {
         id: item.id,
         type: item.type,
         key: item.key,
         itemNumber: currentModalIndex + 1,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        price: item.price
       };
       localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
 
+      // Restaura após 8 segundos
       setTimeout(() => {
         modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · ${priceDisplay}`;
         modalBuyBtn.style.background = '#D4A3B3';
         modalBuyBtn.disabled = false;
       }, 8000);
 
-      console.log(`📊 Intenção de compra: ${item.type} ${currentModalIndex + 1} - ${item.key}`);
+      console.log(`📊 Intenção de compra: ${item.type} ${currentModalIndex + 1} - ${item.key} - ${priceDisplay}`);
     }
   }
 
