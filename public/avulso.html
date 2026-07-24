@@ -1349,20 +1349,23 @@
   }
 
   // ============================================================
-  // VERIFICAÇÃO DE PAGAMENTO PENDENTE
+  // VERIFICAÇÃO DE PAGAMENTO PENDENTE (AO CARREGAR A PÁGINA)
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingAvulso');
     if (pending) {
       try {
         const data = JSON.parse(pending);
+        // Se o pagamento foi feito há menos de 5 minutos, considera válido
         if (Date.now() - data.timestamp < 5 * 60 * 1000) {
           if (confirm(`✅ Pagamento da foto ${data.photoNumber} confirmado?\n\nClique em OK para liberar o download.`)) {
+            // Adiciona a foto como baixada
             if (!downloadedImages.includes(data.key)) {
               downloadedImages.push(data.key);
               localStorage.setItem('downloadedAvulso', JSON.stringify(downloadedImages));
               updateDownloadBadge(data.key);
               updateDownloadedDisplay();
+              // Fecha modal se estiver aberto
               if (modalOverlay.classList.contains('active')) {
                 const currentKey = allPhotoKeys[currentModalIndex];
                 if (currentKey === data.key) {
@@ -1373,6 +1376,7 @@
             }
           }
         }
+        // Remove o pendente após processar
         localStorage.removeItem('pendingAvulso');
       } catch (e) {
         localStorage.removeItem('pendingAvulso');
