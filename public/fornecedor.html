@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal do Fornecedor · Studio Rassi</title>
+  <!-- Fontes e estilos similares -->
+</head>
+<body>
+  <!-- Login com credenciais fixas -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <h2>🔒 Portal do Fornecedor</h2>
+      <p>Acesso restrito para fotógrafos e fornecedores</p>
+      <input type="text" id="loginUser" placeholder="Usuário">
+      <input type="password" id="loginPass" placeholder="Senha">
+      <button onclick="handleLogin()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal (escondido até login) -->
+  <div id="mainContent" style="display:none;">
+    <!-- NAVBAR -->
+    <!-- STATUS: Cronômetro 24h -->
+    <!-- GALERIA com fotos do fornecedor -->
+    <!-- MODAL -->
+  </div>
+
+  <script>
+    // ============================================================
+    // CREDENCIAIS DO FORNECEDOR
+    // ============================================================
+    const FORNECEDOR_USER = 'fotografo';
+    const FORNECEDOR_PASS = 'studio2026';
+    const BUCKET_NAME = 'fornecedor'; // Referência para o backend
+
+    // ============================================================
+    // LISTA DE FOTOS (do novo bucket)
+    // ============================================================
+    const allPhotoKeys = [
+      'fornecedor_01.jpg',
+      'fornecedor_02.jpg',
+      // ... até quantas fotos tiver
+    ];
+
+    // ============================================================
+    // CRONÔMETRO 24 HORAS
+    // ============================================================
+    let timerSeconds = 24 * 3600; // 24 horas
+
+    function updateTimer() {
+      if (timerSeconds <= 0) {
+        document.getElementById('timerDisplay').textContent = '00:00:00';
+        alert('⏰ Seu acesso expirou! Entre em contato com o Studio Rassi.');
+        // Redireciona ou bloqueia
+        return;
+      }
+      timerSeconds--;
+      const hrs = Math.floor(timerSeconds / 3600);
+      const mins = Math.floor((timerSeconds % 3600) / 60);
+      const secs = timerSeconds % 60;
+      document.getElementById('timerDisplay').textContent = 
+        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // ============================================================
+    // FUNÇÃO DE DOWNLOAD (USANDO O BUCKET CORRETO)
+    // ============================================================
+    async function downloadFromModal() {
+      const key = allPhotoKeys[currentModalIndex];
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            imageKeys: [key],
+            bucket: BUCKET_NAME // Passa o bucket correto
+          })
+        });
+        
+        const data = await response.json();
+        const downloadUrl = data.urls[0].url;
+        
+        // Download direto
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = key;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Marca como baixada
+        markAsDownloaded(key);
+      } catch (error) {
+        console.error('Erro no download:', error);
+        alert('Erro ao baixar. Tente novamente.');
+      }
+    }
+
+    // ============================================================
+    // INICIALIZAÇÃO
+    // ============================================================
+    function init() {
+      renderGallery();
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+  </script>
+</body>
+</html>
