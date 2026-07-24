@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minhas Fotos · Studio Rassi</title>
+  <title>Fotos Avulsas · Studio Rassi</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== RESET ===== */
+    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -46,11 +46,6 @@
       padding: 8px 0;
       background: rgba(44, 7, 20, 0.96);
       box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
-    }
-    .navbar.hidden {
-      transform: translateY(-100%);
-      opacity: 0;
-      pointer-events: none;
     }
     .navbar-content {
       display: flex;
@@ -99,6 +94,7 @@
       color: #D4A3B3;
     }
 
+    /* ===== MENU MOBILE ===== */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -131,7 +127,6 @@
       height: 100vh;
       background: rgba(44, 7, 20, 0.98);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       z-index: 999;
       padding: 80px 28px 40px;
       box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
@@ -216,35 +211,6 @@
       font-weight: 600;
       font-size: 1rem;
     }
-    .mobile-menu .menu-status .status-row .value.timer {
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      text-align: right;
-    }
-
-    .mobile-menu .menu-credit-cta-mobile {
-      background: #D4A3B3;
-      color: #2C0714;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Work Sans', sans-serif;
-      width: 100%;
-      margin-top: 8px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .mobile-menu .menu-credit-cta-mobile:hover {
-      background: #c08b9e;
-      transform: scale(1.02);
-    }
-    .mobile-menu .menu-credit-cta-mobile.show { display: flex; }
 
     .mobile-menu .menu-links {
       display: flex;
@@ -283,33 +249,13 @@
       background: transparent;
     }
 
-    .menu-credit-cta {
-      display: none;
-      background: #D4A3B3;
-      color: #2C0714;
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.7rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Work Sans', sans-serif;
-      white-space: nowrap;
-    }
-    .menu-credit-cta:hover {
-      background: #c08b9e;
-      transform: scale(1.05);
-    }
-    .menu-credit-cta.show { display: inline-block; }
-
+    /* ===== STATUS FLUTUANTE ===== */
     .floating-status {
       position: sticky;
       top: 72px;
       z-index: 99;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       padding: 12px 0;
       margin-bottom: 24px;
@@ -338,16 +284,8 @@
       font-weight: 600;
       font-size: 1.1rem;
     }
-    .status-item .timer {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1.1rem;
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      display: inline-block;
-    }
 
-    /* ===== PROGRESS BAR (CARREGAMENTO DA GALERIA) ===== */
+    /* ===== PROGRESS BAR ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -389,6 +327,7 @@
       color: #D4A3B3;
     }
 
+    /* ===== INFO ===== */
     .credits-info {
       background: rgba(31, 5, 16, 0.6);
       border-radius: 16px;
@@ -427,6 +366,7 @@
       font-weight: 500;
     }
 
+    /* ===== SKELETON ===== */
     .skeleton {
       position: absolute;
       top: 0;
@@ -458,6 +398,7 @@
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
+    /* ===== GALERIA ===== */
     .gallery-header {
       display: flex;
       justify-content: space-between;
@@ -600,7 +541,24 @@
       font-size: 0.7rem;
       margin-right: 4px;
     }
+    .watermark-item .price-tag {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 7, 20, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      z-index: 5;
+      font-weight: 700;
+      white-space: nowrap;
+    }
 
+    /* ===== MODAL ===== */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -645,26 +603,26 @@
       pointer-events: none;
       z-index: 10;
     }
-
     .modal-content .watermark-container .watermark-logo-modal {
       width: 80%;
       max-width: 700px;
       height: auto;
       user-select: none;
       pointer-events: none;
+      opacity: 0.5;
     }
-
     @media (max-width: 768px) {
       .modal-content .watermark-container .watermark-logo-modal {
         width: 85%;
         max-width: 500px;
+        opacity: 0.4;
       }
     }
-
     @media (max-width: 480px) {
       .modal-content .watermark-container .watermark-logo-modal {
         width: 90%;
         max-width: 350px;
+        opacity: 0.35;
       }
     }
 
@@ -681,9 +639,7 @@
       position: relative;
       z-index: 1;
     }
-    .modal-content .modal-image.loaded {
-      opacity: 1;
-    }
+    .modal-content .modal-image.loaded { opacity: 1; }
 
     .modal-close {
       position: absolute;
@@ -811,44 +767,49 @@
       width: 100%;
       max-width: 500px;
     }
-    .modal-btn-download {
+
+    .modal-btn-buy-avulso {
       background: #D4A3B3;
       color: #2C0714;
       border: none;
-      padding: 12px 32px;
+      padding: 14px 32px;
       border-radius: 40px;
       font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
       transition: 0.3s;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       flex: 1;
       justify-content: center;
       min-width: 200px;
     }
-    .modal-btn-download:hover {
+    .modal-btn-buy-avulso:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
+      background: #c08b9e;
     }
-    .modal-btn-download:disabled {
-      opacity: 0.4;
+    .modal-btn-buy-avulso:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-    .modal-btn-download.hidden { display: none; }
-    .modal-btn-download.downloaded {
+    .modal-btn-buy-avulso.downloaded {
       background: #2E7D32;
       color: #ffffff;
       cursor: default;
     }
-    .modal-btn-download.downloaded:hover {
+    .modal-btn-buy-avulso.downloaded:hover {
       transform: none;
       box-shadow: none;
     }
+    .modal-btn-buy-avulso i {
+      font-size: 1.1rem;
+    }
+
     .modal-btn-close {
       background: transparent;
       border: 1px solid rgba(212, 163, 179, 0.2);
@@ -864,114 +825,639 @@
       border-color: #D4A3B3;
       color: #f5edea;
     }
-    .modal-credits {
+
+    .modal-price {
       color: #D4A3B3;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
       margin-top: 8px;
       text-align: center;
       z-index: 10;
     }
+    .modal-price strong {
+      font-size: 1.2rem;
+    }
 
-    /* POP-UP / BOX BRANCO CENTRALIZADO E POR CIMA DE TUDO QUANDO CRÉDITOS = 0 */
-    .modal-buy-credits {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 460px;
-      max-height: 85vh; 
-      overflow-y: auto;  
-      background: #fdfbfb;
-      color: #2C0714;
-      border-radius: 24px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-      flex-direction: column;
-      gap: 14px;
-      align-items: center;
-      z-index: 10005;
+    /* ===== FOOTER ===== */
+    footer {
       text-align: center;
-      animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      padding: 32px 0 20px;
+      border-top: 1px solid rgba(212, 163, 179, 0.04);
+      margin-top: 40px;
     }
-    .modal-buy-credits::-webkit-scrollbar {
-      width: 6px;
+    footer p {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #7a5f5a;
     }
-    .modal-buy-credits::-webkit-scrollbar-thumb {
-      background: rgba(44, 7, 20, 0.2);
-      border-radius: 10px;
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 768px) {
+      body { padding-top: 70px; }
+      .container { padding: 0 20px; }
+      .hamburger { display: flex; }
+      .floating-status { display: none; }
+      .navbar { padding: 10px 0; }
+      .navbar .logo img { height: 38px; max-width: 120px; }
+      .navbar.scrolled .logo img { height: 34px; }
+      .mobile-menu { display: block; }
+      .progress-bar-container { top: 118px; }
+      .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
+      .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
+      .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
+      .watermark-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .watermark-item { min-height: 220px; }
+      .watermark-item .watermark-logo { width: 70px; }
+      .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
+      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
+      .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
+      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
+      .nav-info .user span { display: inline; }
+      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
+      .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
+      .modal-nav.prev { left: -10px; }
+      .modal-nav.next { right: -10px; }
+      .modal-content .modal-image { max-height: 60vh; }
+      .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
+      .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
+      .modal-btn-buy-avulso { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
+      .modal-progress { width: 80%; bottom: 80px; }
     }
-    @keyframes popUpScale {
-      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    @media (max-width: 480px) {
+      body { padding-top: 60px; }
+      .watermark-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .watermark-item { min-height: 180px; }
+      .watermark-item .watermark-logo { width: 50px; }
+      .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
+      .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
+      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
+      .navbar .logo img { height: 32px; max-width: 100px; }
+      .navbar.scrolled .logo img { height: 28px; }
+      .progress-bar-container { top: 98px; }
+      .modal-content .modal-image { max-height: 50vh; }
+      .modal-actions { flex-direction: column; align-items: center; }
+      .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
+      .modal-nav.prev { left: -4px; }
+      .modal-nav.next { right: -4px; }
+      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
+      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
+      .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
+      .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
     }
-    .modal-buy-credits.show { display: flex; }
-    .modal-buy-credits .buy-title {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      color: #2C0714;
-      font-size: 1.15rem;
-      line-height: 1.4;
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="mainNavbar">
+  <div class="container navbar-content">
+    <a href="https://studiorassi.github.io/home/index.html" class="logo">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" width="150" height="45" loading="lazy">
+    </a>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-info">
+      <span class="user">
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Convidado</strong> · 
+        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
+          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
+        </span>
+      </span>
+      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MENU MOBILE ===== -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
+  <div class="menu-header">
+    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Convidado</strong></div>
+    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="mobile-menu menu-status">
+    <div class="status-row">
+      <span class="label"><i class="fas fa-tag"></i> Valor por foto</span>
+      <span class="value">R$ 15,00</span>
+    </div>
+    <div class="status-row">
+      <span class="label"><i class="fas fa-images"></i> Baixadas</span>
+      <span class="value" id="mobileDownloadedDisplay">0 / 116</span>
+    </div>
+  </div>
+  <div class="menu-links">
+    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
+  </div>
+</div>
+
+<!-- ===== STATUS ===== -->
+<div class="floating-status" id="statusBar">
+  <div class="container">
+    <div class="status-item">
+      <i class="fas fa-tag"></i>
+      <span>Valor: <strong class="value">R$ 15,00</strong></span>
+    </div>
+    <div class="status-item">
+      <i class="fas fa-images"></i>
+      <span>Baixadas: <strong class="value" id="desktopDownloadedDisplay">0 / 116</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar-container" id="progressContainer">
+  <div class="container">
+    <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span></div>
+  </div>
+</div>
+
+<!-- ===== INFO ===== -->
+<div class="container">
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label">
+      <strong>Como funciona:</strong> Cada foto custa <span class="highlight">R$ 15,00</span> · 
+      Clique na foto, visualize com marca d'água e compre a versão em <span class="highlight">alta definição</span> e 
+      <strong>sem marca d'água</strong>.
+    </span>
+    <span class="label" style="display:inline-flex; align-items:center; gap:4px;">
+      <i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i>
+      <span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo das fotos!</span>
+    </span>
+  </div>
+</div>
+
+<!-- ===== GALERIA ===== -->
+<div class="container">
+  <div class="gallery-header">
+    <h2>📸 <span>Fotos Avulsas</span></h2>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
+      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
+    </span>
+  </div>
+  <div class="watermark-grid" id="galleryGrid"></div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    
+    <!-- MARCA D'ÁGUA -->
+    <div class="watermark-container">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
+    </div>
+    
+    <!-- PROGRESS -->
+    <div class="modal-progress" id="modalProgress">
+      <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
+      <div class="track"><div class="fill" id="modalProgressFill"></div></div>
+      <span class="label" id="modalProgressLabel">0%</span>
+    </div>
+    
+    <!-- CONTADOR -->
+    <div class="modal-counter" id="modalCounter">
+      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">116</span>
+    </div>
+    
+    <!-- NAVEGAÇÃO -->
+    <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="modal-nav next" id="modalNext" onclick="navigateModal(1)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- FECHAR -->
+    <button class="modal-close" onclick="closeModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    
+    <!-- IMAGEM -->
+    <img id="modalImage" class="modal-image" src="" alt="Foto">
+    
+    <!-- AÇÕES -->
+    <div class="modal-actions">
+      <button class="modal-btn-buy-avulso" id="modalBuyBtn" onclick="buyPhoto()">
+        <i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ 15,00
+      </button>
+      <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
+    </div>
+    <div class="modal-price" id="modalPrice">
+      <i class="fas fa-lock" style="color:#7a5f5a;"></i> 
+      Imagem com marca d'água · <strong>R$ 15,00</strong> para alta definição sem marca
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Fotos Avulsas</p></div></footer>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+  // ============================================================
+  // CONFIGURAÇÕES
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  const S3_BUCKET_URL = 'https://studio-rassi-ensaios-2026.s3.amazonaws.com';
+  const PHOTO_PRICE = 15.00;
+  const TOTAL_PHOTOS = 116;
+
+  // Gera lista de chaves das fotos
+  const allPhotoKeys = Array.from({length: TOTAL_PHOTOS}, (_, i) => 
+    `ensaio_${String(i + 1).padStart(2, '0')}.jpg`
+  );
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let currentModalIndex = 0;
+  let imagesLoaded = 0;
+  let downloadedImages = JSON.parse(localStorage.getItem('downloadedAvulso') || '[]');
+
+  // ============================================================
+  // DOM ELEMENTS
+  // ============================================================
+  const grid = document.getElementById('galleryGrid');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalImage = document.getElementById('modalImage');
+  const modalBuyBtn = document.getElementById('modalBuyBtn');
+  const progressContainer = document.getElementById('progressContainer');
+  const progressFill = document.getElementById('progressFill');
+  const loadedCount = document.getElementById('loadedCount');
+  const modalProgress = document.getElementById('modalProgress');
+  const modalProgressFill = document.getElementById('modalProgressFill');
+  const modalProgressLabel = document.getElementById('modalProgressLabel');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const navbar = document.getElementById('mainNavbar');
+
+  // ============================================================
+  // FUNÇÕES DE UI
+  // ============================================================
+  function updateDownloadedDisplay() {
+    const count = downloadedImages.length;
+    const displayElements = [
+      document.getElementById('desktopDownloadedDisplay'),
+      document.getElementById('mobileDownloadedDisplay')
+    ];
+    displayElements.forEach(el => {
+      if (el) el.textContent = `${count} / ${TOTAL_PHOTOS}`;
+    });
+  }
+
+  function updateModalButtons(isDownloaded = false) {
+    if (!modalBuyBtn) return;
+    if (isDownloaded) {
+      modalBuyBtn.className = 'modal-btn-buy-avulso downloaded';
+      modalBuyBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalBuyBtn.disabled = true;
+    } else {
+      modalBuyBtn.className = 'modal-btn-buy-avulso';
+      modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ ${PHOTO_PRICE.toFixed(2)}`;
+      modalBuyBtn.disabled = false;
     }
-    .modal-buy-credits .buy-subtitle {
-      font-size: 0.9rem;
-      color: #55444a;
-      line-height: 1.4;
-      font-weight: 400;
+  }
+
+  function updateDownloadBadge(key) {
+    const items = document.querySelectorAll('.watermark-item');
+    items.forEach(item => {
+      if (item.dataset.key === key) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADA';
+        }
+      }
+    });
+  }
+
+  // ============================================================
+  // RENDER GALERIA
+  // ============================================================
+  function renderGallery() {
+    if (!grid) return;
+    grid.innerHTML = '';
+    imagesLoaded = 0;
+    if (progressContainer) progressContainer.style.display = 'block';
+    if (progressFill) progressFill.style.width = '0%';
+    if (loadedCount) loadedCount.textContent = '0';
+
+    allPhotoKeys.forEach((key, index) => {
+      const isDownloaded = downloadedImages.includes(key);
+      const div = document.createElement('div');
+      div.className = 'watermark-item';
+      div.dataset.key = key;
+
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+
+      div.innerHTML = `
+        <div class="skeleton" id="skeleton-${index}">
+          <div class="spinner"><i class="fas fa-spinner"></i></div>
+        </div>
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
+          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
+        </div>
+        <div class="price-tag">R$ ${PHOTO_PRICE.toFixed(2)}</div>
+        <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy"
+             data-key="${key}" data-index="${index}"
+             onload="onImageLoad(${index})"
+             onerror="onImageError(${index})">
+        <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
+        <div class="watermark-text">Studio Rassi</div>
+      `;
+
+      div.addEventListener('click', () => openModal(index));
+      grid.appendChild(div);
+    });
+    updateDownloadedDisplay();
+  }
+
+  function onImageLoad(index) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img && !img.classList.contains('loaded')) {
+      img.classList.add('loaded');
+      const skeleton = document.getElementById(`skeleton-${index}`);
+      if (skeleton) skeleton.style.display = 'none';
+
+      imagesLoaded++;
+      const percent = Math.round((imagesLoaded / TOTAL_PHOTOS) * 100);
+      if (progressFill) progressFill.style.width = percent + '%';
+      if (loadedCount) loadedCount.textContent = imagesLoaded;
+
+      if (imagesLoaded >= TOTAL_PHOTOS) {
+        setTimeout(() => {
+          if (progressContainer) progressContainer.style.display = 'none';
+        }, 400);
+      }
     }
-    .modal-buy-credits .quick-packages {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      width: 100%;
-      margin-top: 4px;
+  }
+
+  function onImageError(index) {
+    const container = document.querySelector(`.real-image[data-index="${index}"]`)?.parentElement;
+    if (container) {
+      container.innerHTML = '<div style="padding:60px 20px; color:#D4A3B3; z-index:10; position:relative; text-align:center;">Indisponível</div>';
     }
-    .modal-buy-credits .quick-pkg {
-      background: #2C0714;
-      color: #f5edea;
-      padding: 10px 14px;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      flex: 1;
-      min-width: 80px;
-      text-align: center;
-      border: none;
-      font-family: 'Work Sans', sans-serif;
+    onImageLoad(index);
+  }
+
+  // ============================================================
+  // MODAL
+  // ============================================================
+  async function openModal(index) {
+    currentModalIndex = index;
+    const key = allPhotoKeys[index];
+    const isDownloaded = downloadedImages.includes(key);
+
+    modalProgressFill.style.width = '0%';
+    modalProgressLabel.textContent = '0%';
+    modalProgress.classList.add('show');
+
+    modalImage.classList.remove('loaded');
+    modalImage.style.opacity = '0';
+    modalImage.src = '';
+
+    document.getElementById('currentIndexDisplay').textContent = index + 1;
+    updateModalButtons(isDownloaded);
+    updateNavButtons();
+
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    try {
+      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+      const img = new Image();
+      let progress = 0;
+
+      const progressInterval = setInterval(() => {
+        if (progress < 90) {
+          progress += Math.random() * 8;
+          if (progress > 90) progress = 90;
+          modalProgressFill.style.width = progress + '%';
+          modalProgressLabel.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+
+      img.onload = function() {
+        clearInterval(progressInterval);
+        modalProgressFill.style.width = '100%';
+        modalProgressLabel.textContent = '100%';
+        modalImage.src = imageUrl;
+        modalImage.classList.add('loaded');
+        modalImage.style.opacity = '1';
+        setTimeout(() => modalProgress.classList.remove('show'), 500);
+      };
+
+      img.onerror = function() {
+        clearInterval(progressInterval);
+        modalProgress.classList.remove('show');
+        modalImage.alt = 'Erro ao carregar';
+      };
+
+      img.src = imageUrl;
+    } catch (error) {
+      console.error('Erro ao abrir modal:', error);
+      modalProgress.classList.remove('show');
     }
-    .modal-buy-credits .quick-pkg:hover {
-      background: #460c21;
-      transform: scale(1.05);
+
+    document.addEventListener('keydown', handleModalKeydown);
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleModalKeydown);
+  }
+
+  function handleModalKeydown(e) {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowLeft') navigateModal(-1);
+    if (e.key === 'ArrowRight') navigateModal(1);
+  }
+
+  function navigateModal(direction) {
+    const newIndex = currentModalIndex + direction;
+    if (newIndex >= 0 && newIndex < allPhotoKeys.length) {
+      openModal(newIndex);
     }
-    .modal-buy-credits .quick-pkg .pkg-label {
-      font-size: 0.7rem;
-      color: #D4A3B3;
-      display: block;
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById('modalPrev');
+    const nextBtn = document.getElementById('modalNext');
+    if (prevBtn) {
+      prevBtn.disabled = currentModalIndex === 0;
+      prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
     }
-    .modal-buy-credits .quick-pkg .pkg-price {
-      font-size: 0.9rem;
-      font-weight: 700;
+    if (nextBtn) {
+      nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
+      nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
     }
-    .modal-buy-credits .btn-sync-action {
-      background: transparent;
-      color: #2C0714;
-      border: 1px solid rgba(44, 7, 20, 0.2);
-      width: 100%;
-      padding: 10px 18px;
-      border-radius: 40px;
-      font-weight: 500;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 4px;
+  }
+
+  // ============================================================
+  // COMPRA DA FOTO (REDIRECIONA PARA O NUBANK)
+  // ============================================================
+  function buyPhoto() {
+    const key = allPhotoKeys[currentModalIndex];
+    if (!key) return;
+
+    if (downloadedImages.includes(key)) {
+      alert('✅ Esta foto já foi baixada.');
+      return;
     }
-    .modal-buy-credits .btn-sync-action:hover {
-      background: rgba(44, 7, 20, 0.05);
-     
+
+    const confirmMsg = `🛒 Você está comprando a foto ${currentModalIndex + 1} de ${TOTAL_PHOTOS} por R$ ${PHOTO_PRICE.toFixed(2)}.\n\nClique em OK para ir para o pagamento (Nubank).`;
+
+    if (confirm(confirmMsg)) {
+      // Link do Nubank (substitua pelo seu link)
+      const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
+      
+      // Abre o link em nova aba
+      window.open(NUBANK_URL, '_blank');
+
+      // Feedback visual
+      modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
+      modalBuyBtn.style.background = '#2ecc71';
+      modalBuyBtn.disabled = true;
+
+      // Salva a intenção de compra
+      const pendingPurchase = {
+        key: key,
+        photoNumber: currentModalIndex + 1,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('pendingAvulso', JSON.stringify(pendingPurchase));
+
+      // Restaura após 5 segundos
+      setTimeout(() => {
+        modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ ${PHOTO_PRICE.toFixed(2)}`;
+        modalBuyBtn.style.background = '#D4A3B3';
+        modalBuyBtn.disabled = false;
+      }, 8000);
+
+      console.log(`📊 Intenção de compra: Foto ${currentModalIndex + 1} - ${key}`);
+    }
+  }
+
+  // ============================================================
+  // VERIFICAÇÃO DE PAGAMENTO PENDENTE (AO CARREGAR A PÁGINA)
+  // ============================================================
+  function checkPendingPurchase() {
+    const pending = localStorage.getItem('pendingAvulso');
+    if (pending) {
+      try {
+        const data = JSON.parse(pending);
+        // Se o pagamento foi feito há menos de 5 minutos, considera válido
+        if (Date.now() - data.timestamp < 5 * 60 * 1000) {
+          if (confirm(`✅ Pagamento da foto ${data.photoNumber} confirmado?\n\nClique em OK para liberar o download.`)) {
+            // Adiciona a foto como baixada
+            if (!downloadedImages.includes(data.key)) {
+              downloadedImages.push(data.key);
+              localStorage.setItem('downloadedAvulso', JSON.stringify(downloadedImages));
+              updateDownloadBadge(data.key);
+              updateDownloadedDisplay();
+              // Fecha modal se estiver aberto
+              if (modalOverlay.classList.contains('active')) {
+                const currentKey = allPhotoKeys[currentModalIndex];
+                if (currentKey === data.key) {
+                  updateModalButtons(true);
+                }
+              }
+              alert('🎉 Download liberado! A foto já está disponível para baixar.');
+            }
+          }
+        }
+        // Remove o pendente após processar
+        localStorage.removeItem('pendingAvulso');
+      } catch (e) {
+        localStorage.removeItem('pendingAvulso');
+      }
+    }
+  }
+
+  // ============================================================
+  // MENU MOBILE
+  // ============================================================
+  function toggleMobileMenu() {
+    if (!mobileMenu || !hamburgerBtn || !navbar) return;
+    mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    if (mobileMenu.classList.contains('open')) {
+      navbar.classList.add('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      navbar.classList.remove('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closeMobileMenu() {
+    if (!mobileMenu || !hamburgerBtn || !navbar) return;
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    navbar.classList.remove('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+  // ============================================================
+  // BLOQUEIOS DE SEGURANÇA
+  // ============================================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
+      e.preventDefault();
+      alert('🔒 A proteção de imagens está ativa.');
+    }
+  });
+
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
+      e.preventDefault();
+      alert('🔒 Clique direito bloqueado.');
+    }
+  });
+
+  // ============================================================
+  // NAVBAR SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    if (!navbar) return;
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================================
+  // INICIALIZAÇÃO
+  // ============================================================
+  function init() {
+    renderGallery();
+    checkPendingPurchase();
+    setInterval(checkPendingPurchase, 10000);
+
+    console.log('📸 Galeria de Fotos Avulsas carregada!');
+    console.log(`📊 ${TOTAL_PHOTOS} fotos disponíveis (R$ ${PHOTO_PRICE.toFixed(2)} cada)`);
+    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+    console.log('💡 Clique em qualquer foto para comprar a versão em alta definição.');
+  }
+
+  init();
+</script>
+</body>
+</html>
