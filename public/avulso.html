@@ -13,8 +13,6 @@
   
   <style>
     /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
-    /* (mantenha o mesmo CSS do avulso.html original) */
-    
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -213,11 +211,6 @@
       font-weight: 600;
       font-size: 1rem;
     }
-    .mobile-menu .menu-status .status-row .value.timer {
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      text-align: right;
-    }
 
     .mobile-menu .menu-links {
       display: flex;
@@ -290,14 +283,6 @@
       color: #D4A3B3;
       font-weight: 600;
       font-size: 1.1rem;
-    }
-    .status-item .timer {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1.1rem;
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      display: inline-block;
     }
 
     /* ===== PROGRESS BAR ===== */
@@ -942,7 +927,6 @@
           Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">116</span> fotos
         </span>
       </span>
-      <!-- BOTÃO SAIR CORRIGIDO - AGORA VAI PARA A HOME -->
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
@@ -957,10 +941,15 @@
     <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Convidado</strong></div>
     <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
-  <div class="mobile-menu menu-status" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-direction: column; gap: 12px;">
-    <div class="status-row"><span class="label"><i class="fas fa-tag"></i> Valor por foto</span><span class="value">R$ 15,00</span></div>
-    <div class="status-row"><span class="label"><i class="fas fa-images"></i> Baixadas</span><span class="value" id="mobileDownloadedDisplay">0 / 116</span></div>
-    <div class="status-row"><span class="label"><i class="far fa-clock"></i> Acesso até</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
+  <div class="mobile-menu menu-status">
+    <div class="status-row">
+      <span class="label"><i class="fas fa-tag"></i> Valor por foto</span>
+      <span class="value">R$ 15,00</span>
+    </div>
+    <div class="status-row">
+      <span class="label"><i class="fas fa-images"></i> Baixadas</span>
+      <span class="value" id="mobileDownloadedDisplay">0 / 116</span>
+    </div>
   </div>
   <div class="menu-links">
     <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
@@ -971,9 +960,14 @@
 <!-- ===== STATUS ===== -->
 <div class="floating-status" id="statusBar">
   <div class="container">
-    <div class="status-item"><i class="fas fa-tag"></i><span>Valor: <strong class="value">R$ 15,00</strong></span></div>
-    <div class="status-item"><i class="fas fa-images"></i><span>Baixadas: <strong class="value" id="desktopDownloadedDisplay">0 / 116</strong></span></div>
-    <div class="status-item"><i class="far fa-clock"></i><span>Acesso até: <strong class="timer" id="timerDisplay">72:00:00</strong></span></div>
+    <div class="status-item">
+      <i class="fas fa-tag"></i>
+      <span>Valor: <strong class="value">R$ 15,00</strong></span>
+    </div>
+    <div class="status-item">
+      <i class="fas fa-images"></i>
+      <span>Baixadas: <strong class="value" id="desktopDownloadedDisplay">0 / 116</strong></span>
+    </div>
   </div>
 </div>
 
@@ -1087,15 +1081,12 @@
   // ============================================================
   let currentModalIndex = 0;
   let imagesLoaded = 0;
-  let timerSeconds = 72 * 3600;
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedAvulso') || '[]');
 
   // ============================================================
   // DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
-  const timerDisplay = document.getElementById('timerDisplay');
-  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalImage = document.getElementById('modalImage');
   const modalBuyBtn = document.getElementById('modalBuyBtn');
@@ -1358,23 +1349,20 @@
   }
 
   // ============================================================
-  // VERIFICAÇÃO DE PAGAMENTO PENDENTE (AO CARREGAR A PÁGINA)
+  // VERIFICAÇÃO DE PAGAMENTO PENDENTE
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingAvulso');
     if (pending) {
       try {
         const data = JSON.parse(pending);
-        // Se o pagamento foi feito há menos de 5 minutos, considera válido
         if (Date.now() - data.timestamp < 5 * 60 * 1000) {
           if (confirm(`✅ Pagamento da foto ${data.photoNumber} confirmado?\n\nClique em OK para liberar o download.`)) {
-            // Adiciona a foto como baixada
             if (!downloadedImages.includes(data.key)) {
               downloadedImages.push(data.key);
               localStorage.setItem('downloadedAvulso', JSON.stringify(downloadedImages));
               updateDownloadBadge(data.key);
               updateDownloadedDisplay();
-              // Fecha modal se estiver aberto
               if (modalOverlay.classList.contains('active')) {
                 const currentKey = allPhotoKeys[currentModalIndex];
                 if (currentKey === data.key) {
@@ -1385,30 +1373,11 @@
             }
           }
         }
-        // Remove o pendente após processar
         localStorage.removeItem('pendingAvulso');
       } catch (e) {
         localStorage.removeItem('pendingAvulso');
       }
     }
-  }
-
-  // ============================================================
-  // TIMER
-  // ============================================================
-  function updateTimer() {
-    if (timerSeconds <= 0) {
-      if (timerDisplay) timerDisplay.textContent = '00:00:00';
-      if (mobileTimerDisplay) mobileTimerDisplay.textContent = '00:00:00';
-      return;
-    }
-    timerSeconds--;
-    const hrs = Math.floor(timerSeconds / 3600);
-    const mins = Math.floor((timerSeconds % 3600) / 60);
-    const secs = timerSeconds % 60;
-    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    if (timerDisplay) timerDisplay.textContent = timeStr;
-    if (mobileTimerDisplay) mobileTimerDisplay.textContent = timeStr;
   }
 
   // ============================================================
@@ -1475,11 +1444,7 @@
   // ============================================================
   function init() {
     renderGallery();
-    updateTimer();
-    setInterval(updateTimer, 1000);
     checkPendingPurchase();
-
-    // Verifica pendências a cada 10 segundos (para retorno de pagamento)
     setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Galeria de Fotos Avulsas carregada!');
@@ -1490,6 +1455,5 @@
 
   init();
 </script>
-
 </body>
 </html>
