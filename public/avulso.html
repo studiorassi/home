@@ -1229,9 +1229,9 @@
   const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
 
   // ============================================================
-  // CAMINHOS CORRETOS
-  // FOTOS: /FOTOS/ensaio_XX.jpg
-  // VIDEOS: /VIDEOS/video_XX.mp4
+  // CAMINHOS CORRETOS (MINÚSCULOS)
+  // FOTOS: /fotos/ensaio_XX.jpg
+  // VIDEOS: /videos/video_XX.mp4
   // ============================================================
 
   // ============================================================
@@ -1240,35 +1240,35 @@
   const allMedia = [];
 
   // ============================================================
-  // FOTOS (116) - PASTA: FOTOS/
+  // FOTOS (116) - PASTA: fotos/ (MINÚSCULO)
   // ============================================================
   for (let i = 1; i <= 116; i++) {
     const num = String(i).padStart(2, '0');
     allMedia.push({
       id: `foto_${num}`,
       type: 'foto',
-      key: `FOTOS/ensaio_${num}.jpg`,
+      key: `fotos/ensaio_${num}.jpg`,
       price: PHOTO_PRICE,
       title: `Foto ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/FOTOS/ensaio_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/FOTOS/ensaio_${num}.jpg`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
       isVideo: false
     });
   }
 
   // ============================================================
-  // VIDEOS (10) - PASTA: VIDEOS/
+  // VIDEOS (10) - PASTA: videos/ (MINÚSCULO)
   // ============================================================
   for (let i = 1; i <= 10; i++) {
     const num = String(i).padStart(2, '0');
     allMedia.push({
       id: `video_${num}`,
       type: 'video',
-      key: `VIDEOS/video_${num}.mp4`,
+      key: `videos/video_${num}.mp4`,
       price: VIDEO_PRICE,
       title: `Vídeo ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/VIDEOS/video_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/VIDEOS/video_${num}.mp4`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.mp4`,
       isVideo: true
     });
   }
@@ -1755,7 +1755,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Estrutura: FOTOS/ e VIDEOS/ (maiúsculas)`);
+    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas)`);
   }
 
   init();
