@@ -1229,74 +1229,94 @@
   const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
 
   // ============================================================
-  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
+  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS) - TOTALMENTE DINÂMICO
   // ============================================================
   let allMedia = [];
   let totalItems = 0;
 
   // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3
+  // CARREGAR LISTA DE ARQUIVOS DO S3 (FOTOS E VÍDEOS)
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      // 1. Carregar fotos (lista fixa de 116)
-      const fotos = [];
-      for (let i = 1; i <= 116; i++) {
-        const num = String(i).padStart(2, '0');
-        fotos.push({
+      // 1. Carregar fotos dinamicamente do S3
+      console.log('📡 Buscando lista de fotos no S3...');
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
+      
+      if (!fotosResponse.ok) {
+        throw new Error('Erro ao buscar lista de fotos');
+      }
+      
+      const fotosData = await fotosResponse.json();
+      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
+      
+      // Filtrar apenas arquivos .jpg que começam com "ensaio_"
+      const photoFiles = fotosData.files.filter(file => 
+        file.filename.endsWith('.jpg') && 
+        file.filename.startsWith('ensaio_')
+      );
+      
+      const fotos = photoFiles.map((file, index) => {
+        const filename = file.filename;
+        // Extrai o número do arquivo (ex: "ensaio_01.jpg" -> "01")
+        const numMatch = filename.match(/ensaio_(\d+)\.jpg/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        return {
           id: `foto_${num}`,
           type: 'foto',
-          key: `fotos/ensaio_${num}.jpg`,
+          key: `fotos/${filename}`,
           price: PHOTO_PRICE,
-          title: `Foto ${i}`,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+          title: `Foto ${parseInt(num)}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
           isVideo: false
-        });
-      }
+        };
+      });
 
       // 2. Carregar vídeos dinamicamente do S3
       console.log('📡 Buscando lista de vídeos no S3...');
-      const response = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
       
-      if (!response.ok) {
+      if (!videosResponse.ok) {
         throw new Error('Erro ao buscar lista de vídeos');
       }
       
-      const data = await response.json();
-      console.log(`📹 Encontrados ${data.count} vídeos na pasta videos/`);
+      const videosData = await videosResponse.json();
+      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
       
-      // 3. Filtrar apenas arquivos .mp4
-      const videoFiles = data.files.filter(file => 
+      // Filtrar apenas arquivos .mp4 que começam com "video_"
+      const videoFiles = videosData.files.filter(file => 
         file.filename.endsWith('.mp4') && 
         file.filename.startsWith('video_')
       );
       
       const videos = videoFiles.map((file, index) => {
-        const num = String(index + 1).padStart(2, '0');
         const filename = file.filename;
+        // Extrai o número do arquivo (ex: "video_01.mp4" -> "01")
+        const numMatch = filename.match(/video_(\d+)\.mp4/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
         return {
           id: `video_${num}`,
           type: 'video',
           key: `videos/${filename}`,
           price: VIDEO_PRICE,
-          title: `Vídeo ${index + 1}`,
+          title: `Vídeo ${parseInt(num)}`,
           thumbnail: `${API_BASE_URL}/api/gallery/view/videos/${filename.replace('.mp4', '.jpg')}`,
           mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
           isVideo: true
         };
       });
 
-      // 4. Combinar tudo
+      // 3. Combinar tudo
       allMedia = [...fotos, ...videos];
       totalItems = allMedia.length;
       
       console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
       
-      // 5. Atualizar contadores na UI
+      // 4. Atualizar contadores na UI
       updateCounters();
       
-      // 6. Renderizar galeria
+      // 5. Renderizar galeria
       renderGallery();
       
     } catch (error) {
@@ -1797,7 +1817,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - Detecção dinâmica de vídeos`);
+    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - DETECÇÃO DINÂMICA TOTAL`);
   }
 
   init();
