@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
+    /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -211,13 +211,6 @@
       font-weight: 600;
       font-size: 1rem;
     }
-    .mobile-menu .menu-status .status-row .value.timer {
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      text-align: right;
-      color: #f5edea;
-      font-weight: 700;
-    }
 
     .mobile-menu .menu-links {
       display: flex;
@@ -290,14 +283,6 @@
       color: #D4A3B3;
       font-weight: 600;
       font-size: 1.1rem;
-    }
-    .status-item .timer {
-      color: #f5edea;
-      font-weight: 700;
-      font-size: 1.1rem;
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      display: inline-block;
     }
 
     /* ===== PROGRESS BAR ===== */
@@ -556,6 +541,22 @@
       font-size: 0.7rem;
       margin-right: 4px;
     }
+    .watermark-item .price-tag {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 7, 20, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      z-index: 5;
+      font-weight: 700;
+      white-space: nowrap;
+    }
 
     /* ===== MODAL ===== */
     .modal-overlay {
@@ -767,7 +768,8 @@
       max-width: 500px;
     }
 
-    .modal-btn-download-fornecedor {
+    /* ===== BOTÃO DE COMPRA (FORNECEDOR - MESMO MODELO AVULSO) ===== */
+    .modal-btn-buy-fornecedor {
       background: #D4A3B3;
       color: #2C0714;
       border: none;
@@ -785,27 +787,27 @@
       justify-content: center;
       min-width: 200px;
     }
-    .modal-btn-download-fornecedor:hover {
+    .modal-btn-buy-fornecedor:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
       background: #c08b9e;
     }
-    .modal-btn-download-fornecedor:disabled {
+    .modal-btn-buy-fornecedor:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-    .modal-btn-download-fornecedor.downloaded {
+    .modal-btn-buy-fornecedor.downloaded {
       background: #2E7D32;
       color: #ffffff;
       cursor: default;
     }
-    .modal-btn-download-fornecedor.downloaded:hover {
+    .modal-btn-buy-fornecedor.downloaded:hover {
       transform: none;
       box-shadow: none;
     }
-    .modal-btn-download-fornecedor i {
+    .modal-btn-buy-fornecedor i {
       font-size: 1.1rem;
     }
 
@@ -825,16 +827,16 @@
       color: #f5edea;
     }
 
-    .modal-info {
+    .modal-price {
       color: #D4A3B3;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
       margin-top: 8px;
       text-align: center;
       z-index: 10;
     }
-    .modal-info strong {
-      color: #f5edea;
+    .modal-price strong {
+      font-size: 1.2rem;
     }
 
     /* ===== FOOTER ===== */
@@ -869,6 +871,7 @@
       .watermark-item .watermark-logo { width: 70px; }
       .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
       .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
+      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
       .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
       .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
       .nav-info .user span { display: inline; }
@@ -879,7 +882,7 @@
       .modal-content .modal-image { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
-      .modal-btn-download-fornecedor { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
+      .modal-btn-buy-fornecedor { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
       .modal-progress { width: 80%; bottom: 80px; }
     }
     @media (max-width: 480px) {
@@ -890,6 +893,7 @@
       .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
       .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
       .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
+      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
       .navbar .logo img { height: 32px; max-width: 100px; }
       .navbar.scrolled .logo img { height: 28px; }
       .progress-bar-container { top: 98px; }
@@ -940,8 +944,8 @@
   </div>
   <div class="mobile-menu menu-status">
     <div class="status-row">
-      <span class="label"><i class="fas fa-clock"></i> Acesso restante</span>
-      <span class="value timer" id="mobileTimerDisplay">24:00:00</span>
+      <span class="label"><i class="fas fa-tag"></i> Valor por foto</span>
+      <span class="value">R$ 15,00</span>
     </div>
     <div class="status-row">
       <span class="label"><i class="fas fa-images"></i> Baixadas</span>
@@ -958,8 +962,8 @@
 <div class="floating-status" id="statusBar">
   <div class="container">
     <div class="status-item">
-      <i class="fas fa-clock"></i>
-      <span>Acesso restante: <strong class="timer" id="timerDisplay">24:00:00</strong></span>
+      <i class="fas fa-tag"></i>
+      <span>Valor: <strong class="value">R$ 15,00</strong></span>
     </div>
     <div class="status-item">
       <i class="fas fa-images"></i>
@@ -982,8 +986,9 @@
   <div class="credits-info">
     <span class="heart">💖</span>
     <span class="label">
-      <strong>Portal do Fornecedor:</strong> Você tem <span class="highlight">24 horas</span> para baixar todas as fotos em 
-      <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.
+      <strong>Portal do Fornecedor:</strong> Cada foto custa <span class="highlight">R$ 15,00</span> · 
+      Clique na foto, visualize com marca d'água e compre a versão em <span class="highlight">alta definição</span> e 
+      <strong>sem marca d'água</strong>.
     </span>
     <span class="label" style="display:inline-flex; align-items:center; gap:4px;">
       <i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i>
@@ -1042,14 +1047,14 @@
     
     <!-- AÇÕES -->
     <div class="modal-actions">
-      <button class="modal-btn-download-fornecedor" id="modalDownloadBtn" onclick="downloadFromModal()">
-        <i class="fas fa-download"></i> Baixar em alta definição
+      <button class="modal-btn-buy-fornecedor" id="modalBuyBtn" onclick="buyPhoto()">
+        <i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ 15,00
       </button>
       <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
     </div>
-    <div class="modal-info" id="modalInfo">
+    <div class="modal-price" id="modalPrice">
       <i class="fas fa-lock" style="color:#7a5f5a;"></i> 
-      Imagem com marca d'água · <strong>Download grátis</strong> durante o acesso de 24h
+      Imagem com marca d'água · <strong>R$ 15,00</strong> para alta definição sem marca
     </div>
   </div>
 </div>
@@ -1064,6 +1069,7 @@
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
   const BUCKET_NAME = 'fornecedor'; // Referência para o backend
+  const PHOTO_PRICE = 15.00;
   const TOTAL_PHOTOS = 50;
 
   // ============================================================
@@ -1080,19 +1086,15 @@
   // ============================================================
   let currentModalIndex = 0;
   let imagesLoaded = 0;
-  let timerSeconds = 24 * 3600; // 24 horas
   let downloadedImages = JSON.parse(localStorage.getItem('downloadedFornecedor') || '[]');
-  let timerExpired = false;
 
   // ============================================================
   // DOM ELEMENTS
   // ============================================================
   const grid = document.getElementById('galleryGrid');
-  const timerDisplay = document.getElementById('timerDisplay');
-  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalImage = document.getElementById('modalImage');
-  const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+  const modalBuyBtn = document.getElementById('modalBuyBtn');
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
   const loadedCount = document.getElementById('loadedCount');
@@ -1118,23 +1120,15 @@
   }
 
   function updateModalButtons(isDownloaded = false) {
-    if (!modalDownloadBtn) return;
-    if (timerExpired) {
-      modalDownloadBtn.className = 'modal-btn-download-fornecedor';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-clock"></i> Acesso expirado';
-      modalDownloadBtn.disabled = true;
-      modalDownloadBtn.style.background = '#7a5f5a';
-      return;
-    }
+    if (!modalBuyBtn) return;
     if (isDownloaded) {
-      modalDownloadBtn.className = 'modal-btn-download-fornecedor downloaded';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
-      modalDownloadBtn.disabled = true;
+      modalBuyBtn.className = 'modal-btn-buy-fornecedor downloaded';
+      modalBuyBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalBuyBtn.disabled = true;
     } else {
-      modalDownloadBtn.className = 'modal-btn-download-fornecedor';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição';
-      modalDownloadBtn.disabled = false;
-      modalDownloadBtn.style.background = '#D4A3B3';
+      modalBuyBtn.className = 'modal-btn-buy-fornecedor';
+      modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ ${PHOTO_PRICE.toFixed(2)}`;
+      modalBuyBtn.disabled = false;
     }
   }
 
@@ -1149,42 +1143,6 @@
         }
       }
     });
-  }
-
-  // ============================================================
-  // CRONÔMETRO 24 HORAS
-  // ============================================================
-  function updateTimer() {
-    if (timerSeconds <= 0) {
-      timerExpired = true;
-      const timeStr = '00:00:00';
-      if (timerDisplay) timerDisplay.textContent = timeStr;
-      if (mobileTimerDisplay) mobileTimerDisplay.textContent = timeStr;
-      
-      // Desabilita downloads
-      if (modalDownloadBtn) {
-        modalDownloadBtn.className = 'modal-btn-download-fornecedor';
-        modalDownloadBtn.innerHTML = '<i class="fas fa-clock"></i> Acesso expirado';
-        modalDownloadBtn.disabled = true;
-        modalDownloadBtn.style.background = '#7a5f5a';
-      }
-      
-      // Mostra alerta apenas uma vez
-      if (!window._timerAlertShown) {
-        window._timerAlertShown = true;
-        alert('⏰ Seu acesso de 24 horas expirou! Entre em contato com o Studio Rassi.');
-      }
-      return;
-    }
-    
-    timerSeconds--;
-    const hrs = Math.floor(timerSeconds / 3600);
-    const mins = Math.floor((timerSeconds % 3600) / 60);
-    const secs = timerSeconds % 60;
-    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    
-    if (timerDisplay) timerDisplay.textContent = timeStr;
-    if (mobileTimerDisplay) mobileTimerDisplay.textContent = timeStr;
   }
 
   // ============================================================
@@ -1213,6 +1171,7 @@
         <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
           ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
         </div>
+        <div class="price-tag">R$ ${PHOTO_PRICE.toFixed(2)}</div>
         <img src="${imageUrl}" alt="Foto ${index + 1}" class="real-image" loading="lazy"
              data-key="${key}" data-index="${index}"
              onload="onImageLoad(${index})"
@@ -1350,14 +1309,9 @@
   }
 
   // ============================================================
-  // DOWNLOAD (LIVRE - SEM CRÉDITOS)
+  // COMPRA DA FOTO (REDIRECIONA PARA O NUBANK)
   // ============================================================
-  async function downloadFromModal() {
-    if (timerExpired) {
-      alert('⏰ Seu acesso de 24 horas expirou!');
-      return;
-    }
-
+  function buyPhoto() {
     const key = allPhotoKeys[currentModalIndex];
     if (!key) return;
 
@@ -1366,55 +1320,68 @@
       return;
     }
 
-    try {
-      modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
+    const confirmMsg = `🛒 Você está comprando a foto ${currentModalIndex + 1} de ${TOTAL_PHOTOS} por R$ ${PHOTO_PRICE.toFixed(2)}.\n\nClique em OK para ir para o pagamento (Nubank).`;
 
-      const response = await fetch(`${API_BASE_URL}/api/gallery/download`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          imageKeys: [key],
-          bucket: BUCKET_NAME
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erro ao gerar link de download.');
-      }
-
-      const data = await response.json();
-      const downloadUrl = data.urls[0].url;
-
-      // Download direto
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = key;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      // Marca como baixada
-      if (!downloadedImages.includes(key)) {
-        downloadedImages.push(key);
-        localStorage.setItem('downloadedFornecedor', JSON.stringify(downloadedImages));
-        updateDownloadBadge(key);
-        updateDownloadedDisplay();
-        updateModalButtons(true);
-      }
-
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> Download concluído!';
+    if (confirm(confirmMsg)) {
+      // Link do Nubank (substitua pelo seu link)
+      const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
       
-      setTimeout(() => {
-        updateModalButtons(true);
-      }, 3000);
+      // Abre o link em nova aba
+      window.open(NUBANK_URL, '_blank');
 
-    } catch (error) {
-      console.error('❌ Erro no download:', error);
-      alert('❌ ' + (error.message || 'Erro ao baixar. Tente novamente.'));
-      modalDownloadBtn.disabled = false;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição';
+      // Feedback visual
+      modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
+      modalBuyBtn.style.background = '#2ecc71';
+      modalBuyBtn.disabled = true;
+
+      // Salva a intenção de compra
+      const pendingPurchase = {
+        key: key,
+        photoNumber: currentModalIndex + 1,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('pendingFornecedor', JSON.stringify(pendingPurchase));
+
+      // Restaura após 5 segundos
+      setTimeout(() => {
+        modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar esta foto · R$ ${PHOTO_PRICE.toFixed(2)}`;
+        modalBuyBtn.style.background = '#D4A3B3';
+        modalBuyBtn.disabled = false;
+      }, 8000);
+
+      console.log(`📊 Intenção de compra (Fornecedor): Foto ${currentModalIndex + 1} - ${key}`);
+    }
+  }
+
+  // ============================================================
+  // VERIFICAÇÃO DE PAGAMENTO PENDENTE
+  // ============================================================
+  function checkPendingPurchase() {
+    const pending = localStorage.getItem('pendingFornecedor');
+    if (pending) {
+      try {
+        const data = JSON.parse(pending);
+        if (Date.now() - data.timestamp < 5 * 60 * 1000) {
+          if (confirm(`✅ Pagamento da foto ${data.photoNumber} confirmado?\n\nClique em OK para liberar o download.`)) {
+            if (!downloadedImages.includes(data.key)) {
+              downloadedImages.push(data.key);
+              localStorage.setItem('downloadedFornecedor', JSON.stringify(downloadedImages));
+              updateDownloadBadge(data.key);
+              updateDownloadedDisplay();
+              if (modalOverlay.classList.contains('active')) {
+                const currentKey = allPhotoKeys[currentModalIndex];
+                if (currentKey === data.key) {
+                  updateModalButtons(true);
+                }
+              }
+              alert('🎉 Download liberado! A foto já está disponível para baixar.');
+            }
+          }
+        }
+        localStorage.removeItem('pendingFornecedor');
+      } catch (e) {
+        localStorage.removeItem('pendingFornecedor');
+      }
     }
   }
 
@@ -1482,13 +1449,13 @@
   // ============================================================
   function init() {
     renderGallery();
-    updateTimer();
-    setInterval(updateTimer, 1000);
+    checkPendingPurchase();
+    setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Portal do Fornecedor carregado!');
-    console.log(`📊 ${TOTAL_PHOTOS} fotos disponíveis`);
-    console.log(`⏰ Acesso de 24 horas iniciado!`);
+    console.log(`📊 ${TOTAL_PHOTOS} fotos disponíveis (R$ ${PHOTO_PRICE.toFixed(2)} cada)`);
     console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+    console.log('💡 Clique em qualquer foto para comprar a versão em alta definição.');
   }
 
   init();
