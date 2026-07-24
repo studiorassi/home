@@ -1228,7 +1228,7 @@
   // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const BUCKET_NAME = 'fornecedor';
+  const BUCKET_NAME = 'fornecedor'; // Identificador do bucket
   const PHOTO_PRICE = 15.00;
   const VIDEO_PRICE = 40.00;
 
@@ -1247,9 +1247,9 @@
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      // 1. Carregar fotos dinamicamente do S3 (SEM O BUCKET NA URL)
+      // 🔥 USANDO O BUCKET 'fornecedor' NAS URLs
       console.log('📡 Buscando lista de fotos no S3 (fornecedor)...');
-      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/${BUCKET_NAME}/fotos`);
       
       if (!fotosResponse.ok) {
         console.error('❌ Erro ao buscar fotos:', fotosResponse.status);
@@ -1275,15 +1275,15 @@
           key: `fotos/${filename}`,
           price: PHOTO_PRICE,
           title: `Foto ${parseInt(num)}`,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/${filename}`,
           isVideo: false
         };
       });
 
-      // 2. Carregar vídeos dinamicamente do S3 (SEM O BUCKET NA URL)
+      // 2. Carregar vídeos dinamicamente do S3
       console.log('📡 Buscando lista de vídeos no S3 (fornecedor)...');
-      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/${BUCKET_NAME}/videos`);
       
       if (!videosResponse.ok) {
         console.error('❌ Erro ao buscar vídeos:', videosResponse.status);
@@ -1320,7 +1320,7 @@
         const title = `Vídeo ${parseInt(num)}`;
         
         // Usa a rota de thumbnail do backend
-        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
+        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/${BUCKET_NAME}/videos/${filename}`;
         
         return {
           id: `video_${num}`,
@@ -1330,7 +1330,7 @@
           title: title,
           thumbnail: thumbnailUrl,
           fallbackThumbnail: createVideoPlaceholder(title),
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/${filename}`,
           isVideo: true
         };
       });
@@ -1868,7 +1868,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Bucket: ${BUCKET_NAME} - Detecção dinâmica total`);
+    console.log(`📁 Bucket: fornecedor - Detecção dinâmica total`);
   }
 
   init();
