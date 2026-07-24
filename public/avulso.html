@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== RESET ===== */
+    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -327,7 +327,7 @@
       color: #D4A3B3;
     }
 
-    /* ===== FILTROS (ABAIXO DA BARRA DE PROGRESSO) ===== */
+    /* ===== FILTROS ===== */
     .filter-bar {
       position: sticky;
       top: 174px;
@@ -1117,7 +1117,7 @@
   </div>
 </div>
 
-<!-- ===== FILTROS (ABAIXO DA BARRA DE PROGRESSO) ===== -->
+<!-- ===== FILTROS ===== -->
 <div class="filter-bar" id="filterBar">
   <div class="container">
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">
@@ -1250,8 +1250,8 @@
       key: `fotos/ensaio_${num}.jpg`,
       price: PHOTO_PRICE,
       title: `Foto ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/ensaio_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/ensaio_${num}.jpg`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
       isVideo: false
     });
   }
@@ -1265,8 +1265,8 @@
       key: `videos/video_${num}.mp4`,
       price: VIDEO_PRICE,
       title: `Vídeo ${i}`,
-      thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/video_${num}.jpg`,
-      mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/video_${num}.mp4`,
+      thumbnail: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.jpg`,
+      mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/video_${num}.mp4`,
       isVideo: true
     });
   }
