@@ -1229,74 +1229,116 @@
   const NUBANK_URL = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
 
   // ============================================================
-  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
+  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS) - TOTALMENTE DINÂMICO
   // ============================================================
   let allMedia = [];
   let totalItems = 0;
 
   // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3
+  // CARREGAR LISTA DE ARQUIVOS DO S3 (FOTOS E VÍDEOS)
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      // 1. Carregar fotos (lista fixa de 116)
-      const fotos = [];
-      for (let i = 1; i <= 116; i++) {
-        const num = String(i).padStart(2, '0');
-        fotos.push({
+      // 1. Carregar fotos dinamicamente do S3
+      console.log('📡 Buscando lista de fotos no S3...');
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
+      
+      if (!fotosResponse.ok) {
+        throw new Error('Erro ao buscar lista de fotos');
+      }
+      
+      const fotosData = await fotosResponse.json();
+      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
+      
+      const photoFiles = fotosData.files.filter(file => 
+        file.filename.endsWith('.jpg') && 
+        file.filename.startsWith('ensaio_')
+      );
+      
+      const fotos = photoFiles.map((file, index) => {
+        const filename = file.filename;
+        const numMatch = filename.match(/ensaio_(\d+)\.jpg/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        return {
           id: `foto_${num}`,
           type: 'foto',
-          key: `fotos/ensaio_${num}.jpg`,
+          key: `fotos/${filename}`,
           price: PHOTO_PRICE,
-          title: `Foto ${i}`,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/ensaio_${num}.jpg`,
+          title: `Foto ${parseInt(num)}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
           isVideo: false
-        });
-      }
+        };
+      });
 
       // 2. Carregar vídeos dinamicamente do S3
       console.log('📡 Buscando lista de vídeos no S3...');
-      const response = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
       
-      if (!response.ok) {
+      if (!videosResponse.ok) {
         throw new Error('Erro ao buscar lista de vídeos');
       }
       
-      const data = await response.json();
-      console.log(`📹 Encontrados ${data.count} vídeos na pasta videos/`);
+      const videosData = await videosResponse.json();
+      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
       
-      // 3. Filtrar apenas arquivos .mp4
-      const videoFiles = data.files.filter(file => 
+      const videoFiles = videosData.files.filter(file => 
         file.filename.endsWith('.mp4') && 
-        file.filename.startsWith('video_')
+        (file.filename.startsWith('video_') || file.filename.startsWith('videos_'))
       );
       
+      // Cria placeholder SVG para vídeos
+      function createVideoPlaceholder(title) {
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+            <rect width="400" height="300" fill="#1f0510"/>
+            <rect x="20" y="20" width="360" height="260" rx="10" fill="#2C0714" stroke="#D4A3B3" stroke-width="1" opacity="0.5"/>
+            <circle cx="200" cy="130" r="45" fill="#D4A3B3" opacity="0.2"/>
+            <polygon points="185,110 185,150 225,130" fill="#D4A3B3"/>
+            <text x="200" y="210" font-family="Arial, sans-serif" font-size="16" fill="#D4A3B3" text-anchor="middle" font-weight="bold">${title}</text>
+            <text x="200" y="235" font-family="Arial, sans-serif" font-size="12" fill="#7a5f5a" text-anchor="middle">🎬 Clique para assistir</text>
+          </svg>
+        `;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      }
+      
       const videos = videoFiles.map((file, index) => {
-        const num = String(index + 1).padStart(2, '0');
         const filename = file.filename;
+        
+        // Extrai o número do arquivo
+        let numMatch = filename.match(/video_(\d+)\.mp4/);
+        if (!numMatch) {
+          numMatch = filename.match(/videos_(\d+)\.mp4/);
+        }
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        const title = `Vídeo ${parseInt(num)}`;
+        
+        // 🔥 USA A ROTA DE THUMBNAIL DO BACKEND
+        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/${filename}`;
+        
         return {
           id: `video_${num}`,
           type: 'video',
           key: `videos/${filename}`,
           price: VIDEO_PRICE,
-          title: `Vídeo ${index + 1}`,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/videos/${filename.replace('.mp4', '.jpg')}`,
+          title: title,
+          thumbnail: thumbnailUrl,
+          fallbackThumbnail: createVideoPlaceholder(title),
           mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
           isVideo: true
         };
       });
 
-      // 4. Combinar tudo
+      // 3. Combinar tudo
       allMedia = [...fotos, ...videos];
       totalItems = allMedia.length;
       
       console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
       
-      // 5. Atualizar contadores na UI
+      // 4. Atualizar contadores na UI
       updateCounters();
       
-      // 6. Renderizar galeria
+      // 5. Renderizar galeria
       renderGallery();
       
     } catch (error) {
@@ -1410,6 +1452,47 @@
   }
 
   // ============================================================
+  // FUNÇÃO PARA TRATAR ERRO DE CARREGAMENTO DA IMAGEM
+  // ============================================================
+  function handleImageError(index, fallbackSrc) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img) {
+      // Tenta usar o fallback se existir
+      if (fallbackSrc) {
+        img.src = fallbackSrc;
+        img.onerror = null; // Remove o handler para evitar loop
+      } else {
+        // Se não tiver fallback, mostra "Indisponível"
+        img.style.display = 'none';
+        const container = img.parentElement;
+        const unavailableDiv = document.createElement('div');
+        unavailableDiv.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #D4A3B3;
+          font-size: 0.9rem;
+          text-align: center;
+          z-index: 10;
+          background: rgba(44, 7, 20, 0.8);
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid rgba(212, 163, 179, 0.1);
+        `;
+        unavailableDiv.innerHTML = `
+          <i class="fas fa-video" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+          ${img.alt || 'Indisponível'}
+        `;
+        container.appendChild(unavailableDiv);
+      }
+    }
+    
+    // Atualiza o contador de imagens carregadas
+    onMediaLoad(index);
+  }
+
+  // ============================================================
   // RENDER GALERIA
   // ============================================================
   function renderGallery() {
@@ -1422,7 +1505,6 @@
     grid.innerHTML = '';
     imagesLoaded = 0;
     
-    // Mostra progress bar apenas se for o primeiro carregamento
     if (!window._galleryLoaded) {
       if (progressContainer) progressContainer.style.display = 'block';
       if (progressFill) progressFill.style.width = '0%';
@@ -1439,6 +1521,14 @@
       const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
       const typeLabel = item.isVideo ? '🎬 VÍDEO' : '📷 FOTO';
       const typeClass = item.isVideo ? 'video' : 'photo';
+      
+      // 🔥 CORRIGIDO: Usa a thumbnail ou fallback
+      let imgSrc = item.thumbnail;
+      
+      // Se for vídeo, tenta usar a thumbnail do backend
+      if (item.isVideo) {
+        imgSrc = item.thumbnail || item.fallbackThumbnail;
+      }
 
       div.innerHTML = `
         <div class="skeleton" id="skeleton-${index}">
@@ -1450,10 +1540,10 @@
         <div class="type-badge ${typeClass}">${typeLabel}</div>
         <div class="price-tag">${priceDisplay}</div>
         ${item.isVideo ? '<div class="play-icon"><i class="fas fa-play-circle"></i></div>' : ''}
-        <img src="${item.thumbnail}" alt="${item.title}" class="real-image" loading="lazy"
+        <img src="${imgSrc}" alt="${item.title}" class="real-image" loading="lazy"
              data-key="${item.key}" data-index="${index}"
              onload="onMediaLoad(${index})"
-             onerror="onMediaError(${index})">
+             onerror="handleImageError(${index}, '${item.fallbackThumbnail || ''}')">
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
@@ -1475,7 +1565,6 @@
 
       imagesLoaded++;
       
-      // Só atualiza progresso se for o carregamento inicial (todas as mídias)
       if (!window._progressComplete && totalItems > 0) {
         const percent = Math.round((imagesLoaded / totalItems) * 100);
         if (progressFill) progressFill.style.width = percent + '%';
@@ -1491,19 +1580,10 @@
     }
   }
 
-  function onMediaError(index) {
-    const container = document.querySelector(`.real-image[data-index="${index}"]`)?.parentElement;
-    if (container) {
-      container.innerHTML = '<div style="padding:60px 20px; color:#D4A3B3; z-index:10; position:relative; text-align:center;">Indisponível</div>';
-    }
-    onMediaLoad(index);
-  }
-
   // ============================================================
   // MODAL
   // ============================================================
   async function openModal(index) {
-    // Acha o índice real no allMedia baseado no filtro atual
     const filteredItems = currentFilter === 'all' 
       ? allMedia 
       : allMedia.filter(item => item.type === currentFilter);
@@ -1515,12 +1595,10 @@
     const item = allMedia[currentModalIndex];
     const isDownloaded = downloadedItems.includes(item.id);
 
-    // Reseta progresso
     modalProgressFill.style.width = '0%';
     modalProgressLabel.textContent = '0%';
     modalProgress.classList.add('show');
 
-    // Esconde tudo
     modalImage.style.display = 'none';
     modalVideoContainer.style.display = 'none';
     modalImage.classList.remove('loaded');
@@ -1528,7 +1606,6 @@
     modalVideo.classList.remove('loaded');
     modalVideoContainer.classList.remove('loaded');
 
-    // Atualiza contador e preço
     document.getElementById('currentIndexDisplay').textContent = realIndex + 1;
     modalPriceDisplay.textContent = `R$ ${item.price.toFixed(2)}`;
     modalPriceStrong.textContent = `R$ ${item.price.toFixed(2)}`;
@@ -1553,7 +1630,6 @@
       }, 100);
 
       if (item.isVideo) {
-        // Vídeo
         modalVideoContainer.style.display = 'block';
         modalVideoSource.src = item.mediaUrl;
         modalVideo.load();
@@ -1571,7 +1647,6 @@
           alert('Erro ao carregar o vídeo. Tente novamente.');
         };
       } else {
-        // Foto
         modalImage.style.display = 'block';
         const img = new Image();
         img.onload = function() {
@@ -1602,7 +1677,6 @@
     modalOverlay.classList.remove('active');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', handleModalKeydown);
-    // Pausa o vídeo se estiver tocando
     if (modalVideo) {
       modalVideo.pause();
     }
@@ -1617,12 +1691,10 @@
   function navigateModal(direction) {
     const newIndex = currentModalIndex + direction;
     if (newIndex >= 0 && newIndex < allMedia.length) {
-      // Aplica o filtro para navegação
       const filteredItems = currentFilter === 'all' 
         ? allMedia 
         : allMedia.filter(item => item.type === currentFilter);
       
-      // Encontra a posição no filtro
       const currentFilteredIndex = filteredItems.indexOf(allMedia[currentModalIndex]);
       const newFilteredIndex = currentFilteredIndex + direction;
       
@@ -1665,15 +1737,12 @@
     const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${totalItems} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
 
     if (confirm(confirmMsg)) {
-      // Abre o link do Nubank
       window.open(NUBANK_URL, '_blank');
 
-      // Feedback visual
       modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
       modalBuyBtn.style.background = '#2ecc71';
       modalBuyBtn.disabled = true;
 
-      // Salva a intenção de compra
       const pendingPurchase = {
         id: item.id,
         type: item.type,
@@ -1683,7 +1752,6 @@
       };
       localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
 
-      // Restaura após 5 segundos
       setTimeout(() => {
         modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · ${priceDisplay}`;
         modalBuyBtn.style.background = '#D4A3B3';
@@ -1797,7 +1865,7 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - Detecção dinâmica de vídeos`);
+    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - DETECÇÃO DINÂMICA TOTAL`);
   }
 
   init();
