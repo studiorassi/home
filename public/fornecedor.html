@@ -1228,28 +1228,23 @@
   // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const BUCKET_NAME = 'fornecedor'; // Identificador do bucket
+  const BUCKET_NAME = 'fornecedor';
   const PHOTO_PRICE = 15.00;
   const VIDEO_PRICE = 40.00;
 
-  // 🔥 LINKS SEPARADOS POR TIPO
   const NUBANK_URL_PHOTO = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o';
   const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o';
 
-  // ============================================================
-  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS) - DINÂMICO
-  // ============================================================
   let allMedia = [];
   let totalItems = 0;
 
   // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3 (FORNECEDOR)
+  // CARREGAR LISTA DE ARQUIVOS DO S3 (COM URL PÚBLICA DIRETA)
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      // 🔥 USANDO O BUCKET 'fornecedor' NAS URLs
       console.log('📡 Buscando lista de fotos no S3 (fornecedor)...');
-      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/${BUCKET_NAME}/fotos`);
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fornecedor/fotos`);
       
       if (!fotosResponse.ok) {
         console.error('❌ Erro ao buscar fotos:', fotosResponse.status);
@@ -1257,33 +1252,32 @@
       }
       
       const fotosData = await fotosResponse.json();
-      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
-      
-      // Filtra apenas arquivos .jpg
       const photoFiles = fotosData.files.filter(file => 
         file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
       );
       
       const fotos = photoFiles.map((file, index) => {
         const filename = file.filename;
-        // Tenta extrair número do nome do arquivo
-        const numMatch = filename.match(/(\d+)\./);
+        const numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        
+        // URL PÚBLICA DIRETA DO S3
+        const publicUrl = `https://studio-rassi-fornecedor-2026.s3.amazonaws.com/fotos/${filename}`;
+
         return {
           id: `foto_${num}`,
           type: 'foto',
           key: `fotos/${filename}`,
           price: PHOTO_PRICE,
           title: `Foto ${parseInt(num)}`,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/${filename}`,
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/fotos/${filename}`,
+          thumbnail: publicUrl,
+          mediaUrl: publicUrl,
           isVideo: false
         };
       });
 
-      // 2. Carregar vídeos dinamicamente do S3
       console.log('📡 Buscando lista de vídeos no S3 (fornecedor)...');
-      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/${BUCKET_NAME}/videos`);
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fornecedor/videos`);
       
       if (!videosResponse.ok) {
         console.error('❌ Erro ao buscar vídeos:', videosResponse.status);
@@ -1291,14 +1285,10 @@
       }
       
       const videosData = await videosResponse.json();
-      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
-      
-      // Filtra apenas arquivos .mp4
       const videoFiles = videosData.files.filter(file => 
         file.filename.endsWith('.mp4')
       );
       
-      // Cria placeholder SVG para vídeos
       function createVideoPlaceholder(title) {
         const svg = `
           <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
@@ -1315,12 +1305,14 @@
       
       const videos = videoFiles.map((file, index) => {
         const filename = file.filename;
-        const numMatch = filename.match(/(\d+)\.mp4/);
+        const numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
         const title = `Vídeo ${parseInt(num)}`;
         
-        // Usa a rota de thumbnail do backend
-        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/${BUCKET_NAME}/videos/${filename}`;
+        // URL PÚBLICA DIRETA DO S3 PARA VÍDEOS E THUMBNAILS
+        const publicVideoUrl = `https://studio-rassi-fornecedor-2026.s3.amazonaws.com/videos/${filename}`;
+        const thumbnailFilename = filename.replace('.mp4', '.jpg');
+        const publicThumbUrl = `https://studio-rassi-fornecedor-2026.s3.amazonaws.com/videos/${thumbnailFilename}`;
         
         return {
           id: `video_${num}`,
@@ -1328,23 +1320,17 @@
           key: `videos/${filename}`,
           price: VIDEO_PRICE,
           title: title,
-          thumbnail: thumbnailUrl,
+          thumbnail: publicThumbUrl,
           fallbackThumbnail: createVideoPlaceholder(title),
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/${BUCKET_NAME}/videos/${filename}`,
+          mediaUrl: publicVideoUrl,
           isVideo: true
         };
       });
 
-      // 3. Combinar tudo
       allMedia = [...fotos, ...videos];
       totalItems = allMedia.length;
       
-      console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
-      
-      // 4. Atualizar contadores na UI
       updateCounters();
-      
-      // 5. Renderizar galeria
       renderGallery();
       
     } catch (error) {
@@ -1457,7 +1443,7 @@
   }
 
   // ============================================================
-  // FUNÇÃO PARA TRATAR ERRO DE CARREGAMENTO DA IMAGEM
+  // TRATAR ERRO DE IMAGEM
   // ============================================================
   function handleImageError(index, fallbackSrc) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
@@ -1719,7 +1705,7 @@
   }
 
   // ============================================================
-  // COMPRA (REDIRECIONA PARA O NUBANK COM LINK CORRETO)
+  // COMPRA
   // ============================================================
   function buyMedia() {
     const item = allMedia[currentModalIndex];
@@ -1733,7 +1719,6 @@
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
-    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO
     const paymentUrl = item.isVideo ? NUBANK_URL_VIDEO : NUBANK_URL_PHOTO;
     
     const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${totalItems} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
@@ -1760,8 +1745,6 @@
         modalBuyBtn.style.background = '#D4A3B3';
         modalBuyBtn.disabled = false;
       }, 8000);
-
-      console.log(`📊 Intenção de compra: ${item.type} ${currentModalIndex + 1} - ${item.key} - ${priceDisplay}`);
     }
   }
 
@@ -1828,7 +1811,7 @@
   if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
 
   // ============================================================
-  // BLOQUEIOS DE SEGURANÇA
+  // BLOQUEIOS E SCROLL
   // ============================================================
   document.addEventListener('keydown', function(e) {
     if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
@@ -1844,9 +1827,6 @@
     }
   });
 
-  // ============================================================
-  // NAVBAR SCROLL
-  // ============================================================
   window.addEventListener('scroll', function() {
     if (!navbar) return;
     if (window.scrollY > 50) {
@@ -1868,7 +1848,6 @@
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Bucket: fornecedor - Detecção dinâmica total`);
   }
 
   init();
