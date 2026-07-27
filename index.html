@@ -127,7 +127,7 @@
       box-shadow: 0 8px 25px rgba(212, 163, 179, 0.2);
     }
 
-    /* ===== NAVBAR ===== */
+    /* ===== NAVBAR FLUTUANTE ===== */
     .navbar {
       position: fixed;
       top: 0;
@@ -156,6 +156,7 @@
       align-items: center;
     }
     
+    /* ===== LOGO ===== */
     .logo {
       display: inline-block;
       line-height: 0;
@@ -212,7 +213,15 @@
       background: #D4A3B3;
       color: #2C0714;
     }
+    .navbar.scrolled .nav-menu .btn-minhas-fotos {
+      background: rgba(212, 163, 179, 0.2);
+    }
+    .navbar.scrolled .nav-menu .btn-minhas-fotos:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+    }
 
+    /* ===== MENU HAMBURGUER ===== */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -295,6 +304,7 @@
       color: #2C0714;
     }
 
+    /* ===== OVERLAY DO MENU ===== */
     .menu-overlay {
       display: none;
       position: fixed;
@@ -419,6 +429,7 @@
       display: inline-block;
     }
 
+    /* ===== SETA PARA BAIXO ===== */
     .scroll-down {
       position: absolute;
       bottom: 30px;
@@ -503,46 +514,6 @@
       font-style: italic;
     }
 
-    /* ===== BENEFÍCIOS ===== */
-    .benefit-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 30px;
-      margin-top: 24px;
-    }
-    .benefit-card {
-      background: rgba(31, 5, 16, 0.6);
-      padding: 32px 24px;
-      border-radius: 24px;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      text-align: center;
-      transition: 0.3s;
-    }
-    .benefit-card:hover {
-      border-color: rgba(212, 163, 179, 0.3);
-      background: rgba(44, 7, 20, 0.8);
-      transform: translateY(-4px);
-    }
-    .benefit-card i {
-      font-size: 2.6rem;
-      color: #D4A3B3;
-      margin-bottom: 12px;
-    }
-    .benefit-card h4 {
-      font-family: 'Fraunces', serif;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 6px;
-      letter-spacing: -0.02em;
-    }
-    .benefit-card p {
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.9rem;
-      color: #d4c5c0;
-      line-height: 1.6;
-    }
-
     /* ===== PACOTES ===== */
     .pacotes-header {
       text-align: center;
@@ -566,61 +537,6 @@
     .pacotes-header .pacotes-description strong {
       color: #D4A3B3;
       font-weight: 500;
-    }
-
-    .package-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-top: 16px;
-    }
-    .package-card {
-      background: #1f0510;
-      border-radius: 28px;
-      padding: 32px 20px;
-      text-align: center;
-      border: 1px solid rgba(212, 163, 179, 0.08);
-      transition: 0.3s;
-    }
-    .package-card:hover {
-      border-color: #D4A3B3;
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-    }
-    .package-card .price {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 3rem;
-      color: #D4A3B3;
-      letter-spacing: -1px;
-    }
-    .package-card .price small {
-      font-family: 'Work Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 300;
-      color: #d4c5c0;
-    }
-    .package-card p {
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 300;
-      color: #d4c5c0;
-    }
-    .package-card .badge {
-      display: inline-block;
-      background: #D4A3B3;
-      color: #2C0714;
-      padding: 4px 16px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .pacotes-footer {
-      text-align: center;
-      margin-top: 24px;
     }
 
     /* ===== CARROSSEL ===== */
@@ -679,6 +595,7 @@
       color: #f5edea;
     }
 
+    /* ===== CARROSSEL ===== */
     .carousel-wrapper {
       position: relative;
       max-width: 920px;
@@ -773,6 +690,7 @@
       text-shadow: 0 1px 10px rgba(0,0,0,0.5);
     }
 
+    /* ===== INDICADORES ===== */
     .carousel-indicators {
       display: flex;
       justify-content: center;
@@ -797,6 +715,7 @@
       box-shadow: 0 0 30px rgba(212, 163, 179, 0.25);
     }
 
+    /* ===== SETAS ===== */
     .carousel-arrows {
       position: absolute;
       top: 50%;
@@ -831,6 +750,7 @@
       transform: scale(1.1);
     }
 
+    /* ===== BADGE INSTAGRAM ===== */
     .instagram-badge {
       position: absolute;
       top: 16px;
@@ -1008,6 +928,103 @@
       font-size: 0.7rem;
       color: #7a5f5a;
       letter-spacing: 1px;
+    }
+
+    /* ===== BENEFÍCIOS ===== */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 24px;
+    }
+    .benefit-card {
+      background: rgba(31, 5, 16, 0.6);
+      padding: 32px 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      text-align: center;
+      transition: 0.3s;
+    }
+    .benefit-card:hover {
+      border-color: rgba(212, 163, 179, 0.3);
+      background: rgba(44, 7, 20, 0.8);
+      transform: translateY(-4px);
+    }
+    .benefit-card i {
+      font-size: 2.6rem;
+      color: #D4A3B3;
+      margin-bottom: 12px;
+    }
+    .benefit-card h4 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .benefit-card p {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: #d4c5c0;
+      line-height: 1.6;
+    }
+
+    /* ===== PACOTES ===== */
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .package-card {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 32px 20px;
+      text-align: center;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      transition: 0.3s;
+    }
+    .package-card:hover {
+      border-color: #D4A3B3;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .package-card .price {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 3rem;
+      color: #D4A3B3;
+      letter-spacing: -1px;
+    }
+    .package-card .price small {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: #d4c5c0;
+    }
+    .package-card p {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 300;
+      color: #d4c5c0;
+    }
+    .package-card .badge {
+      display: inline-block;
+      background: #D4A3B3;
+      color: #2C0714;
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .pacotes-footer {
+      text-align: center;
+      margin-top: 24px;
     }
 
     /* ===== BUILDER ===== */
@@ -1211,7 +1228,7 @@
       border-color: #D4A3B3;
     }
 
-    /* ===== FOOTER ===== */
+    /* ===== FOOTER COM REDES SOCIAIS ===== */
     .footer-social {
       padding: 40px 0 20px;
       border-top: 1px solid rgba(212, 163, 179, 0.05);
@@ -1335,24 +1352,38 @@
     @media (max-width: 768px) {
       .container { padding: 0 20px; }
       
+      /* ===== NAVBAR MOBILE ===== */
       .navbar {
         padding: 10px 0;
         background: rgba(44, 7, 20, 0.92);
         backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(212, 163, 179, 0.08);
       }
-      .navbar.scrolled { padding: 6px 0; }
+      .navbar.scrolled {
+        padding: 6px 0;
+      }
       .logo img {
         height: 38px;
         max-width: 130px;
       }
-      .navbar.scrolled .logo img { height: 34px; }
+      .navbar.scrolled .logo img {
+        height: 34px;
+      }
       
+      /* ===== HERO MOBILE ===== */
       .hero {
         height: 100vh;
         min-height: 100vh;
         max-height: 100vh;
         height: 100dvh;
+      }
+      .hero-video {
+        min-width: 100%;
+        min-height: 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       .hero-content {
         max-height: 100vh;
@@ -1394,6 +1425,7 @@
         margin-bottom: 8px;
       }
       
+      /* ===== DEMAIS AJUSTES ===== */
       .section-title { 
         font-size: 2rem; 
         padding-top: 20px;
@@ -1507,6 +1539,7 @@
         bottom: 24px;
       }
       
+      /* ===== CARROSSEL MOBILE ===== */
       .carousel-wrapper {
         position: relative;
         max-width: 100%;
@@ -1587,6 +1620,7 @@
         padding: 4px 12px;
       }
       
+      /* ===== FOOTER SOCIAL MOBILE ===== */
       .footer-social .social-links {
         flex-direction: column;
         align-items: center;
@@ -1611,6 +1645,7 @@
         height: 28px;
       }
       
+      /* ===== HERO MOBILE PEQUENO ===== */
       .hero {
         height: 100vh;
         min-height: 100vh;
@@ -1729,7 +1764,7 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- ===== NAVBAR FLUTUANTE ===== -->
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="index.html" class="logo">
@@ -1740,6 +1775,7 @@
            loading="lazy">
     </a>
     
+    <!-- Menu Desktop -->
     <div class="nav-menu">
       <a href="#pacotes">Pacotes</a>
       <a href="#personalizado">Personalizado</a>
@@ -1749,6 +1785,7 @@
       </button>
     </div>
     
+    <!-- Menu Hamburguer (Mobile) -->
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span>
       <span></span>
@@ -1757,8 +1794,10 @@
   </div>
 </nav>
 
-<!-- ===== MOBILE MENU ===== -->
+<!-- ===== MOBILE MENU OVERLAY ===== -->
 <div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- ===== MOBILE MENU ===== -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="#pacotes" onclick="closeMenu()">Pacotes</a>
   <a href="#personalizado" onclick="closeMenu()">Personalizado</a>
@@ -1804,12 +1843,13 @@
     </div>
   </div>
   
+  <!-- Seta para baixo -->
   <a href="#instagram" class="scroll-down">
     <i class="fas fa-chevron-down"></i>
   </a>
 </header>
 
-<!-- ===== CARROSSEL ===== -->
+<!-- ===== SEGUNDA DOBRA: CARROSSEL ===== -->
 <section class="instagram-section" id="instagram">
   <div class="container">
     <div class="instagram-header">
@@ -1984,25 +2024,67 @@
           <input type="range" id="photoSlider" min="20" max="150" value="20" step="1">
         </div>
         <div class="addons" id="addonsList"></div>
+        
+        <!-- 🔥 DATA E HORÁRIO -->
+        <div class="control-row" style="margin-top: 24px; border-top: 1px solid rgba(245,237,234,0.08); padding-top: 20px;">
+          <label style="margin-bottom: 12px; font-weight: 500;">
+            <i class="fas fa-calendar-alt" style="color:#D4A3B3;"></i> 
+            Escolha a data e horário do seu ensaio
+          </label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <input type="date" id="dataEnsaio" class="input-dark" style="font-size:0.85rem;">
+            <select id="horarioEnsaio" class="input-dark" style="font-size:0.85rem;">
+              <option value="">Selecione o horário</option>
+              <option value="08:00">08:00</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+            </select>
+          </div>
+          
+          <div style="margin-top: 8px; font-size:0.7rem; color:#7a5f5a;">
+            <i class="fas fa-info-circle"></i> Selecione uma data com pelo menos 7 dias de antecedência
+          </div>
+        </div>
       </div>
+      
       <div class="builder-summary">
         <div>
           <span class="summary-label">Total estimado</span>
           <div class="summary-total" id="totalPrice">R$360</div>
           <div class="summary-list" id="summaryList"></div>
+          
+          <!-- 🔥 DATA E HORÁRIO SELECIONADOS -->
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(245,237,234,0.08);">
+            <div style="display:flex; justify-content:space-between; font-family:'Work Sans',sans-serif; font-size:0.75rem; color:#d4c5c0;">
+              <span><i class="fas fa-calendar-check" style="color:#D4A3B3;"></i> Data selecionada:</span>
+              <span id="dataSelecionadaDisplay" style="color:#f5edea;">Nenhuma</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-family:'Work Sans',sans-serif; font-size:0.75rem; color:#d4c5c0; margin-top:4px;">
+              <span><i class="fas fa-clock" style="color:#D4A3B3;"></i> Horário:</span>
+              <span id="horarioSelecionadoDisplay" style="color:#f5edea;">Nenhum</span>
+            </div>
+          </div>
         </div>
+        
         <div>
+          <!-- 🔥 BOTÃO ADQUIRIR PACOTE -->
           <button class="btn-primary" id="adquirirPacoteBtn" style="display:block; text-align:center; width:100%; padding:14px; font-size:0.85rem;">
             <i class="fas fa-shopping-cart"></i> Adquirir Pacote
           </button>
-          <div class="summary-note">* Simulação — após seleção, enviamos o link de pagamento seguro.</div>
+          <div class="summary-note">* Após a confirmação, você será redirecionado para o pagamento seguro.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- ===== FOOTER COM REDES SOCIAIS ===== -->
 <footer class="footer-social">
   <div class="container">
     <div class="social-links">
@@ -2032,11 +2114,13 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // NAVBAR SCROLL
+  // NAVBAR SCROLL EFFECT
   // ============================================================
   const navbar = document.getElementById('mainNavbar');
+
   window.addEventListener('scroll', function() {
-    if (window.scrollY > 50) {
+    const scrollY = window.scrollY;
+    if (scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
@@ -2044,57 +2128,106 @@
   });
 
   // ============================================================
-  // MENU MOBILE
-  // ============================================================
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const menuOverlay = document.getElementById('menuOverlay');
-
-  function toggleMenu() {
-    hamburger.classList.toggle('active');
-    mobileMenu.classList.toggle('open');
-    menuOverlay.classList.toggle('active');
-    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-  }
-
-  function closeMenu() {
-    hamburger.classList.remove('active');
-    mobileMenu.classList.remove('open');
-    menuOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', toggleMenu);
-  menuOverlay.addEventListener('click', closeMenu);
-
-  document.querySelectorAll('.mobile-menu a, .mobile-menu button').forEach(el => {
-    el.addEventListener('click', closeMenu);
-  });
-
-  // ============================================================
-  // CARROSSEL
+  // 1. CARROSSEL - DADOS DAS IMAGENS
   // ============================================================
   const instagramPosts = [
-    { id: 'post_01', image: 'assets/instagram/instagram-01.jpg', alt: 'Ensaio externo', caption: '✨ Luz dourada para eternizar' },
-    { id: 'post_02', image: 'assets/instagram/instagram-02.jpg', alt: 'Gestante', caption: '🌸 Ternura em cada detalhe' },
-    { id: 'post_03', image: 'assets/instagram/instagram-03.jpg', alt: 'Festa infantil', caption: '🎉 Alegria eternizada' },
-    { id: 'post_04', image: 'assets/instagram/instagram-04.jpg', alt: 'Casal', caption: '💍 Amor em cada olhar' },
-    { id: 'post_05', image: 'assets/instagram/instagram-05.jpg', alt: 'Newborn', caption: '👶 Primeiros dias com amor' },
-    { id: 'post_06', image: 'assets/instagram/instagram-06.jpg', alt: 'Ensaio externo', caption: '🌿 Natureza e conexão' },
-    { id: 'post_07', image: 'assets/instagram/instagram-07.jpg', alt: 'Gestante', caption: '🤰 Luz e emoção' },
-    { id: 'post_08', image: 'assets/instagram/instagram-08.jpg', alt: 'Festa', caption: '🎈 Memórias para sempre' },
-    { id: 'post_09', image: 'assets/instagram/instagram-09.jpg', alt: 'Casal', caption: '💑 Seu amor merece ser eternizado' },
-    { id: 'post_10', image: 'assets/instagram/instagram-10.jpg', alt: 'Estúdio', caption: '🎂 Celebre seus momentos' },
+    { 
+      id: 'post_01', 
+      image: 'assets/instagram/instagram-01.jpg', 
+      alt: 'Ensaio externo com luz dourada', 
+      caption: 'Esse é o resultado do seu próximo ensaio ✨' 
+    },
+    { 
+      id: 'post_02', 
+      image: 'assets/instagram/instagram-02.jpg', 
+      alt: 'Gestante - momentos de ternura', 
+      caption: 'Um momento para você eternizar 🌸' 
+    },
+    { 
+      id: 'post_03', 
+      image: 'assets/instagram/instagram-03.jpg', 
+      alt: 'Festa infantil - sorrisos eternizados', 
+      caption: 'Registro de um momento para sua vida toda 🎉' 
+    },
+    { 
+      id: 'post_04', 
+      image: 'assets/instagram/instagram-04.jpg', 
+      alt: 'Ensaio de casal - amor em detalhes', 
+      caption: 'Você é o próximo 💍' 
+    },
+    { 
+      id: 'post_05', 
+      image: 'assets/instagram/instagram-05.jpg', 
+      alt: 'Newborn - delicadeza e ternura', 
+      caption: 'Cada detalhe feito com amor 👶' 
+    },
+    { 
+      id: 'post_06', 
+      image: 'assets/instagram/instagram-06.jpg', 
+      alt: 'Ensaio externo - natureza e luz', 
+      caption: 'Sua história merece ser contada 🌿' 
+    },
+    { 
+      id: 'post_07', 
+      image: 'assets/instagram/instagram-07.jpg', 
+      alt: 'Gestante - silhueta e emoção', 
+      caption: 'Esse momento é só seu 🤰' 
+    },
+    { 
+      id: 'post_08', 
+      image: 'assets/instagram/instagram-08.jpg', 
+      alt: 'Festa - decoração elegante', 
+      caption: 'Memórias que duram para sempre 🎈' 
+    },
+    { 
+      id: 'post_09', 
+      image: 'assets/instagram/instagram-09.jpg', 
+      alt: 'Casal - ensaio romântico', 
+      caption: 'Você merece ser eternizado 💑' 
+    },
+    { 
+      id: 'post_10', 
+      image: 'assets/instagram/instagram-10.jpg', 
+      alt: 'Estúdio - bolo de aniversário', 
+      caption: 'Celebre seus momentos especiais 🎂' 
+    },
+    { 
+      id: 'post_11', 
+      image: 'assets/instagram/instagram-11.jpg', 
+      alt: 'Ensaio externo - luz da tarde', 
+      caption: 'A luz perfeita para sua história 🌅' 
+    },
+    { 
+      id: 'post_12', 
+      image: 'assets/instagram/instagram-12.jpg', 
+      alt: 'Detalhes - amor em cada foto', 
+      caption: 'Seu amor em cada clique 💕' 
+    },
+    { 
+      id: 'post_13', 
+      image: 'assets/instagram/instagram-13.jpg', 
+      alt: 'Família - momentos eternizados', 
+      caption: 'Sua família merece ser lembrada 👨‍👩‍👧‍👦' 
+    }
   ];
 
+  // ============================================================
+  // 2. CARROSSEL - CONFIGURAÇÕES
+  // ============================================================
   let currentIndex = 0;
   let autoSlideInterval = null;
   const SLIDE_INTERVAL = 3000;
+  const TRANSITION_SPEED = 0.5;
+
   const track = document.getElementById('carouselTrack');
   const indicators = document.getElementById('carouselIndicators');
-  const totalItems = instagramPosts.length;
+  let totalItems = instagramPosts.length;
+  
   const isMobile = () => window.innerWidth <= 768;
 
+  // ============================================================
+  // 3. CARROSSEL - RENDERIZAR
+  // ============================================================
   function renderCarousel() {
     track.innerHTML = '';
     indicators.innerHTML = '';
@@ -2106,7 +2239,7 @@
       item.className = 'carousel-item';
       item.dataset.index = index;
       item.innerHTML = `
-        <img src="${post.image}" alt="${post.alt}" loading="lazy">
+        <img src="${post.image}" alt="${post.alt}" loading="${index < 13 ? 'lazy' : 'eager'}">
         <div class="overlay">
           <span class="instagram-icon"><i class="fab fa-instagram"></i> @studio.rassi</span>
           <span class="caption">${post.caption}</span>
@@ -2124,11 +2257,15 @@
     }
 
     if (!isMobile()) {
+      track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
       const startIndex = totalItems;
       goToSlide(startIndex, false);
     }
   }
 
+  // ============================================================
+  // 4. CARROSSEL - NAVEGAÇÃO
+  // ============================================================
   function goToSlide(index, animate = true) {
     const items = track.children;
     const total = items.length;
@@ -2158,14 +2295,14 @@
       if (!animate) {
         track.style.transition = 'none';
       } else {
-        track.style.transition = `transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
       }
       
       track.style.transform = `translateX(-${offset}px)`;
       
       if (!animate) {
         track.offsetHeight;
-        track.style.transition = `transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        track.style.transition = `transform ${TRANSITION_SPEED}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
       }
       
       Array.from(items).forEach((item, i) => {
@@ -2191,6 +2328,35 @@
   function nextSlide() { goToSlide((currentIndex + 1) % totalItems); }
   function prevSlide() { goToSlide((currentIndex - 1 + totalItems) % totalItems); }
 
+  track.addEventListener('scroll', () => {
+    if (isMobile()) {
+      clearTimeout(track.scrollTimeout);
+      track.scrollTimeout = setTimeout(() => {
+        const items = Array.from(track.children);
+        let closestIndex = 0;
+        let minDistance = Infinity;
+        
+        items.forEach((item, index) => {
+          const distance = Math.abs((item.offsetLeft + item.clientWidth / 2) - (track.scrollLeft + track.clientWidth / 2));
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+        
+        if (closestIndex !== currentIndex) {
+          currentIndex = closestIndex;
+          document.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+          });
+        }
+      }, 50);
+    }
+  });
+
+  // ============================================================
+  // 5. CARROSSEL - AUTOPLAY
+  // ============================================================
   function startAutoSlide() {
     if (autoSlideInterval) clearInterval(autoSlideInterval);
     autoSlideInterval = setInterval(() => {
@@ -2207,20 +2373,87 @@
     }
   }
 
-  document.getElementById('prevSlide').addEventListener('click', () => { prevSlide(); stopAutoSlide(); setTimeout(startAutoSlide, 5000); });
-  document.getElementById('nextSlide').addEventListener('click', () => { nextSlide(); stopAutoSlide(); setTimeout(startAutoSlide, 5000); });
+  function pauseAutoplay() {
+    stopAutoSlide();
+    setTimeout(startAutoSlide, 5000);
+  }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') { prevSlide(); stopAutoSlide(); setTimeout(startAutoSlide, 5000); }
-    if (e.key === 'ArrowRight') { nextSlide(); stopAutoSlide(); setTimeout(startAutoSlide, 5000); }
+  // ============================================================
+  // 6. MENU HAMBURGUER
+  // ============================================================
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  function toggleMenu() {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    menuOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+
+  document.querySelectorAll('.mobile-menu a, .mobile-menu button').forEach(el => {
+    el.addEventListener('click', closeMenu);
   });
 
+  // ============================================================
+  // 7. EVENT LISTENERS
+  // ============================================================
+  document.getElementById('prevSlide').addEventListener('click', () => {
+    prevSlide();
+    pauseAutoplay();
+  });
+
+  document.getElementById('nextSlide').addEventListener('click', () => {
+    nextSlide();
+    pauseAutoplay();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { prevSlide(); pauseAutoplay(); }
+    if (e.key === 'ArrowRight') { nextSlide(); pauseAutoplay(); }
+  });
+
+  let touchStartX = 0;
+  let touchEndX = 0;
   const wrapper = document.querySelector('.carousel-wrapper');
+  
+  wrapper.addEventListener('touchstart', (e) => {
+    if (!isMobile()) touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  wrapper.addEventListener('touchend', (e) => {
+    if (!isMobile()) {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) { nextSlide(); } else { prevSlide(); }
+        pauseAutoplay();
+      }
+    }
+  }, { passive: true });
+
   wrapper.addEventListener('mouseenter', stopAutoSlide);
   wrapper.addEventListener('mouseleave', startAutoSlide);
 
+  // ============================================================
+  // 8. CARROSSEL - INICIALIZAR
+  // ============================================================
   renderCarousel();
-  setTimeout(startAutoSlide, 500);
+  
+  setTimeout(() => {
+    startAutoSlide();
+  }, 500);
 
   let resizeTimeout;
   window.addEventListener('resize', () => {
@@ -2231,7 +2464,7 @@
   });
 
   // ============================================================
-  // BUILDER
+  // 9. BUILDER - JAVASCRIPT
   // ============================================================
   const addons = [
     {id:'story', name:'Storymaker em tempo real', price:550},
@@ -2274,6 +2507,44 @@
   const summaryList = document.getElementById('summaryList');
   const PRICE_PER_PHOTO = 18;
 
+  // 🔥 DATA E HORÁRIO
+  const dataEnsaio = document.getElementById('dataEnsaio');
+  const horarioEnsaio = document.getElementById('horarioEnsaio');
+  const dataSelecionadaDisplay = document.getElementById('dataSelecionadaDisplay');
+  const horarioSelecionadoDisplay = document.getElementById('horarioSelecionadoDisplay');
+
+  // Define a data mínima (7 dias a partir de hoje)
+  function setMinDate() {
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 7);
+    const year = minDate.getFullYear();
+    const month = String(minDate.getMonth() + 1).padStart(2, '0');
+    const day = String(minDate.getDate()).padStart(2, '0');
+    dataEnsaio.min = `${year}-${month}-${day}`;
+    dataEnsaio.value = `${year}-${month}-${day}`;
+    dataSelecionadaDisplay.textContent = minDate.toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+  }
+  setMinDate();
+
+  // Atualiza display da data selecionada
+  dataEnsaio.addEventListener('change', function() {
+    if (this.value) {
+      const data = new Date(this.value + 'T00:00:00');
+      dataSelecionadaDisplay.textContent = data.toLocaleDateString('pt-BR', {
+        day: '2-digit', month: 'long', year: 'numeric'
+      });
+    } else {
+      dataSelecionadaDisplay.textContent = 'Nenhuma';
+    }
+  });
+
+  horarioEnsaio.addEventListener('change', function() {
+    horarioSelecionadoDisplay.textContent = this.value || 'Nenhum';
+  });
+
   function updateTotal() {
     const count = parseInt(slider.value, 10);
     photoLabel.textContent = count + ' fotos';
@@ -2293,18 +2564,27 @@
   updateTotal();
 
   // ============================================================
-  // ADQUIRIR PACOTE
+  // 10. ADQUIRIR PACOTE - INTEGRAÇÃO MERCADO PAGO
   // ============================================================
   document.getElementById('adquirirPacoteBtn').addEventListener('click', async function() {
+    // 1. Validar dados
     const count = parseInt(slider.value, 10);
+    const data = dataEnsaio.value;
+    const horario = horarioEnsaio.value;
     
-    // Validar
-    if (count < 20) {
-      alert('⚠️ O mínimo é 20 fotos.');
+    if (!data) {
+      alert('⚠️ Por favor, selecione uma data para o ensaio.');
+      dataEnsaio.focus();
       return;
     }
     
-    // Calcular total
+    if (!horario) {
+      alert('⚠️ Por favor, selecione um horário para o ensaio.');
+      horarioEnsaio.focus();
+      return;
+    }
+    
+    // 2. Calcular total
     let total = count * PRICE_PER_PHOTO;
     const addonsSelecionados = [];
     addons.forEach(a => {
@@ -2314,30 +2594,68 @@
       }
     });
     
-    // Montar payload
+    // 3. Montar payload
     const payload = {
       fotos: count,
       addons: addonsSelecionados,
-      total: total
+      data: data,
+      horario: horario,
+      total: total,
+      cliente_nome: 'Cliente',
+      cliente_email: 'cliente@email.com'
     };
     
     console.log('📦 Pacote personalizado:', payload);
     
-    // Feedback
+    // 4. Desabilitar botão e mostrar loading
     const btn = this;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
     
-    // Simular envio (substituir pela chamada real depois)
-    setTimeout(() => {
-      alert(`✅ Pacote personalizado!\n\nFotos: ${count}\nAdd-ons: ${addonsSelecionados.length}\nTotal: R$ ${total.toFixed(2)}\n\n(Em produção: integração com Mercado Pago)`);
+    try {
+      // 5. Enviar para o backend (substituir pela URL real depois)
+      const response = await fetch('https://api-studiorassi.onrender.com/api/pacote/personalizado', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erro ao processar pacote');
+      }
+      
+      const dataResponse = await response.json();
+      
+      // 6. Redirecionar para o checkout do Mercado Pago
+      if (dataResponse.checkout_url) {
+        window.location.href = dataResponse.checkout_url;
+      } else {
+        throw new Error('Link de pagamento não gerado');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro:', error);
+      
+      // 🔥 FALLBACK: Simulação (para testes)
+      const usarSimulacao = confirm(
+        '⚠️ Não foi possível conectar ao servidor.\n\n' +
+        'Deseja simular a compra do pacote personalizado?\n' +
+        `Total: R$ ${total.toFixed(2)}`
+      );
+      
+      if (usarSimulacao) {
+        alert(`✅ Simulação de compra concluída!\n\n📦 Pacote Personalizado\n📸 Fotos: ${count}\n🎬 Add-ons: ${addonsSelecionados.length}\n📅 Data: ${data}\n🕐 Horário: ${horario}\n💰 Total: R$ ${total.toFixed(2)}\n\n(Em produção: redirecionamento para Mercado Pago)`);
+      }
+      
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Adquirir Pacote';
-    }, 1500);
+    }
   });
 
   // ============================================================
-  // VÍDEOS - AUTOPLAY
+  // 11. VÍDEOS
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
     const videos = document.querySelectorAll('.hero-video');
@@ -2347,6 +2665,7 @@
       });
     });
   });
+
 </script>
 
 </body>
