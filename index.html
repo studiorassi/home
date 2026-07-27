@@ -2059,6 +2059,86 @@
   </div>
 </footer>
 
+  <!-- ===== BUILDER COM AGENDAMENTO ===== -->
+<section class="builder" id="personalizado">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Sob medida</div>
+      <h2>Monte seu pacote personalizado</h2>
+      <p style="font-family:'Work Sans',sans-serif; font-weight:300; color:#d4c5c0; max-width:600px; margin:8px auto 0;">
+        Escolha o número de fotos, adicione serviços extras e agende a data do seu ensaio.
+      </p>
+    </div>
+    <div class="builder-box">
+      <div class="builder-controls">
+        <!-- FOTOS -->
+        <div class="control-row">
+          <label>Número de fotos (mín. 20) <span class="val" id="photoCountLabel">20 fotos</span></label>
+          <input type="range" id="photoSlider" min="20" max="150" value="20" step="1">
+        </div>
+        
+        <!-- ADD-ONS -->
+        <div class="addons" id="addonsList"></div>
+        
+        <!-- DATA E HORÁRIO -->
+        <div class="control-row" style="margin-top: 24px; border-top: 1px solid rgba(245,237,234,0.08); padding-top: 20px;">
+          <label style="margin-bottom: 12px; font-weight: 500;">
+            <i class="fas fa-calendar-alt" style="color:#D4A3B3;"></i> 
+            Escolha a data e horário do seu ensaio
+          </label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <input type="date" id="dataEnsaio" class="input-dark" 
+                   min="<?php echo date('Y-m-d', strtotime('+7 days')); ?>" 
+                   style="font-size:0.85rem;">
+            <select id="horarioEnsaio" class="input-dark" style="font-size:0.85rem;">
+              <option value="">Selecione o horário</option>
+              <option value="08:00">08:00</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+            </select>
+          </div>
+          
+          <div style="margin-top: 8px; font-size:0.7rem; color:#7a5f5a;">
+            <i class="fas fa-info-circle"></i> Selecione uma data com pelo menos 7 dias de antecedência
+          </div>
+        </div>
+      </div>
+      
+      <div class="builder-summary">
+        <div>
+          <span class="summary-label">Total estimado</span>
+          <div class="summary-total" id="totalPrice">R$360</div>
+          <div class="summary-list" id="summaryList"></div>
+          
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(245,237,234,0.08);">
+            <div style="display:flex; justify-content:space-between; font-family:'Work Sans',sans-serif; font-size:0.75rem; color:#d4c5c0;">
+              <span><i class="fas fa-calendar-check" style="color:#D4A3B3;"></i> Data selecionada:</span>
+              <span id="dataSelecionadaDisplay" style="color:#f5edea;">Nenhuma</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-family:'Work Sans',sans-serif; font-size:0.75rem; color:#d4c5c0; margin-top:4px;">
+              <span><i class="fas fa-clock" style="color:#D4A3B3;"></i> Horário:</span>
+              <span id="horarioSelecionadoDisplay" style="color:#f5edea;">Nenhum</span>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <button class="btn-primary" id="adquirirPacoteBtn" style="display:block; text-align:center; width:100%; padding:14px; font-size:0.85rem;">
+            <i class="fas fa-shopping-cart"></i> Adquirir Pacote
+          </button>
+          <div class="summary-note">* Após a confirmação, você será redirecionado para o pagamento seguro.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
@@ -2513,6 +2593,187 @@
     });
   });
 
+  // ============================================================
+// 12. BUILDER - COM AGENDAMENTO E MERCADO PAGO
+// ============================================================
+const addons = [
+  {id:'story', name:'Storymaker em tempo real', price:550},
+  {id:'drone', name:'Imagens com drone (30s)', price:550},
+  {id:'video', name:'Video maker (até 3min)', price:300},
+  {id:'studio', name:'Estúdio + bolo 1kg', price:300},
+];
+
+const addonsList = document.getElementById('addonsList');
+const active = new Set();
+
+addons.forEach(a => {
+  const el = document.createElement('div');
+  el.className = 'addon';
+  el.dataset.id = a.id;
+  el.innerHTML = `
+    <div class="addon-left">
+      <div class="checkbox"></div>
+      <span>${a.name}</span>
+    </div>
+    <span class="price-tag">+R$${a.price}</span>
+  `;
+  el.addEventListener('click', ()=>{
+    if(active.has(a.id)) {
+      active.delete(a.id);
+      el.classList.remove('active');
+      el.querySelector('.checkbox').textContent='';
+    } else {
+      active.add(a.id);
+      el.classList.add('active');
+      el.querySelector('.checkbox').textContent='✓';
+    }
+    updateTotal();
+  });
+  addonsList.appendChild(el);
+});
+
+const slider = document.getElementById('photoSlider');
+const photoLabel = document.getElementById('photoCountLabel');
+const totalPriceEl = document.getElementById('totalPrice');
+const summaryList = document.getElementById('summaryList');
+const PRICE_PER_PHOTO = 18;
+
+// Data e Horário
+const dataEnsaio = document.getElementById('dataEnsaio');
+const horarioEnsaio = document.getElementById('horarioEnsaio');
+const dataSelecionadaDisplay = document.getElementById('dataSelecionadaDisplay');
+const horarioSelecionadoDisplay = document.getElementById('horarioSelecionadoDisplay');
+
+// Define a data mínima (7 dias a partir de hoje)
+function setMinDate() {
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() + 7);
+  const year = minDate.getFullYear();
+  const month = String(minDate.getMonth() + 1).padStart(2, '0');
+  const day = String(minDate.getDate()).padStart(2, '0');
+  dataEnsaio.min = `${year}-${month}-${day}`;
+  dataEnsaio.value = `${year}-${month}-${day}`;
+}
+setMinDate();
+
+// Atualiza display da data selecionada
+dataEnsaio.addEventListener('change', function() {
+  if (this.value) {
+    const data = new Date(this.value + 'T00:00:00');
+    dataSelecionadaDisplay.textContent = data.toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+  } else {
+    dataSelecionadaDisplay.textContent = 'Nenhuma';
+  }
+});
+
+horarioEnsaio.addEventListener('change', function() {
+  horarioSelecionadoDisplay.textContent = this.value || 'Nenhum';
+});
+
+// Atualiza o total
+function updateTotal() {
+  const count = parseInt(slider.value, 10);
+  photoLabel.textContent = count + ' fotos';
+  let total = count * PRICE_PER_PHOTO;
+  let lines = [`${count} fotos · R$${PRICE_PER_PHOTO} cada — R$${total}`];
+  addons.forEach(a => {
+    if(active.has(a.id)) {
+      total += a.price;
+      lines.push(`${a.name} — R$${a.price}`);
+    }
+  });
+  totalPriceEl.textContent = 'R$' + total.toLocaleString('pt-BR');
+  summaryList.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+}
+
+slider.addEventListener('input', updateTotal);
+updateTotal();
+
+// ============================================================
+// 13. ADQUIRIR PACOTE - INTEGRAÇÃO COM MERCADO PAGO
+// ============================================================
+document.getElementById('adquirirPacoteBtn').addEventListener('click', async function() {
+  // 1. Validar dados
+  const count = parseInt(slider.value, 10);
+  const data = dataEnsaio.value;
+  const horario = horarioEnsaio.value;
+  
+  if (!data) {
+    alert('⚠️ Por favor, selecione uma data para o ensaio.');
+    dataEnsaio.focus();
+    return;
+  }
+  
+  if (!horario) {
+    alert('⚠️ Por favor, selecione um horário para o ensaio.');
+    horarioEnsaio.focus();
+    return;
+  }
+  
+  // 2. Calcular total
+  let total = count * PRICE_PER_PHOTO;
+  const addonsSelecionados = [];
+  addons.forEach(a => {
+    if(active.has(a.id)) {
+      total += a.price;
+      addonsSelecionados.push({id: a.id, name: a.name, price: a.price});
+    }
+  });
+  
+  // 3. Montar payload
+  const payload = {
+    fotos: count,
+    addons: addonsSelecionados,
+    data: data,
+    horario: horario,
+    total: total,
+    cliente_nome: 'Cliente', // Será preenchido na página de pagamento
+    cliente_email: 'cliente@email.com'
+  };
+  
+  console.log('📦 Pacote personalizado:', payload);
+  
+  // 4. Desabilitar botão e mostrar loading
+  const btn = this;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+  
+  try {
+    // 5. Enviar para o backend
+    const response = await fetch('https://api-studiorassi.onrender.com/api/pacote/personalizado', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (!response.ok) {
+      throw new Error('Erro ao processar pacote');
+    }
+    
+    const dataResponse = await response.json();
+    
+    // 6. Redirecionar para o checkout do Mercado Pago
+    if (dataResponse.checkout_url) {
+      window.location.href = dataResponse.checkout_url;
+    } else {
+      throw new Error('Link de pagamento não gerado');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro:', error);
+    alert('❌ Erro ao processar seu pedido. Tente novamente.');
+    
+    // Restaurar botão
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Adquirir Pacote';
+  }
+});
+  
 </script>
 
 </body>
