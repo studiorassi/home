@@ -2493,7 +2493,8 @@
     const mensagem = `📸 *NOVO PACOTE PROMOCIONAL* 📸\n\n` +
                      `💰 *Valor:* R$ ${valor}\n` +
                      `📷 *Fotos:* ${fotos}\n\n` +
-                     `🔗 Site: https://studiorassi.github.io/home/index.html`;
+                     `🔗 Site: https://studiorassi.github.io/home/index.html\n\n` +
+                     `Me envie o link de pagamento?`;
     
     const mensagemCodificada = encodeURIComponent(mensagem);
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
@@ -2647,7 +2648,8 @@
     }
     
     mensagem += `\n💰 *Total:* R$ ${total.toFixed(2)}\n\n`;
-    mensagem += `🔗 Site: https://studiorassi.github.io/home/index.html`;
+    mensagem += `🔗 Site: https://studiorassi.github.io/home/index.html\n\n`;
+    mensagem += `Me envie o link de pagamento?`;
     
     // 4. Abrir WhatsApp
     const mensagemCodificada = encodeURIComponent(mensagem);
