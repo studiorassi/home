@@ -355,7 +355,7 @@
       background: rgba(31, 5, 16, 0.6);
       backdrop-filter: blur(8px);
       padding: 8px 0;
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       display: none;
     }
@@ -387,6 +387,44 @@
     }
     .progress-bar-container .progress-label strong {
       color: #D4A3B3;
+    }
+
+    /* ===== FILTROS ===== */
+    .filter-bar {
+      position: sticky;
+      top: 174px;
+      z-index: 97;
+      background: rgba(44, 7, 20, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      margin-bottom: 16px;
+    }
+    .filter-bar .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .filter-btn {
+      background: rgba(31, 5, 16, 0.6);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      color: #d4c5c0;
+      padding: 8px 24px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .filter-btn:hover {
+      border-color: #D4A3B3;
+      color: #f5edea;
+    }
+    .filter-btn.active {
+      background: #D4A3B3;
+      color: #2C0714;
+      border-color: #D4A3B3;
     }
 
     .credits-info {
@@ -600,6 +638,66 @@
       font-size: 0.7rem;
       margin-right: 4px;
     }
+    .watermark-item .price-tag {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 7, 20, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      z-index: 5;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .watermark-item .type-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 0.6rem;
+      padding: 3px 12px;
+      border-radius: 40px;
+      z-index: 4;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+    }
+    .watermark-item .type-badge.photo {
+      background: rgba(212, 163, 179, 0.2);
+      color: #D4A3B3;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+    }
+    .watermark-item .type-badge.video {
+      background: rgba(46, 125, 50, 0.2);
+      color: #4CAF50;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+    .watermark-item .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      color: rgba(255,255,255,0.8);
+      z-index: 3;
+      text-shadow: 0 0 30px rgba(0,0,0,0.8);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .watermark-item:hover .play-icon {
+      opacity: 1;
+    }
+    .watermark-item.video-item .real-image {
+      opacity: 0.7;
+    }
+    .watermark-item.video-item .real-image.loaded {
+      opacity: 0.7;
+    }
 
     .modal-overlay {
       display: none;
@@ -683,6 +781,26 @@
     }
     .modal-content .modal-image.loaded {
       opacity: 1;
+    }
+    
+    .modal-content .modal-video {
+      max-width: 90vw;
+      max-height: 75vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      position: relative;
+      z-index: 1;
+      background: #000;
+    }
+    .modal-content .modal-video.loaded { opacity: 1; }
+    .modal-content .modal-video video {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+      display: block;
     }
 
     .modal-close {
@@ -872,6 +990,33 @@
       text-align: center;
       z-index: 10;
     }
+    .modal-price {
+      color: #D4A3B3;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 8px;
+      text-align: center;
+      z-index: 10;
+    }
+    .modal-price strong {
+      font-size: 1.2rem;
+    }
+    .modal-price .media-type {
+      display: inline-block;
+      padding: 2px 12px;
+      border-radius: 40px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .modal-price .media-type.photo {
+      background: rgba(212, 163, 179, 0.15);
+      color: #D4A3B3;
+    }
+    .modal-price .media-type.video {
+      background: rgba(46, 125, 50, 0.15);
+      color: #4CAF50;
+    }
 
     /* POP-UP / BOX BRANCO CENTRALIZADO E POR CIMA DE TUDO QUANDO CRÉDITOS = 0 */
     .modal-buy-credits {
@@ -1054,6 +1199,7 @@
       .navbar.scrolled .logo img { height: 34px; }
       .mobile-menu { display: block; }
       .progress-bar-container { top: 118px; }
+      .filter-bar { top: 160px; }
       .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
       .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
       .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
@@ -1062,6 +1208,9 @@
       .watermark-item .watermark-logo { width: 70px; }
       .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
       .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
+      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
+      .watermark-item .type-badge { font-size: 0.5rem; padding: 2px 10px; top: 8px; left: 8px; }
+      .watermark-item .play-icon { font-size: 2rem; }
       .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
       .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
       .nav-info .user span { display: inline; }
@@ -1071,6 +1220,7 @@
       .modal-nav.prev { left: -10px; }
       .modal-nav.next { right: -10px; }
       .modal-content .modal-image { max-height: 60vh; }
+      .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
       .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
@@ -1087,10 +1237,15 @@
       .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
       .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
       .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
+      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
+      .watermark-item .type-badge { font-size: 0.45rem; padding: 2px 8px; top: 6px; left: 6px; }
+      .watermark-item .play-icon { font-size: 1.5rem; }
       .navbar .logo img { height: 32px; max-width: 100px; }
       .navbar.scrolled .logo img { height: 28px; }
       .progress-bar-container { top: 98px; }
+      .filter-bar { top: 140px; }
       .modal-content .modal-image { max-height: 50vh; }
+      .modal-content .modal-video { max-height: 50vh; }
       .modal-actions { flex-direction: column; align-items: center; }
       .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
       .modal-nav.prev { left: -4px; }
@@ -1118,7 +1273,7 @@
         <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
-          Baixadas: <span id="downloadedCountDisplay" style="font-weight: 700; color: #f5edea;">0</span>/116
+          Baixados: <span id="downloadedCountDisplay" style="font-weight: 700; color: #f5edea;">0</span>/<span id="totalPhotosDisplay">0</span>
         </span>
       </span>
       <button class="menu-credit-cta" id="menuCreditCta" onclick="openCreditUpsell()">
@@ -1140,7 +1295,7 @@
   </div>
   <div class="mobile-menu menu-status" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-direction: column; gap: 12px;">
     <div class="status-row"><span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span><span class="value" id="mobileCreditsDisplay">0</span></div>
-    <div class="status-row"><span class="label"><i class="fas fa-images"></i> Fotos baixadas</span><span class="value" id="mobileDownloadedDisplay">0 / 116</span></div>
+    <div class="status-row"><span class="label"><i class="fas fa-images"></i> Baixados</span><span class="value" id="mobileDownloadedDisplay">0 / 0</span></div>
     <div class="status-row"><span class="label"><i class="far fa-clock"></i> Expira em</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
   </div>
   <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
@@ -1157,7 +1312,7 @@
 <div class="floating-status" id="statusBar">
   <div class="container">
     <div class="status-item"><i class="fas fa-coins"></i><span>Créditos: <strong class="value" id="creditsDisplay">0</strong></span></div>
-    <div class="status-item"><i class="fas fa-images"></i><span>Baixadas: <strong class="value" id="desktopDownloadedDisplay">0 / 116</strong></span></div>
+    <div class="status-item"><i class="fas fa-images"></i><span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 0</strong></span></div>
     <div class="status-item"><i class="far fa-clock"></i><span>Expira em: <strong class="timer" id="timerDisplay">72:00:00</strong></span></div>
   </div>
 </div>
@@ -1167,7 +1322,22 @@
   <div class="container">
     <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">116</span></div>
+    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">0</span></div>
+  </div>
+</div>
+
+<!-- ===== FILTROS ===== -->
+<div class="filter-bar" id="filterBar">
+  <div class="container">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">
+      <i class="fas fa-th"></i> Todos
+    </button>
+    <button class="filter-btn" data-filter="foto" onclick="setFilter('foto')">
+      <i class="fas fa-camera"></i> Fotos
+    </button>
+    <button class="filter-btn" data-filter="video" onclick="setFilter('video')">
+      <i class="fas fa-video"></i> Vídeos
+    </button>
   </div>
 </div>
 
@@ -1175,8 +1345,8 @@
 <div class="container">
   <div class="credits-info">
     <span class="heart">💖</span>
-    <span class="label"><strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.</span>
-    <span class="label" style="display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i><span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo das fotos!</span></span>
+    <span class="label"><strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto ou vídeo em <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.</span>
+    <span class="label" style="display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i><span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo!</span></span>
     <span class="emoji-heart" style="display:inline-block; animation:pulse 1.5s ease-in-out infinite;">🥰</span>
   </div>
 </div>
@@ -1208,7 +1378,7 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
     
-    <!-- MARCA D'ÁGUA - SEM OPACIDADE -->
+    <!-- MARCA D'ÁGUA -->
     <div class="watermark-container">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
     </div>
@@ -1226,7 +1396,7 @@
     
     <!-- CONTADOR -->
     <div class="modal-counter" id="modalCounter">
-      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">116</span>
+      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">0</span>
     </div>
     
     <!-- NAVEGAÇÃO -->
@@ -1242,14 +1412,22 @@
       <i class="fas fa-times"></i>
     </button>
     
-    <!-- IMAGEM -->
-    <img id="modalImage" class="modal-image" src="" alt="Foto em alta resolução">
+    <!-- IMAGEM / VÍDEO -->
+    <div id="modalMediaContainer">
+      <img id="modalImage" class="modal-image" src="" alt="Foto" style="display:none;">
+      <div id="modalVideoContainer" class="modal-video" style="display:none;">
+        <video id="modalVideo" controls playsinline preload="metadata">
+          <source id="modalVideoSource" src="" type="video/mp4">
+          Seu navegador não suporta vídeos.
+        </video>
+      </div>
+    </div>
     
     <!-- AÇÕES -->
     <div class="modal-actions">
       <!-- BOTÃO DE DOWNLOAD NORMAL (Visível quando há créditos) -->
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
-        <i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito
+        <i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito
       </button>
     </div>
 
@@ -1308,9 +1486,9 @@
   }
 
   let credits = 0;
-  const totalPhotos = 116;
-  const allPhotoKeys = Array.from({length: totalPhotos}, (_, i) => `ensaio_${String(i + 1).padStart(2, '0')}.jpg`);
-  let downloadedImages = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
+  let downloadedItems = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
+  let allMedia = [];
+  let totalItems = 0;
 
   // ============================================================
   // DOM ELEMENTS
@@ -1325,12 +1503,16 @@
   const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalImage = document.getElementById('modalImage');
+  const modalVideoContainer = document.getElementById('modalVideoContainer');
+  const modalVideo = document.getElementById('modalVideo');
+  const modalVideoSource = document.getElementById('modalVideoSource');
   const modalDownloadBtn = document.getElementById('modalDownloadBtn');
   const modalBuyCredits = document.getElementById('modalBuyCredits');
   const modalCreditsCount = document.getElementById('modalCreditsCount');
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
   const loadedCount = document.getElementById('loadedCount');
+  const totalCount = document.getElementById('totalCount');
   const modalProgress = document.getElementById('modalProgress');
   const modalProgressFill = document.getElementById('modalProgressFill');
   const modalProgressLabel = document.getElementById('modalProgressLabel');
@@ -1340,12 +1522,124 @@
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
 
-  // Setar Textos na Tela
-  if (document.getElementById('clienteNome')) document.getElementById('clienteNome').textContent = clientName;
-  if (document.getElementById('mobileUserName')) document.getElementById('mobileUserName').textContent = clientName;
-  if (document.getElementById('totalPhotosDisplay')) document.getElementById('totalPhotosDisplay').textContent = totalPhotos;
-  if (document.getElementById('totalCount')) document.getElementById('totalCount').textContent = totalPhotos;
-  if (document.getElementById('totalCountDisplay')) document.getElementById('totalCountDisplay').textContent = totalPhotos;
+  // ============================================================
+  // CARREGAR LISTA DE ARQUIVOS DO S3 (CLIENTES)
+  // ============================================================
+  async function loadMediaFromS3() {
+    try {
+      console.log('📡 Buscando lista de fotos no S3 (clientes)...');
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
+      
+      if (!fotosResponse.ok) {
+        console.error('❌ Erro ao buscar fotos:', fotosResponse.status);
+        throw new Error('Erro ao buscar lista de fotos');
+      }
+      
+      const fotosData = await fotosResponse.json();
+      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
+      
+      const photoFiles = fotosData.files.filter(file => 
+        file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
+      );
+      
+      const fotos = photoFiles.map((file, index) => {
+        const filename = file.filename;
+        const numMatch = filename.match(/(\d+)\./);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        return {
+          id: `foto_${num}`,
+          type: 'foto',
+          key: `fotos/${filename}`,
+          title: `Foto ${parseInt(num)}`,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          isVideo: false
+        };
+      });
+
+      // 2. Carregar vídeos dinamicamente do S3
+      console.log('📡 Buscando lista de vídeos no S3 (clientes)...');
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      
+      if (!videosResponse.ok) {
+        console.error('❌ Erro ao buscar vídeos:', videosResponse.status);
+        throw new Error('Erro ao buscar lista de vídeos');
+      }
+      
+      const videosData = await videosResponse.json();
+      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
+      
+      const videoFiles = videosData.files.filter(file => 
+        file.filename.endsWith('.mp4')
+      );
+      
+      function createVideoPlaceholder(title) {
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+            <rect width="400" height="300" fill="#1f0510"/>
+            <rect x="20" y="20" width="360" height="260" rx="10" fill="#2C0714" stroke="#D4A3B3" stroke-width="1" opacity="0.5"/>
+            <circle cx="200" cy="130" r="45" fill="#D4A3B3" opacity="0.2"/>
+            <polygon points="185,110 185,150 225,130" fill="#D4A3B3"/>
+            <text x="200" y="210" font-family="Arial, sans-serif" font-size="16" fill="#D4A3B3" text-anchor="middle" font-weight="bold">${title}</text>
+            <text x="200" y="235" font-family="Arial, sans-serif" font-size="12" fill="#7a5f5a" text-anchor="middle">🎬 Clique para assistir</text>
+          </svg>
+        `;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      }
+      
+      const videos = videoFiles.map((file, index) => {
+        const filename = file.filename;
+        const numMatch = filename.match(/(\d+)\.mp4/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        const title = `Vídeo ${parseInt(num)}`;
+        
+        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
+        
+        return {
+          id: `video_${num}`,
+          type: 'video',
+          key: `videos/${filename}`,
+          title: title,
+          thumbnail: thumbnailUrl,
+          fallbackThumbnail: createVideoPlaceholder(title),
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
+          isVideo: true
+        };
+      });
+
+      // 3. Combinar tudo
+      allMedia = [...fotos, ...videos];
+      totalItems = allMedia.length;
+      
+      console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
+      
+      // 4. Atualizar contadores na UI
+      updateCounters();
+      
+      // 5. Renderizar galeria
+      renderGallery();
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar mídias:', error);
+      alert('Erro ao carregar a galeria. Tente novamente.');
+    }
+  }
+
+  // ============================================================
+  // ATUALIZAR CONTADORES
+  // ============================================================
+  function updateCounters() {
+    const elements = [
+      document.getElementById('totalCount'),
+      document.getElementById('totalCountDisplay'),
+      document.getElementById('totalPhotosDisplay')
+    ];
+    elements.forEach(el => {
+      if (el) el.textContent = totalItems;
+    });
+    
+    updateDownloadedDisplay();
+  }
 
   // ============================================================
   // 1. CARREGAR CRÉDITOS DO SERVIDOR
@@ -1377,63 +1671,101 @@
     if (mobileCreditsDisplay) mobileCreditsDisplay.textContent = credits;
     if (modalCreditsCount) modalCreditsCount.textContent = credits;
     
-    const baixadasCount = downloadedImages.length;
-    if (downloadedCountDisplay) downloadedCountDisplay.textContent = baixadasCount;
-    if (mobileDownloadedDisplay) mobileDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
-    if (desktopDownloadedDisplay) desktopDownloadedDisplay.textContent = `${baixadasCount} / ${totalPhotos}`;
+    const baixadosCount = downloadedItems.length;
+    if (downloadedCountDisplay) downloadedCountDisplay.textContent = baixadosCount;
+    if (mobileDownloadedDisplay) mobileDownloadedDisplay.textContent = `${baixadosCount} / ${totalItems}`;
+    if (desktopDownloadedDisplay) desktopDownloadedDisplay.textContent = `${baixadosCount} / ${totalItems}`;
 
     updateModalButtons();
     updateMenuCtaVisibility();
+  }
+
+  function updateDownloadedDisplay() {
+    const count = downloadedItems.length;
+    const displayElements = [
+      document.getElementById('desktopDownloadedDisplay'),
+      document.getElementById('mobileDownloadedDisplay'),
+      document.getElementById('downloadedCountDisplay')
+    ];
+    displayElements.forEach(el => {
+      if (el) el.textContent = `${count} / ${totalItems}`;
+    });
   }
 
   // ============================================================
   // 2. RENDERIZAR GALERIA
   // ============================================================
   let imagesLoaded = 0;
+  let currentFilter = 'all';
+  let filterButtons = document.querySelectorAll('.filter-btn');
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    filterButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderGallery();
+  }
 
   function renderGallery() {
     if (!grid) return;
+    
+    const filteredItems = currentFilter === 'all' 
+      ? allMedia 
+      : allMedia.filter(item => item.type === currentFilter);
+    
     grid.innerHTML = '';
     imagesLoaded = 0;
-    if (progressContainer) progressContainer.style.display = 'block';
-    if (progressFill) progressFill.style.width = '0%';
-    if (loadedCount) loadedCount.textContent = '0';
     
-    for (let i = 0; i < allPhotoKeys.length; i++) {
-      const key = allPhotoKeys[i];
-      const isDownloaded = downloadedImages.includes(key);
-      const div = document.createElement('div');
-      div.className = 'watermark-item';
-      div.dataset.key = key;
+    if (!window._galleryLoaded) {
+      if (progressContainer) progressContainer.style.display = 'block';
+      if (progressFill) progressFill.style.width = '0%';
+      if (loadedCount) loadedCount.textContent = '0';
+    }
 
-      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
+    filteredItems.forEach((item, index) => {
+      const isDownloaded = downloadedItems.includes(item.id);
+      const div = document.createElement('div');
+      div.className = `watermark-item ${item.isVideo ? 'video-item' : ''}`;
+      div.dataset.id = item.id;
+      div.dataset.index = index;
+
+      const priceDisplay = '1 crédito';
+      const typeLabel = item.isVideo ? '🎬 VÍDEO' : '📷 FOTO';
+      const typeClass = item.isVideo ? 'video' : 'photo';
       
+      let imgSrc = item.thumbnail;
+      if (item.isVideo) {
+        imgSrc = item.thumbnail || item.fallbackThumbnail;
+      }
+
       div.innerHTML = `
-        <div class="skeleton" id="skeleton-${i}">
+        <div class="skeleton" id="skeleton-${index}">
           <div class="spinner"><i class="fas fa-spinner"></i></div>
         </div>
-        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${i}">
-          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADA' : '<i class="fas fa-lock"></i>'}
+        <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
+          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADO' : '<i class="fas fa-lock"></i>'}
         </div>
-        <img src="${imageUrl}" alt="Foto ${i + 1}" class="real-image" loading="lazy"
-             data-key="${key}" data-index="${i}"
-             onload="onImageLoad(${i})"
-             onerror="onImageError(${i})">
+        <div class="type-badge ${typeClass}">${typeLabel}</div>
+        <div class="price-tag">1 crédito</div>
+        ${item.isVideo ? '<div class="play-icon"><i class="fas fa-play-circle"></i></div>' : ''}
+        <img src="${imgSrc}" alt="${item.title}" class="real-image" loading="lazy"
+             data-key="${item.key}" data-index="${index}"
+             onload="onMediaLoad(${index})"
+             onerror="handleImageError(${index}, '${item.fallbackThumbnail || ''}')">
         <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo" loading="lazy">
         <div class="watermark-text">Studio Rassi</div>
       `;
-      
-      div.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-download')) return;
-        openModal(i);
-      });
-      
+
+      div.addEventListener('click', () => openModal(index));
       grid.appendChild(div);
-    }
-    updateCreditsDisplay();
+    });
+    
+    updateDownloadedDisplay();
+    window._galleryLoaded = true;
   }
 
-  function onImageLoad(index) {
+  function onMediaLoad(index) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
     if (img && !img.classList.contains('loaded')) {
       img.classList.add('loaded');
@@ -1441,24 +1773,54 @@
       if (skeleton) skeleton.style.display = 'none';
       
       imagesLoaded++;
-      const percent = Math.round((imagesLoaded / totalPhotos) * 100);
-      if (progressFill) progressFill.style.width = percent + '%';
-      if (loadedCount) loadedCount.textContent = imagesLoaded;
       
-      if (imagesLoaded >= totalPhotos) {
-        setTimeout(() => {
-          if (progressContainer) progressContainer.style.display = 'none';
-        }, 400);
+      if (!window._progressComplete && totalItems > 0) {
+        const percent = Math.round((imagesLoaded / totalItems) * 100);
+        if (progressFill) progressFill.style.width = percent + '%';
+        if (loadedCount) loadedCount.textContent = imagesLoaded;
+        
+        if (imagesLoaded >= totalItems) {
+          window._progressComplete = true;
+          setTimeout(() => {
+            if (progressContainer) progressContainer.style.display = 'none';
+          }, 400);
+        }
       }
     }
   }
 
-  function onImageError(index) {
-    const container = document.querySelector(`.real-image[data-index="${index}"]`)?.parentElement;
-    if (container) {
-      container.innerHTML = '<div style="padding:60px 20px; color:#D4A3B3; z-index:10; position:relative; text-align:center;">Indisponível</div>';
+  function handleImageError(index, fallbackSrc) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img) {
+      if (fallbackSrc) {
+        img.src = fallbackSrc;
+        img.onerror = null;
+      } else {
+        img.style.display = 'none';
+        const container = img.parentElement;
+        const unavailableDiv = document.createElement('div');
+        unavailableDiv.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #D4A3B3;
+          font-size: 0.9rem;
+          text-align: center;
+          z-index: 10;
+          background: rgba(44, 7, 20, 0.8);
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid rgba(212, 163, 179, 0.1);
+        `;
+        unavailableDiv.innerHTML = `
+          <i class="fas fa-${img.alt.includes('Vídeo') ? 'video' : 'image'}" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+          ${img.alt || 'Indisponível'}
+        `;
+        container.appendChild(unavailableDiv);
+      }
     }
-    onImageLoad(index);
+    onMediaLoad(index);
   }
 
   // ============================================================
@@ -1467,22 +1829,30 @@
   let currentModalIndex = 0;
 
   async function openModal(index) {
-    currentModalIndex = index;
-    const key = allPhotoKeys[index];
-    const isDownloaded = downloadedImages.includes(key);
+    const filteredItems = currentFilter === 'all' 
+      ? allMedia 
+      : allMedia.filter(item => item.type === currentFilter);
+    
+    const realIndex = allMedia.indexOf(filteredItems[index]);
+    if (realIndex === -1) return;
+    
+    currentModalIndex = realIndex;
+    const item = allMedia[currentModalIndex];
+    const isDownloaded = downloadedItems.includes(item.id);
     
     if (modalProgressFill) modalProgressFill.style.width = '0%';
     if (modalProgressLabel) modalProgressLabel.textContent = '0%';
     if (modalProgress) modalProgress.classList.add('show');
     
-    if (modalImage) {
-      modalImage.classList.remove('loaded');
-      modalImage.style.opacity = '0';
-      modalImage.src = '';
-    }
+    modalImage.style.display = 'none';
+    modalVideoContainer.style.display = 'none';
+    modalImage.classList.remove('loaded');
+    modalImage.style.opacity = '0';
+    modalVideo.classList.remove('loaded');
+    modalVideoContainer.classList.remove('loaded');
     
     if (document.getElementById('currentIndexDisplay')) {
-      document.getElementById('currentIndexDisplay').textContent = index + 1;
+      document.getElementById('currentIndexDisplay').textContent = realIndex + 1;
     }
     updateModalButtons(isDownloaded);
     updateNavButtons();
@@ -1491,11 +1861,7 @@
     document.body.style.overflow = 'hidden';
     
     try {
-      const imageUrl = `${API_BASE_URL}/api/gallery/view/${key}`;
-
-      const img = new Image();
       let progress = 0;
-      
       const progressInterval = setInterval(() => {
         if (progress < 90) {
           progress += Math.random() * 8;
@@ -1504,29 +1870,43 @@
           if (modalProgressLabel) modalProgressLabel.textContent = Math.round(progress) + '%';
         }
       }, 100);
-      
-      img.onload = function() {
-        clearInterval(progressInterval);
-        if (modalProgressFill) modalProgressFill.style.width = '100%';
-        if (modalProgressLabel) modalProgressLabel.textContent = '100%';
-        if (modalImage) {
-          modalImage.src = imageUrl;
+
+      if (item.isVideo) {
+        modalVideoContainer.style.display = 'block';
+        modalVideoSource.src = item.mediaUrl;
+        modalVideo.load();
+        
+        modalVideo.onloadeddata = function() {
+          clearInterval(progressInterval);
+          modalProgressFill.style.width = '100%';
+          modalProgressLabel.textContent = '100%';
+          modalVideoContainer.classList.add('loaded');
+          setTimeout(() => modalProgress.classList.remove('show'), 500);
+        };
+        modalVideo.onerror = function() {
+          clearInterval(progressInterval);
+          modalProgress.classList.remove('show');
+          alert('Erro ao carregar o vídeo. Tente novamente.');
+        };
+      } else {
+        modalImage.style.display = 'block';
+        const img = new Image();
+        img.onload = function() {
+          clearInterval(progressInterval);
+          modalProgressFill.style.width = '100%';
+          modalProgressLabel.textContent = '100%';
+          modalImage.src = item.mediaUrl;
           modalImage.classList.add('loaded');
           modalImage.style.opacity = '1';
-        }
-        setTimeout(() => {
-          if (modalProgress) modalProgress.classList.remove('show');
-        }, 500);
-      };
-      
-      img.onerror = function() {
-        clearInterval(progressInterval);
-        if (modalProgress) modalProgress.classList.remove('show');
-        if (modalImage) modalImage.alt = 'Erro ao carregar';
-      };
-      
-      img.src = imageUrl;
-
+          setTimeout(() => modalProgress.classList.remove('show'), 500);
+        };
+        img.onerror = function() {
+          clearInterval(progressInterval);
+          modalProgress.classList.remove('show');
+          modalImage.alt = 'Erro ao carregar';
+        };
+        img.src = item.mediaUrl;
+      }
     } catch (error) {
       console.error('Erro ao abrir modal:', error);
       if (modalProgress) modalProgress.classList.remove('show');
@@ -1536,16 +1916,16 @@
   }
 
   async function downloadFromModal() {
-    const key = allPhotoKeys[currentModalIndex];
-    if (!key) return;
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
 
     if (credits <= 0) {
       updateModalButtons(false);
       return;
     }
 
-    if (downloadedImages.includes(key)) {
-      alert('✅ Esta imagem já foi baixada anteriormente.');
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado anteriormente.');
       return;
     }
 
@@ -1556,17 +1936,16 @@
 
     try {
       // 1. Solicita a URL assinada direta da imagem em alta para o servidor
-      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${key}`, {
+      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
 
-      // Como o servidor agora redireciona com res.redirect(url), pegamos a URL final do S3
-      const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${key}`;
+      const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
 
       // 2. Dispara o download nativo do arquivo real
       const link = document.createElement('a');
       link.href = downloadFinalUrl;
-      link.setAttribute('download', key);
+      link.setAttribute('download', item.key.split('/').pop());
       link.target = '_blank';
       document.body.appendChild(link);
       link.click();
@@ -1579,7 +1958,7 @@
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`
         },
-        body: JSON.stringify({ imageKey: key })
+        body: JSON.stringify({ imageKey: item.key })
       });
 
       if (!debitResponse.ok) {
@@ -1590,18 +1969,18 @@
       const debitData = await debitResponse.json();
       credits = debitData.credits || 0;
 
-      if (!downloadedImages.includes(key)) {
-        downloadedImages.push(key);
-        localStorage.setItem('downloadedImages', JSON.stringify(downloadedImages));
+      if (!downloadedItems.includes(item.id)) {
+        downloadedItems.push(item.id);
+        localStorage.setItem('downloadedImages', JSON.stringify(downloadedItems));
       }
 
       updateCreditsDisplay();
-      updateDownloadBadge(key);
+      updateDownloadBadge(item.id);
       updateModalButtons(true);
 
       if (modalDownloadBtn) {
         modalDownloadBtn.className = 'modal-btn-download downloaded';
-        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
         modalDownloadBtn.disabled = true;
       }
 
@@ -1609,25 +1988,25 @@
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
-      alert('❌ ' + (error.message || 'Erro ao baixar a imagem. Tente novamente.'));
+      alert('❌ ' + (error.message || 'Erro ao baixar. Tente novamente.'));
       
       if (modalDownloadBtn) {
         modalDownloadBtn.disabled = false;
-        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
       }
       
       await fetchCreditsFromServer();
     }
   }
 
-  function updateDownloadBadge(key) {
+  function updateDownloadBadge(id) {
     const items = document.querySelectorAll('.watermark-item');
     items.forEach(item => {
-      if (item.dataset.key === key) {
+      if (item.dataset.id === id) {
         const badge = item.querySelector('.badge-status');
         if (badge) {
           badge.className = 'badge-status downloaded';
-          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADA';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADO';
         }
       }
     });
@@ -1660,6 +2039,9 @@
     if (modalOverlay) modalOverlay.classList.remove('active');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', handleModalKeydown);
+    if (modalVideo) {
+      modalVideo.pause();
+    }
   }
 
   function handleModalKeydown(e) {
@@ -1670,8 +2052,20 @@
 
   function navigateModal(direction) {
     const newIndex = currentModalIndex + direction;
-    if (newIndex >= 0 && newIndex < allPhotoKeys.length) {
-      openModal(newIndex);
+    if (newIndex >= 0 && newIndex < allMedia.length) {
+      const filteredItems = currentFilter === 'all' 
+        ? allMedia 
+        : allMedia.filter(item => item.type === currentFilter);
+      
+      const currentFilteredIndex = filteredItems.indexOf(allMedia[currentModalIndex]);
+      const newFilteredIndex = currentFilteredIndex + direction;
+      
+      if (newFilteredIndex >= 0 && newFilteredIndex < filteredItems.length) {
+        const newRealIndex = allMedia.indexOf(filteredItems[newFilteredIndex]);
+        if (newRealIndex !== -1) {
+          openModal(newFilteredIndex);
+        }
+      }
     }
   }
 
@@ -1683,8 +2077,8 @@
       prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
     }
     if (nextBtn) {
-      nextBtn.disabled = currentModalIndex === allPhotoKeys.length - 1;
-      nextBtn.style.opacity = currentModalIndex === allPhotoKeys.length - 1 ? '0.3' : '1';
+      nextBtn.disabled = currentModalIndex === allMedia.length - 1;
+      nextBtn.style.opacity = currentModalIndex === allMedia.length - 1 ? '0.3' : '1';
     }
   }
 
@@ -1693,7 +2087,7 @@
     
     if (isDownloaded) {
       modalDownloadBtn.className = 'modal-btn-download downloaded';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADA';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
       modalDownloadBtn.disabled = true;
       modalDownloadBtn.style.display = 'flex';
       modalBuyCredits.classList.remove('show');
@@ -1702,7 +2096,7 @@
       modalBuyCredits.classList.add('show');
     } else {
       modalDownloadBtn.className = 'modal-btn-download';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar imagem em alta definição = utilizar 1 crédito';
+      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
       modalDownloadBtn.style.display = 'flex';
       modalDownloadBtn.disabled = false;
       modalBuyCredits.classList.remove('show');
@@ -1805,15 +2199,16 @@
   // ============================================================
   async function init() {
     await fetchCreditsFromServer();
-    renderGallery();
+    await loadMediaFromS3();
     updateTimer();
     setInterval(updateTimer, 1000);
     checkMobile();
     
     window.addEventListener('resize', checkMobile);
     console.log('📸 Galeria Studio Rassi carregada!');
-    console.log(`📊 ${totalPhotos} fotos disponíveis (${credits} créditos)`);
-    console.log(`📥 ${downloadedImages.length} imagens já baixadas`);
+    console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos disponíveis`);
+    console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos disponíveis`);
+    console.log(`📥 ${downloadedItems.length} itens já baixados`);
   }
 
   init();
