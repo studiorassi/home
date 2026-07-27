@@ -1973,8 +1973,8 @@
 <section class="container section" id="pacotes">
   <div class="pacotes-header">
     <h2 class="section-title">
-      <span class="highlight-script">Escolha</span>
-      seu pacote
+      <span class="highlight-script">Selecione</span>
+      seu pacote promocional
     </h2>
     <p class="pacotes-description">
       Você adquire seu pacote de fotos e garante seus <strong>créditos</strong> para baixar a imagem que quiser 
@@ -1988,17 +1988,23 @@
       <span class="badge">mais pedido</span>
       <div class="price">R$ 350</div>
       <p>30 fotos<br><span style="font-size:0.8rem; color:#b09a94;">+ R$ 15/foto extra</span></p>
-      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;" onclick="enviarWhatsApp('350', '30')">
+        <i class="fab fa-whatsapp"></i> Quero esse
+      </button>
     </div>
     <div class="package-card">
       <div class="price">R$ 400</div>
       <p>40 fotos<br><span style="font-size:0.8rem; color:#b09a94;">ideal para festas</span></p>
-      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;" onclick="enviarWhatsApp('400', '40')">
+        <i class="fab fa-whatsapp"></i> Quero esse
+      </button>
     </div>
     <div class="package-card">
       <div class="price">R$ 500</div>
       <p>50 fotos<br><span style="font-size:0.8rem; color:#b09a94;">completo</span></p>
-      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;">Quero esse</button>
+      <button class="btn btn-primary" style="margin-top:16px; width:100%; justify-content:center;" onclick="enviarWhatsApp('500', '50')">
+        <i class="fab fa-whatsapp"></i> Quero esse
+      </button>
     </div>
   </div>
   
@@ -2036,14 +2042,30 @@
             <input type="date" id="dataEnsaio" class="input-dark" style="font-size:0.85rem;">
             <select id="horarioEnsaio" class="input-dark" style="font-size:0.85rem;">
               <option value="">Selecione o horário</option>
+              <option value="00:00">00:00</option>
+              <option value="01:00">01:00</option>
+              <option value="02:00">02:00</option>
+              <option value="03:00">03:00</option>
+              <option value="04:00">04:00</option>
+              <option value="05:00">05:00</option>
+              <option value="06:00">06:00</option>
+              <option value="07:00">07:00</option>
               <option value="08:00">08:00</option>
               <option value="09:00">09:00</option>
               <option value="10:00">10:00</option>
               <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
               <option value="14:00">14:00</option>
               <option value="15:00">15:00</option>
               <option value="16:00">16:00</option>
               <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+              <option value="21:00">21:00</option>
+              <option value="22:00">22:00</option>
+              <option value="23:00">23:00</option>
             </select>
           </div>
           
@@ -2073,11 +2095,11 @@
         </div>
         
         <div>
-          <!-- 🔥 BOTÃO ADQUIRIR PACOTE -->
+          <!-- 🔥 BOTÃO ENVIAR PARA WHATSAPP -->
           <button class="btn-primary" id="adquirirPacoteBtn" style="display:block; text-align:center; width:100%; padding:14px; font-size:0.85rem;">
-            <i class="fas fa-shopping-cart"></i> Adquirir Pacote
+            <i class="fab fa-whatsapp"></i> Enviar para WhatsApp
           </button>
-          <div class="summary-note">* Após a confirmação, você será redirecionado para o pagamento seguro.</div>
+          <div class="summary-note">* Sua solicitação será enviada diretamente para nosso WhatsApp.</div>
         </div>
       </div>
     </div>
@@ -2464,7 +2486,22 @@
   });
 
   // ============================================================
-  // 9. BUILDER - JAVASCRIPT
+  // 9. FUNÇÃO PARA ENVIAR PARA WHATSAPP (PACOTES PROMOCIONAIS)
+  // ============================================================
+  function enviarWhatsApp(valor, fotos) {
+    const numeroWhatsApp = '5511969761002';
+    const mensagem = `📸 *NOVO PACOTE PROMOCIONAL* 📸\n\n` +
+                     `💰 *Valor:* R$ ${valor}\n` +
+                     `📷 *Fotos:* ${fotos}\n\n` +
+                     `🔗 Site: https://studiorassi.github.io/home/index.html`;
+    
+    const mensagemCodificada = encodeURIComponent(mensagem);
+    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+    window.open(linkWhatsApp, '_blank');
+  }
+
+  // ============================================================
+  // 10. BUILDER - JAVASCRIPT
   // ============================================================
   const addons = [
     {id:'story', name:'Storymaker em tempo real', price:550},
@@ -2564,9 +2601,9 @@
   updateTotal();
 
   // ============================================================
-  // 10. ADQUIRIR PACOTE - INTEGRAÇÃO MERCADO PAGO
+  // 11. ENVIAR PARA WHATSAPP (PACOTE PERSONALIZADO)
   // ============================================================
-  document.getElementById('adquirirPacoteBtn').addEventListener('click', async function() {
+  document.getElementById('adquirirPacoteBtn').addEventListener('click', function() {
     // 1. Validar dados
     const count = parseInt(slider.value, 10);
     const data = dataEnsaio.value;
@@ -2590,72 +2627,46 @@
     addons.forEach(a => {
       if(active.has(a.id)) {
         total += a.price;
-        addonsSelecionados.push({id: a.id, name: a.name, price: a.price});
+        addonsSelecionados.push(a.name);
       }
     });
     
-    // 3. Montar payload
-    const payload = {
-      fotos: count,
-      addons: addonsSelecionados,
-      data: data,
-      horario: horario,
-      total: total,
-      cliente_nome: 'Cliente',
-      cliente_email: 'cliente@email.com'
-    };
+    // 3. Montar mensagem para o WhatsApp
+    const numeroWhatsApp = '5511969761002';
     
-    console.log('📦 Pacote personalizado:', payload);
+    let mensagem = '📸 *NOVO PACOTE PERSONALIZADO* 📸\n\n';
+    mensagem += `📅 *Data:* ${dataSelecionadaDisplay.textContent}\n`;
+    mensagem += `🕐 *Horário:* ${horario}\n`;
+    mensagem += `📷 *Fotos:* ${count} (R$ ${(count * PRICE_PER_PHOTO).toFixed(2)})\n`;
     
-    // 4. Desabilitar botão e mostrar loading
-    const btn = this;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-    
-    try {
-      // 5. Enviar para o backend (substituir pela URL real depois)
-      const response = await fetch('https://api-studiorassi.onrender.com/api/pacote/personalizado', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
+    if (addonsSelecionados.length > 0) {
+      mensagem += `\n🎬 *Serviços extras:*\n`;
+      addonsSelecionados.forEach(a => {
+        mensagem += `   ✅ ${a}\n`;
       });
-      
-      if (!response.ok) {
-        throw new Error('Erro ao processar pacote');
-      }
-      
-      const dataResponse = await response.json();
-      
-      // 6. Redirecionar para o checkout do Mercado Pago
-      if (dataResponse.checkout_url) {
-        window.location.href = dataResponse.checkout_url;
-      } else {
-        throw new Error('Link de pagamento não gerado');
-      }
-      
-    } catch (error) {
-      console.error('❌ Erro:', error);
-      
-      // 🔥 FALLBACK: Simulação (para testes)
-      const usarSimulacao = confirm(
-        '⚠️ Não foi possível conectar ao servidor.\n\n' +
-        'Deseja simular a compra do pacote personalizado?\n' +
-        `Total: R$ ${total.toFixed(2)}`
-      );
-      
-      if (usarSimulacao) {
-        alert(`✅ Simulação de compra concluída!\n\n📦 Pacote Personalizado\n📸 Fotos: ${count}\n🎬 Add-ons: ${addonsSelecionados.length}\n📅 Data: ${data}\n🕐 Horário: ${horario}\n💰 Total: R$ ${total.toFixed(2)}\n\n(Em produção: redirecionamento para Mercado Pago)`);
-      }
-      
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Adquirir Pacote';
     }
+    
+    mensagem += `\n💰 *Total:* R$ ${total.toFixed(2)}\n\n`;
+    mensagem += `🔗 Site: https://studiorassi.github.io/home/index.html`;
+    
+    // 4. Abrir WhatsApp
+    const mensagemCodificada = encodeURIComponent(mensagem);
+    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+    window.open(linkWhatsApp, '_blank');
+    
+    // 5. Feedback visual
+    const btn = this;
+    btn.innerHTML = '<i class="fas fa-check"></i> Enviado para WhatsApp!';
+    btn.style.background = '#25D366';
+    
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar para WhatsApp';
+      btn.style.background = '#D4A3B3';
+    }, 3000);
   });
 
   // ============================================================
-  // 11. VÍDEOS
+  // 12. VÍDEOS
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
     const videos = document.querySelectorAll('.hero-video');
