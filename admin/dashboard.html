@@ -346,6 +346,24 @@
     .toast.error { border-color: rgba(212, 163, 179, 0.3); }
     .toast.error i { color: #D4A3B3; }
     
+    /* ===== BOTÃO REPARAR ===== */
+    .btn-fix {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-fix:hover {
+      background: #c0392b;
+      transform: scale(1.02);
+    }
+    
     /* ===== RESPONSIVO ===== */
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -421,10 +439,10 @@
       <div class="label">Resetar Usuário</div>
       <div class="desc">Zerar créditos</div>
     </a>
-    <a href="#" class="action-btn" onclick="exportData()">
-      <i class="fas fa-file-export"></i>
-      <div class="label">Exportar Dados</div>
-      <div class="desc">Relatório em CSV</div>
+    <a href="#" class="action-btn" onclick="fixTable()">
+      <i class="fas fa-tools"></i>
+      <div class="label">🔧 Reparar Tabela</div>
+      <div class="desc">Corrigir estrutura do banco</div>
     </a>
   </div>
 
@@ -432,9 +450,14 @@
   <div class="table-section">
     <div class="table-header">
       <h3><i class="fas fa-users" style="color:#D4A3B3;"></i> Usuários</h3>
-      <button class="btn-add" onclick="openModal('user')">
-        <i class="fas fa-plus"></i> Novo Usuário
-      </button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn-add" onclick="openModal('user')">
+          <i class="fas fa-plus"></i> Novo Usuário
+        </button>
+        <button class="btn-fix" onclick="fixTable()">
+          <i class="fas fa-tools"></i> Reparar
+        </button>
+      </div>
     </div>
     <div class="table-wrap">
       <table>
@@ -531,6 +554,37 @@
     toastTimeout = setTimeout(() => {
       toast.classList.remove('show');
     }, 4000);
+  }
+
+  // ============================================================
+  // FUNÇÃO REPARAR TABELA
+  // ============================================================
+  async function fixTable() {
+    if (!confirm('🔧 Isso vai adicionar todas as colunas necessárias na tabela users.\n\nUsuários existentes serão preservados.\n\nContinuar?')) return;
+    
+    try {
+      showToast('🔄 Reparando tabela... Aguarde...', 'success');
+      
+      const response = await fetch(`${API_BASE_URL}/api/admin/fix-users-table`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        showToast('✅ Tabela reparada com sucesso!', 'success');
+        loadUsers();
+        loadStats();
+        console.log('📋 Estrutura da tabela:', data.structure);
+        console.log('👤 Usuários:', data.users);
+      } else {
+        showToast('❌ ' + (data.message || 'Erro ao reparar tabela'), 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao reparar tabela:', error);
+      showToast('❌ Erro ao reparar tabela.', 'error');
+    }
   }
 
   // ============================================================
@@ -931,13 +985,6 @@
   }
 
   // ============================================================
-  // EXPORTAR DADOS
-  // ============================================================
-  function exportData() {
-    showToast('📊 Função de exportação em desenvolvimento.', 'success');
-  }
-
-  // ============================================================
   // LOGOUT
   // ============================================================
   function logout() {
@@ -986,13 +1033,13 @@
       }
     }, 100);
   };
-  window.exportData = exportData;
   window.logout = logout;
   window.saveUser = saveUser;
   window.addCreditsToUser = addCreditsToUser;
   window.resetUserCredits = resetUserCredits;
   window.loadUsersSelect = loadUsersSelect;
   window.showToast = showToast;
+  window.fixTable = fixTable;
 </script>
 
 </body>
