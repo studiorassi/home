@@ -2,9 +2,23 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minhas Fotos · Studio Rassi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Paula & Gabriel · Studio Rassi</title>
   
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
+  
+  <!-- OG Image -->
+  <meta property="og:title" content="Paula & Gabriel · Studio Rassi">
+  <meta property="og:description" content="Nossas memórias eternizadas em fotos">
+  <meta property="og:image" content="https://seudominio.com/assets/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://seudominio.com">
+  <meta property="og:type" content="website">
+  
+  <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,17 +28,187 @@
   <style>
     /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      background: #2C0714;
+      background-color: #2C0714;
       color: #f5edea;
       font-family: 'Work Sans', sans-serif;
-      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
       padding-top: 80px;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
     }
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 32px;
+    }
+
+    /* ===== TIPOGRAFIA ===== */
+    .font-title { font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-body { font-family: 'Work Sans', sans-serif; }
+    .text-rose { color: #D4A3B3; }
+    .text-offwhite { color: #f5edea; }
+    
+    .highlight-script {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-style: italic;
+      color: #D4A3B3;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 40px rgba(212, 163, 179, 0.15);
+    }
+
+    /* ===== BOTÕES ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
+    }
+    .btn-primary {
+      background: #D4A3B3;
+      color: #2C0714;
+      box-shadow: 0 4px 15px rgba(212, 163, 179, 0.3);
+    }
+    .btn-primary:hover {
+      background: #c08b9e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 163, 179, 0.4);
+    }
+    .btn-outline {
+      border: 2px solid #D4A3B3;
+      color: #f5edea;
+      background: rgba(44, 7, 20, 0.4);
+      backdrop-filter: blur(4px);
+    }
+    .btn-outline:hover {
+      background: rgba(212, 163, 179, 0.15);
+      border-color: #c08b9e;
+    }
+
+    /* ===== LOGIN OVERLAY ===== */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+      padding: 20px;
+    }
+    .login-overlay.hidden {
+      display: none;
+    }
+    .login-box {
+      background: #1f0510;
+      border-radius: 32px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      text-align: center;
+    }
+    .login-box .logo-login {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      color: #D4A3B3;
+      margin-bottom: 4px;
+    }
+    .login-box .subtitle {
+      color: #d4c5c0;
+      font-weight: 300;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+    .login-box .input-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .login-box .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: #d4c5c0;
+      margin-bottom: 4px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .login-box .input-group input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      background: rgba(44, 7, 20, 0.6);
+      color: #f5edea;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+    .login-box .input-group input:focus {
+      outline: none;
+      border-color: #D4A3B3;
+      background: rgba(44, 7, 20, 0.8);
+    }
+    .login-box .input-group input::placeholder {
+      color: #7a5f5a;
+    }
+    .login-box .btn-login {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      background: #D4A3B3;
+      color: #2C0714;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 8px;
+    }
+    .login-box .btn-login:hover {
+      background: #c08b9e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
+    }
+    .login-box .btn-login:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .login-box .error-msg {
+      color: #e74c3c;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+    .login-box .heart-icon {
+      color: #D4A3B3;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      display: block;
     }
 
     /* ===== NAVBAR ===== */
@@ -34,7 +218,7 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 12px 0;
+      padding: 14px 0;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -47,17 +231,10 @@
       background: rgba(44, 7, 20, 0.96);
       box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
     }
-    .navbar.hidden {
-      transform: translateY(-100%);
-      opacity: 0;
-      pointer-events: none;
-    }
     .navbar-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
     }
     .logo {
       display: inline-block;
@@ -67,12 +244,13 @@
     .logo img {
       display: block;
       width: auto;
-      height: 45px;
-      max-width: 150px;
+      height: 50px;
+      max-width: 170px;
       transition: all 0.3s ease;
     }
-    .navbar.scrolled .logo img { height: 40px; }
+    .navbar.scrolled .logo img { height: 42px; }
     .logo img:hover { opacity: 0.85; transform: scale(1.02); }
+
     .nav-info {
       display: flex;
       align-items: center;
@@ -102,214 +280,103 @@
     .hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
-      background: transparent;
-      border: none;
+      gap: 4px;
       cursor: pointer;
-      padding: 8px;
-      z-index: 1001;
+      z-index: 101;
+      background: none;
+      border: none;
+      padding: 6px;
     }
     .hamburger span {
       display: block;
-      width: 28px;
+      width: 24px;
       height: 2px;
       background: #f5edea;
-      border-radius: 2px;
+      border-radius: 4px;
       transition: all 0.3s ease;
     }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 4px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -4px);
+    }
 
     .mobile-menu {
       display: none;
       position: fixed;
       top: 0;
-      right: 0;
-      width: 100%;
-      max-width: 380px;
+      right: -100%;
+      width: 75%;
+      max-width: 320px;
       height: 100vh;
       background: rgba(44, 7, 20, 0.98);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      padding: 80px 32px 40px;
+      transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 999;
-      padding: 80px 28px 40px;
-      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       border-left: 1px solid rgba(212, 163, 179, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    .mobile-menu.open { transform: translateX(0); }
-    .mobile-menu .menu-overlay {
+    .mobile-menu.open { right: 0; }
+    .mobile-menu a {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #f5edea;
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+    .mobile-menu a:hover {
+      color: #D4A3B3;
+      padding-left: 8px;
+    }
+    .mobile-menu .btn-minhas-fotos-mobile {
+      margin-top: 12px;
+      background: rgba(212, 163, 179, 0.15);
+      border: 2px solid #D4A3B3;
+      color: #f5edea;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+    }
+    .mobile-menu .btn-minhas-fotos-mobile:hover {
+      background: #D4A3B3;
+      color: #2C0714;
+    }
+
+    .menu-overlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: -1;
-      display: none;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 98;
     }
-    .mobile-menu.open .menu-overlay { display: block; }
+    .menu-overlay.active { display: block; }
 
-    .mobile-menu .menu-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
-    }
-    .mobile-menu .menu-header .user-info {
-      font-size: 0.9rem;
-      color: #d4c5c0;
-    }
-    .mobile-menu .menu-header .user-info strong {
-      color: #f5edea;
-      display: block;
-      font-size: 1.1rem;
-      margin-top: 4px;
-    }
-    .mobile-menu .menu-header .close-menu {
-      background: transparent;
-      border: none;
-      color: #f5edea;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 8px;
-      transition: 0.3s;
-    }
-    .mobile-menu .menu-header .close-menu:hover {
-      color: #D4A3B3;
-      transform: rotate(90deg);
-    }
-
-    .mobile-menu .menu-status {
-      background: rgba(31, 5, 16, 0.6);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .mobile-menu .menu-status .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #d4c5c0;
-    }
-    .mobile-menu .menu-status .status-row .label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .mobile-menu .menu-status .status-row .label i {
-      color: #D4A3B3;
-      font-size: 1rem;
-    }
-    .mobile-menu .menu-status .status-row .value {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1rem;
-    }
-    .mobile-menu .menu-status .status-row .value.timer {
-      font-variant-numeric: tabular-nums;
-      min-width: 80px;
-      text-align: right;
-    }
-
-    .mobile-menu .menu-credit-cta-mobile {
-      background: #D4A3B3;
-      color: #2C0714;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Work Sans', sans-serif;
-      width: 100%;
-      margin-top: 8px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .mobile-menu .menu-credit-cta-mobile:hover {
-      background: #c08b9e;
-      transform: scale(1.02);
-    }
-    .mobile-menu .menu-credit-cta-mobile.show { display: flex; }
-
-    .mobile-menu .menu-links {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 8px;
-    }
-    .mobile-menu .menu-links a {
-      color: #d4c5c0;
-      text-decoration: none;
-      padding: 14px 16px;
-      border-radius: 12px;
-      transition: 0.3s;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .mobile-menu .menu-links a i {
-      color: #D4A3B3;
-      width: 20px;
-      text-align: center;
-    }
-    .mobile-menu .menu-links a:hover {
-      background: rgba(212, 163, 179, 0.08);
-      color: #f5edea;
-    }
-    .mobile-menu .menu-links .logout-link {
-      margin-top: 12px;
-      border-top: 1px solid rgba(212, 163, 179, 0.06);
-      padding-top: 16px;
-      color: #7a5f5a;
-    }
-    .mobile-menu .menu-links .logout-link:hover {
-      color: #D4A3B3;
-      background: transparent;
-    }
-
-    .menu-credit-cta {
-      display: none;
-      background: #D4A3B3;
-      color: #2C0714;
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.7rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: 'Work Sans', sans-serif;
-      white-space: nowrap;
-    }
-    .menu-credit-cta:hover {
-      background: #c08b9e;
-      transform: scale(1.05);
-    }
-    .menu-credit-cta.show { display: inline-block; }
-
+    /* ===== STATUS FLUTUANTE ===== */
     .floating-status {
       position: sticky;
       top: 72px;
       z-index: 99;
       background: rgba(44, 7, 20, 0.92);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(212, 163, 179, 0.06);
       padding: 12px 0;
       margin-bottom: 24px;
@@ -347,7 +414,7 @@
       display: inline-block;
     }
 
-    /* ===== PROGRESS BAR (CARREGAMENTO DA GALERIA) ===== */
+    /* ===== PROGRESS BAR ===== */
     .progress-bar-container {
       position: sticky;
       top: 132px;
@@ -427,75 +494,7 @@
       border-color: #D4A3B3;
     }
 
-    .credits-info {
-      background: rgba(31, 5, 16, 0.6);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin: 12px auto 8px;
-      max-width: 700px;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 8px 16px;
-      text-align: center;
-    }
-    .credits-info .heart {
-      color: #D4A3B3;
-      font-size: 1.1rem;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-    .credits-info .label {
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.8rem;
-      color: #d4c5c0;
-      font-weight: 300;
-    }
-    .credits-info .label strong {
-      color: #D4A3B3;
-      font-weight: 600;
-    }
-    .credits-info .highlight {
-      color: #D4A3B3;
-      font-weight: 500;
-    }
-
-    .skeleton {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #1a0510 25%, #2C0714 50%, #1a0510 75%);
-      background-size: 400% 400%;
-      animation: skeletonLoading 1.5s ease-in-out infinite;
-      z-index: 1;
-      border-radius: 20px;
-    }
-    @keyframes skeletonLoading {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .skeleton .spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #D4A3B3;
-      font-size: 1.5rem;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
+    /* ===== GALERIA ===== */
     .gallery-header {
       display: flex;
       justify-content: space-between;
@@ -699,6 +698,7 @@
       opacity: 0.7;
     }
 
+    /* ===== MODAL ===== */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -743,26 +743,26 @@
       pointer-events: none;
       z-index: 10;
     }
-
     .modal-content .watermark-container .watermark-logo-modal {
       width: 80%;
       max-width: 700px;
       height: auto;
       user-select: none;
       pointer-events: none;
+      opacity: 0.5;
     }
-
     @media (max-width: 768px) {
       .modal-content .watermark-container .watermark-logo-modal {
         width: 85%;
         max-width: 500px;
+        opacity: 0.4;
       }
     }
-
     @media (max-width: 480px) {
       .modal-content .watermark-container .watermark-logo-modal {
         width: 90%;
         max-width: 350px;
+        opacity: 0.35;
       }
     }
 
@@ -779,10 +779,7 @@
       position: relative;
       z-index: 1;
     }
-    .modal-content .modal-image.loaded {
-      opacity: 1;
-    }
-    
+    .modal-content .modal-image.loaded { opacity: 1; }
     .modal-content .modal-video {
       max-width: 90vw;
       max-height: 75vh;
@@ -1018,7 +1015,7 @@
       color: #4CAF50;
     }
 
-    /* POP-UP / BOX BRANCO CENTRALIZADO E POR CIMA DE TUDO QUANDO CRÉDITOS = 0 */
+    /* POP-UP CRÉDITOS = 0 */
     .modal-buy-credits {
       display: none;
       position: fixed;
@@ -1027,8 +1024,8 @@
       transform: translate(-50%, -50%);
       width: 90%;
       max-width: 460px;
-      max-height: 85vh; 
-      overflow-y: auto;  
+      max-height: 85vh;
+      overflow-y: auto;
       background: #fdfbfb;
       color: #2C0714;
       border-radius: 24px;
@@ -1041,18 +1038,11 @@
       text-align: center;
       animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .modal-buy-credits::-webkit-scrollbar {
-      width: 6px;
-    }
-    .modal-buy-credits::-webkit-scrollbar-thumb {
-      background: rgba(44, 7, 20, 0.2);
-      border-radius: 10px;
-    }
+    .modal-buy-credits.show { display: flex; }
     @keyframes popUpScale {
       0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
-    .modal-buy-credits.show { display: flex; }
     .modal-buy-credits .buy-title {
       font-family: 'Fraunces', serif;
       font-weight: 700;
@@ -1189,57 +1179,41 @@
       color: #7a5f5a;
     }
 
+    /* ===== RESPONSIVO ===== */
     @media (max-width: 768px) {
       body { padding-top: 70px; }
       .container { padding: 0 20px; }
-      .hamburger { display: flex; }
-      .floating-status { display: none; }
       .navbar { padding: 10px 0; }
       .navbar .logo img { height: 38px; max-width: 120px; }
       .navbar.scrolled .logo img { height: 34px; }
+      .hamburger { display: flex; }
       .mobile-menu { display: block; }
+      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
+      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
+      
+      .floating-status { display: none; }
       .progress-bar-container { top: 118px; }
       .filter-bar { top: 160px; }
-      .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
-      .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
-      .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
+      
       .watermark-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
       .watermark-item { min-height: 220px; }
       .watermark-item .watermark-logo { width: 70px; }
-      .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
-      .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
-      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
-      .watermark-item .type-badge { font-size: 0.5rem; padding: 2px 10px; top: 8px; left: 8px; }
-      .watermark-item .play-icon { font-size: 2rem; }
-      .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
-      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
-      .nav-info .user span { display: inline; }
-      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
-      .menu-credit-cta { display: none !important; }
+      
       .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
       .modal-nav.prev { left: -10px; }
       .modal-nav.next { right: -10px; }
       .modal-content .modal-image { max-height: 60vh; }
       .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
-      .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
       .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
-      .modal-progress { width: 80%; bottom: 80px; }
-      .upsell-grid { flex-direction: column; }
-      .upsell-item { justify-content: center; }
+      .login-box { padding: 32px 24px; }
+      .login-box .logo-login { font-size: 1.5rem; }
     }
-    
     @media (max-width: 480px) {
       body { padding-top: 60px; }
       .watermark-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .watermark-item { min-height: 180px; }
       .watermark-item .watermark-logo { width: 50px; }
-      .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
-      .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
-      .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
-      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
-      .watermark-item .type-badge { font-size: 0.45rem; padding: 2px 8px; top: 6px; left: 6px; }
-      .watermark-item .play-icon { font-size: 1.5rem; }
       .navbar .logo img { height: 32px; max-width: 100px; }
       .navbar.scrolled .logo img { height: 28px; }
       .progress-bar-container { top: 98px; }
@@ -1250,36 +1224,58 @@
       .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
       .modal-nav.prev { left: -4px; }
       .modal-nav.next { right: -4px; }
-      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
       .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
-      .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
-      .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <span class="heart-icon">💕</span>
+    <div class="logo-login">Paula & Gabriel</div>
+    <div class="subtitle">Acesse as fotos do nosso ensaio</div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" id="loginUser" placeholder="Digite o usuário">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" id="loginPass" placeholder="Digite a senha">
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">
+        <i class="fas fa-lock"></i> Entrar na Galeria
+      </button>
+      <div class="error-msg" id="loginError"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== NAVBAR FLUTUANTE ===== -->
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
-    <a href="https://studiorassi.github.io/home/index.html" class="logo">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" width="150" height="45" loading="lazy">
+    <a href="index.html" class="logo">
+      <img src="assets/images/logo/logo-header.png" 
+           alt="Studio Rassi · Photo & Video" 
+           width="170" 
+           height="50"
+           loading="lazy">
     </a>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
-      <span></span><span></span><span></span>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Lucille e Edson</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Paula & Gabriel</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
           Baixados: <span id="downloadedCountDisplay" style="font-weight: 700; color: #f5edea;">0</span>/<span id="totalPhotosDisplay">0</span>
         </span>
       </span>
-      <button class="menu-credit-cta" id="menuCreditCta" onclick="openCreditUpsell()">
-        <i class="fas fa-plus-circle"></i> + Quer mais fotos?
-      </button>
-      <!-- 🔥 BOTÃO SAIR CORRIGIDO - VAI PARA A HOME -->
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
@@ -1287,27 +1283,16 @@
   </div>
 </nav>
 
-<!-- ===== MENU MOBILE ===== -->
+<!-- ===== MOBILE MENU OVERLAY ===== -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- ===== MOBILE MENU ===== -->
 <div class="mobile-menu" id="mobileMenu">
-  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
-  <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Lucille e Edson</strong></div>
-    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="mobile-menu menu-status" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-direction: column; gap: 12px;">
-    <div class="status-row"><span class="label"><i class="fas fa-coins"></i> Créditos disponíveis</span><span class="value" id="mobileCreditsDisplay">0</span></div>
-    <div class="status-row"><span class="label"><i class="fas fa-images"></i> Baixados</span><span class="value" id="mobileDownloadedDisplay">0 / 0</span></div>
-    <div class="status-row"><span class="label"><i class="far fa-clock"></i> Expira em</span><span class="value timer" id="mobileTimerDisplay">72:00:00</span></div>
-  </div>
-  <button class="menu-credit-cta-mobile" id="mobileCreditCta" onclick="openCreditUpsell(); closeMobileMenu();">
-    <i class="fas fa-plus-circle"></i> + Quer mais fotos?
+  <a href="#" onclick="scrollToTop(); closeMenu(); return false;">Galeria</a>
+  <a href="#upsellSection" onclick="closeMenu()">Comprar Créditos</a>
+  <button class="btn-minhas-fotos-mobile" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
+    <i class="fas fa-sign-out-alt"></i> Sair
   </button>
-  <div class="menu-links">
-    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
-    <a href="#upsellSection" onclick="closeMobileMenu()"><i class="fas fa-plus-circle"></i> Comprar Créditos</a>
-    <!-- 🔥 LINK SAIR CORRIGIDO NO MENU MOBILE -->
-    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
-  </div>
 </div>
 
 <!-- ===== STATUS DESKTOP ===== -->
@@ -1343,21 +1328,23 @@
   </div>
 </div>
 
-<!-- ===== CRÉDITOS INFO ===== -->
+<!-- ===== INFO ===== -->
 <div class="container">
-  <div class="credits-info">
-    <span class="heart">💖</span>
-    <span class="label"><strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto ou vídeo em <span class="highlight">alta definição</span> e <strong>sem marca d'água</strong>.</span>
-    <span class="label" style="display:inline-flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#D4A3B3; font-size:0.7rem;"></i><span style="font-size:0.7rem; color:#7a5f5a;">Aguarde o carregamento completo!</span></span>
-    <span class="emoji-heart" style="display:inline-block; animation:pulse 1.5s ease-in-out infinite;">🥰</span>
+  <div class="credits-info" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin: 12px auto 8px; max-width: 700px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; text-align: center;">
+    <span class="heart" style="color: #D4A3B3; font-size: 1.1rem; animation: pulse 1.5s ease-in-out infinite;">💖</span>
+    <span class="label" style="font-family: 'Work Sans', sans-serif; font-size: 0.8rem; color: #d4c5c0; font-weight: 300;">
+      <strong style="color: #D4A3B3; font-weight: 600;">Como funciona:</strong> Cada <span style="color: #D4A3B3; font-weight: 500;">1 crédito</span> equivale a <span style="color: #D4A3B3; font-weight: 500;">1 download</span> de foto em <span style="color: #D4A3B3; font-weight: 500;">alta definição</span> e <strong style="color: #D4A3B3; font-weight: 600;">sem marca d'água</strong>.
+    </span>
   </div>
 </div>
 
 <!-- ===== GALERIA ===== -->
 <div class="container">
   <div class="gallery-header">
-    <h2>📸 <span>Suas memórias</span></h2>
-    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;"><i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água</span>
+    <h2>📸 <span>Paula & Gabriel</span></h2>
+    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
+      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
+    </span>
   </div>
   <div class="watermark-grid" id="galleryGrid"></div>
 
@@ -1371,7 +1358,7 @@
       <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
     </div>
     <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
-      <i class="fas fa-info-circle"></i> Escolha um pacote para ser redirecionado ao checkout seguro do Mercado Pago.
+      <i class="fas fa-info-circle"></i> Escolha um pacote para ser redirecionado ao checkout seguro.
     </p>
   </div>
 </div>
@@ -1380,12 +1367,10 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
     
-    <!-- MARCA D'ÁGUA -->
     <div class="watermark-container">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
     </div>
     
-    <!-- PROGRESS BAR -->
     <div class="modal-progress" id="modalProgress">
       <span style="font-size:0.7rem; color:#D4A3B3;">
         <i class="fas fa-spinner fa-spin"></i>
@@ -1396,12 +1381,10 @@
       <span class="label" id="modalProgressLabel">0%</span>
     </div>
     
-    <!-- CONTADOR -->
     <div class="modal-counter" id="modalCounter">
       <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">0</span>
     </div>
     
-    <!-- NAVEGAÇÃO -->
     <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
       <i class="fas fa-chevron-left"></i>
     </button>
@@ -1409,12 +1392,10 @@
       <i class="fas fa-chevron-right"></i>
     </button>
     
-    <!-- FECHAR -->
     <button class="modal-close" onclick="closeModal()">
       <i class="fas fa-times"></i>
     </button>
     
-    <!-- IMAGEM / VÍDEO -->
     <div id="modalMediaContainer">
       <img id="modalImage" class="modal-image" src="" alt="Foto" style="display:none;">
       <div id="modalVideoContainer" class="modal-video" style="display:none;">
@@ -1425,24 +1406,19 @@
       </div>
     </div>
     
-    <!-- AÇÕES -->
     <div class="modal-actions">
-      <!-- BOTÃO DE DOWNLOAD NORMAL (Visível quando há créditos) -->
       <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
         <i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito
       </button>
     </div>
 
-    <!-- POP-UP CLARO E REFINADO CENTRALIZADO (Visível quando créditos = 0) -->
     <div class="modal-buy-credits" id="modalBuyCredits">
       <div class="buy-title">
-        🎉✨ Uau, você completou todos os downloads dos seus créditos contratados! 🥳💖
+        🎉✨ Uau, você completou todos os downloads dos seus créditos! 🥳💖
       </div>
       <div class="buy-subtitle">
-        Que momento especial! Para continuar baixando mais memórias lindas e eternizar cada detalhe, escolha um pacote abaixo:
+        Escolha um pacote abaixo para continuar baixando:
       </div>
-      
-      <!-- PACOTES DE COMPRA RÁPIDA DIRETO NO POP-UP -->
       <div class="quick-packages">
         <button class="quick-pkg" onclick="buyCredits(5)">
           <span class="pkg-label">+5 Créditos</span>
@@ -1457,12 +1433,10 @@
           <span class="pkg-price">R$ 160</span>
         </button>
       </div>
-
       <button class="btn-sync-action" onclick="fetchCreditsFromServer(); alert('🔄 Verificando novos créditos...');">
-        <i class="fas fa-sync-alt"></i> Já realizei o pagamento, atualizar créditos
+        <i class="fas fa-sync-alt"></i> Já realizei o pagamento
       </button>
-      
-      <button class="buy-close" onclick="closeModal()">Continuar navegando na galeria</button>
+      <button class="buy-close" onclick="closeModal()">Continuar navegando</button>
     </div>
     
     <div class="modal-credits" id="modalCredits">
@@ -1472,73 +1446,78 @@
 </div>
 
 <!-- ===== FOOTER ===== -->
-<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Suas memórias são nosso legado</p></div></footer>
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Paula & Gabriel 💕</p></div></footer>
 
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // CONFIGURAÇÕES BASE
+  // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  let authToken = localStorage.getItem('authToken');
-  let clientName = localStorage.getItem('userName') || 'Lucille e Edson';
+  const VALID_USER = 'paula&gabriel';
+  const VALID_PASS = '01082026_p&g';
+  let credits = 30; // Créditos iniciais
+  let totalItems = 0;
+  let allMedia = [];
+  let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
+  let isLoggedIn = false;
 
-  if (!authToken) {
-    window.location.href = '../login.html';
+  // ============================================================
+  // LOGIN
+  // ============================================================
+  function handleLogin(e) {
+    e.preventDefault();
+    const user = document.getElementById('loginUser').value.trim().toLowerCase();
+    const pass = document.getElementById('loginPass').value.trim();
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+    loginError.textContent = '';
+
+    setTimeout(() => {
+      if (user === VALID_USER && pass === VALID_PASS) {
+        isLoggedIn = true;
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('clienteNome').textContent = 'Paula & Gabriel';
+        initSite();
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-lock"></i> Entrar na Galeria';
+      } else {
+        loginError.textContent = '❌ Usuário ou senha incorretos. Tente novamente.';
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-lock"></i> Entrar na Galeria';
+        document.getElementById('loginUser').value = '';
+        document.getElementById('loginPass').value = '';
+        document.getElementById('loginUser').focus();
+      }
+    }, 800);
   }
 
-  let credits = 0;
-  let downloadedItems = JSON.parse(localStorage.getItem('downloadedImages') || '[]');
-  let allMedia = [];
-  let totalItems = 0;
+  // ============================================================
+  // INICIAR SITE
+  // ============================================================
+  async function initSite() {
+    await loadMediaFromS3();
+    updateCreditsDisplay();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+  }
 
   // ============================================================
-  // DOM ELEMENTS
-  // ============================================================
-  const grid = document.getElementById('galleryGrid');
-  const creditsDisplay = document.getElementById('creditsDisplay');
-  const mobileCreditsDisplay = document.getElementById('mobileCreditsDisplay');
-  const downloadedCountDisplay = document.getElementById('downloadedCountDisplay');
-  const mobileDownloadedDisplay = document.getElementById('mobileDownloadedDisplay');
-  const desktopDownloadedDisplay = document.getElementById('desktopDownloadedDisplay');
-  const timerDisplay = document.getElementById('timerDisplay');
-  const mobileTimerDisplay = document.getElementById('mobileTimerDisplay');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalImage = document.getElementById('modalImage');
-  const modalVideoContainer = document.getElementById('modalVideoContainer');
-  const modalVideo = document.getElementById('modalVideo');
-  const modalVideoSource = document.getElementById('modalVideoSource');
-  const modalDownloadBtn = document.getElementById('modalDownloadBtn');
-  const modalBuyCredits = document.getElementById('modalBuyCredits');
-  const modalCreditsCount = document.getElementById('modalCreditsCount');
-  const progressContainer = document.getElementById('progressContainer');
-  const progressFill = document.getElementById('progressFill');
-  const loadedCount = document.getElementById('loadedCount');
-  const totalCount = document.getElementById('totalCount');
-  const modalProgress = document.getElementById('modalProgress');
-  const modalProgressFill = document.getElementById('modalProgressFill');
-  const modalProgressLabel = document.getElementById('modalProgressLabel');
-  const menuCreditCta = document.getElementById('menuCreditCta');
-  const mobileCreditCta = document.getElementById('mobileCreditCta');
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const navbar = document.getElementById('mainNavbar');
-
-  // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3 (CLIENTES)
+  // CARREGAR MÍDIAS DO S3
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      console.log('📡 Buscando lista de fotos no S3 (clientes)...');
+      console.log('📡 Buscando fotos para Paula & Gabriel...');
+      
+      // Busca fotos
       const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
-      
-      if (!fotosResponse.ok) {
-        console.error('❌ Erro ao buscar fotos:', fotosResponse.status);
-        throw new Error('Erro ao buscar lista de fotos');
-      }
-      
+      if (!fotosResponse.ok) throw new Error('Erro ao buscar fotos');
       const fotosData = await fotosResponse.json();
-      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
       
       const photoFiles = fotosData.files.filter(file => 
         file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
@@ -1559,17 +1538,10 @@
         };
       });
 
-      // 2. Carregar vídeos dinamicamente do S3
-      console.log('📡 Buscando lista de vídeos no S3 (clientes)...');
+      // Busca vídeos
       const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
-      
-      if (!videosResponse.ok) {
-        console.error('❌ Erro ao buscar vídeos:', videosResponse.status);
-        throw new Error('Erro ao buscar lista de vídeos');
-      }
-      
+      if (!videosResponse.ok) throw new Error('Erro ao buscar vídeos');
       const videosData = await videosResponse.json();
-      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
       
       const videoFiles = videosData.files.filter(file => 
         file.filename.endsWith('.mp4')
@@ -1594,9 +1566,7 @@
         const numMatch = filename.match(/(\d+)\.mp4/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
         const title = `Vídeo ${parseInt(num)}`;
-        
         const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
-        
         return {
           id: `video_${num}`,
           type: 'video',
@@ -1609,16 +1579,12 @@
         };
       });
 
-      // 3. Combinar tudo
       allMedia = [...fotos, ...videos];
       totalItems = allMedia.length;
       
       console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
       
-      // 4. Atualizar contadores na UI
       updateCounters();
-      
-      // 5. Renderizar galeria
       renderGallery();
       
     } catch (error) {
@@ -1628,74 +1594,7 @@
   }
 
   // ============================================================
-  // ATUALIZAR CONTADORES
-  // ============================================================
-  function updateCounters() {
-    const elements = [
-      document.getElementById('totalCount'),
-      document.getElementById('totalCountDisplay'),
-      document.getElementById('totalPhotosDisplay')
-    ];
-    elements.forEach(el => {
-      if (el) el.textContent = totalItems;
-    });
-    
-    updateDownloadedDisplay();
-  }
-
-  // ============================================================
-  // 1. CARREGAR CRÉDITOS DO SERVIDOR
-  // ============================================================
-  async function fetchCreditsFromServer() {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Erro ao buscar créditos');
-      }
-      
-      const data = await response.json();
-      credits = data.credits || 0;
-      updateCreditsDisplay();
-      return credits;
-    } catch (error) {
-      console.error('❌ Erro ao buscar créditos:', error);
-      credits = 0;
-      updateCreditsDisplay();
-      return 0;
-    }
-  }
-
-  function updateCreditsDisplay() {
-    if (creditsDisplay) creditsDisplay.textContent = credits;
-    if (mobileCreditsDisplay) mobileCreditsDisplay.textContent = credits;
-    if (modalCreditsCount) modalCreditsCount.textContent = credits;
-    
-    const baixadosCount = downloadedItems.length;
-    if (downloadedCountDisplay) downloadedCountDisplay.textContent = baixadosCount;
-    if (mobileDownloadedDisplay) mobileDownloadedDisplay.textContent = `${baixadosCount} / ${totalItems}`;
-    if (desktopDownloadedDisplay) desktopDownloadedDisplay.textContent = `${baixadosCount} / ${totalItems}`;
-
-    updateModalButtons();
-    updateMenuCtaVisibility();
-  }
-
-  function updateDownloadedDisplay() {
-    const count = downloadedItems.length;
-    const displayElements = [
-      document.getElementById('desktopDownloadedDisplay'),
-      document.getElementById('mobileDownloadedDisplay'),
-      document.getElementById('downloadedCountDisplay')
-    ];
-    displayElements.forEach(el => {
-      if (el) el.textContent = `${count} / ${totalItems}`;
-    });
-  }
-
-  // ============================================================
-  // 2. RENDERIZAR GALERIA
+  // RENDER GALERIA
   // ============================================================
   let imagesLoaded = 0;
   let currentFilter = 'all';
@@ -1710,8 +1609,7 @@
   }
 
   function renderGallery() {
-    if (!grid) return;
-    
+    const grid = document.getElementById('galleryGrid');
     const filteredItems = currentFilter === 'all' 
       ? allMedia 
       : allMedia.filter(item => item.type === currentFilter);
@@ -1720,9 +1618,9 @@
     imagesLoaded = 0;
     
     if (!window._galleryLoaded) {
-      if (progressContainer) progressContainer.style.display = 'block';
-      if (progressFill) progressFill.style.width = '0%';
-      if (loadedCount) loadedCount.textContent = '0';
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('loadedCount').textContent = '0';
     }
 
     filteredItems.forEach((item, index) => {
@@ -1732,7 +1630,6 @@
       div.dataset.id = item.id;
       div.dataset.index = index;
 
-      const priceDisplay = '1 crédito';
       const typeLabel = item.isVideo ? '🎬 VÍDEO' : '📷 FOTO';
       const typeClass = item.isVideo ? 'video' : 'photo';
       
@@ -1778,13 +1675,13 @@
       
       if (!window._progressComplete && totalItems > 0) {
         const percent = Math.round((imagesLoaded / totalItems) * 100);
-        if (progressFill) progressFill.style.width = percent + '%';
-        if (loadedCount) loadedCount.textContent = imagesLoaded;
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('loadedCount').textContent = imagesLoaded;
         
         if (imagesLoaded >= totalItems) {
           window._progressComplete = true;
           setTimeout(() => {
-            if (progressContainer) progressContainer.style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
           }, 400);
         }
       }
@@ -1797,36 +1694,13 @@
       if (fallbackSrc) {
         img.src = fallbackSrc;
         img.onerror = null;
-      } else {
-        img.style.display = 'none';
-        const container = img.parentElement;
-        const unavailableDiv = document.createElement('div');
-        unavailableDiv.style.cssText = `
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: #D4A3B3;
-          font-size: 0.9rem;
-          text-align: center;
-          z-index: 10;
-          background: rgba(44, 7, 20, 0.8);
-          padding: 20px;
-          border-radius: 12px;
-          border: 1px solid rgba(212, 163, 179, 0.1);
-        `;
-        unavailableDiv.innerHTML = `
-          <i class="fas fa-${img.alt.includes('Vídeo') ? 'video' : 'image'}" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
-          ${img.alt || 'Indisponível'}
-        `;
-        container.appendChild(unavailableDiv);
       }
     }
     onMediaLoad(index);
   }
 
   // ============================================================
-  // 3. MODAL E DOWNLOAD SEGURO
+  // MODAL
   // ============================================================
   let currentModalIndex = 0;
 
@@ -1842,24 +1716,22 @@
     const item = allMedia[currentModalIndex];
     const isDownloaded = downloadedItems.includes(item.id);
     
-    if (modalProgressFill) modalProgressFill.style.width = '0%';
-    if (modalProgressLabel) modalProgressLabel.textContent = '0%';
-    if (modalProgress) modalProgress.classList.add('show');
+    document.getElementById('modalProgressFill').style.width = '0%';
+    document.getElementById('modalProgressLabel').textContent = '0%';
+    document.getElementById('modalProgress').classList.add('show');
     
-    modalImage.style.display = 'none';
-    modalVideoContainer.style.display = 'none';
-    modalImage.classList.remove('loaded');
-    modalImage.style.opacity = '0';
-    modalVideo.classList.remove('loaded');
-    modalVideoContainer.classList.remove('loaded');
+    document.getElementById('modalImage').style.display = 'none';
+    document.getElementById('modalVideoContainer').style.display = 'none';
+    document.getElementById('modalImage').classList.remove('loaded');
+    document.getElementById('modalImage').style.opacity = '0';
+    document.getElementById('modalVideo').classList.remove('loaded');
+    document.getElementById('modalVideoContainer').classList.remove('loaded');
     
-    if (document.getElementById('currentIndexDisplay')) {
-      document.getElementById('currentIndexDisplay').textContent = realIndex + 1;
-    }
+    document.getElementById('currentIndexDisplay').textContent = realIndex + 1;
     updateModalButtons(isDownloaded);
     updateNavButtons();
     
-    if (modalOverlay) modalOverlay.classList.add('active');
+    document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
     
     try {
@@ -1868,182 +1740,55 @@
         if (progress < 90) {
           progress += Math.random() * 8;
           if (progress > 90) progress = 90;
-          if (modalProgressFill) modalProgressFill.style.width = progress + '%';
-          if (modalProgressLabel) modalProgressLabel.textContent = Math.round(progress) + '%';
+          document.getElementById('modalProgressFill').style.width = progress + '%';
+          document.getElementById('modalProgressLabel').textContent = Math.round(progress) + '%';
         }
       }, 100);
 
       if (item.isVideo) {
-        modalVideoContainer.style.display = 'block';
-        modalVideoSource.src = item.mediaUrl;
-        modalVideo.load();
+        document.getElementById('modalVideoContainer').style.display = 'block';
+        document.getElementById('modalVideoSource').src = item.mediaUrl;
+        document.getElementById('modalVideo').load();
         
-        modalVideo.onloadeddata = function() {
+        document.getElementById('modalVideo').onloadeddata = function() {
           clearInterval(progressInterval);
-          modalProgressFill.style.width = '100%';
-          modalProgressLabel.textContent = '100%';
-          modalVideoContainer.classList.add('loaded');
-          setTimeout(() => modalProgress.classList.remove('show'), 500);
-        };
-        modalVideo.onerror = function() {
-          clearInterval(progressInterval);
-          modalProgress.classList.remove('show');
-          alert('Erro ao carregar o vídeo. Tente novamente.');
+          document.getElementById('modalProgressFill').style.width = '100%';
+          document.getElementById('modalProgressLabel').textContent = '100%';
+          document.getElementById('modalVideoContainer').classList.add('loaded');
+          setTimeout(() => {
+            document.getElementById('modalProgress').classList.remove('show');
+          }, 500);
         };
       } else {
-        modalImage.style.display = 'block';
+        document.getElementById('modalImage').style.display = 'block';
         const img = new Image();
         img.onload = function() {
           clearInterval(progressInterval);
-          modalProgressFill.style.width = '100%';
-          modalProgressLabel.textContent = '100%';
-          modalImage.src = item.mediaUrl;
-          modalImage.classList.add('loaded');
-          modalImage.style.opacity = '1';
-          setTimeout(() => modalProgress.classList.remove('show'), 500);
-        };
-        img.onerror = function() {
-          clearInterval(progressInterval);
-          modalProgress.classList.remove('show');
-          modalImage.alt = 'Erro ao carregar';
+          document.getElementById('modalProgressFill').style.width = '100%';
+          document.getElementById('modalProgressLabel').textContent = '100%';
+          document.getElementById('modalImage').src = item.mediaUrl;
+          document.getElementById('modalImage').classList.add('loaded');
+          document.getElementById('modalImage').style.opacity = '1';
+          setTimeout(() => {
+            document.getElementById('modalProgress').classList.remove('show');
+          }, 500);
         };
         img.src = item.mediaUrl;
       }
     } catch (error) {
       console.error('Erro ao abrir modal:', error);
-      if (modalProgress) modalProgress.classList.remove('show');
+      document.getElementById('modalProgress').classList.remove('show');
     }
     
     document.addEventListener('keydown', handleModalKeydown);
   }
 
-  async function downloadFromModal() {
-    const item = allMedia[currentModalIndex];
-    if (!item) return;
-
-    if (credits <= 0) {
-      updateModalButtons(false);
-      return;
-    }
-
-    if (downloadedItems.includes(item.id)) {
-      alert('✅ Este item já foi baixado anteriormente.');
-      return;
-    }
-
-    if (modalDownloadBtn) {
-      modalDownloadBtn.disabled = true;
-      modalDownloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando download...';
-    }
-
-    try {
-      // 1. Solicita a URL assinada direta da imagem em alta para o servidor
-      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-
-      const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
-
-      // 2. Dispara o download nativo do arquivo real
-      const link = document.createElement('a');
-      link.href = downloadFinalUrl;
-      link.setAttribute('download', item.key.split('/').pop());
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // 3. Debita o crédito no servidor
-      const debitResponse = await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({ imageKey: item.key })
-      });
-
-      if (!debitResponse.ok) {
-        const error = await debitResponse.json();
-        throw new Error(error.error || 'Erro ao debitar crédito');
-      }
-
-      const debitData = await debitResponse.json();
-      credits = debitData.credits || 0;
-
-      if (!downloadedItems.includes(item.id)) {
-        downloadedItems.push(item.id);
-        localStorage.setItem('downloadedImages', JSON.stringify(downloadedItems));
-      }
-
-      updateCreditsDisplay();
-      updateDownloadBadge(item.id);
-      updateModalButtons(true);
-
-      if (modalDownloadBtn) {
-        modalDownloadBtn.className = 'modal-btn-download downloaded';
-        modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
-        modalDownloadBtn.disabled = true;
-      }
-
-      alert('✅ Download iniciado no seu dispositivo!');
-
-    } catch (error) {
-      console.error('❌ Erro no download:', error);
-      alert('❌ ' + (error.message || 'Erro ao baixar. Tente novamente.'));
-      
-      if (modalDownloadBtn) {
-        modalDownloadBtn.disabled = false;
-        modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
-      }
-      
-      await fetchCreditsFromServer();
-    }
-  }
-
-  function updateDownloadBadge(id) {
-    const items = document.querySelectorAll('.watermark-item');
-    items.forEach(item => {
-      if (item.dataset.id === id) {
-        const badge = item.querySelector('.badge-status');
-        if (badge) {
-          badge.className = 'badge-status downloaded';
-          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADO';
-        }
-      }
-    });
-  }
-
-  // ============================================================
-  // 4. LINKS DO MERCADO PAGO POR PACOTE
-  // ============================================================
-  function buyCredits(amount) {
-    const paymentLinks = {
-      5: 'https://mpago.la/2fSQufA',
-      10: 'https://mpago.la/28Aw32a',
-      20: 'https://mpago.la/2ZCXNZq',
-      50: 'https://mpago.la/1H3q1Rk'
-    };
-
-    const targetUrl = paymentLinks[amount];
-    if (targetUrl) {
-      localStorage.setItem('pendingPayment', JSON.stringify({ planId: amount, timestamp: Date.now() }));
-      window.open(targetUrl, '_blank');
-    } else {
-      alert('⚠️ Pacote não encontrado.');
-    }
-  }
-
-  // ============================================================
-  // FUNÇÕES DE NAVEGAÇÃO DO MODAL
-  // ============================================================
   function closeModal() {
-    if (modalOverlay) modalOverlay.classList.remove('active');
+    document.getElementById('modalOverlay').classList.remove('active');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', handleModalKeydown);
-    if (modalVideo) {
-      modalVideo.pause();
-    }
+    const video = document.getElementById('modalVideo');
+    if (video) video.pause();
   }
 
   function handleModalKeydown(e) {
@@ -2058,10 +1803,8 @@
       const filteredItems = currentFilter === 'all' 
         ? allMedia 
         : allMedia.filter(item => item.type === currentFilter);
-      
       const currentFilteredIndex = filteredItems.indexOf(allMedia[currentModalIndex]);
       const newFilteredIndex = currentFilteredIndex + direction;
-      
       if (newFilteredIndex >= 0 && newFilteredIndex < filteredItems.length) {
         const newRealIndex = allMedia.indexOf(filteredItems[newFilteredIndex]);
         if (newRealIndex !== -1) {
@@ -2074,146 +1817,234 @@
   function updateNavButtons() {
     const prevBtn = document.getElementById('modalPrev');
     const nextBtn = document.getElementById('modalNext');
-    if (prevBtn) {
-      prevBtn.disabled = currentModalIndex === 0;
-      prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
-    }
-    if (nextBtn) {
-      nextBtn.disabled = currentModalIndex === allMedia.length - 1;
-      nextBtn.style.opacity = currentModalIndex === allMedia.length - 1 ? '0.3' : '1';
-    }
-  }
-
-  function updateModalButtons(isDownloaded = false) {
-    if (!modalDownloadBtn || !modalBuyCredits) return;
-    
-    if (isDownloaded) {
-      modalDownloadBtn.className = 'modal-btn-download downloaded';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
-      modalDownloadBtn.disabled = true;
-      modalDownloadBtn.style.display = 'flex';
-      modalBuyCredits.classList.remove('show');
-    } else if (credits <= 0) {
-      modalDownloadBtn.style.display = 'none';
-      modalBuyCredits.classList.add('show');
-    } else {
-      modalDownloadBtn.className = 'modal-btn-download';
-      modalDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
-      modalDownloadBtn.style.display = 'flex';
-      modalDownloadBtn.disabled = false;
-      modalBuyCredits.classList.remove('show');
-    }
-  }
-
-  function openCreditUpsell() {
-    const upsell = document.getElementById('upsellSection');
-    if (upsell) upsell.scrollIntoView({ behavior: 'smooth' });
+    prevBtn.disabled = currentModalIndex === 0;
+    nextBtn.disabled = currentModalIndex === allMedia.length - 1;
+    prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentModalIndex === allMedia.length - 1 ? '0.3' : '1';
   }
 
   // ============================================================
-  // MENU MOBILE E UI GERAL
+  // DOWNLOAD
   // ============================================================
-  function toggleMobileMenu() {
-    if (!mobileMenu || !hamburgerBtn || !navbar) return;
-    mobileMenu.classList.toggle('open');
-    hamburgerBtn.classList.toggle('active');
-    if (mobileMenu.classList.contains('open')) {
-      navbar.classList.add('hidden');
-      document.body.style.overflow = 'hidden';
-    } else {
-      navbar.classList.remove('hidden');
-      document.body.style.overflow = '';
+  async function downloadFromModal() {
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
+
+    if (credits <= 0) {
+      updateModalButtons(false);
+      return;
+    }
+
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado.');
+      return;
+    }
+
+    const btn = document.getElementById('modalDownloadBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
+
+    try {
+      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
+      const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
+
+      const link = document.createElement('a');
+      link.href = downloadFinalUrl;
+      link.setAttribute('download', item.key.split('/').pop());
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      credits--;
+      if (!downloadedItems.includes(item.id)) {
+        downloadedItems.push(item.id);
+        localStorage.setItem('downloaded_paulagabriel', JSON.stringify(downloadedItems));
+      }
+
+      updateCreditsDisplay();
+      updateDownloadBadge(item.id);
+      updateModalButtons(true);
+      
+      btn.className = 'modal-btn-download downloaded';
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
+      btn.disabled = true;
+
+      alert('✅ Download iniciado!');
+
+    } catch (error) {
+      console.error('❌ Erro no download:', error);
+      alert('❌ Erro ao baixar. Tente novamente.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
     }
   }
 
-  function closeMobileMenu() {
-    if (!mobileMenu || !hamburgerBtn || !navbar) return;
-    mobileMenu.classList.remove('open');
-    hamburgerBtn.classList.remove('active');
-    navbar.classList.remove('hidden');
-    document.body.style.overflow = '';
+  function updateDownloadBadge(id) {
+    document.querySelectorAll('.watermark-item').forEach(item => {
+      if (item.dataset.id === id) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADO';
+        }
+      }
+    });
   }
 
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
-  
-  function checkMobile() {
+  // ============================================================
+  // CRÉDITOS
+  // ============================================================
+  function updateCreditsDisplay() {
+    document.getElementById('creditsDisplay').textContent = credits;
+    document.getElementById('modalCreditsCount').textContent = credits;
+    updateModalButtons();
     updateMenuCtaVisibility();
   }
 
-  function updateMenuCtaVisibility() {
-    if (window.innerWidth > 768 && credits <= 0) {
-      if (menuCreditCta) menuCreditCta.classList.add('show');
+  function updateModalButtons(isDownloaded = false) {
+    const downloadBtn = document.getElementById('modalDownloadBtn');
+    const buyCreditsDiv = document.getElementById('modalBuyCredits');
+    
+    if (isDownloaded) {
+      downloadBtn.className = 'modal-btn-download downloaded';
+      downloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
+      downloadBtn.disabled = true;
+      downloadBtn.style.display = 'flex';
+      buyCreditsDiv.classList.remove('show');
+    } else if (credits <= 0) {
+      downloadBtn.style.display = 'none';
+      buyCreditsDiv.classList.add('show');
     } else {
-      if (menuCreditCta) menuCreditCta.classList.remove('show');
-    }
-    if (window.innerWidth <= 768 && credits <= 0) {
-      if (mobileCreditCta) mobileCreditCta.classList.add('show');
-    } else {
-      if (mobileCreditCta) mobileCreditCta.classList.remove('show');
+      downloadBtn.className = 'modal-btn-download';
+      downloadBtn.innerHTML = '<i class="fas fa-download"></i> Baixar em alta definição = utilizar 1 crédito';
+      downloadBtn.style.display = 'flex';
+      downloadBtn.disabled = false;
+      buyCreditsDiv.classList.remove('show');
     }
   }
 
+  function buyCredits(amount) {
+    const paymentLinks = {
+      5: 'https://mpago.la/2fSQufA',
+      10: 'https://mpago.la/28Aw32a',
+      20: 'https://mpago.la/2ZCXNZq',
+      50: 'https://mpago.la/1H3q1Rk'
+    };
+    const targetUrl = paymentLinks[amount];
+    if (targetUrl) {
+      localStorage.setItem('pending_paulagabriel', JSON.stringify({ amount, timestamp: Date.now() }));
+      window.open(targetUrl, '_blank');
+    } else {
+      alert('⚠️ Pacote não encontrado.');
+    }
+  }
+
+  function fetchCreditsFromServer() {
+    credits += 5;
+    updateCreditsDisplay();
+    alert('🔄 Créditos atualizados!');
+  }
+
+  function updateDownloadedDisplay() {
+    const count = downloadedItems.length;
+    const displayElements = [
+      document.getElementById('desktopDownloadedDisplay'),
+      document.getElementById('downloadedCountDisplay')
+    ];
+    displayElements.forEach(el => {
+      if (el) el.textContent = `${count} / ${totalItems}`;
+    });
+  }
+
+  function updateCounters() {
+    document.getElementById('totalCount').textContent = totalItems;
+    document.getElementById('totalCountDisplay').textContent = totalItems;
+    document.getElementById('totalPhotosDisplay').textContent = totalItems;
+    updateDownloadedDisplay();
+  }
+
+  // ============================================================
+  // TIMER
+  // ============================================================
   let timerSeconds = 72 * 3600;
   function updateTimer() {
     if (timerSeconds <= 0) {
-      if (timerDisplay) timerDisplay.textContent = '00:00:00';
-      if (mobileTimerDisplay) mobileTimerDisplay.textContent = '00:00:00';
+      document.getElementById('timerDisplay').textContent = '00:00:00';
       return;
     }
     timerSeconds--;
     const hrs = Math.floor(timerSeconds / 3600);
     const mins = Math.floor((timerSeconds % 3600) / 60);
     const secs = timerSeconds % 60;
-    const timeStr = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    if (timerDisplay) timerDisplay.textContent = timeStr;
-    if (mobileTimerDisplay) mobileTimerDisplay.textContent = timeStr;
+    document.getElementById('timerDisplay').textContent = 
+      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
-  window.addEventListener('scroll', function() {
-    if (!navbar) return;
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+  // ============================================================
+  // MENU MOBILE
+  // ============================================================
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  function toggleMenu() {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    menuOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.mobile-menu a, .mobile-menu button').forEach(el => {
+    el.addEventListener('click', closeMenu);
   });
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
-      e.preventDefault();
-      alert('🔒 A proteção de imagens está ativa.');
-    }
-  });
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-  document.addEventListener('contextmenu', function(e) {
-    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
-      e.preventDefault();
-      alert('🔒 Clique direito bloqueado.');
-    }
-  });
+  function checkMobile() {
+    // Função para ajustes mobile
+  }
+
+  function updateMenuCtaVisibility() {
+    // Função para mostrar CTA no menu
+  }
 
   // ============================================================
   // INICIALIZAÇÃO
   // ============================================================
-  async function init() {
-    await fetchCreditsFromServer();
-    await loadMediaFromS3();
-    updateTimer();
-    setInterval(updateTimer, 1000);
-    checkMobile();
-    
-    window.addEventListener('resize', checkMobile);
-    console.log('📸 Galeria Studio Rassi carregada!');
-    console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos disponíveis`);
-    console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos disponíveis`);
-    console.log(`📥 ${downloadedItems.length} itens já baixados`);
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Verifica se já está logado
+    if (isLoggedIn) {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      initSite();
+    }
+  });
 
-  init();
+  // ============================================================
+  // EXPORTA FUNÇÕES GLOBAIS
+  // ============================================================
+  window.handleLogin = handleLogin;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.downloadFromModal = downloadFromModal;
+  window.navigateModal = navigateModal;
+  window.buyCredits = buyCredits;
+  window.fetchCreditsFromServer = fetchCreditsFromServer;
+  window.setFilter = setFilter;
+  window.scrollToTop = scrollToTop;
+  window.closeMenu = closeMenu;
+  window.toggleMenu = toggleMenu;
 </script>
 </body>
 </html>
