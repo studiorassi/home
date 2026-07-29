@@ -306,7 +306,7 @@
   });
   
   // ============================================================
-  // FUNÇÃO DE LOGIN (CORRIGIDA)
+  // FUNÇÃO DE LOGIN
   // ============================================================
   async function handleLogin(e) {
     e.preventDefault();
@@ -325,7 +325,6 @@
     errorMsg.classList.remove('show');
     
     try {
-      // ✅ CORRIGIDO: Envia como 'username' (não 'email')
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -341,11 +340,14 @@
         throw new Error(data.message || 'Credenciais inválidas');
       }
       
-      // ✅ CORRIGIDO: Acessa data.user (não data.data)
+      // Salva os dados da sessão
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('userName', data.user.username);
       localStorage.setItem('userCredits', data.user.credits);
       localStorage.setItem('userId', data.user.id);
+      
+      // Redireciona para a galeria APÓS o login bem-sucedido
+      window.location.href = 'cliente/cliente.html';
       
     } catch (error) {
       console.error('Erro no login:', error);
@@ -369,7 +371,11 @@
   loginInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   passwordInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   
-  console.log('🔐 Página de login carregada - Sistema Studio Rassi');
+  // ============================================================
+  // ❌ REMOVIDO: Verificação automática de token
+  // Agora a página SEMPRE mostra a tela de login
+  // ============================================================
+  console.log('🔐 Página de login carregada - Aguardando credenciais');
 </script>
 
 </body>
