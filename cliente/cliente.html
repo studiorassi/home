@@ -1756,9 +1756,11 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
 
     try {
+      // 🔥 OBTÉM A URL DA IMAGEM EM ALTA RESOLUÇÃO
       const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
       const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
 
+      // 🔥 DEBITA O CRÉDITO NO BACKEND
       const token = localStorage.getItem('authToken');
       if (token) {
         await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
@@ -1772,14 +1774,15 @@
         await fetchUserCredits();
       }
 
+      // 🔥 FAZ O DOWNLOAD DIRETO - SEM ABRIR NOVA ABA
       const link = document.createElement('a');
       link.href = downloadFinalUrl;
-      link.setAttribute('download', item.key.split('/').pop());
-      link.target = '_blank';
+      link.download = item.key.split('/').pop();
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
+      // Atualiza estado
       credits--;
       if (!downloadedItems.includes(item.id)) {
         downloadedItems.push(item.id);
