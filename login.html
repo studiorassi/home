@@ -347,9 +347,6 @@
       localStorage.setItem('userCredits', data.user.credits);
       localStorage.setItem('userId', data.user.id);
       
-      // Redireciona para a galeria
-      window.location.href = 'cliente/cliente.html';
-      
     } catch (error) {
       console.error('Erro no login:', error);
       errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error.message}`;
