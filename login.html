@@ -369,14 +369,6 @@
   loginInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   passwordInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   
-  // ============================================================
-  // VERIFICA SESSÃO EXISTENTE
-  // ============================================================
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    window.location.href = 'cliente/cliente.html';
-  }
-  
   console.log('🔐 Página de login carregada - Sistema Studio Rassi');
 </script>
 
