@@ -240,7 +240,7 @@
         <span class="icon-left">
           <i class="fas fa-user"></i>
         </span>
-        <input type="text" id="login" placeholder="Digite seu login" value="paula&gabriel">
+        <input type="text" id="login" placeholder="Digite seu login" value="paulaegabriel">
       </div>
     </div>
     
@@ -295,7 +295,6 @@
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
     
-    // Troca o ícone
     const icon = this.querySelector('i');
     if (type === 'text') {
       icon.classList.remove('fa-eye');
@@ -307,15 +306,15 @@
   });
   
   // ============================================================
-  // FUNÇÃO DE LOGIN
+  // FUNÇÃO DE LOGIN (CORRIGIDA)
   // ============================================================
   async function handleLogin(e) {
     e.preventDefault();
     
-    const login = loginInput.value.trim();
+    const username = loginInput.value.trim();
     const password = passwordInput.value.trim();
     
-    if (!login || !password) {
+    if (!username || !password) {
       errorMsg.textContent = '⚠️ Preencha todos os campos';
       errorMsg.classList.add('show');
       return;
@@ -326,10 +325,14 @@
     errorMsg.classList.remove('show');
     
     try {
+      // ✅ CORRIGIDO: Envia como 'username' (não 'email')
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: login, password: password })
+        body: JSON.stringify({ 
+          username: username, 
+          password: password 
+        })
       });
       
       const data = await response.json();
@@ -338,10 +341,11 @@
         throw new Error(data.message || 'Credenciais inválidas');
       }
       
-      // Salva os dados da sessão
+      // ✅ CORRIGIDO: Acessa data.user (não data.data)
       localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userName', data.data.username);
-      localStorage.setItem('userCredits', data.data.credits);
+      localStorage.setItem('userName', data.user.username);
+      localStorage.setItem('userCredits', data.user.credits);
+      localStorage.setItem('userId', data.user.id);
       
       // Redireciona para a galeria
       window.location.href = 'cliente/cliente.html';
@@ -361,12 +365,10 @@
   // ============================================================
   form.addEventListener('submit', handleLogin);
   
-  // Enter key
   passwordInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') form.dispatchEvent(new Event('submit'));
   });
   
-  // Limpa erro ao digitar
   loginInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   passwordInput.addEventListener('input', () => errorMsg.classList.remove('show'));
   
@@ -378,7 +380,7 @@
     window.location.href = 'cliente/cliente.html';
   }
   
-  console.log('🔐 Página de login carregada e pronta para o sistema simplificado');
+  console.log('🔐 Página de login carregada - Sistema Studio Rassi');
 </script>
 
 </body>
