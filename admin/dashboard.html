@@ -262,6 +262,10 @@
       color: #d4c5c0;
       margin-bottom: 4px;
     }
+    .modal-box label .required {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
     .modal-box input, .modal-box select {
       width: 100%;
       padding: 12px 16px;
@@ -275,6 +279,11 @@
     .modal-box input:focus, .modal-box select:focus {
       outline: none;
       border-color: #D4A3B3;
+    }
+    .modal-box .helper-text {
+      font-size: 0.65rem;
+      color: #7a5f5a;
+      margin-top: 4px;
     }
     .modal-box .modal-actions {
       display: flex;
@@ -306,6 +315,37 @@
     }
     .modal-box .btn-cancel:hover { border-color: #D4A3B3; color: #f5edea; }
     
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1f0510;
+      border: 1px solid rgba(212, 163, 179, 0.1);
+      border-radius: 16px;
+      padding: 16px 24px;
+      color: #f5edea;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 300px;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .toast.success { border-color: rgba(46, 125, 50, 0.3); }
+    .toast.success i { color: #4CAF50; }
+    .toast.error { border-color: rgba(212, 163, 179, 0.3); }
+    .toast.error i { color: #D4A3B3; }
+    
     /* ===== RESPONSIVO ===== */
     @media (max-width: 768px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -316,6 +356,7 @@
     @media (max-width: 480px) {
       .stats-grid { grid-template-columns: 1fr; }
       .quick-actions { grid-template-columns: 1fr; }
+      .modal-box { padding: 24px 20px; }
     }
   </style>
 </head>
@@ -368,7 +409,7 @@
     <a href="#" class="action-btn" onclick="openModal('user')">
       <i class="fas fa-user-plus"></i>
       <div class="label">Novo Usuário</div>
-      <div class="desc">Adicionar cliente</div>
+      <div class="desc">Criar login e senha</div>
     </a>
     <a href="#" class="action-btn" onclick="openModal('credits')">
       <i class="fas fa-coins"></i>
@@ -400,8 +441,8 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
+            <th>Usuário</th>
+            <th>Senha</th>
             <th>Créditos</th>
             <th>Status</th>
             <th>Ações</th>
@@ -440,11 +481,17 @@
 
 </div>
 
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toastMessage">Operação realizada com sucesso!</span>
+</div>
+
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <h2 id="modalTitle">Adicionar Usuário</h2>
-    <form id="modalForm">
+    <h2 id="modalTitle">Novo Usuário</h2>
+    <form id="modalForm" onsubmit="event.preventDefault();">
       <div id="modalBody">
         <!-- Conteúdo dinâmico via JS -->
       </div>
@@ -463,16 +510,33 @@
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
   let authToken = localStorage.getItem('authToken');
   
-  // Verifica autenticação
   if (!authToken) {
     window.location.href = 'admin-login.html';
+  }
+
+  // ============================================================
+  // TOAST
+  // ============================================================
+  let toastTimeout;
+
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toast.className = 'toast ' + type;
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
   }
 
   // ============================================================
   // FUNÇÕES PRINCIPAIS
   // ============================================================
   
-  // Carregar estatísticas
   async function loadStats() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/stats`, {
@@ -490,7 +554,6 @@
     }
   }
 
-  // Carregar usuários
   async function loadUsers() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
@@ -504,13 +567,14 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${user.id}</td>
-            <td><strong>${user.name || 'Usuário'}</strong></td>
-            <td>${user.email}</td>
+            <td><strong>${user.username || user.name || 'Usuário'}</strong></td>
+            <td><code style="background:rgba(212,163,179,0.1); padding:2px 8px; border-radius:4px; font-size:0.7rem; color:#D4A3B3;">${user.password || '••••••'}</code></td>
             <td><span style="color:#D4A3B3; font-weight:600;">${user.credits}</span></td>
             <td><span class="badge-status ${user.status || 'active'}">${user.status || 'Ativo'}</span></td>
             <td>
               <button class="btn-action" onclick="editUser(${user.id})" title="Editar"><i class="fas fa-edit"></i></button>
               <button class="btn-action" onclick="addCredits(${user.id})" title="Adicionar créditos"><i class="fas fa-coins"></i></button>
+              <button class="btn-action" onclick="generateNewPassword(${user.id})" title="Gerar nova senha"><i class="fas fa-key"></i></button>
               <button class="btn-action danger" onclick="deleteUser(${user.id})" title="Excluir"><i class="fas fa-trash"></i></button>
             </td>
           `;
@@ -522,7 +586,6 @@
     }
   }
 
-  // Carregar pedidos
   async function loadOrders() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
@@ -554,7 +617,6 @@
   // FUNÇÕES DE AÇÃO
   // ============================================================
 
-  // Adicionar/Editar usuário
   function openModal(type, data = null) {
     const modal = document.getElementById('modalOverlay');
     const title = document.getElementById('modalTitle');
@@ -567,20 +629,19 @@
       title.textContent = data ? 'Editar Usuário' : 'Novo Usuário';
       body.innerHTML = `
         <div class="form-group">
-          <label>Nome</label>
-          <input type="text" id="userName" value="${data ? data.name : ''}" placeholder="Nome do cliente">
+          <label>Usuário <span class="required">*</span></label>
+          <input type="text" id="userUsername" value="${data ? data.username || data.name : ''}" placeholder="Ex: paula&gabriel" ${data ? '' : 'required'}>
+          <div class="helper-text">Nome que o cliente usará para fazer login</div>
         </div>
         <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="userEmail" value="${data ? data.email : ''}" placeholder="email@exemplo.com">
-        </div>
-        <div class="form-group">
-          <label>Senha</label>
-          <input type="password" id="userPassword" placeholder="Digite uma senha" ${data ? '' : 'required'}>
+          <label>Senha <span class="required">*</span></label>
+          <input type="text" id="userPassword" value="${data ? data.password : ''}" placeholder="Digite uma senha" ${data ? '' : 'required'}>
+          <div class="helper-text">Senha que o cliente usará para fazer login</div>
         </div>
         <div class="form-group">
           <label>Créditos iniciais</label>
           <input type="number" id="userCredits" value="${data ? data.credits : 0}" min="0">
+          <div class="helper-text">Quantos créditos o cliente terá para baixar fotos</div>
         </div>
       `;
       submitBtn.onclick = () => saveUser(data ? data.id : null);
@@ -588,27 +649,26 @@
       title.textContent = 'Adicionar Créditos';
       body.innerHTML = `
         <div class="form-group">
-          <label>Usuário</label>
-          <select id="creditUser"></select>
+          <label>Usuário <span class="required">*</span></label>
+          <select id="creditUser" required></select>
         </div>
         <div class="form-group">
-          <label>Quantidade de créditos</label>
-          <input type="number" id="creditAmount" min="1" value="10" placeholder="Ex: 10">
+          <label>Quantidade de créditos <span class="required">*</span></label>
+          <input type="number" id="creditAmount" min="1" value="10" placeholder="Ex: 10" required>
         </div>
         <div class="form-group">
           <label>Motivo</label>
           <input type="text" id="creditReason" placeholder="Ex: Compra de pacote">
         </div>
       `;
-      // Carregar usuários no select
       loadUsersSelect();
       submitBtn.onclick = () => addCreditsToUser();
     } else if (type === 'reset') {
-      title.textContent = 'Resetar Usuário';
+      title.textContent = 'Resetar Créditos';
       body.innerHTML = `
         <div class="form-group">
-          <label>Usuário</label>
-          <select id="resetUser"></select>
+          <label>Usuário <span class="required">*</span></label>
+          <select id="resetUser" required></select>
         </div>
         <div class="form-group">
           <label>Nova quantidade de créditos</label>
@@ -628,15 +688,21 @@
     document.getElementById('modalOverlay').classList.remove('show');
   }
 
-  // Salvar usuário
+  // ============================================================
+  // SALVAR USUÁRIO (APENAS USUÁRIO + SENHA)
+  // ============================================================
   async function saveUser(id = null) {
-    const name = document.getElementById('userName').value.trim();
-    const email = document.getElementById('userEmail').value.trim();
+    const username = document.getElementById('userUsername').value.trim();
     const password = document.getElementById('userPassword').value.trim();
     const credits = parseInt(document.getElementById('userCredits').value) || 0;
 
-    if (!name || !email) {
-      alert('⚠️ Nome e email são obrigatórios.');
+    if (!username) {
+      showToast('⚠️ O campo "Usuário" é obrigatório.', 'error');
+      return;
+    }
+
+    if (!password) {
+      showToast('⚠️ O campo "Senha" é obrigatório.', 'error');
       return;
     }
 
@@ -644,8 +710,11 @@
       const url = id ? `${API_BASE_URL}/api/admin/users/${id}` : `${API_BASE_URL}/api/admin/users`;
       const method = id ? 'PUT' : 'POST';
       
-      const body = { name, email, credits };
-      if (password) body.password = password;
+      const body = { 
+        username: username, 
+        password: password, 
+        credits: credits 
+      };
 
       const response = await fetch(url, {
         method,
@@ -658,27 +727,64 @@
 
       const data = await response.json();
       if (data.success) {
-        alert('✅ Usuário salvo com sucesso!');
+        showToast(`✅ ${id ? 'Usuário atualizado' : 'Usuário criado'} com sucesso!`);
         closeModal();
         loadUsers();
         loadStats();
       } else {
-        alert('❌ ' + data.message);
+        showToast('❌ ' + (data.message || 'Erro ao salvar usuário'), 'error');
       }
     } catch (error) {
       console.error('Erro ao salvar usuário:', error);
-      alert('❌ Erro ao salvar usuário.');
+      showToast('❌ Erro ao salvar usuário.', 'error');
     }
   }
 
-  // Adicionar créditos
+  // ============================================================
+  // GERAR NOVA SENHA
+  // ============================================================
+  function generateNewPassword(userId) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let password = '';
+    for (let i = 0; i < 8; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    if (confirm(`🔑 Gerar nova senha para o usuário ${userId}?\n\nNova senha: ${password}\n\nClique em OK para confirmar.`)) {
+      // Atualiza a senha no backend
+      fetch(`${API_BASE_URL}/api/admin/users/${userId}/password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showToast(`✅ Nova senha gerada: ${password}`, 'success');
+          loadUsers();
+        } else {
+          showToast('❌ Erro ao gerar nova senha.', 'error');
+        }
+      })
+      .catch(() => {
+        showToast('❌ Erro ao gerar nova senha.', 'error');
+      });
+    }
+  }
+
+  // ============================================================
+  // ADICIONAR CRÉDITOS
+  // ============================================================
   async function addCreditsToUser() {
     const userId = document.getElementById('creditUser').value;
     const amount = parseInt(document.getElementById('creditAmount').value) || 0;
     const reason = document.getElementById('creditReason').value || 'Adição manual';
 
     if (!userId || amount <= 0) {
-      alert('⚠️ Selecione um usuário e informe uma quantidade válida.');
+      showToast('⚠️ Selecione um usuário e informe uma quantidade válida.', 'error');
       return;
     }
 
@@ -694,31 +800,33 @@
 
       const data = await response.json();
       if (data.success) {
-        alert(`✅ ${amount} créditos adicionados com sucesso!`);
+        showToast(`✅ ${amount} créditos adicionados com sucesso!`, 'success');
         closeModal();
         loadUsers();
         loadStats();
       } else {
-        alert('❌ ' + data.message);
+        showToast('❌ ' + data.message, 'error');
       }
     } catch (error) {
       console.error('Erro ao adicionar créditos:', error);
-      alert('❌ Erro ao adicionar créditos.');
+      showToast('❌ Erro ao adicionar créditos.', 'error');
     }
   }
 
-  // Resetar créditos
+  // ============================================================
+  // RESETAR CRÉDITOS
+  // ============================================================
   async function resetUserCredits() {
     const userId = document.getElementById('resetUser').value;
     const amount = parseInt(document.getElementById('resetAmount').value) || 0;
     const reason = document.getElementById('resetReason').value || 'Reset manual';
 
     if (!userId) {
-      alert('⚠️ Selecione um usuário.');
+      showToast('⚠️ Selecione um usuário.', 'error');
       return;
     }
 
-    if (!confirm(`⚠️ Tem certeza que deseja resetar os créditos do usuário para ${amount}?`)) return;
+    if (!confirm(`⚠️ Tem certeza que deseja resetar os créditos para ${amount}?`)) return;
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/credits/reset`, {
@@ -732,20 +840,22 @@
 
       const data = await response.json();
       if (data.success) {
-        alert(`✅ Créditos resetados para ${amount}!`);
+        showToast(`✅ Créditos resetados para ${amount}!`, 'success');
         closeModal();
         loadUsers();
         loadStats();
       } else {
-        alert('❌ ' + data.message);
+        showToast('❌ ' + data.message, 'error');
       }
     } catch (error) {
       console.error('Erro ao resetar créditos:', error);
-      alert('❌ Erro ao resetar créditos.');
+      showToast('❌ Erro ao resetar créditos.', 'error');
     }
   }
 
-  // Carregar usuários no select
+  // ============================================================
+  // CARREGAR USUÁRIOS NO SELECT
+  // ============================================================
   async function loadUsersSelect(selectId = 'creditUser') {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
@@ -758,7 +868,7 @@
         data.users.forEach(user => {
           const option = document.createElement('option');
           option.value = user.id;
-          option.textContent = `${user.name || 'Usuário'} (${user.email}) - ${user.credits} créditos`;
+          option.textContent = `${user.username || user.name || 'Usuário'} (${user.credits} créditos)`;
           select.appendChild(option);
         });
       }
@@ -767,7 +877,9 @@
     }
   }
 
-  // Editar usuário
+  // ============================================================
+  // EDITAR USUÁRIO
+  // ============================================================
   async function editUser(id) {
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
@@ -779,12 +891,15 @@
       }
     } catch (error) {
       console.error('Erro ao buscar usuário:', error);
+      showToast('❌ Erro ao buscar usuário.', 'error');
     }
   }
 
-  // Excluir usuário
+  // ============================================================
+  // EXCLUIR USUÁRIO
+  // ============================================================
   async function deleteUser(id) {
-    if (!confirm('⚠️ Tem certeza que deseja excluir este usuário?')) return;
+    if (!confirm('⚠️ Tem certeza que deseja excluir este usuário?\n\nEsta ação não pode ser desfeita.')) return;
     
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
@@ -793,24 +908,28 @@
       });
       const data = await response.json();
       if (data.success) {
-        alert('✅ Usuário excluído com sucesso!');
+        showToast('✅ Usuário excluído com sucesso!', 'success');
         loadUsers();
         loadStats();
       } else {
-        alert('❌ ' + data.message);
+        showToast('❌ ' + data.message, 'error');
       }
     } catch (error) {
       console.error('Erro ao excluir usuário:', error);
-      alert('❌ Erro ao excluir usuário.');
+      showToast('❌ Erro ao excluir usuário.', 'error');
     }
   }
 
-  // Exportar dados
+  // ============================================================
+  // EXPORTAR DADOS
+  // ============================================================
   function exportData() {
-    alert('📊 Função de exportação em desenvolvimento.\n\nEm breve você poderá baixar relatórios em CSV.');
+    showToast('📊 Função de exportação em desenvolvimento.', 'success');
   }
 
-  // Logout
+  // ============================================================
+  // LOGOUT
+  // ============================================================
   function logout() {
     localStorage.removeItem('authToken');
     window.location.href = 'admin-login.html';
@@ -824,7 +943,6 @@
     loadUsers();
     loadOrders();
     
-    // Atualiza a cada 30 segundos
     setInterval(() => {
       loadStats();
       loadUsers();
@@ -846,9 +964,9 @@
   window.closeModal = closeModal;
   window.editUser = editUser;
   window.deleteUser = deleteUser;
+  window.generateNewPassword = generateNewPassword;
   window.addCredits = (id) => {
     openModal('credits');
-    // Pré-seleciona o usuário
     setTimeout(() => {
       const select = document.getElementById('creditUser');
       if (select) {
@@ -864,6 +982,7 @@
   window.addCreditsToUser = addCreditsToUser;
   window.resetUserCredits = resetUserCredits;
   window.loadUsersSelect = loadUsersSelect;
+  window.showToast = showToast;
 </script>
 
 </body>
