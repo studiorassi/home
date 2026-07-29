@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Paula & Gabriel · Studio Rassi</title>
+  <title>Admin · Studio Rassi</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico">
   <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
   
   <!-- OG Image -->
-  <meta property="og:title" content="Paula & Gabriel · Studio Rassi">
+  <meta property="og:title" content="Admin · Studio Rassi">
   <meta property="og:description" content="Nossas memórias eternizadas em fotos">
   <meta property="og:image" content="https://seudominio.com/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -274,6 +274,16 @@
       padding: 12px 0;
       margin-bottom: 24px;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    .floating-status.hidden {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+      margin-bottom: 0;
+      padding: 0;
+      height: 0;
+      overflow: hidden;
     }
     .floating-status .container {
       display: flex;
@@ -1125,7 +1135,7 @@
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
     <a href="index.html" class="logo">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo.png" 
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
            alt="Studio Rassi · Photo & Video" 
            width="170" 
            height="50"
@@ -1163,7 +1173,7 @@
   </button>
 </div>
 
-<!-- ===== STATUS DESKTOP ===== -->
+<!-- ===== STATUS FLUTUANTE ===== -->
 <div class="floating-status" id="statusBar">
   <div class="container">
     <div class="status-item"><i class="fas fa-coins"></i><span>Créditos: <strong class="value" id="creditsDisplay">0</strong></span></div>
@@ -1335,13 +1345,11 @@
     const token = localStorage.getItem('authToken');
     
     if (!token) {
-      // Se não tem token, redireciona para o login
       window.location.href = 'https://studiorassi.github.io/home/login.html';
       return;
     }
 
     try {
-      // Verifica se o token é válido
       const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -1349,13 +1357,11 @@
       const data = await response.json();
       
       if (!data.success) {
-        // Token inválido, redireciona para login
         localStorage.removeItem('authToken');
         window.location.href = 'https://studiorassi.github.io/home/login.html';
         return;
       }
 
-      // ✅ Usuário logado, carrega os dados
       credits = data.credits || 0;
       const userName = localStorage.getItem('userName') || 'Paula & Gabriel';
       
@@ -1364,17 +1370,14 @@
         credits: credits
       };
       
-      // Atualiza os nomes na interface
       document.getElementById('clienteNome').textContent = userName;
       document.getElementById('clienteNomeGaleria').textContent = userName;
       document.getElementById('footerNome').textContent = userName;
       
-      // Inicializa o site
       initSite();
 
     } catch (error) {
       console.error('❌ Erro ao verificar sessão:', error);
-      // Redireciona para login em caso de erro
       localStorage.removeItem('authToken');
       window.location.href = 'https://studiorassi.github.io/home/login.html';
     }
@@ -1425,7 +1428,6 @@
     try {
       console.log('📡 Buscando mídias para o cliente...');
       
-      // Busca fotos
       const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
       if (!fotosResponse.ok) throw new Error('Erro ao buscar fotos');
       const fotosData = await fotosResponse.json();
@@ -1449,7 +1451,6 @@
         };
       });
 
-      // Busca vídeos
       const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
       if (!videosResponse.ok) throw new Error('Erro ao buscar vídeos');
       const videosData = await videosResponse.json();
@@ -1756,11 +1757,9 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
 
     try {
-      // 🔥 OBTÉM A URL DA IMAGEM EM ALTA RESOLUÇÃO
       const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
       const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
 
-      // 🔥 DEBITA O CRÉDITO NO BACKEND
       const token = localStorage.getItem('authToken');
       if (token) {
         await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
@@ -1774,7 +1773,6 @@
         await fetchUserCredits();
       }
 
-      // 🔥 FAZ O DOWNLOAD DIRETO - SEM ABRIR NOVA ABA
       const link = document.createElement('a');
       link.href = downloadFinalUrl;
       link.download = item.key.split('/').pop();
@@ -1782,7 +1780,6 @@
       link.click();
       document.body.removeChild(link);
 
-      // Atualiza estado
       credits--;
       if (!downloadedItems.includes(item.id)) {
         downloadedItems.push(item.id);
@@ -1908,16 +1905,30 @@
   }
 
   // ============================================================
-  // MENU MOBILE
+  // MENU MOBILE (CORRIGIDO)
   // ============================================================
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
   const menuOverlay = document.getElementById('menuOverlay');
+  const statusBar = document.getElementById('statusBar');
 
   function toggleMenu() {
+    const isOpen = mobileMenu.classList.contains('open');
+    
+    // Alterna o menu
     hamburger.classList.toggle('active');
     mobileMenu.classList.toggle('open');
     menuOverlay.classList.toggle('active');
+    
+    // 👇 CORREÇÃO: Esconde/mostra o menu flutuante
+    if (!isOpen) {
+      // Menu abrindo → esconde o status bar
+      statusBar.classList.add('hidden');
+    } else {
+      // Menu fechando → mostra o status bar
+      statusBar.classList.remove('hidden');
+    }
+    
     document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   }
 
@@ -1925,6 +1936,7 @@
     hamburger.classList.remove('active');
     mobileMenu.classList.remove('open');
     menuOverlay.classList.remove('active');
+    statusBar.classList.remove('hidden'); // 👈 Mostra o status bar ao fechar
     document.body.style.overflow = '';
   }
 
@@ -1934,6 +1946,9 @@
     el.addEventListener('click', closeMenu);
   });
 
+  // ============================================================
+  // FUNÇÕES AUXILIARES
+  // ============================================================
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
