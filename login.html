@@ -225,12 +225,12 @@
   </a>
   
   <!-- ===== LOGO ===== -->
-  <img src="assets/images/logo/logo.png" 
+  <img src="assets/images/logo/logo_branco.png" 
        alt="Studio Rassi" 
        class="logo">
   
   <h1>Área do Cliente</h1>
-  <p class="subtitle">Acesse suas <span>memórias</span> em alta definição</p>
+  <p class="subtitle">Acesse com os dados enviados para visualizar suas <span>fotos</span> e <span>vídeos</span></p>
   
   <form id="loginForm">
     <!-- ===== CAMPO LOGIN ===== -->
@@ -329,17 +329,16 @@
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: login, password: password }) // Enviando o login no campo que a API espera
+        body: JSON.stringify({ email: login, password: password })
       });
       
       const data = await response.json();
       
       if (!response.ok) {
-        // Lê a mensagem de erro correta enviada pelo novo backend
         throw new Error(data.message || 'Credenciais inválidas');
       }
       
-      // Salva os dados da sessão perfeitamente alinhados com o sistema simplificado
+      // Salva os dados da sessão
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('userName', data.data.username);
       localStorage.setItem('userCredits', data.data.credits);
