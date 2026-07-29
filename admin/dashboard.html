@@ -441,7 +441,7 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Usuário</th>
+            <th>Email/Usuário</th>
             <th>Senha</th>
             <th>Créditos</th>
             <th>Status</th>
@@ -567,7 +567,7 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${user.id}</td>
-            <td><strong>${user.username || user.name || 'Usuário'}</strong></td>
+            <td><strong>${user.username || user.email || 'Usuário'}</strong></td>
             <td><code style="background:rgba(212,163,179,0.1); padding:2px 8px; border-radius:4px; font-size:0.7rem; color:#D4A3B3;">${user.password || '••••••'}</code></td>
             <td><span style="color:#D4A3B3; font-weight:600;">${user.credits}</span></td>
             <td><span class="badge-status ${user.status || 'active'}">${user.status || 'Ativo'}</span></td>
@@ -629,14 +629,18 @@
       title.textContent = data ? 'Editar Usuário' : 'Novo Usuário';
       body.innerHTML = `
         <div class="form-group">
-          <label>Usuário <span class="required">*</span></label>
-          <input type="text" id="userUsername" value="${data ? data.username || data.name : ''}" placeholder="Ex: paula&gabriel" ${data ? '' : 'required'}>
-          <div class="helper-text">Nome que o cliente usará para fazer login</div>
+          <label>Email / Usuário <span class="required">*</span></label>
+          <input type="email" id="userEmail" value="${data ? data.username || data.email : ''}" placeholder="Ex: cliente@email.com" ${data ? '' : 'required'}>
+          <div class="helper-text">Email que o cliente usará para fazer login</div>
         </div>
         <div class="form-group">
           <label>Senha <span class="required">*</span></label>
           <input type="text" id="userPassword" value="${data ? data.password : ''}" placeholder="Digite uma senha" ${data ? '' : 'required'}>
           <div class="helper-text">Senha que o cliente usará para fazer login</div>
+        </div>
+        <div class="form-group">
+          <label>Nome (opcional)</label>
+          <input type="text" id="userName" value="${data ? data.name : ''}" placeholder="Ex: João Silva">
         </div>
         <div class="form-group">
           <label>Créditos iniciais</label>
@@ -689,15 +693,16 @@
   }
 
   // ============================================================
-  // SALVAR USUÁRIO (APENAS USUÁRIO + SENHA)
+  // SALVAR USUÁRIO (CORRIGIDO - usa email)
   // ============================================================
   async function saveUser(id = null) {
-    const username = document.getElementById('userUsername').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
     const password = document.getElementById('userPassword').value.trim();
     const credits = parseInt(document.getElementById('userCredits').value) || 0;
+    const name = document.getElementById('userName').value.trim() || email;
 
-    if (!username) {
-      showToast('⚠️ O campo "Usuário" é obrigatório.', 'error');
+    if (!email) {
+      showToast('⚠️ O campo "Email" é obrigatório.', 'error');
       return;
     }
 
@@ -711,9 +716,11 @@
       const method = id ? 'PUT' : 'POST';
       
       const body = { 
-        username: username, 
+        email: email,
+        username: email,
         password: password, 
-        credits: credits 
+        credits: credits,
+        name: name
       };
 
       const response = await fetch(url, {
@@ -751,7 +758,6 @@
     }
     
     if (confirm(`🔑 Gerar nova senha para o usuário ${userId}?\n\nNova senha: ${password}\n\nClique em OK para confirmar.`)) {
-      // Atualiza a senha no backend
       fetch(`${API_BASE_URL}/api/admin/users/${userId}/password`, {
         method: 'PUT',
         headers: {
@@ -868,7 +874,7 @@
         data.users.forEach(user => {
           const option = document.createElement('option');
           option.value = user.id;
-          option.textContent = `${user.username || user.name || 'Usuário'} (${user.credits} créditos)`;
+          option.textContent = `${user.username || user.email || 'Usuário'} (${user.credits} créditos)`;
           select.appendChild(option);
         });
       }
@@ -882,12 +888,15 @@
   // ============================================================
   async function editUser(id) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
       const data = await response.json();
       if (data.success) {
-        openModal('user', data.user);
+        const user = data.users.find(u => u.id === id);
+        if (user) {
+          openModal('user', user);
+        }
       }
     } catch (error) {
       console.error('Erro ao buscar usuário:', error);
