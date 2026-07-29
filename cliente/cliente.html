@@ -104,113 +104,6 @@
       border-color: #c08b9e;
     }
 
-    /* ===== LOGIN OVERLAY ===== */
-    .login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(10px);
-      padding: 20px;
-    }
-    .login-overlay.hidden {
-      display: none;
-    }
-    .login-box {
-      background: #1f0510;
-      border-radius: 32px;
-      padding: 48px 40px;
-      max-width: 420px;
-      width: 100%;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      text-align: center;
-    }
-    .login-box .logo-login {
-      font-family: 'Fraunces', serif;
-      font-size: 2rem;
-      color: #D4A3B3;
-      margin-bottom: 4px;
-    }
-    .login-box .subtitle {
-      color: #d4c5c0;
-      font-weight: 300;
-      margin-bottom: 24px;
-      font-size: 0.9rem;
-    }
-    .login-box .input-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    .login-box .input-group label {
-      display: block;
-      font-size: 0.75rem;
-      color: #d4c5c0;
-      margin-bottom: 4px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
-    .login-box .input-group input {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 40px;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      background: rgba(44, 7, 20, 0.6);
-      color: #f5edea;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 1rem;
-      transition: 0.3s;
-    }
-    .login-box .input-group input:focus {
-      outline: none;
-      border-color: #D4A3B3;
-      background: rgba(44, 7, 20, 0.8);
-    }
-    .login-box .input-group input::placeholder {
-      color: #7a5f5a;
-    }
-    .login-box .btn-login {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 40px;
-      background: #D4A3B3;
-      color: #2C0714;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 8px;
-    }
-    .login-box .btn-login:hover {
-      background: #c08b9e;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
-    }
-    .login-box .btn-login:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .login-box .error-msg {
-      color: #e74c3c;
-      font-size: 0.8rem;
-      margin-top: 8px;
-      min-height: 20px;
-    }
-    .login-box .heart-icon {
-      color: #D4A3B3;
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-      display: block;
-    }
-
     /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
@@ -1206,8 +1099,6 @@
       .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
       .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
-      .login-box { padding: 32px 24px; }
-      .login-box .logo-login { font-size: 1.5rem; }
     }
     @media (max-width: 480px) {
       body { padding-top: 60px; }
@@ -1230,29 +1121,6 @@
 </head>
 <body>
 
-<!-- ===== LOGIN OVERLAY ===== -->
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <span class="heart-icon">💕</span>
-    <div class="logo-login">Paula & Gabriel</div>
-    <div class="subtitle">Acesse as fotos do nosso ensaio</div>
-    <form id="loginForm" onsubmit="handleLogin(event)">
-      <div class="input-group">
-        <label>Usuário</label>
-        <input type="text" id="loginUser" placeholder="Digite o usuário">
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <input type="password" id="loginPass" placeholder="Digite a senha">
-      </div>
-      <button type="submit" class="btn-login" id="loginBtn">
-        <i class="fas fa-lock"></i> Entrar na Galeria
-      </button>
-      <div class="error-msg" id="loginError"></div>
-    </form>
-  </div>
-</div>
-
 <!-- ===== NAVBAR FLUTUANTE ===== -->
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
@@ -1270,7 +1138,7 @@
     </button>
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Paula & Gabriel</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Carregando...</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
           Baixados: <span id="downloadedCountDisplay" style="font-weight: 700; color: #f5edea;">0</span>/<span id="totalPhotosDisplay">0</span>
@@ -1341,7 +1209,7 @@
 <!-- ===== GALERIA ===== -->
 <div class="container">
   <div class="gallery-header">
-    <h2>📸 <span>Paula & Gabriel</span></h2>
+    <h2>📸 <span id="clienteNomeGaleria">Paula & Gabriel</span></h2>
     <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
       <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
     </span>
@@ -1446,7 +1314,7 @@
 </div>
 
 <!-- ===== FOOTER ===== -->
-<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Paula & Gabriel 💕</p></div></footer>
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · <span id="footerNome">Paula & Gabriel</span> 💕</p></div></footer>
 
 <!-- ===== SCRIPT ===== -->
 <script>
@@ -1454,45 +1322,62 @@
   // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const VALID_USER = 'paula&gabriel';
-  const VALID_PASS = '01082026_p&g';
-  let credits = 30; // Créditos iniciais
+  let credits = 0;
   let totalItems = 0;
   let allMedia = [];
   let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
-  let isLoggedIn = false;
+  let currentUser = null;
 
   // ============================================================
-  // LOGIN
+  // VERIFICA SESSÃO EXISTENTE (REDIRECIONA SE NÃO LOGADO)
   // ============================================================
-  function handleLogin(e) {
-    e.preventDefault();
-    const user = document.getElementById('loginUser').value.trim().toLowerCase();
-    const pass = document.getElementById('loginPass').value.trim();
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
+  async function checkSession() {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      // Se não tem token, redireciona para o login
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
+      return;
+    }
 
-    loginBtn.disabled = true;
-    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-    loginError.textContent = '';
-
-    setTimeout(() => {
-      if (user === VALID_USER && pass === VALID_PASS) {
-        isLoggedIn = true;
-        document.getElementById('loginOverlay').classList.add('hidden');
-        document.getElementById('clienteNome').textContent = 'Paula & Gabriel';
-        initSite();
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i class="fas fa-lock"></i> Entrar na Galeria';
-      } else {
-        loginError.textContent = '❌ Usuário ou senha incorretos. Tente novamente.';
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i class="fas fa-lock"></i> Entrar na Galeria';
-        document.getElementById('loginUser').value = '';
-        document.getElementById('loginPass').value = '';
-        document.getElementById('loginUser').focus();
+    try {
+      // Verifica se o token é válido
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        // Token inválido, redireciona para login
+        localStorage.removeItem('authToken');
+        window.location.href = 'https://studiorassi.github.io/home/login.html';
+        return;
       }
-    }, 800);
+
+      // ✅ Usuário logado, carrega os dados
+      credits = data.credits || 0;
+      const userName = localStorage.getItem('userName') || 'Paula & Gabriel';
+      
+      currentUser = {
+        username: userName,
+        credits: credits
+      };
+      
+      // Atualiza os nomes na interface
+      document.getElementById('clienteNome').textContent = userName;
+      document.getElementById('clienteNomeGaleria').textContent = userName;
+      document.getElementById('footerNome').textContent = userName;
+      
+      // Inicializa o site
+      initSite();
+
+    } catch (error) {
+      console.error('❌ Erro ao verificar sessão:', error);
+      // Redireciona para login em caso de erro
+      localStorage.removeItem('authToken');
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
+    }
   }
 
   // ============================================================
@@ -1505,6 +1390,32 @@
     setInterval(updateTimer, 1000);
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    await fetchUserCredits();
+  }
+
+  // ============================================================
+  // BUSCAR CRÉDITOS DO BACKEND
+  // ============================================================
+  async function fetchUserCredits() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        credits = data.credits;
+        localStorage.setItem('userCredits', credits);
+        updateCreditsDisplay();
+      }
+    } catch (error) {
+      console.error('❌ Erro ao buscar créditos:', error);
+    }
   }
 
   // ============================================================
@@ -1512,7 +1423,7 @@
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      console.log('📡 Buscando fotos para Paula & Gabriel...');
+      console.log('📡 Buscando mídias para o cliente...');
       
       // Busca fotos
       const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
@@ -1704,7 +1615,7 @@
   // ============================================================
   let currentModalIndex = 0;
 
-  async function openModal(index) {
+  function openModal(index) {
     const filteredItems = currentFilter === 'all' 
       ? allMedia 
       : allMedia.filter(item => item.type === currentFilter);
@@ -1824,7 +1735,7 @@
   }
 
   // ============================================================
-  // DOWNLOAD
+  // DOWNLOAD (COM DEBITO NO BACKEND)
   // ============================================================
   async function downloadFromModal() {
     const item = allMedia[currentModalIndex];
@@ -1847,6 +1758,19 @@
     try {
       const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
       const downloadFinalUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
+
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ imageKey: item.key })
+        });
+        await fetchUserCredits();
+      }
 
       const link = document.createElement('a');
       link.href = downloadFinalUrl;
@@ -1941,8 +1865,7 @@
   }
 
   function fetchCreditsFromServer() {
-    credits += 5;
-    updateCreditsDisplay();
+    fetchUserCredits();
     alert('🔄 Créditos atualizados!');
   }
 
@@ -2012,29 +1935,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function checkMobile() {
-    // Função para ajustes mobile
-  }
-
-  function updateMenuCtaVisibility() {
-    // Função para mostrar CTA no menu
-  }
+  function checkMobile() {}
+  function updateMenuCtaVisibility() {}
 
   // ============================================================
   // INICIALIZAÇÃO
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    // Verifica se já está logado
-    if (isLoggedIn) {
-      document.getElementById('loginOverlay').classList.add('hidden');
-      initSite();
-    }
+    checkSession();
   });
 
   // ============================================================
   // EXPORTA FUNÇÕES GLOBAIS
   // ============================================================
-  window.handleLogin = handleLogin;
   window.openModal = openModal;
   window.closeModal = closeModal;
   window.downloadFromModal = downloadFromModal;
@@ -2045,6 +1958,9 @@
   window.scrollToTop = scrollToTop;
   window.closeMenu = closeMenu;
   window.toggleMenu = toggleMenu;
+  window.onMediaLoad = onMediaLoad;
+  window.handleImageError = handleImageError;
 </script>
+
 </body>
 </html>
