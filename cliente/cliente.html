@@ -1447,22 +1447,12 @@
       
       if (data.success && data.hasReset) {
         console.log('🔄 Reset de downloads detectado! Limpando localStorage...');
-        
-        // 🔥 LIMPA O LOCALSTORAGE
         const key = `downloaded_${username}`;
         localStorage.removeItem(key);
         downloadedItems = [];
-        
-        // Remove o token para forçar relogin (opcional)
-        // localStorage.removeItem('authToken');
-        
-        // Mostra notificação
-        alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
-        
-        // Recarrega a galeria
         renderGallery();
         updateDownloadedDisplay();
-        
+        alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
         return true;
       }
     } catch (error) {
@@ -1508,7 +1498,6 @@
       document.getElementById('footerNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
       
-      // 🔥 VERIFICA SE HOUVE RESET ANTES DE CARREGAR A GALERIA
       await checkReset();
       
       initSite();
@@ -1873,19 +1862,17 @@
   }
 
   // ============================================================
-  // 🔥 DOWNLOAD CORRIGIDO PARA TODOS OS DISPOSITIVOS
+  // 🔥 DOWNLOAD UNIVERSAL CORRIGIDO (FOTOS E VÍDEOS)
   // ============================================================
   async function downloadFromModal() {
     const item = allMedia[currentModalIndex];
     if (!item) return;
 
-    // Verifica créditos
     if (credits <= 0) {
       updateModalButtons(false);
       return;
     }
 
-    // Verifica se já foi baixado
     if (downloadedItems.includes(item.id)) {
       alert('✅ Este item já foi baixado.');
       return;
@@ -1914,48 +1901,41 @@
         await fetchUserCredits();
       }
 
-      // 3. 🔥 DOWNLOAD UNIVERSAL - Funciona em Android, iOS e Desktop
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isAndroid = /Android/.test(navigator.userAgent);
+      // 3. 🔥 DOWNLOAD UNIVERSAL - MESMO MÉTODO PARA TODOS
       const filename = item.key.split('/').pop();
-
-      if (isIOS) {
-        // 🔥 iOS: Usa fetch + blob para forçar download
-        try {
-          const response = await fetch(downloadUrl);
-          const blob = await response.blob();
-          
-          // Cria um link para download
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          // Libera memória após 5 segundos
-          setTimeout(() => {
-            URL.revokeObjectURL(link.href);
-          }, 5000);
-        } catch (iosError) {
-          // Fallback para iOS: abre em nova aba (último recurso)
-          console.warn('⚠️ Fallback iOS:', iosError);
-          window.open(downloadUrl, '_blank');
-        }
-      } else if (isAndroid) {
-        // 🔥 Android: Usa o método padrão com anchor
+      
+      // 🔥 Usa fetch + blob para TODOS os dispositivos
+      // Isso garante que o download seja feito sem abrir nova aba
+      try {
+        const response = await fetch(downloadUrl);
+        const blob = await response.blob();
+        
+        // Determina o tipo MIME correto
+        let mimeType = item.isVideo ? 'video/mp4' : 'image/jpeg';
+        const blobWithType = new Blob([blob], { type: mimeType });
+        
+        // Cria um link para download
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blobWithType);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Libera memória após 5 segundos
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href);
+        }, 5000);
+        
+        console.log(`✅ Download iniciado: ${filename} (${item.isVideo ? 'vídeo' : 'foto'})`);
+        
+      } catch (blobError) {
+        console.warn('⚠️ Fallback para método alternativo:', blobError);
+        // Fallback: método tradicional
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = filename;
         link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        // 🔥 Desktop: Método padrão
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = filename;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -1976,9 +1956,7 @@
       btn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
       btn.disabled = true;
 
-      // Notificação de sucesso
-      const msg = isIOS ? '✅ Download iniciado! Verifique sua pasta de downloads.' : '✅ Download iniciado!';
-      alert(msg);
+      alert('✅ Download iniciado! O arquivo foi salvo no seu dispositivo.');
 
     } catch (error) {
       console.error('❌ Erro no download:', error);
@@ -2094,7 +2072,7 @@
   }
 
   // ============================================================
-  // MENU MOBILE (PADRONIZADO COM AVULSO.HTML)
+  // MENU MOBILE
   // ============================================================
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
