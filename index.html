@@ -149,6 +149,34 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
     }
 
     /* ===== BOTÃO WHATSAPP ===== */
+    .btn-whatsapp-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: #25D366;
+      color: #ffffff;
+      border-radius: 50px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+    .btn-whatsapp-hero:hover {
+      background: #1da851;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+      color: #ffffff;
+    }
+    .btn-whatsapp-hero i {
+      font-size: 1.2rem;
+    }
+
+    /* ===== BOTÃO WHATSAPP HEADER ===== */
     .btn-whatsapp-header {
       display: inline-flex;
       align-items: center;
@@ -1504,6 +1532,12 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
         width: 100%;
         justify-content: center;
       }
+      .hero-buttons .btn-whatsapp-hero {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+      }
       .hero-badge {
         font-size: 0.6rem;
         padding: 3px 14px;
@@ -1769,6 +1803,10 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
         padding: 8px 18px;
         font-size: 0.65rem;
       }
+      .hero-buttons .btn-whatsapp-hero {
+        padding: 10px 16px;
+        font-size: 0.75rem;
+      }
       
       .section-title { 
         font-size: 1.6rem; 
@@ -1912,6 +1950,12 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
   <button class="btn-whatsapp-mobile" onclick="window.open('https://wa.me/5511969761002?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20conhecer%20os%20pacotes%20promocionais', '_blank')">
     <i class="fab fa-whatsapp"></i> Pacotes Promocionais
   </button>
+  
+  <!-- 🔥 BOTÃO FALE AGORA NO WHATSAPP - MENU MOBILE -->
+  <button class="btn-whatsapp-mobile" onclick="window.open('https://wa.me/5511969761002?text=Ol%C3%A1%2C%20eu%20vim%20pelo%20site%20e%20quero%20fazer%20um%20or%C3%A7amento', '_blank')" 
+          style="background:#25D366; margin-top:4px;">
+    <i class="fab fa-whatsapp"></i> Fale agora no WhatsApp
+  </button>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -1945,7 +1989,13 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
       <div class="hero-buttons">
         <a href="#pacotes" class="btn btn-primary"><i class="fas fa-crown"></i> Pacotes promocionais</a>
         <a href="#personalizado" class="btn btn-outline"><i class="fas fa-sliders-h"></i> Personalizado</a>
-        <a href="#instagram" class="btn btn-outline"><i class="fas fa-images"></i> Conheça</a>
+        <!-- 🔥 BOTÃO WHATSAPP SUBSTITUINDO "CONHEÇA" -->
+        <a href="https://wa.me/5511969761002?text=Ol%C3%A1%2C%20eu%20vim%20pelo%20site%20e%20quero%20fazer%20um%20or%C3%A7amento" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-whatsapp-hero">
+          <i class="fab fa-whatsapp"></i> Fale agora no WhatsApp
+        </a>
       </div>
     </div>
   </div>
