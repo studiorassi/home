@@ -1432,6 +1432,44 @@
   let allMedia = [];
   let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
   let currentUser = null;
+  let resetChecked = false;
+
+  // ============================================================
+  // 🔥 VERIFICAR SE HOUVE RESET DE DOWNLOADS
+  // ============================================================
+  async function checkReset() {
+    const username = localStorage.getItem('userName');
+    if (!username) return false;
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
+      const data = await response.json();
+      
+      if (data.success && data.hasReset) {
+        console.log('🔄 Reset de downloads detectado! Limpando localStorage...');
+        
+        // 🔥 LIMPA O LOCALSTORAGE
+        const key = `downloaded_${username}`;
+        localStorage.removeItem(key);
+        downloadedItems = [];
+        
+        // Remove o token para forçar relogin (opcional)
+        // localStorage.removeItem('authToken');
+        
+        // Mostra notificação
+        alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
+        
+        // Recarrega a galeria
+        renderGallery();
+        updateDownloadedDisplay();
+        
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao verificar reset:', error);
+    }
+    return false;
+  }
 
   // ============================================================
   // VERIFICA SESSÃO EXISTENTE (REDIRECIONA SE NÃO LOGADO)
@@ -1469,6 +1507,9 @@
       document.getElementById('clienteNomeGaleria').textContent = userName;
       document.getElementById('footerNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
+      
+      // 🔥 VERIFICA SE HOUVE RESET ANTES DE CARREGAR A GALERIA
+      await checkReset();
       
       initSite();
 
