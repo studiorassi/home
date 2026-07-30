@@ -6,24 +6,23 @@
   <title>Studio Rassi · Photo & Video</title>
   
   <!-- ============================================================
-  FACEBOOK PIXEL - META PIXEL
+  FACEBOOK PIXEL - META PIXEL (OTIMIZADO)
   ============================================================ -->
-  <!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2266592067527225');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
-/></noscript>
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2266592067527225');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"/>
+  </noscript>
   <!-- End Meta Pixel Code -->
   
   <!-- Favicon -->
@@ -2293,10 +2292,10 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-  // FACEBOOK PIXEL - CONVERSIONS API
+  // FACEBOOK PIXEL - CONVERSIONS API (OTIMIZADO)
   // ============================================================
   const META_PIXEL_ID = '2266592067527225';
-  const META_ACCESS_TOKEN = 'EAASYtX1TVj8BSIIslF4XyGqWZB3iSpQjFn8OdNYhdFiQ7L8No6q8ZBHVJwCjSvlqhimXoYCmFeljPrepaylI11veHzvFl4CjZB56nUkZAuhZAB9ZBu5ZA3JG80RDWfZB0lR09NioFHXs8Y4x3uJeKvnVR8R1zdkWfD0CZCEa5qs6PNV3S5QdCNnLOXWzDAgE9QgZDZD'; // Substitua pelo seu token
+  const META_ACCESS_TOKEN = 'EAASYtX1TVj8BSIIslF4XyGqWZB3iSpQjFn8OdNYhdFiQ7L8No6q8ZBHVJwCjSvlqhimXoYCmFeljPrepaylI11veHzvFl4CjZB56nUkZAuhZAB9ZBu5ZA3JG80RDWfZB0lR09NioFHXs8Y4x3uJeKvnVR8R1zdkWfD0CZCEa5qs6PNV3S5QdCNnLOXWzDAgE9QgZDZD';
 
   /**
    * Função para enviar evento Purchase via Conversions API
@@ -2306,28 +2305,22 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
    */
   async function sendPurchaseEvent(value, currency = 'BRL', email = null) {
     try {
-      // Dados do usuário (hash do email se fornecido)
-      const userData = {};
-      if (email) {
-        // Hash SHA-256 do email (o Meta espera hash)
-        const encoder = new TextEncoder();
-        const data = encoder.encode(email.toLowerCase().trim());
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        userData.em = [hashHex];
-      }
-
-      // Payload do evento
+      // 🔥 ESTRUTURA CORRIGIDA CONFORME A CARGA FORNECIDA
       const payload = {
         data: [{
           event_name: 'Purchase',
           event_time: Math.floor(Date.now() / 1000),
           action_source: 'website',
-          user_data: userData,
+          user_data: {
+            em: email ? [await hashEmail(email)] : null,
+            ph: null
+          },
           custom_data: {
             currency: currency,
             value: value
+          },
+          attribution_data: {
+            attribution_share: '0.3'
           }
         }]
       };
@@ -2369,6 +2362,17 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
         console.error('❌ Erro no fallback fbq:', fbqError);
       }
     }
+  }
+
+  /**
+   * Função para hash SHA-256 do email
+   */
+  async function hashEmail(email) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(email.toLowerCase().trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   // ============================================================
@@ -2840,7 +2844,7 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
   // ============================================================
   // 12. ENVIAR PARA WHATSAPP (PACOTE PERSONALIZADO) COM PIXEL
   // ============================================================
-  document.getElementById('adquirirPacoteBtn').addEventListener('click', function() {
+  document.getElementById('adquirirPacoteBtn').addEventListener('click', async function() {
     // 1. Validar dados
     const count = parseInt(slider.value, 10);
     const data = dataEnsaio.value;
@@ -2873,7 +2877,7 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
     const clienteEmail = 'cliente@email.com'; // Substituir pelo email real do cliente
     
     // Envia o evento Purchase para o Meta Pixel
-    sendPurchaseEvent(total, 'BRL', clienteEmail);
+    await sendPurchaseEvent(total, 'BRL', clienteEmail);
     
     // Também dispara via fbq (para o pixel do navegador)
     try {
