@@ -222,6 +222,7 @@
     }
     .btn-action:hover { color: #D4A3B3; }
     .btn-action.danger:hover { color: #e74c3c; }
+    .btn-action.warning:hover { color: #f39c12; }
     
     /* ===== MODAL ===== */
     .modal-overlay {
@@ -314,6 +315,18 @@
       transition: 0.3s;
     }
     .modal-box .btn-cancel:hover { border-color: #D4A3B3; color: #f5edea; }
+    .modal-box .btn-danger {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .modal-box .btn-danger:hover { background: #c0392b; }
     
     /* ===== TOAST ===== */
     .toast {
@@ -345,6 +358,8 @@
     .toast.success i { color: #4CAF50; }
     .toast.error { border-color: rgba(212, 163, 179, 0.3); }
     .toast.error i { color: #D4A3B3; }
+    .toast.warning { border-color: rgba(243, 156, 18, 0.3); }
+    .toast.warning i { color: #f39c12; }
     
     /* ===== BOTÃO REPARAR ===== */
     .btn-fix {
@@ -629,6 +644,7 @@
               <button class="btn-action" onclick="editUser(${user.id})" title="Editar"><i class="fas fa-edit"></i></button>
               <button class="btn-action" onclick="addCredits(${user.id})" title="Adicionar créditos"><i class="fas fa-coins"></i></button>
               <button class="btn-action" onclick="generateNewPassword(${user.id})" title="Gerar nova senha"><i class="fas fa-key"></i></button>
+              <button class="btn-action warning" onclick="resetDownloads(${user.id})" title="Resetar downloads"><i class="fas fa-undo"></i></button>
               <button class="btn-action danger" onclick="deleteUser(${user.id})" title="Excluir"><i class="fas fa-trash"></i></button>
             </td>
           `;
@@ -739,11 +755,41 @@
       `;
       loadUsersSelect('resetUser');
       submitBtn.onclick = () => resetUserCredits();
+    } else if (type === 'resetDownloads') {
+      title.textContent = 'Resetar Downloads';
+      body.innerHTML = `
+        <div class="form-group">
+          <p style="color:#d4c5c0; font-size:0.9rem; margin-bottom:12px;">
+            <i class="fas fa-exclamation-triangle" style="color:#f39c12;"></i>
+            Isso vai limpar o histórico de downloads do usuário. 
+            <strong style="color:#D4A3B3;">Todas as fotos voltarão a ficar disponíveis para download.</strong>
+          </p>
+          <div style="background:rgba(243,156,18,0.1); border-radius:12px; padding:12px 16px; border:1px solid rgba(243,156,18,0.2);">
+            <p style="font-size:0.8rem; color:#d4c5c0;">
+              <i class="fas fa-user" style="color:#D4A3B3;"></i> 
+              Usuário: <strong id="resetDownloadsUsername" style="color:#f5edea;">Carregando...</strong>
+            </p>
+            <p style="font-size:0.8rem; color:#d4c5c0; margin-top:4px;">
+              <i class="fas fa-images" style="color:#D4A3B3;"></i> 
+              Downloads atuais: <strong id="resetDownloadsCount" style="color:#f5edea;">0</strong>
+            </p>
+          </div>
+        </div>
+      `;
+      // Guarda o ID do usuário para a ação
+      const userId = data;
+      submitBtn.textContent = 'Resetar Downloads';
+      submitBtn.className = 'btn-danger';
+      submitBtn.onclick = () => confirmResetDownloads(userId);
     }
   }
 
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('show');
+    // Restaura o botão para o padrão
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    submitBtn.textContent = 'Salvar';
+    submitBtn.className = 'btn-save';
   }
 
   // ============================================================
@@ -915,6 +961,70 @@
   }
 
   // ============================================================
+  // 🆕 RESETAR DOWNLOADS (NOVA FUNÇÃO)
+  // ============================================================
+  async function resetDownloads(userId) {
+    try {
+      // Busca os dados do usuário para mostrar no modal
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        const user = data.users.find(u => u.id === userId);
+        if (user) {
+          // Abre o modal com as informações do usuário
+          openModal('resetDownloads', userId);
+          
+          // Atualiza as informações no modal
+          setTimeout(() => {
+            document.getElementById('resetDownloadsUsername').textContent = user.username || 'Usuário';
+            // Busca a quantidade de downloads (via localStorage do cliente)
+            const downloadKey = `downloaded_${user.username}`;
+            const downloads = JSON.parse(localStorage.getItem(downloadKey) || '[]');
+            document.getElementById('resetDownloadsCount').textContent = downloads.length;
+          }, 100);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao buscar usuário:', error);
+      showToast('❌ Erro ao buscar dados do usuário.', 'error');
+    }
+  }
+
+  async function confirmResetDownloads(userId) {
+    if (!confirm('⚠️ Tem certeza que deseja resetar todos os downloads deste usuário?\n\nTodas as fotos voltarão a ficar disponíveis para download.\n\nEsta ação não pode ser desfeita.')) return;
+    
+    try {
+      showToast('🔄 Resetando downloads... Aguarde...', 'warning');
+      
+      // 🔥 CHAMA O BACKEND PARA RESETAR OS DOWNLOADS
+      const response = await fetch(`${API_BASE_URL}/api/admin/reset-downloads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ userId })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        showToast(`✅ Downloads resetados com sucesso! ${data.resetCount || 0} itens removidos.`, 'success');
+        closeModal();
+        loadUsers();
+      } else {
+        showToast('❌ ' + (data.message || 'Erro ao resetar downloads'), 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao resetar downloads:', error);
+      showToast('❌ Erro ao resetar downloads.', 'error');
+    }
+  }
+
+  // ============================================================
   // CARREGAR USUÁRIOS NO SELECT
   // ============================================================
   async function loadUsersSelect(selectId = 'creditUser') {
@@ -1022,6 +1132,8 @@
   window.editUser = editUser;
   window.deleteUser = deleteUser;
   window.generateNewPassword = generateNewPassword;
+  window.resetDownloads = resetDownloads;
+  window.confirmResetDownloads = confirmResetDownloads;
   window.addCredits = (id) => {
     openModal('credits');
     setTimeout(() => {
