@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Admin · Studio Rassi</title>
+  <title>Paula & Gabriel · Studio Rassi</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico">
   <link rel="apple-touch-icon" href="assets/images/favicon/apple-touch-icon.png">
   
   <!-- OG Image -->
-  <meta property="og:title" content="Admin · Studio Rassi">
+  <meta property="og:title" content="Paula & Gabriel · Studio Rassi">
   <meta property="og:description" content="Nossas memórias eternizadas em fotos">
   <meta property="og:image" content="https://seudominio.com/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -49,61 +49,6 @@
       padding: 0 32px;
     }
 
-    /* ===== TIPOGRAFIA ===== */
-    .font-title { font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.02em; }
-    .font-body { font-family: 'Work Sans', sans-serif; }
-    .text-rose { color: #D4A3B3; }
-    .text-offwhite { color: #f5edea; }
-    
-    .highlight-script {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-style: italic;
-      color: #D4A3B3;
-      letter-spacing: -0.02em;
-      text-shadow: 0 0 40px rgba(212, 163, 179, 0.15);
-    }
-
-    /* ===== BOTÕES ===== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 24px;
-      border-radius: 50px;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      position: relative;
-      z-index: 2;
-    }
-    .btn-primary {
-      background: #D4A3B3;
-      color: #2C0714;
-      box-shadow: 0 4px 15px rgba(212, 163, 179, 0.3);
-    }
-    .btn-primary:hover {
-      background: #c08b9e;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(212, 163, 179, 0.4);
-    }
-    .btn-outline {
-      border: 2px solid #D4A3B3;
-      color: #f5edea;
-      background: rgba(44, 7, 20, 0.4);
-      backdrop-filter: blur(4px);
-    }
-    .btn-outline:hover {
-      background: rgba(212, 163, 179, 0.15);
-      border-color: #c08b9e;
-    }
-
     /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
@@ -128,6 +73,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     .logo {
       display: inline-block;
@@ -137,11 +84,11 @@
     .logo img {
       display: block;
       width: auto;
-      height: 50px;
-      max-width: 170px;
+      height: 45px;
+      max-width: 150px;
       transition: all 0.3s ease;
     }
-    .navbar.scrolled .logo img { height: 42px; }
+    .navbar.scrolled .logo img { height: 40px; }
     .logo img:hover { opacity: 0.85; transform: scale(1.02); }
 
     .nav-info {
@@ -170,96 +117,160 @@
       color: #D4A3B3;
     }
 
+    /* ===== MENU MOBILE ===== */
     .hamburger {
       display: none;
       flex-direction: column;
-      gap: 4px;
-      cursor: pointer;
-      z-index: 101;
-      background: none;
+      gap: 5px;
+      background: transparent;
       border: none;
-      padding: 6px;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1001;
     }
     .hamburger span {
       display: block;
-      width: 24px;
+      width: 28px;
       height: 2px;
       background: #f5edea;
-      border-radius: 4px;
+      border-radius: 2px;
       transition: all 0.3s ease;
     }
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(4px, 4px);
-    }
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(4px, -4px);
-    }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
     .mobile-menu {
       display: none;
       position: fixed;
       top: 0;
-      right: -100%;
-      width: 75%;
-      max-width: 320px;
+      right: 0;
+      width: 100%;
+      max-width: 380px;
       height: 100vh;
       background: rgba(44, 7, 20, 0.98);
       backdrop-filter: blur(20px);
-      padding: 80px 32px 40px;
-      transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 999;
+      padding: 80px 28px 40px;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       border-left: 1px solid rgba(212, 163, 179, 0.08);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+
+    .mobile-menu .menu-header {
       display: flex;
-      flex-direction: column;
-      gap: 20px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
     }
-    .mobile-menu.open { right: 0; }
-    .mobile-menu a {
-      font-family: 'Work Sans', sans-serif;
+    .mobile-menu .menu-header .user-info {
+      font-size: 0.9rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-header .user-info strong {
+      color: #f5edea;
+      display: block;
       font-size: 1.1rem;
-      font-weight: 500;
-      color: #f5edea;
-      text-decoration: none;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
-      transition: 0.3s;
-      letter-spacing: 0.5px;
+      margin-top: 4px;
     }
-    .mobile-menu a:hover {
-      color: #D4A3B3;
-      padding-left: 8px;
-    }
-    .mobile-menu .btn-minhas-fotos-mobile {
-      margin-top: 12px;
-      background: rgba(212, 163, 179, 0.15);
-      border: 2px solid #D4A3B3;
+    .mobile-menu .menu-header .close-menu {
+      background: transparent;
+      border: none;
       color: #f5edea;
-      padding: 12px 20px;
-      border-radius: 50px;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 1.5rem;
       cursor: pointer;
+      padding: 8px;
       transition: 0.3s;
-      text-align: center;
     }
-    .mobile-menu .btn-minhas-fotos-mobile:hover {
-      background: #D4A3B3;
-      color: #2C0714;
+    .mobile-menu .menu-header .close-menu:hover {
+      color: #D4A3B3;
+      transform: rotate(90deg);
     }
 
+    .mobile-menu .menu-status {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-menu .menu-status .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #d4c5c0;
+    }
+    .mobile-menu .menu-status .status-row .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mobile-menu .menu-status .status-row .label i {
+      color: #D4A3B3;
+      font-size: 1rem;
+    }
+    .mobile-menu .menu-status .status-row .value {
+      color: #D4A3B3;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .mobile-menu .menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .mobile-menu .menu-links a {
+      color: #d4c5c0;
+      text-decoration: none;
+      padding: 14px 16px;
+      border-radius: 12px;
+      transition: 0.3s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-menu .menu-links a i {
+      color: #D4A3B3;
+      width: 20px;
+      text-align: center;
+    }
+    .mobile-menu .menu-links a:hover {
+      background: rgba(212, 163, 179, 0.08);
+      color: #f5edea;
+    }
+    .mobile-menu .menu-links .logout-link {
+      margin-top: 12px;
+      border-top: 1px solid rgba(212, 163, 179, 0.06);
+      padding-top: 16px;
+      color: #7a5f5a;
+    }
+    .mobile-menu .menu-links .logout-link:hover {
+      color: #D4A3B3;
+      background: transparent;
+    }
+
+    /* ===== MENU OVERLAY ===== */
     .menu-overlay {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 98;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 998;
     }
     .menu-overlay.active { display: block; }
 
@@ -395,6 +406,77 @@
       background: #D4A3B3;
       color: #2C0714;
       border-color: #D4A3B3;
+    }
+
+    /* ===== INFO ===== */
+    .credits-info {
+      background: rgba(31, 5, 16, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 12px auto 8px;
+      max-width: 700px;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      text-align: center;
+    }
+    .credits-info .heart {
+      color: #D4A3B3;
+      font-size: 1.1rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .credits-info .label {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #d4c5c0;
+      font-weight: 300;
+    }
+    .credits-info .label strong {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+    .credits-info .highlight {
+      color: #D4A3B3;
+      font-weight: 500;
+    }
+
+    /* ===== SKELETON ===== */
+    .skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a0510 25%, #2C0714 50%, #1a0510 75%);
+      background-size: 400% 400%;
+      animation: skeletonLoading 1.5s ease-in-out infinite;
+      z-index: 1;
+      border-radius: 20px;
+    }
+    @keyframes skeletonLoading {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .skeleton .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #D4A3B3;
+      font-size: 1.5rem;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     /* ===== GALERIA ===== */
@@ -890,33 +972,6 @@
       text-align: center;
       z-index: 10;
     }
-    .modal-price {
-      color: #D4A3B3;
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-top: 8px;
-      text-align: center;
-      z-index: 10;
-    }
-    .modal-price strong {
-      font-size: 1.2rem;
-    }
-    .modal-price .media-type {
-      display: inline-block;
-      padding: 2px 12px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      margin-left: 8px;
-    }
-    .modal-price .media-type.photo {
-      background: rgba(212, 163, 179, 0.15);
-      color: #D4A3B3;
-    }
-    .modal-price .media-type.video {
-      background: rgba(46, 125, 50, 0.15);
-      color: #4CAF50;
-    }
 
     /* POP-UP CRÉDITOS = 0 */
     .modal-buy-credits {
@@ -1086,35 +1141,53 @@
     @media (max-width: 768px) {
       body { padding-top: 70px; }
       .container { padding: 0 20px; }
+      .hamburger { display: flex; }
+      .floating-status { display: none; }
       .navbar { padding: 10px 0; }
       .navbar .logo img { height: 38px; max-width: 120px; }
       .navbar.scrolled .logo img { height: 34px; }
-      .hamburger { display: flex; }
       .mobile-menu { display: block; }
-      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
-      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
-      
-      .floating-status { display: none; }
       .progress-bar-container { top: 118px; }
       .filter-bar { top: 160px; }
-      
+      .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
+      .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
+      .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
       .watermark-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
       .watermark-item { min-height: 220px; }
       .watermark-item .watermark-logo { width: 70px; }
-      
+      .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
+      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
+      .watermark-item .type-badge { font-size: 0.5rem; padding: 2px 10px; top: 8px; left: 8px; }
+      .watermark-item .play-icon { font-size: 2rem; }
+      .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
+      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
+      .nav-info .user span { display: inline; }
+      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
       .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
       .modal-nav.prev { left: -10px; }
       .modal-nav.next { right: -10px; }
       .modal-content .modal-image { max-height: 60vh; }
       .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
-      .modal-btn-download { padding: 10px 20px; font-size: 0.8rem; min-width: 150px; }
+      .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
+      .modal-btn-download { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
+      .modal-progress { width: 80%; bottom: 80px; }
+      .filter-bar { padding: 8px 0; }
+      .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
+      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
     }
     @media (max-width: 480px) {
       body { padding-top: 60px; }
       .watermark-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .watermark-item { min-height: 180px; }
       .watermark-item .watermark-logo { width: 50px; }
+      .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
+      .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
+      .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
+      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
+      .watermark-item .type-badge { font-size: 0.45rem; padding: 2px 8px; top: 6px; left: 6px; }
+      .watermark-item .play-icon { font-size: 1.5rem; }
       .navbar .logo img { height: 32px; max-width: 100px; }
       .navbar.scrolled .logo img { height: 28px; }
       .progress-bar-container { top: 98px; }
@@ -1125,26 +1198,22 @@
       .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
       .modal-nav.prev { left: -4px; }
       .modal-nav.next { right: -4px; }
-      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
+      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
+      .filter-bar { padding: 6px 0; }
+      .filter-btn { padding: 4px 12px; font-size: 0.65rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR FLUTUANTE ===== -->
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar" id="mainNavbar">
   <div class="container navbar-content">
-    <a href="index.html" class="logo">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" 
-           alt="Studio Rassi · Photo & Video" 
-           width="170" 
-           height="50"
-           loading="lazy">
+    <a href="https://studiorassi.github.io/home/index.html" class="logo">
+      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" width="150" height="45" loading="lazy">
     </a>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
     </button>
     <div class="nav-info">
       <span class="user">
@@ -1161,16 +1230,42 @@
   </div>
 </nav>
 
-<!-- ===== MOBILE MENU OVERLAY ===== -->
+<!-- ===== MENU MOBILE ===== -->
 <div class="menu-overlay" id="menuOverlay"></div>
-
-<!-- ===== MOBILE MENU ===== -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#" onclick="scrollToTop(); closeMenu(); return false;">Galeria</a>
-  <a href="#upsellSection" onclick="closeMenu()">Comprar Créditos</a>
-  <button class="btn-minhas-fotos-mobile" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
-    <i class="fas fa-sign-out-alt"></i> Sair
-  </button>
+  <div class="menu-header">
+    <div class="user-info">
+      <i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Carregando...</strong>
+    </div>
+    <button class="close-menu" onclick="closeMenu()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="menu-status">
+    <div class="status-row">
+      <span class="label"><i class="fas fa-coins"></i> Créditos</span>
+      <span class="value" id="mobileCreditsDisplay">0</span>
+    </div>
+    <div class="status-row">
+      <span class="label"><i class="fas fa-images"></i> Baixados</span>
+      <span class="value" id="mobileDownloadedDisplay">0 / 0</span>
+    </div>
+    <div class="status-row">
+      <span class="label"><i class="far fa-clock"></i> Expira em</span>
+      <span class="value" id="mobileTimerDisplay">72:00:00</span>
+    </div>
+  </div>
+
+  <div class="menu-links">
+    <a href="#" onclick="scrollToTop(); closeMenu(); return false;">
+      <i class="fas fa-arrow-up"></i> Ver Galeria
+    </a>
+    <a href="#upsellSection" onclick="closeMenu();">
+      <i class="fas fa-plus-circle"></i> Comprar Créditos
+    </a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
+  </div>
 </div>
 
 <!-- ===== STATUS FLUTUANTE ===== -->
@@ -1208,10 +1303,10 @@
 
 <!-- ===== INFO ===== -->
 <div class="container">
-  <div class="credits-info" style="background: rgba(31, 5, 16, 0.6); border-radius: 16px; padding: 16px 20px; margin: 12px auto 8px; max-width: 700px; border: 1px solid rgba(212, 163, 179, 0.06); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; text-align: center;">
-    <span class="heart" style="color: #D4A3B3; font-size: 1.1rem; animation: pulse 1.5s ease-in-out infinite;">💖</span>
-    <span class="label" style="font-family: 'Work Sans', sans-serif; font-size: 0.8rem; color: #d4c5c0; font-weight: 300;">
-      <strong style="color: #D4A3B3; font-weight: 600;">Como funciona:</strong> Cada <span style="color: #D4A3B3; font-weight: 500;">1 crédito</span> equivale a <span style="color: #D4A3B3; font-weight: 500;">1 download</span> de foto em <span style="color: #D4A3B3; font-weight: 500;">alta definição</span> e <strong style="color: #D4A3B3; font-weight: 600;">sem marca d'água</strong>.
+  <div class="credits-info">
+    <span class="heart">💖</span>
+    <span class="label">
+      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> equivale a <span class="highlight">1 download</span> de foto em <span class="highlight">alta definição</span> e <strong style="color: #D4A3B3;">sem marca d'água</strong>.
     </span>
   </div>
 </div>
@@ -1373,6 +1468,7 @@
       document.getElementById('clienteNome').textContent = userName;
       document.getElementById('clienteNomeGaleria').textContent = userName;
       document.getElementById('footerNome').textContent = userName;
+      document.getElementById('mobileUserName').textContent = userName;
       
       initSite();
 
@@ -1822,6 +1918,7 @@
   function updateCreditsDisplay() {
     document.getElementById('creditsDisplay').textContent = credits;
     document.getElementById('modalCreditsCount').textContent = credits;
+    document.getElementById('mobileCreditsDisplay').textContent = credits;
     updateModalButtons();
     updateMenuCtaVisibility();
   }
@@ -1873,7 +1970,8 @@
     const count = downloadedItems.length;
     const displayElements = [
       document.getElementById('desktopDownloadedDisplay'),
-      document.getElementById('downloadedCountDisplay')
+      document.getElementById('downloadedCountDisplay'),
+      document.getElementById('mobileDownloadedDisplay')
     ];
     displayElements.forEach(el => {
       if (el) el.textContent = `${count} / ${totalItems}`;
@@ -1893,21 +1991,24 @@
   let timerSeconds = 72 * 3600;
   function updateTimer() {
     if (timerSeconds <= 0) {
-      document.getElementById('timerDisplay').textContent = '00:00:00';
+      const timerText = '00:00:00';
+      document.getElementById('timerDisplay').textContent = timerText;
+      document.getElementById('mobileTimerDisplay').textContent = timerText;
       return;
     }
     timerSeconds--;
     const hrs = Math.floor(timerSeconds / 3600);
     const mins = Math.floor((timerSeconds % 3600) / 60);
     const secs = timerSeconds % 60;
-    document.getElementById('timerDisplay').textContent = 
-      `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const timerText = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    document.getElementById('timerDisplay').textContent = timerText;
+    document.getElementById('mobileTimerDisplay').textContent = timerText;
   }
 
   // ============================================================
-  // MENU MOBILE (CORRIGIDO)
+  // MENU MOBILE (PADRONIZADO COM AVULSO.HTML)
   // ============================================================
-  const hamburger = document.getElementById('hamburger');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   const menuOverlay = document.getElementById('menuOverlay');
   const statusBar = document.getElementById('statusBar');
@@ -1915,17 +2016,13 @@
   function toggleMenu() {
     const isOpen = mobileMenu.classList.contains('open');
     
-    // Alterna o menu
-    hamburger.classList.toggle('active');
+    hamburgerBtn.classList.toggle('active');
     mobileMenu.classList.toggle('open');
     menuOverlay.classList.toggle('active');
     
-    // 👇 CORREÇÃO: Esconde/mostra o menu flutuante
     if (!isOpen) {
-      // Menu abrindo → esconde o status bar
       statusBar.classList.add('hidden');
     } else {
-      // Menu fechando → mostra o status bar
       statusBar.classList.remove('hidden');
     }
     
@@ -1933,16 +2030,16 @@
   }
 
   function closeMenu() {
-    hamburger.classList.remove('active');
+    hamburgerBtn.classList.remove('active');
     mobileMenu.classList.remove('open');
     menuOverlay.classList.remove('active');
-    statusBar.classList.remove('hidden'); // 👈 Mostra o status bar ao fechar
+    statusBar.classList.remove('hidden');
     document.body.style.overflow = '';
   }
 
-  hamburger.addEventListener('click', toggleMenu);
+  hamburgerBtn.addEventListener('click', toggleMenu);
   menuOverlay.addEventListener('click', closeMenu);
-  document.querySelectorAll('.mobile-menu a, .mobile-menu button').forEach(el => {
+  document.querySelectorAll('.mobile-menu .menu-links a').forEach(el => {
     el.addEventListener('click', closeMenu);
   });
 
@@ -1955,6 +2052,19 @@
 
   function checkMobile() {}
   function updateMenuCtaVisibility() {}
+
+  // ============================================================
+  // NAVBAR SCROLL
+  // ============================================================
+  window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('mainNavbar');
+    if (!navbar) return;
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
 
   // ============================================================
   // INICIALIZAÇÃO
