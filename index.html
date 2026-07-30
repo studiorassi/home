@@ -148,6 +148,34 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
       box-shadow: 0 8px 25px rgba(212, 163, 179, 0.2);
     }
 
+    /* ===== BOTÃO WHATSAPP ===== */
+    .btn-whatsapp-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: #25D366;
+      color: #ffffff;
+      border-radius: 50px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+    .btn-whatsapp-header:hover {
+      background: #1da851;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+      color: #ffffff;
+    }
+    .btn-whatsapp-header i {
+      font-size: 1.1rem;
+    }
+
     /* ===== NAVBAR FLUTUANTE ===== */
     .navbar {
       position: fixed;
@@ -323,6 +351,30 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
     .mobile-menu .btn-minhas-fotos-mobile:hover {
       background: #D4A3B3;
       color: #2C0714;
+    }
+
+    /* ===== BOTÃO WHATSAPP NO MENU MOBILE ===== */
+    .mobile-menu .btn-whatsapp-mobile {
+      margin-top: 8px;
+      background: #25D366;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mobile-menu .btn-whatsapp-mobile:hover {
+      background: #1da851;
+      transform: scale(1.02);
     }
 
     /* ===== OVERLAY DO MENU ===== */
@@ -1392,6 +1444,18 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
         height: 34px;
       }
       
+      /* ===== BOTÃO WHATSAPP NO HEADER MOBILE ===== */
+      .btn-whatsapp-header span {
+        display: none;
+      }
+      .btn-whatsapp-header {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+      }
+      .btn-whatsapp-header i {
+        font-size: 1rem;
+      }
+      
       /* ===== HERO MOBILE ===== */
       .hero {
         height: 100vh;
@@ -1666,6 +1730,14 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
         height: 28px;
       }
       
+      /* ===== BOTÃO WHATSAPP MOBILE PEQUENO ===== */
+      .btn-whatsapp-header {
+        padding: 6px 10px;
+      }
+      .btn-whatsapp-header i {
+        font-size: 0.9rem;
+      }
+      
       /* ===== HERO MOBILE PEQUENO ===== */
       .hero {
         height: 100vh;
@@ -1804,6 +1876,15 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
       <button class="btn-minhas-fotos" onclick="window.location.href='login.html'">
         <i class="fas fa-images"></i> Minhas Fotos
       </button>
+      
+      <!-- 🔥 BOTÃO WHATSAPP NO HEADER DESKTOP -->
+      <a href="https://wa.me/5511969761002?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20conhecer%20os%20pacotes%20promocionais" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="btn-whatsapp-header">
+        <i class="fab fa-whatsapp"></i>
+        <span>Pacotes Promocionais</span>
+      </a>
     </div>
     
     <!-- Menu Hamburguer (Mobile) -->
@@ -1825,6 +1906,11 @@ src="https://www.facebook.com/tr?id=2266592067527225&ev=PageView&noscript=1"
   <a href="#instagram" onclick="closeMenu()">Portfólio</a>
   <button class="btn-minhas-fotos-mobile" onclick="window.location.href='login.html'">
     <i class="fas fa-images"></i> Minhas Fotos
+  </button>
+  
+  <!-- 🔥 BOTÃO WHATSAPP NO MENU MOBILE -->
+  <button class="btn-whatsapp-mobile" onclick="window.open('https://wa.me/5511969761002?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20conhecer%20os%20pacotes%20promocionais', '_blank')">
+    <i class="fab fa-whatsapp"></i> Pacotes Promocionais
   </button>
 </div>
 
