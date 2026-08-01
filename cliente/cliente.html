@@ -1430,14 +1430,67 @@
   let credits = 0;
   let totalItems = 0;
   let allMedia = [];
-  let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
+  let downloadedItems = [];
   let currentUser = null;
-  
-  // 🔥 CONTROLE DE RESET - Para mostrar o alerta apenas uma vez
-  let resetAlertShown = false;
+  let checkResetInterval = null;
 
   // ============================================================
-  // 🔥 VERIFICAR RESET DE DOWNLOADS (COM ALERTA ÚNICO)
+  // CARREGAR DOWNLOADS DO USUÁRIO DO BACKEND
+  // ============================================================
+  async function loadDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        downloadedItems = data.downloads || [];
+        // Atualiza localStorage como cache
+        const username = localStorage.getItem('userName') || 'user';
+        localStorage.setItem(`downloaded_${username}`, JSON.stringify(downloadedItems));
+        console.log(`📥 Downloads carregados: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao carregar downloads:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // SALVAR DOWNLOADS NO BACKEND
+  // ============================================================
+  async function saveDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ downloads: downloadedItems })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log(`✅ Downloads salvos: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao salvar downloads:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // VERIFICAR RESET DE DOWNLOADS (APENAS QUANDO ADMIN DISPARAR)
   // ============================================================
   async function checkReset() {
     const username = localStorage.getItem('userName');
@@ -1448,22 +1501,18 @@
       const data = await response.json();
       
       if (data.success && data.hasReset) {
-        console.log('🔄 Reset de downloads detectado!');
+        console.log('🔄 Reset de downloads detectado (comando do admin)!');
         
-        // Limpa o localStorage
-        const key = `downloaded_${username}`;
-        localStorage.removeItem(key);
+        // Limpa downloads
         downloadedItems = [];
-        
-        // 🔥 MOSTRA O ALERTA APENAS UMA VEZ
-        if (!resetAlertShown) {
-          resetAlertShown = true;
-          alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
-        }
+        await saveDownloadedItems();
         
         // Recarrega a galeria
         renderGallery();
         updateDownloadedDisplay();
+        
+        // Mostra notificação amigável (sem alerta automático)
+        showNotification('🔄 Seus downloads foram resetados pelo administrador.', 'info');
         
         return true;
       }
@@ -1474,7 +1523,15 @@
   }
 
   // ============================================================
-  // VERIFICA SESSÃO EXISTENTE (REDIRECIONA SE NÃO LOGADO)
+  // NOTIFICAÇÃO SIMPLES
+  // ============================================================
+  function showNotification(message, type = 'info') {
+    // Usa alert simples por enquanto, mas pode ser substituído por um toast
+    alert(message);
+  }
+
+  // ============================================================
+  // VERIFICA SESSÃO EXISTENTE
   // ============================================================
   async function checkSession() {
     const token = localStorage.getItem('authToken');
@@ -1510,7 +1567,10 @@
       document.getElementById('footerNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
       
-      // 🔥 VERIFICA RESET (COM ALERTA ÚNICO)
+      // Carrega downloads do usuário
+      await loadDownloadedItems();
+      
+      // Verifica reset (apenas se admin disparou)
       await checkReset();
       
       initSite();
@@ -1533,6 +1593,12 @@
     checkMobile();
     window.addEventListener('resize', checkMobile);
     await fetchUserCredits();
+    
+    // Verifica reset a cada 30 segundos (apenas se admin disparar)
+    if (checkResetInterval) clearInterval(checkResetInterval);
+    checkResetInterval = setInterval(async () => {
+      await checkReset();
+    }, 30000);
   }
 
   // ============================================================
@@ -1694,7 +1760,7 @@
           <div class="spinner"><i class="fas fa-spinner"></i></div>
         </div>
         <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
-          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADO' : '<i class="fas fa-lock"></i>'}
+          ${isDownloaded ? '<i class="fas fa-check-circle"></i> JÁ BAIXADO' : '<i class="fas fa-lock"></i>'}
         </div>
         <div class="type-badge ${typeClass}">${typeLabel}</div>
         <div class="price-tag">1 crédito</div>
@@ -1947,7 +2013,8 @@
       credits--;
       if (!downloadedItems.includes(item.id)) {
         downloadedItems.push(item.id);
-        localStorage.setItem('downloaded_paulagabriel', JSON.stringify(downloadedItems));
+        // Salva no backend
+        await saveDownloadedItems();
       }
 
       updateCreditsDisplay();
@@ -1974,7 +2041,7 @@
         const badge = item.querySelector('.badge-status');
         if (badge) {
           badge.className = 'badge-status downloaded';
-          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADO';
+          badge.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
         }
       }
     });
@@ -2030,11 +2097,12 @@
   }
 
   // ============================================================
-  // FUNÇÃO PARA SINCRONIZAR CRÉDITOS (SEM ALERTA)
+  // FUNÇÃO PARA SINCRONIZAR CRÉDITOS
   // ============================================================
   function fetchCreditsFromServer() {
     fetchUserCredits();
-    console.log('🔄 Créditos sincronizados com o servidor');
+    loadDownloadedItems(); // Também sincroniza downloads
+    console.log('🔄 Créditos e downloads sincronizados com o servidor');
   }
 
   function updateDownloadedDisplay() {
