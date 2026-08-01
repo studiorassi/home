@@ -1432,6 +1432,46 @@
   let allMedia = [];
   let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
   let currentUser = null;
+  
+  // 🔥 CONTROLE DE RESET - Para mostrar o alerta apenas uma vez
+  let resetAlertShown = false;
+
+  // ============================================================
+  // 🔥 VERIFICAR RESET DE DOWNLOADS (COM ALERTA ÚNICO)
+  // ============================================================
+  async function checkReset() {
+    const username = localStorage.getItem('userName');
+    if (!username) return false;
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
+      const data = await response.json();
+      
+      if (data.success && data.hasReset) {
+        console.log('🔄 Reset de downloads detectado!');
+        
+        // Limpa o localStorage
+        const key = `downloaded_${username}`;
+        localStorage.removeItem(key);
+        downloadedItems = [];
+        
+        // 🔥 MOSTRA O ALERTA APENAS UMA VEZ
+        if (!resetAlertShown) {
+          resetAlertShown = true;
+          alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
+        }
+        
+        // Recarrega a galeria
+        renderGallery();
+        updateDownloadedDisplay();
+        
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao verificar reset:', error);
+    }
+    return false;
+  }
 
   // ============================================================
   // VERIFICA SESSÃO EXISTENTE (REDIRECIONA SE NÃO LOGADO)
@@ -1470,8 +1510,8 @@
       document.getElementById('footerNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
       
-      // 🔥 CHECA O RESET SEM MOSTRAR ALERTA (SILENCIOSO)
-      await checkResetSilent();
+      // 🔥 VERIFICA RESET (COM ALERTA ÚNICO)
+      await checkReset();
       
       initSite();
 
@@ -1480,44 +1520,6 @@
       localStorage.removeItem('authToken');
       window.location.href = 'https://studiorassi.github.io/home/login.html';
     }
-  }
-
-  // ============================================================
-  // 🔥 VERIFICA RESET SEM ALERTA (SILENCIOSO)
-  // ============================================================
-  async function checkResetSilent() {
-    const username = localStorage.getItem('userName');
-    if (!username) return false;
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
-      const data = await response.json();
-      
-      if (data.success && data.hasReset) {
-        console.log('🔄 Reset de downloads detectado! Limpando localStorage...');
-        const key = `downloaded_${username}`;
-        localStorage.removeItem(key);
-        downloadedItems = [];
-        renderGallery();
-        updateDownloadedDisplay();
-        // 🔥 ALERT REMOVIDO - Não mostra mais notificação automática
-        // O reset só será notificado se o admin clicar no botão específico
-        return true;
-      }
-    } catch (error) {
-      console.warn('⚠️ Erro ao verificar reset:', error);
-    }
-    return false;
-  }
-
-  // ============================================================
-  // 🔥 FUNÇÃO PARA RESET MANUAL (CHAMADA PELO ADMIN)
-  // ============================================================
-  function triggerResetNotification() {
-    // Esta função pode ser chamada pelo admin para mostrar o alerta
-    alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
-    // Recarrega a página para atualizar a galeria
-    window.location.reload();
   }
 
   // ============================================================
@@ -2027,7 +2029,9 @@
     }
   }
 
-  // 🔥 FUNÇÃO CORRIGIDA - SEM ALERTA AO RECARREGAR
+  // ============================================================
+  // FUNÇÃO PARA SINCRONIZAR CRÉDITOS (SEM ALERTA)
+  // ============================================================
   function fetchCreditsFromServer() {
     fetchUserCredits();
     console.log('🔄 Créditos sincronizados com o servidor');
@@ -2155,7 +2159,6 @@
   window.toggleMenu = toggleMenu;
   window.onMediaLoad = onMediaLoad;
   window.handleImageError = handleImageError;
-  window.triggerResetNotification = triggerResetNotification;
 </script>
 
 </body>
