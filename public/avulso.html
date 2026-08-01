@@ -1221,15 +1221,15 @@
 <!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
-// CONFIGURAÇÕES
-// ============================================================
-const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-const PHOTO_PRICE = 15.00;
-const VIDEO_PRICE = 40.00;
+  // CONFIGURAÇÕES
+  // ============================================================
+  const API_BASE_URL = 'https://api-studiorassi.onrender.com';
+  const PHOTO_PRICE = 15.00;
+  const VIDEO_PRICE = 40.00;
 
-// 🔥 LINKS SEPARADOS POR TIPO
-const NUBANK_URL_PHOTO = 'https://checkout.nubank.com.br/fnFrABdbi9819q1o'; // Link para Fotos (R$ 15,00)
-const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // Link para Vídeos (R$ 40,00)
+  // 🔥 LINKS DO MERCADO PAGO
+  const MP_URL_PHOTO = 'https://mpago.la/1Poyp16';   // R$ 15,00 - Foto avulsa
+  const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';   // R$ 40,00 - Vídeo avulso
 
   // ============================================================
   // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS) - TOTALMENTE DINÂMICO
@@ -1239,6 +1239,7 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
 
   // ============================================================
   // CARREGAR LISTA DE ARQUIVOS DO S3 (FOTOS E VÍDEOS)
+  // 🔥 CORRIGIDO: AGORA ACEITA QUALQUER NOME DE ARQUIVO
   // ============================================================
   async function loadMediaFromS3() {
     try {
@@ -1253,21 +1254,24 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
       const fotosData = await fotosResponse.json();
       console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
       
+      // 🔥 CORRIGIDO: ACEITA QUALQUER ARQUIVO .jpg OU .jpeg (SEM RESTRIÇÃO DE NOME)
       const photoFiles = fotosData.files.filter(file => 
-        file.filename.endsWith('.jpg') && 
-        file.filename.startsWith('ensaio_')
+        file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
       );
       
       const fotos = photoFiles.map((file, index) => {
         const filename = file.filename;
-        const numMatch = filename.match(/ensaio_(\d+)\.jpg/);
+        // Tenta extrair número do nome do arquivo (se houver)
+        const numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        // Remove extensão para usar como título
+        const title = filename.replace(/\.[^.]+$/, '');
         return {
           id: `foto_${num}`,
           type: 'foto',
           key: `fotos/${filename}`,
           price: PHOTO_PRICE,
-          title: `Foto ${parseInt(num)}`,
+          title: title,
           thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
           mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
           isVideo: false
@@ -1285,9 +1289,9 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
       const videosData = await videosResponse.json();
       console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
       
+      // 🔥 CORRIGIDO: ACEITA QUALQUER ARQUIVO .mp4 (SEM RESTRIÇÃO DE NOME)
       const videoFiles = videosData.files.filter(file => 
-        file.filename.endsWith('.mp4') && 
-        (file.filename.startsWith('video_') || file.filename.startsWith('videos_'))
+        file.filename.endsWith('.mp4')
       );
       
       // Cria placeholder SVG para vídeos
@@ -1307,17 +1311,13 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
       
       const videos = videoFiles.map((file, index) => {
         const filename = file.filename;
-        
-        // Extrai o número do arquivo
-        let numMatch = filename.match(/video_(\d+)\.mp4/);
-        if (!numMatch) {
-          numMatch = filename.match(/videos_(\d+)\.mp4/);
-        }
+        // Tenta extrair número do nome do arquivo
+        let numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        const title = `Vídeo ${parseInt(num)}`;
+        const title = filename.replace(/\.[^.]+$/, '');
         
         // 🔥 USA A ROTA DE THUMBNAIL DO BACKEND
-        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/${filename}`;
+        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
         
         return {
           id: `video_${num}`,
@@ -1460,12 +1460,10 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
   function handleImageError(index, fallbackSrc) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
     if (img) {
-      // Tenta usar o fallback se existir
       if (fallbackSrc) {
         img.src = fallbackSrc;
-        img.onerror = null; // Remove o handler para evitar loop
+        img.onerror = null;
       } else {
-        // Se não tiver fallback, mostra "Indisponível"
         img.style.display = 'none';
         const container = img.parentElement;
         const unavailableDiv = document.createElement('div');
@@ -1490,8 +1488,6 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
         container.appendChild(unavailableDiv);
       }
     }
-    
-    // Atualiza o contador de imagens carregadas
     onMediaLoad(index);
   }
 
@@ -1525,10 +1521,7 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
       const typeLabel = item.isVideo ? '🎬 VÍDEO' : '📷 FOTO';
       const typeClass = item.isVideo ? 'video' : 'photo';
       
-      // 🔥 CORRIGIDO: Usa a thumbnail ou fallback
       let imgSrc = item.thumbnail;
-      
-      // Se for vídeo, tenta usar a thumbnail do backend
       if (item.isVideo) {
         imgSrc = item.thumbnail || item.fallbackThumbnail;
       }
@@ -1723,8 +1716,8 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
     }
   }
 
-    // ============================================================
-  // COMPRA (REDIRECIONA PARA O NUBANK COM LINK CORRETO)
+  // ============================================================
+  // 🔥 COMPRA - REDIRECIONA PARA MERCADO PAGO
   // ============================================================
   function buyMedia() {
     const item = allMedia[currentModalIndex];
@@ -1738,13 +1731,13 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
-    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO
-    const paymentUrl = item.isVideo ? NUBANK_URL_VIDEO : NUBANK_URL_PHOTO;
+    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO (MERCADO PAGO)
+    const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
     
-    const confirmMsg = `🛒 Você está comprando ${typeName} ${currentModalIndex + 1} de ${totalItems} por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Nubank).`;
+    const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).`;
 
     if (confirm(confirmMsg)) {
-      // Abre o link correto
+      // Abre o link do Mercado Pago
       window.open(paymentUrl, '_blank');
 
       // Feedback visual
@@ -1759,31 +1752,34 @@ const NUBANK_URL_VIDEO = 'https://checkout.nubank.com.br/2GesI002Ds819q1o'; // L
         key: item.key,
         itemNumber: currentModalIndex + 1,
         timestamp: Date.now(),
-        price: item.price
+        price: item.price,
+        title: item.title
       };
       localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
 
-      // Restaura após 8 segundos
+      // Restaura após 10 segundos
       setTimeout(() => {
         modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · ${priceDisplay}`;
         modalBuyBtn.style.background = '#D4A3B3';
         modalBuyBtn.disabled = false;
-      }, 8000);
+      }, 10000);
 
-      console.log(`📊 Intenção de compra: ${item.type} ${currentModalIndex + 1} - ${item.key} - ${priceDisplay}`);
+      console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
+      console.log(`🔗 Link: ${paymentUrl}`);
     }
   }
 
   // ============================================================
-  // VERIFICAÇÃO DE PAGAMENTO PENDENTE
+  // 🔥 VERIFICAÇÃO DE PAGAMENTO PENDENTE (MERCADO PAGO)
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingMedia');
     if (pending) {
       try {
         const data = JSON.parse(pending);
-        if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-          if (confirm(`✅ Pagamento do ${data.type} ${data.itemNumber} confirmado?\n\nClique em OK para liberar o download.`)) {
+        // Aguarda 2 minutos para o pagamento ser processado
+        if (Date.now() - data.timestamp < 2 * 60 * 1000) {
+          if (confirm(`✅ Pagamento do ${data.type} "${data.title}" confirmado?\n\nClique em OK para liberar o download.`)) {
             if (!downloadedItems.includes(data.id)) {
               downloadedItems.push(data.id);
               localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
