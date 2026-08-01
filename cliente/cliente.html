@@ -1406,7 +1406,7 @@
           <span class="pkg-price">R$ 160</span>
         </button>
       </div>
-      <button class="btn-sync-action" onclick="fetchCreditsFromServer(); alert('🔄 Verificando novos créditos...');">
+      <button class="btn-sync-action" onclick="fetchCreditsFromServer()">
         <i class="fas fa-sync-alt"></i> Já realizei o pagamento
       </button>
       <button class="buy-close" onclick="closeModal()">Continuar navegando</button>
@@ -2027,9 +2027,11 @@
     }
   }
 
+  // 🔥 FUNÇÃO CORRIGIDA - SEM ALERTA AO RECARREGAR
   function fetchCreditsFromServer() {
     fetchUserCredits();
-    alert('🔄 Créditos atualizados!');
+    // 🔥 ALERT REMOVIDO - Não mostra mais notificação ao recarregar
+    console.log('🔄 Créditos sincronizados com o servidor');
   }
 
   function updateDownloadedDisplay() {
