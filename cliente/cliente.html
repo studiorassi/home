@@ -1432,34 +1432,6 @@
   let allMedia = [];
   let downloadedItems = JSON.parse(localStorage.getItem('downloaded_paulagabriel') || '[]');
   let currentUser = null;
-  let resetChecked = false;
-
-  // ============================================================
-  // 🔥 VERIFICAR SE HOUVE RESET DE DOWNLOADS
-  // ============================================================
-  async function checkReset() {
-    const username = localStorage.getItem('userName');
-    if (!username) return false;
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
-      const data = await response.json();
-      
-      if (data.success && data.hasReset) {
-        console.log('🔄 Reset de downloads detectado! Limpando localStorage...');
-        const key = `downloaded_${username}`;
-        localStorage.removeItem(key);
-        downloadedItems = [];
-        renderGallery();
-        updateDownloadedDisplay();
-        alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
-        return true;
-      }
-    } catch (error) {
-      console.warn('⚠️ Erro ao verificar reset:', error);
-    }
-    return false;
-  }
 
   // ============================================================
   // VERIFICA SESSÃO EXISTENTE (REDIRECIONA SE NÃO LOGADO)
@@ -1498,7 +1470,8 @@
       document.getElementById('footerNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
       
-      await checkReset();
+      // 🔥 CHECA O RESET SEM MOSTRAR ALERTA (SILENCIOSO)
+      await checkResetSilent();
       
       initSite();
 
@@ -1507,6 +1480,44 @@
       localStorage.removeItem('authToken');
       window.location.href = 'https://studiorassi.github.io/home/login.html';
     }
+  }
+
+  // ============================================================
+  // 🔥 VERIFICA RESET SEM ALERTA (SILENCIOSO)
+  // ============================================================
+  async function checkResetSilent() {
+    const username = localStorage.getItem('userName');
+    if (!username) return false;
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
+      const data = await response.json();
+      
+      if (data.success && data.hasReset) {
+        console.log('🔄 Reset de downloads detectado! Limpando localStorage...');
+        const key = `downloaded_${username}`;
+        localStorage.removeItem(key);
+        downloadedItems = [];
+        renderGallery();
+        updateDownloadedDisplay();
+        // 🔥 ALERT REMOVIDO - Não mostra mais notificação automática
+        // O reset só será notificado se o admin clicar no botão específico
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao verificar reset:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // 🔥 FUNÇÃO PARA RESET MANUAL (CHAMADA PELO ADMIN)
+  // ============================================================
+  function triggerResetNotification() {
+    // Esta função pode ser chamada pelo admin para mostrar o alerta
+    alert('🔄 Seus downloads foram resetados pelo administrador. Você pode baixar novamente todos os itens!');
+    // Recarrega a página para atualizar a galeria
+    window.location.reload();
   }
 
   // ============================================================
@@ -1862,7 +1873,7 @@
   }
 
   // ============================================================
-  // 🔥 DOWNLOAD UNIVERSAL CORRIGIDO (FOTOS E VÍDEOS)
+  // DOWNLOAD UNIVERSAL
   // ============================================================
   async function downloadFromModal() {
     const item = allMedia[currentModalIndex];
@@ -1883,11 +1894,9 @@
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
 
     try {
-      // 1. Obtém a URL do arquivo
       const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
       const downloadUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
 
-      // 2. Debita o crédito no backend
       const token = localStorage.getItem('authToken');
       if (token) {
         await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
@@ -1901,20 +1910,14 @@
         await fetchUserCredits();
       }
 
-      // 3. 🔥 DOWNLOAD UNIVERSAL - MESMO MÉTODO PARA TODOS
       const filename = item.key.split('/').pop();
       
-      // 🔥 Usa fetch + blob para TODOS os dispositivos
-      // Isso garante que o download seja feito sem abrir nova aba
       try {
         const response = await fetch(downloadUrl);
         const blob = await response.blob();
-        
-        // Determina o tipo MIME correto
         let mimeType = item.isVideo ? 'video/mp4' : 'image/jpeg';
         const blobWithType = new Blob([blob], { type: mimeType });
         
-        // Cria um link para download
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blobWithType);
         link.download = filename;
@@ -1922,7 +1925,6 @@
         link.click();
         document.body.removeChild(link);
         
-        // Libera memória após 5 segundos
         setTimeout(() => {
           URL.revokeObjectURL(link.href);
         }, 5000);
@@ -1931,7 +1933,6 @@
         
       } catch (blobError) {
         console.warn('⚠️ Fallback para método alternativo:', blobError);
-        // Fallback: método tradicional
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = filename;
@@ -1941,7 +1942,6 @@
         document.body.removeChild(link);
       }
 
-      // 4. Atualiza estado local
       credits--;
       if (!downloadedItems.includes(item.id)) {
         downloadedItems.push(item.id);
@@ -2030,7 +2030,6 @@
   // 🔥 FUNÇÃO CORRIGIDA - SEM ALERTA AO RECARREGAR
   function fetchCreditsFromServer() {
     fetchUserCredits();
-    // 🔥 ALERT REMOVIDO - Não mostra mais notificação ao recarregar
     console.log('🔄 Créditos sincronizados com o servidor');
   }
 
@@ -2156,6 +2155,7 @@
   window.toggleMenu = toggleMenu;
   window.onMediaLoad = onMediaLoad;
   window.handleImageError = handleImageError;
+  window.triggerResetNotification = triggerResetNotification;
 </script>
 
 </body>
