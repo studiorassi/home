@@ -1015,9 +1015,9 @@
       font-weight: 400;
     }
     .modal-buy-credits .quick-packages {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
       justify-content: center;
       width: 100%;
       margin-top: 4px;
@@ -1025,15 +1025,14 @@
     .modal-buy-credits .quick-pkg {
       background: #2C0714;
       color: #f5edea;
-      padding: 10px 14px;
+      padding: 12px 10px;
       border-radius: 16px;
       cursor: pointer;
       transition: 0.3s;
-      flex: 1;
-      min-width: 80px;
       text-align: center;
       border: none;
       font-family: 'Work Sans', sans-serif;
+      min-width: 80px;
     }
     .modal-buy-credits .quick-pkg:hover {
       background: #460c21;
@@ -1068,6 +1067,10 @@
     .modal-buy-credits .btn-sync-action:hover {
       background: rgba(44, 7, 20, 0.05);
       border-color: #2C0714;
+    }
+    .modal-buy-credits .btn-sync-action:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
     .modal-buy-credits .buy-close {
       background: transparent;
@@ -1176,6 +1179,9 @@
       .filter-bar { padding: 8px 0; }
       .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
       .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
+      .modal-buy-credits .quick-packages {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     @media (max-width: 480px) {
       body { padding-top: 60px; }
@@ -1201,6 +1207,10 @@
       .credits-info { font-size: 0.65rem; padding: 10px 12px; }
       .filter-bar { padding: 6px 0; }
       .filter-btn { padding: 4px 12px; font-size: 0.65rem; }
+      .modal-buy-credits .quick-packages {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
     }
   </style>
 </head>
@@ -1405,8 +1415,12 @@
           <span class="pkg-label">+20 Créditos</span>
           <span class="pkg-price">R$ 160</span>
         </button>
+        <button class="quick-pkg" onclick="buyCredits(50)">
+          <span class="pkg-label">+50 Créditos</span>
+          <span class="pkg-price">R$ 400</span>
+        </button>
       </div>
-      <button class="btn-sync-action" onclick="fetchCreditsFromServer()">
+      <button class="btn-sync-action" onclick="handlePaymentConfirmation()">
         <i class="fas fa-sync-alt"></i> Já realizei o pagamento
       </button>
       <button class="buy-close" onclick="closeModal()">Continuar navegando</button>
@@ -1432,7 +1446,6 @@
   let allMedia = [];
   let downloadedItems = [];
   let currentUser = null;
-  let checkResetInterval = null;
 
   // ============================================================
   // CARREGAR DOWNLOADS DO USUÁRIO DO BACKEND
@@ -1490,47 +1503,6 @@
   }
 
   // ============================================================
-  // VERIFICAR RESET DE DOWNLOADS (APENAS QUANDO ADMIN DISPARAR)
-  // ============================================================
-  async function checkReset() {
-    const username = localStorage.getItem('userName');
-    if (!username) return false;
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/check-reset/${encodeURIComponent(username)}`);
-      const data = await response.json();
-      
-      if (data.success && data.hasReset) {
-        console.log('🔄 Reset de downloads detectado (comando do admin)!');
-        
-        // Limpa downloads
-        downloadedItems = [];
-        await saveDownloadedItems();
-        
-        // Recarrega a galeria
-        renderGallery();
-        updateDownloadedDisplay();
-        
-        // Mostra notificação amigável (sem alerta automático)
-        showNotification('🔄 Seus downloads foram resetados pelo administrador.', 'info');
-        
-        return true;
-      }
-    } catch (error) {
-      console.warn('⚠️ Erro ao verificar reset:', error);
-    }
-    return false;
-  }
-
-  // ============================================================
-  // NOTIFICAÇÃO SIMPLES
-  // ============================================================
-  function showNotification(message, type = 'info') {
-    // Usa alert simples por enquanto, mas pode ser substituído por um toast
-    alert(message);
-  }
-
-  // ============================================================
   // VERIFICA SESSÃO EXISTENTE
   // ============================================================
   async function checkSession() {
@@ -1570,9 +1542,6 @@
       // Carrega downloads do usuário
       await loadDownloadedItems();
       
-      // Verifica reset (apenas se admin disparou)
-      await checkReset();
-      
       initSite();
 
     } catch (error) {
@@ -1593,12 +1562,6 @@
     checkMobile();
     window.addEventListener('resize', checkMobile);
     await fetchUserCredits();
-    
-    // Verifica reset a cada 30 segundos (apenas se admin disparar)
-    if (checkResetInterval) clearInterval(checkResetInterval);
-    checkResetInterval = setInterval(async () => {
-      await checkReset();
-    }, 30000);
   }
 
   // ============================================================
@@ -2080,6 +2043,9 @@
     }
   }
 
+  // ============================================================
+  // COMPRAR CRÉDITOS - CORRIGIDO COM 50 CRÉDITOS
+  // ============================================================
   function buyCredits(amount) {
     const paymentLinks = {
       5: 'https://mpago.la/2fSQufA',
@@ -2087,22 +2053,156 @@
       20: 'https://mpago.la/2ZCXNZq',
       50: 'https://mpago.la/1H3q1Rk'
     };
+    
     const targetUrl = paymentLinks[amount];
     if (targetUrl) {
-      localStorage.setItem('pending_paulagabriel', JSON.stringify({ amount, timestamp: Date.now() }));
+      // Salva o pedido pendente
+      const pendingOrder = {
+        amount: amount,
+        timestamp: Date.now(),
+        username: localStorage.getItem('userName') || 'cliente'
+      };
+      localStorage.setItem('pending_paulagabriel', JSON.stringify(pendingOrder));
+      
+      // Abre o link de pagamento em uma nova aba
       window.open(targetUrl, '_blank');
+      
+      // Mostra instruções para o usuário
+      alert(`💳 Pacote de ${amount} créditos selecionado!\n\nApós realizar o pagamento, clique em "Já realizei o pagamento" para atualizar seus créditos automaticamente.`);
     } else {
-      alert('⚠️ Pacote não encontrado.');
+      alert('⚠️ Pacote não encontrado. Entre em contato com o suporte.');
     }
   }
 
   // ============================================================
-  // FUNÇÃO PARA SINCRONIZAR CRÉDITOS
+  // CONFIRMAR PAGAMENTO - FUNÇÃO CORRIGIDA
+  // ============================================================
+  async function handlePaymentConfirmation() {
+    const btn = document.querySelector('.btn-sync-action');
+    const originalText = btn.innerHTML;
+    
+    try {
+      // Desabilita o botão e mostra loading
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando pagamento...';
+      
+      // Busca o pedido pendente
+      const pendingData = localStorage.getItem('pending_paulagabriel');
+      let pendingOrder = null;
+      
+      if (pendingData) {
+        try {
+          pendingOrder = JSON.parse(pendingData);
+        } catch (e) {
+          console.warn('⚠️ Dados pendentes inválidos:', e);
+        }
+      }
+      
+      // Verifica se há um pedido pendente
+      if (!pendingOrder) {
+        alert('ℹ️ Nenhum pagamento pendente encontrado. Por favor, faça um novo pedido.');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      // Verifica se o pedido é recente (menos de 24 horas)
+      const timeElapsed = Date.now() - pendingOrder.timestamp;
+      const hoursElapsed = timeElapsed / (1000 * 60 * 60);
+      
+      if (hoursElapsed > 24) {
+        alert('⏰ Este pedido expirou. Por favor, faça um novo pedido.');
+        localStorage.removeItem('pending_paulagabriel');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      // Busca os créditos atualizados do servidor
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        alert('❌ Sessão expirada. Faça login novamente.');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      // Tenta buscar os créditos atualizados
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        const oldCredits = credits;
+        credits = data.credits;
+        
+        // Verifica se os créditos foram atualizados
+        if (credits > oldCredits) {
+          // Sucesso! Créditos adicionados
+          localStorage.removeItem('pending_paulagabriel');
+          updateCreditsDisplay();
+          updateModalButtons(false);
+          
+          // Fecha o popup de compra se estiver aberto
+          document.getElementById('modalBuyCredits').classList.remove('show');
+          
+          // Mostra mensagem de sucesso
+          alert(`✅ Pagamento confirmado! ${credits - oldCredits} créditos adicionados com sucesso.\n\nSaldo atual: ${credits} créditos`);
+          
+          // Recarrega a página para atualizar tudo
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          
+          btn.innerHTML = '✅ Pagamento confirmado!';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }, 3000);
+          
+          return;
+        } else {
+          // Créditos não mudaram - pode ser que o pagamento ainda não foi processado
+          const confirmar = confirm(
+            `ℹ️ Seus créditos atuais: ${credits}\n\n` +
+            `O pagamento pode levar alguns minutos para ser processado.\n\n` +
+            `Deseja tentar verificar novamente?`
+          );
+          
+          if (confirmar) {
+            // Tenta novamente após 5 segundos
+            setTimeout(() => {
+              handlePaymentConfirmation();
+            }, 5000);
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+          return;
+        }
+      } else {
+        alert('❌ Erro ao verificar créditos: ' + (data.message || 'Tente novamente.'));
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao confirmar pagamento:', error);
+      alert('❌ Erro ao verificar pagamento. Por favor, tente novamente ou entre em contato com o suporte.');
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
+
+  // ============================================================
+  // FUNÇÃO PARA SINCRONIZAR CRÉDITOS (LEGADO)
   // ============================================================
   function fetchCreditsFromServer() {
-    fetchUserCredits();
-    loadDownloadedItems(); // Também sincroniza downloads
-    console.log('🔄 Créditos e downloads sincronizados com o servidor');
+    handlePaymentConfirmation();
   }
 
   function updateDownloadedDisplay() {
@@ -2220,6 +2320,7 @@
   window.downloadFromModal = downloadFromModal;
   window.navigateModal = navigateModal;
   window.buyCredits = buyCredits;
+  window.handlePaymentConfirmation = handlePaymentConfirmation;
   window.fetchCreditsFromServer = fetchCreditsFromServer;
   window.setFilter = setFilter;
   window.scrollToTop = scrollToTop;
