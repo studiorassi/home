@@ -595,6 +595,10 @@
       font-weight: 700;
       white-space: nowrap;
     }
+    .watermark-item .price-tag.video-price {
+      color: #FFD700;
+      border-color: rgba(255, 215, 0, 0.2);
+    }
     .watermark-item .type-badge {
       position: absolute;
       top: 12px;
@@ -613,9 +617,9 @@
       border: 1px solid rgba(212, 163, 179, 0.1);
     }
     .watermark-item .type-badge.video {
-      background: rgba(46, 125, 50, 0.2);
-      color: #4CAF50;
-      border: 1px solid rgba(76, 175, 80, 0.2);
+      background: rgba(255, 215, 0, 0.2);
+      color: #FFD700;
+      border: 1px solid rgba(255, 215, 0, 0.2);
     }
     .watermark-item .play-icon {
       position: absolute;
@@ -860,62 +864,17 @@
 
     .modal-actions {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 16px;
       margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
       z-index: 10;
       width: 100%;
       max-width: 500px;
     }
-
-    .modal-btn-buy {
+    .modal-btn-download {
       background: #D4A3B3;
       color: #2C0714;
-      border: none;
-      padding: 14px 32px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      width: 100%;
-    }
-    .modal-btn-buy:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
-      background: #c08b9e;
-    }
-    .modal-btn-buy:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .modal-btn-buy.downloaded {
-      background: #2E7D32;
-      color: #ffffff;
-      cursor: default;
-    }
-    .modal-btn-buy.downloaded:hover {
-      transform: none;
-      box-shadow: none;
-    }
-    .modal-btn-buy i {
-      font-size: 1.1rem;
-    }
-    .modal-btn-buy .spinner {
-      animation: spin 1s linear infinite;
-      display: inline-block;
-    }
-
-    .modal-btn-confirm-payment {
-      background: #1565C0;
-      color: #ffffff;
       border: none;
       padding: 12px 32px;
       border-radius: 40px;
@@ -927,25 +886,37 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex: 1;
       justify-content: center;
-      width: 100%;
+      min-width: 200px;
     }
-    .modal-btn-confirm-payment:hover {
+    .modal-btn-download:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(21, 101, 192, 0.3);
-      background: #0d47a1;
+      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
     }
-    .modal-btn-confirm-payment:disabled {
-      opacity: 0.5;
+    .modal-btn-download:disabled {
+      opacity: 0.4;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-    .modal-btn-confirm-payment .spinner {
-      animation: spin 1s linear infinite;
-      display: inline-block;
+    .modal-btn-download.hidden { display: none; }
+    .modal-btn-download.downloaded {
+      background: #2E7D32;
+      color: #ffffff;
+      cursor: default;
     }
-
+    .modal-btn-download.downloaded:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .modal-btn-download.video-btn {
+      background: #FFD700;
+      color: #2C0714;
+    }
+    .modal-btn-download.video-btn:hover {
+      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+    }
     .modal-btn-close {
       background: transparent;
       border: 1px solid rgba(212, 163, 179, 0.2);
@@ -956,48 +927,175 @@
       font-size: 0.85rem;
       cursor: pointer;
       transition: 0.3s;
-      width: 100%;
     }
     .modal-btn-close:hover {
       border-color: #D4A3B3;
       color: #f5edea;
     }
-
-    .modal-price {
+    .modal-credits {
       color: #D4A3B3;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
       margin-top: 8px;
       text-align: center;
       z-index: 10;
     }
-    .modal-price strong {
-      font-size: 1.2rem;
+
+    /* POP-UP CRÉDITOS = 0 */
+    .modal-buy-credits {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 460px;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #fdfbfb;
+      color: #2C0714;
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      z-index: 10005;
+      text-align: center;
+      animation: popUpScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .modal-price .media-type {
-      display: inline-block;
-      padding: 2px 12px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      margin-left: 8px;
+    .modal-buy-credits.show { display: flex; }
+    @keyframes popUpScale {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
-    .modal-price .media-type.photo {
-      background: rgba(212, 163, 179, 0.15);
-      color: #D4A3B3;
+    .modal-buy-credits .buy-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      color: #2C0714;
+      font-size: 1.15rem;
+      line-height: 1.4;
     }
-    .modal-price .media-type.video {
-      background: rgba(46, 125, 50, 0.15);
-      color: #4CAF50;
+    .modal-buy-credits .buy-subtitle {
+      font-size: 0.9rem;
+      color: #55444a;
+      line-height: 1.4;
+      font-weight: 400;
     }
-    .modal-price .payment-status {
-      display: block;
+    .modal-buy-credits .quick-packages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
       margin-top: 4px;
-      font-size: 0.75rem;
+    }
+    .modal-buy-credits .quick-pkg {
+      background: #2C0714;
+      color: #f5edea;
+      padding: 12px 10px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+      border: none;
+      font-family: 'Work Sans', sans-serif;
+      min-width: 80px;
+    }
+    .modal-buy-credits .quick-pkg:hover {
+      background: #460c21;
+      transform: scale(1.05);
+    }
+    .modal-buy-credits .quick-pkg .pkg-label {
+      font-size: 0.7rem;
+      color: #D4A3B3;
+      display: block;
+    }
+    .modal-buy-credits .quick-pkg .pkg-price {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .modal-buy-credits .btn-sync-action {
+      background: transparent;
+      color: #2C0714;
+      border: 1px solid rgba(44, 7, 20, 0.2);
+      width: 100%;
+      padding: 10px 18px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .modal-buy-credits .btn-sync-action:hover {
+      background: rgba(44, 7, 20, 0.05);
+      border-color: #2C0714;
+    }
+    .modal-buy-credits .btn-sync-action:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .modal-buy-credits .buy-close {
+      background: transparent;
+      border: none;
       color: #7a5f5a;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      text-decoration: underline;
+    }
+    .modal-buy-credits .buy-close:hover {
+      color: #2C0714;
     }
 
-    /* ===== FOOTER ===== */
+    .upsell-section {
+      background: #1f0510;
+      border-radius: 28px;
+      padding: 28px 32px;
+      margin: 32px 0;
+      border: 1px solid rgba(212, 163, 179, 0.06);
+    }
+    .upsell-section h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      color: #D4A3B3;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+    .upsell-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .upsell-item {
+      background: #2C0714;
+      padding: 12px 20px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 163, 179, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+    }
+    .upsell-item:hover {
+      border-color: #D4A3B3;
+      background: rgba(212, 163, 179, 0.05);
+    }
+    .upsell-item .price {
+      color: #D4A3B3;
+      font-weight: 600;
+    }
+
     footer {
       text-align: center;
       padding: 32px 0 20px;
@@ -1044,10 +1142,14 @@
       .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
-      .modal-btn-buy { padding: 10px 20px; font-size: 0.85rem; }
+      .modal-btn-download { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
       .modal-progress { width: 80%; bottom: 80px; }
       .filter-bar { padding: 8px 0; }
       .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
+      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
+      .modal-buy-credits .quick-packages {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     @media (max-width: 480px) {
       body { padding-top: 60px; }
@@ -1071,11 +1173,12 @@
       .modal-nav.prev { left: -4px; }
       .modal-nav.next { right: -4px; }
       .credits-info { font-size: 0.65rem; padding: 10px 12px; }
-      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
-      .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
-      .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
       .filter-bar { padding: 6px 0; }
       .filter-btn { padding: 4px 12px; font-size: 0.65rem; }
+      .modal-buy-credits .quick-packages {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
     }
   </style>
 </head>
@@ -1092,10 +1195,14 @@
     </button>
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Convidado</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Carregando...</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
-          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
+          Baixados: <span id="downloadedCountDisplay" style="font-weight: 700; color: #f5edea;">0</span>/<span id="totalPhotosDisplay">0</span>
+        </span>
+        <span style="color: #FFD700; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; margin-left: 8px;">
+          <i class="fas fa-coins" style="font-size: 0.8rem;"></i>
+          Créditos: <span id="creditsDisplayHeader" style="font-weight: 700; color: #f5edea;">0</span>
         </span>
       </span>
       <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
@@ -1106,47 +1213,44 @@
 </nav>
 
 <!-- ===== MENU MOBILE ===== -->
+<div class="menu-overlay" id="menuOverlay"></div>
 <div class="mobile-menu" id="mobileMenu">
-  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
   <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Convidado</strong></div>
-    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="mobile-menu menu-status">
-    <div class="status-row">
-      <span class="label"><i class="fas fa-camera"></i> Fotos</span>
-      <span class="value">R$ 15,00</span>
+    <div class="user-info">
+      <i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Carregando...</strong>
     </div>
+    <button class="close-menu" onclick="closeMenu()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="menu-status">
     <div class="status-row">
-      <span class="label"><i class="fas fa-video"></i> Vídeos</span>
-      <span class="value">R$ 40,00</span>
+      <span class="label"><i class="fas fa-coins"></i> Créditos</span>
+      <span class="value" id="mobileCreditsDisplay">0</span>
     </div>
     <div class="status-row">
       <span class="label"><i class="fas fa-images"></i> Baixados</span>
       <span class="value" id="mobileDownloadedDisplay">0 / 0</span>
     </div>
   </div>
+
   <div class="menu-links">
-    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
-    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    <a href="#" onclick="scrollToTop(); closeMenu(); return false;">
+      <i class="fas fa-arrow-up"></i> Ver Galeria
+    </a>
+    <a href="#upsellSection" onclick="closeMenu();">
+      <i class="fas fa-plus-circle"></i> Comprar Créditos
+    </a>
+    <a href="https://studiorassi.github.io/home/index.html" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
   </div>
 </div>
 
-<!-- ===== STATUS ===== -->
+<!-- ===== STATUS FLUTUANTE ===== -->
 <div class="floating-status" id="statusBar">
   <div class="container">
-    <div class="status-item">
-      <i class="fas fa-camera"></i>
-      <span>Fotos: <strong class="value">R$ 15,00</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="fas fa-video"></i>
-      <span>Vídeos: <strong class="value">R$ 40,00</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="fas fa-images"></i>
-      <span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 0</strong></span>
-    </div>
+    <div class="status-item"><i class="fas fa-coins"></i><span>Créditos: <strong class="value" id="creditsDisplay">0</strong></span></div>
+    <div class="status-item"><i class="fas fa-images"></i><span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 0</strong></span></div>
   </div>
 </div>
 
@@ -1179,9 +1283,7 @@
   <div class="credits-info">
     <span class="heart">💖</span>
     <span class="label">
-      <strong>Como funciona:</strong> Fotos <span class="highlight">R$ 15,00</span> · 
-      Vídeos <span class="highlight">R$ 40,00</span> · 
-      Clique no item, visualize com marca d'água e compre a versão em <span class="highlight">alta definição</span>
+      <strong>Como funciona:</strong> Cada <span class="highlight">1 crédito</span> = <span class="highlight">1 foto</span> · <span class="highlight">5 créditos</span> = <span class="highlight">1 vídeo</span> em alta definição sem marca d'água
     </span>
   </div>
 </div>
@@ -1189,36 +1291,50 @@
 <!-- ===== GALERIA ===== -->
 <div class="container">
   <div class="gallery-header">
-    <h2>📸 <span>Memórias em Fotos e Vídeos</span></h2>
+    <h2>📸 <span id="clienteNomeGaleria">Paula & Gabriel</span></h2>
     <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
       <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
     </span>
   </div>
   <div class="watermark-grid" id="galleryGrid"></div>
+
+  <!-- ===== UPSELL ===== -->
+  <div class="upsell-section" id="upsellSection">
+    <h3><i class="fas fa-plus-circle" style="color:#D4A3B3;"></i> Quer mais créditos?</h3>
+    <div class="upsell-grid">
+      <div class="upsell-item" onclick="buyCredits(5)"><span>📷 +5 créditos</span><span class="price">R$ 40</span></div>
+      <div class="upsell-item" onclick="buyCredits(10)"><span>📷 +10 créditos</span><span class="price">R$ 80</span></div>
+      <div class="upsell-item" onclick="buyCredits(20)"><span>📷 +20 créditos</span><span class="price">R$ 160</span></div>
+      <div class="upsell-item" onclick="buyCredits(50)"><span>📷 +50 créditos</span><span class="price">R$ 400</span></div>
+    </div>
+    <p style="font-size:0.7rem; color:#7a5f5a; margin-top:12px;">
+      <i class="fas fa-info-circle"></i> Escolha um pacote para ser redirecionado ao checkout seguro.
+    </p>
+  </div>
 </div>
 
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-content">
     
-    <!-- MARCA D'ÁGUA -->
     <div class="watermark-container">
       <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
     </div>
     
-    <!-- PROGRESS -->
     <div class="modal-progress" id="modalProgress">
-      <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
-      <div class="track"><div class="fill" id="modalProgressFill"></div></div>
+      <span style="font-size:0.7rem; color:#D4A3B3;">
+        <i class="fas fa-spinner fa-spin"></i>
+      </span>
+      <div class="track">
+        <div class="fill" id="modalProgressFill"></div>
+      </div>
       <span class="label" id="modalProgressLabel">0%</span>
     </div>
     
-    <!-- CONTADOR -->
     <div class="modal-counter" id="modalCounter">
       <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">0</span>
     </div>
     
-    <!-- NAVEGAÇÃO -->
     <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
       <i class="fas fa-chevron-left"></i>
     </button>
@@ -1226,12 +1342,10 @@
       <i class="fas fa-chevron-right"></i>
     </button>
     
-    <!-- FECHAR -->
     <button class="modal-close" onclick="closeModal()">
       <i class="fas fa-times"></i>
     </button>
     
-    <!-- IMAGEM / VÍDEO -->
     <div id="modalMediaContainer">
       <img id="modalImage" class="modal-image" src="" alt="Foto" style="display:none;">
       <div id="modalVideoContainer" class="modal-video" style="display:none;">
@@ -1242,31 +1356,51 @@
       </div>
     </div>
     
-    <!-- AÇÕES -->
     <div class="modal-actions">
-      <button class="modal-btn-buy" id="modalBuyBtn" onclick="buyMedia()">
-        <i class="fas fa-shopping-cart"></i> Comprar · <span id="modalPriceDisplay">R$ 15,00</span>
+      <button class="modal-btn-download" id="modalDownloadBtn" onclick="downloadFromModal()">
+        <i class="fas fa-download"></i> Baixar = utilizar 1 crédito
       </button>
-      
-      <!-- BOTÃO DE CONFIRMAR PAGAMENTO -->
-      <button class="modal-btn-confirm-payment" id="modalConfirmPaymentBtn" onclick="confirmPayment()">
-        <i class="fas fa-check-circle"></i> Já realizei o pagamento
+    </div>
+
+    <div class="modal-buy-credits" id="modalBuyCredits">
+      <div class="buy-title">
+        🎉✨ Uau, você não tem créditos suficientes! 🥳💖
+      </div>
+      <div class="buy-subtitle">
+        Escolha um pacote abaixo para continuar baixando:
+      </div>
+      <div class="quick-packages">
+        <button class="quick-pkg" onclick="buyCredits(5)">
+          <span class="pkg-label">+5 Créditos</span>
+          <span class="pkg-price">R$ 40</span>
+        </button>
+        <button class="quick-pkg" onclick="buyCredits(10)">
+          <span class="pkg-label">+10 Créditos</span>
+          <span class="pkg-price">R$ 80</span>
+        </button>
+        <button class="quick-pkg" onclick="buyCredits(20)">
+          <span class="pkg-label">+20 Créditos</span>
+          <span class="pkg-price">R$ 160</span>
+        </button>
+        <button class="quick-pkg" onclick="buyCredits(50)">
+          <span class="pkg-label">+50 Créditos</span>
+          <span class="pkg-price">R$ 400</span>
+        </button>
+      </div>
+      <button class="btn-sync-action" onclick="handlePaymentConfirmation()">
+        <i class="fas fa-sync-alt"></i> Já realizei o pagamento
       </button>
-      
-      <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
+      <button class="buy-close" onclick="closeModal()">Continuar navegando</button>
     </div>
     
-    <div class="modal-price" id="modalPrice">
-      <i class="fas fa-lock" style="color:#7a5f5a;"></i> 
-      Com marca d'água · <strong id="modalPriceStrong">R$ 15,00</strong> para alta definição sem marca
-      <span class="media-type" id="modalMediaType">📷 Foto</span>
-      <span class="payment-status" id="paymentStatus"></span>
+    <div class="modal-credits" id="modalCredits">
+      Créditos restantes: <strong id="modalCreditsCount">0</strong>
     </div>
   </div>
 </div>
 
 <!-- ===== FOOTER ===== -->
-<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Fotos e Vídeos</p></div></footer>
+<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · <span id="footerNome">Paula & Gabriel</span> 💕</p></div></footer>
 
 <!-- ===== SCRIPT ===== -->
 <script>
@@ -1274,149 +1408,167 @@
   // CONFIGURAÇÕES
   // ============================================================
   const API_BASE_URL = 'https://api-studiorassi.onrender.com';
-  const PHOTO_PRICE = 15.00;
-  const VIDEO_PRICE = 40.00;
-
-  // 🔥 LINKS DO MERCADO PAGO
-  const MP_URL_PHOTO = 'https://mpago.la/1Poyp16';
-  const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';
-
-  // ============================================================
-  // DADOS
-  // ============================================================
-  let allMedia = [];
+  let credits = 0;
   let totalItems = 0;
-  let currentModalIndex = 0;
-  let imagesLoaded = 0;
-  let currentFilter = 'all';
-  let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
-  let pendingPurchase = null;
+  let allMedia = [];
+  let downloadedItems = [];
+  let currentUser = null;
 
   // ============================================================
-  // DOM ELEMENTS
+  // FUNÇÃO PARA OBTER CUSTO DO ITEM
   // ============================================================
-  const grid = document.getElementById('galleryGrid');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalImage = document.getElementById('modalImage');
-  const modalVideoContainer = document.getElementById('modalVideoContainer');
-  const modalVideo = document.getElementById('modalVideo');
-  const modalVideoSource = document.getElementById('modalVideoSource');
-  const modalBuyBtn = document.getElementById('modalBuyBtn');
-  const modalConfirmPaymentBtn = document.getElementById('modalConfirmPaymentBtn');
-  const modalPriceDisplay = document.getElementById('modalPriceDisplay');
-  const modalPriceStrong = document.getElementById('modalPriceStrong');
-  const modalMediaType = document.getElementById('modalMediaType');
-  const paymentStatus = document.getElementById('paymentStatus');
-  const progressContainer = document.getElementById('progressContainer');
-  const progressFill = document.getElementById('progressFill');
-  const loadedCount = document.getElementById('loadedCount');
-  const totalCount = document.getElementById('totalCount');
-  const modalProgress = document.getElementById('modalProgress');
-  const modalProgressFill = document.getElementById('modalProgressFill');
-  const modalProgressLabel = document.getElementById('modalProgressLabel');
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const navbar = document.getElementById('mainNavbar');
-
-  // ============================================================
-  // FUNÇÕES AUXILIARES
-  // ============================================================
-  function updateDownloadedDisplay() {
-    const count = downloadedItems.length;
-    const displayElements = [
-      document.getElementById('desktopDownloadedDisplay'),
-      document.getElementById('mobileDownloadedDisplay')
-    ];
-    displayElements.forEach(el => {
-      if (el) el.textContent = `${count} / ${totalItems}`;
-    });
+  function getItemCost(item) {
+    return item.isVideo ? 5 : 1;
   }
 
-  function updateModalButtons(isDownloaded = false) {
-    if (!modalBuyBtn || !modalConfirmPaymentBtn) return;
+  // ============================================================
+  // VERIFICA SESSÃO EXISTENTE
+  // ============================================================
+  async function checkSession() {
+    const token = localStorage.getItem('authToken');
     
-    if (isDownloaded) {
-      modalBuyBtn.className = 'modal-btn-buy downloaded';
-      modalBuyBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
-      modalBuyBtn.disabled = true;
-      modalConfirmPaymentBtn.style.display = 'none';
-      if (paymentStatus) {
-        paymentStatus.textContent = '✅ Item já baixado';
-        paymentStatus.style.color = '#4CAF50';
+    if (!token) {
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        localStorage.removeItem('authToken');
+        window.location.href = 'https://studiorassi.github.io/home/login.html';
+        return;
       }
-    } else {
-      const item = allMedia[currentModalIndex];
-      const price = item ? item.price : PHOTO_PRICE;
-      modalBuyBtn.className = 'modal-btn-buy';
-      modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · R$ ${price.toFixed(2)}`;
-      modalBuyBtn.disabled = false;
-      modalConfirmPaymentBtn.style.display = 'flex';
-      if (paymentStatus) {
-        paymentStatus.textContent = '⏳ Aguardando pagamento';
-        paymentStatus.style.color = '#FFD700';
-      }
+
+      credits = data.credits || 0;
+      const userName = localStorage.getItem('userName') || 'Paula & Gabriel';
+      
+      currentUser = {
+        username: userName,
+        credits: credits
+      };
+      
+      document.getElementById('clienteNome').textContent = userName;
+      document.getElementById('clienteNomeGaleria').textContent = userName;
+      document.getElementById('footerNome').textContent = userName;
+      document.getElementById('mobileUserName').textContent = userName;
+      
+      // Carrega downloads do usuário
+      await loadDownloadedItems();
+      
+      initSite();
+
+    } catch (error) {
+      console.error('❌ Erro ao verificar sessão:', error);
+      localStorage.removeItem('authToken');
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
     }
   }
 
-  function updateDownloadBadge(id) {
-    const items = document.querySelectorAll('.watermark-item');
-    items.forEach(item => {
-      if (item.dataset.id === id) {
-        const badge = item.querySelector('.badge-status');
-        if (badge) {
-          badge.className = 'badge-status downloaded';
-          badge.innerHTML = '<i class="fas fa-unlock"></i> JÁ BAIXADO';
+  // ============================================================
+  // CARREGAR DOWNLOADS DO USUÁRIO DO BACKEND
+  // ============================================================
+  async function loadDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        downloadedItems = data.downloads || [];
+        const username = localStorage.getItem('userName') || 'user';
+        localStorage.setItem(`downloaded_${username}`, JSON.stringify(downloadedItems));
+        console.log(`📥 Downloads carregados: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao carregar downloads:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // SALVAR DOWNLOADS NO BACKEND
+  // ============================================================
+  async function saveDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ downloads: downloadedItems })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log(`✅ Downloads salvos: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao salvar downloads:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // BUSCAR CRÉDITOS DO BACKEND
+  // ============================================================
+  async function fetchUserCredits() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        credits = data.credits;
+        localStorage.setItem('userCredits', credits);
+        updateCreditsDisplay();
       }
-    });
-  }
-
-  function updatePaymentStatus(message, type = 'info') {
-    if (!paymentStatus) return;
-    paymentStatus.textContent = message;
-    if (type === 'success') {
-      paymentStatus.style.color = '#4CAF50';
-    } else if (type === 'error') {
-      paymentStatus.style.color = '#ff6b6b';
-    } else if (type === 'warning') {
-      paymentStatus.style.color = '#FFD700';
-    } else {
-      paymentStatus.style.color = '#7a5f5a';
+    } catch (error) {
+      console.error('❌ Erro ao buscar créditos:', error);
     }
   }
 
-  function updateCounters() {
-    const elements = [
-      document.getElementById('totalCount'),
-      document.getElementById('totalCountDisplay'),
-      document.getElementById('totalPhotosDisplay')
-    ];
-    elements.forEach(el => {
-      if (el) el.textContent = totalItems;
-    });
-    updateDownloadedDisplay();
+  // ============================================================
+  // INICIAR SITE
+  // ============================================================
+  async function initSite() {
+    await loadMediaFromS3();
+    updateCreditsDisplay();
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    await fetchUserCredits();
   }
 
   // ============================================================
-  // GERAR CÓDIGO DE CONFIRMAÇÃO
-  // ============================================================
-  function gerarCodigoConfirmacao() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let codigo = '';
-    for (let i = 0; i < 8; i++) {
-      codigo += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return codigo;
-  }
-
-  // ============================================================
-  // CARREGAR MÍDIAS
+  // CARREGAR MÍDIAS DO S3
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      console.log('📡 Buscando lista de fotos no S3...');
+      console.log('📡 Buscando mídias para o cliente...');
+      
       const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
-      if (!fotosResponse.ok) throw new Error('Erro ao buscar lista de fotos');
+      if (!fotosResponse.ok) throw new Error('Erro ao buscar fotos');
       const fotosData = await fotosResponse.json();
       
       const photoFiles = fotosData.files.filter(file => 
@@ -1425,24 +1577,22 @@
       
       const fotos = photoFiles.map((file, index) => {
         const filename = file.filename;
-        const numMatch = filename.match(/(\d+)/);
+        const numMatch = filename.match(/(\d+)\./);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        const title = filename.replace(/\.[^.]+$/, '');
         return {
           id: `foto_${num}`,
           type: 'foto',
           key: `fotos/${filename}`,
-          price: PHOTO_PRICE,
-          title: title,
+          title: `Foto ${parseInt(num)}`,
           thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
           mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
-          isVideo: false
+          isVideo: false,
+          cost: 1
         };
       });
 
-      console.log('📡 Buscando lista de vídeos no S3...');
       const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
-      if (!videosResponse.ok) throw new Error('Erro ao buscar lista de vídeos');
+      if (!videosResponse.ok) throw new Error('Erro ao buscar vídeos');
       const videosData = await videosResponse.json();
       
       const videoFiles = videosData.files.filter(file => 
@@ -1465,20 +1615,20 @@
       
       const videos = videoFiles.map((file, index) => {
         const filename = file.filename;
-        const numMatch = filename.match(/(\d+)/);
+        const numMatch = filename.match(/(\d+)\.mp4/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        const title = filename.replace(/\.[^.]+$/, '');
+        const title = `Vídeo ${parseInt(num)}`;
         const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
         return {
           id: `video_${num}`,
           type: 'video',
           key: `videos/${filename}`,
-          price: VIDEO_PRICE,
           title: title,
           thumbnail: thumbnailUrl,
           fallbackThumbnail: createVideoPlaceholder(title),
           mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
-          isVideo: true
+          isVideo: true,
+          cost: 5
         };
       });
 
@@ -1486,6 +1636,7 @@
       totalItems = allMedia.length;
       
       console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
+      console.log(`📊 Vídeos consomem 5 créditos cada, fotos consomem 1 crédito`);
       
       updateCounters();
       renderGallery();
@@ -1499,9 +1650,20 @@
   // ============================================================
   // RENDER GALERIA
   // ============================================================
+  let imagesLoaded = 0;
+  let currentFilter = 'all';
+  let filterButtons = document.querySelectorAll('.filter-btn');
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    filterButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderGallery();
+  }
+
   function renderGallery() {
-    if (!grid) return;
-    
+    const grid = document.getElementById('galleryGrid');
     const filteredItems = currentFilter === 'all' 
       ? allMedia 
       : allMedia.filter(item => item.type === currentFilter);
@@ -1510,19 +1672,22 @@
     imagesLoaded = 0;
     
     if (!window._galleryLoaded) {
-      if (progressContainer) progressContainer.style.display = 'block';
-      if (progressFill) progressFill.style.width = '0%';
-      if (loadedCount) loadedCount.textContent = '0';
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('loadedCount').textContent = '0';
     }
 
     filteredItems.forEach((item, index) => {
       const isDownloaded = downloadedItems.includes(item.id);
+      const cost = getItemCost(item);
+      const priceText = cost === 1 ? '1 crédito' : `${cost} créditos`;
+      const priceClass = cost > 1 ? 'video-price' : '';
+      
       const div = document.createElement('div');
       div.className = `watermark-item ${item.isVideo ? 'video-item' : ''}`;
       div.dataset.id = item.id;
       div.dataset.index = index;
 
-      const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
       const typeLabel = item.isVideo ? '🎬 VÍDEO' : '📷 FOTO';
       const typeClass = item.isVideo ? 'video' : 'photo';
       
@@ -1536,10 +1701,10 @@
           <div class="spinner"><i class="fas fa-spinner"></i></div>
         </div>
         <div class="badge-status ${isDownloaded ? 'downloaded' : 'locked'}" id="badge-${index}">
-          ${isDownloaded ? '<i class="fas fa-unlock"></i> JÁ BAIXADO' : '<i class="fas fa-lock"></i>'}
+          ${isDownloaded ? '<i class="fas fa-check-circle"></i> JÁ BAIXADO' : '<i class="fas fa-lock"></i>'}
         </div>
         <div class="type-badge ${typeClass}">${typeLabel}</div>
-        <div class="price-tag">${priceDisplay}</div>
+        <div class="price-tag ${priceClass}">${priceText}</div>
         ${item.isVideo ? '<div class="play-icon"><i class="fas fa-play-circle"></i></div>' : ''}
         <img src="${imgSrc}" alt="${item.title}" class="real-image" loading="lazy"
              data-key="${item.key}" data-index="${index}"
@@ -1563,18 +1728,18 @@
       img.classList.add('loaded');
       const skeleton = document.getElementById(`skeleton-${index}`);
       if (skeleton) skeleton.style.display = 'none';
-
+      
       imagesLoaded++;
       
       if (!window._progressComplete && totalItems > 0) {
         const percent = Math.round((imagesLoaded / totalItems) * 100);
-        if (progressFill) progressFill.style.width = percent + '%';
-        if (loadedCount) loadedCount.textContent = imagesLoaded;
-
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('loadedCount').textContent = imagesLoaded;
+        
         if (imagesLoaded >= totalItems) {
           window._progressComplete = true;
           setTimeout(() => {
-            if (progressContainer) progressContainer.style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
           }, 400);
         }
       }
@@ -1587,51 +1752,17 @@
       if (fallbackSrc) {
         img.src = fallbackSrc;
         img.onerror = null;
-      } else {
-        img.style.display = 'none';
-        const container = img.parentElement;
-        const unavailableDiv = document.createElement('div');
-        unavailableDiv.style.cssText = `
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: #D4A3B3;
-          font-size: 0.9rem;
-          text-align: center;
-          z-index: 10;
-          background: rgba(44, 7, 20, 0.8);
-          padding: 20px;
-          border-radius: 12px;
-          border: 1px solid rgba(212, 163, 179, 0.1);
-        `;
-        unavailableDiv.innerHTML = `
-          <i class="fas fa-video" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
-          ${img.alt || 'Indisponível'}
-        `;
-        container.appendChild(unavailableDiv);
       }
     }
     onMediaLoad(index);
   }
 
   // ============================================================
-  // FILTROS
-  // ============================================================
-  let filterButtons = document.querySelectorAll('.filter-btn');
-
-  function setFilter(filter) {
-    currentFilter = filter;
-    filterButtons.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.filter === filter);
-    });
-    renderGallery();
-  }
-
-  // ============================================================
   // MODAL
   // ============================================================
-  async function openModal(index) {
+  let currentModalIndex = 0;
+
+  function openModal(index) {
     const filteredItems = currentFilter === 'all' 
       ? allMedia 
       : allMedia.filter(item => item.type === currentFilter);
@@ -1642,92 +1773,81 @@
     currentModalIndex = realIndex;
     const item = allMedia[currentModalIndex];
     const isDownloaded = downloadedItems.includes(item.id);
-
-    modalProgressFill.style.width = '0%';
-    modalProgressLabel.textContent = '0%';
-    modalProgress.classList.add('show');
-
-    modalImage.style.display = 'none';
-    modalVideoContainer.style.display = 'none';
-    modalImage.classList.remove('loaded');
-    modalImage.style.opacity = '0';
-    modalVideo.classList.remove('loaded');
-    modalVideoContainer.classList.remove('loaded');
-
+    const cost = getItemCost(item);
+    
+    document.getElementById('modalProgressFill').style.width = '0%';
+    document.getElementById('modalProgressLabel').textContent = '0%';
+    document.getElementById('modalProgress').classList.add('show');
+    
+    document.getElementById('modalImage').style.display = 'none';
+    document.getElementById('modalVideoContainer').style.display = 'none';
+    document.getElementById('modalImage').classList.remove('loaded');
+    document.getElementById('modalImage').style.opacity = '0';
+    document.getElementById('modalVideo').classList.remove('loaded');
+    document.getElementById('modalVideoContainer').classList.remove('loaded');
+    
     document.getElementById('currentIndexDisplay').textContent = realIndex + 1;
-    modalPriceDisplay.textContent = `R$ ${item.price.toFixed(2)}`;
-    modalPriceStrong.textContent = `R$ ${item.price.toFixed(2)}`;
-    modalMediaType.textContent = item.isVideo ? '🎬 Vídeo' : '📷 Foto';
-    modalMediaType.className = `media-type ${item.isVideo ? 'video' : 'photo'}`;
-
     updateModalButtons(isDownloaded);
     updateNavButtons();
-
-    modalOverlay.classList.add('active');
+    
+    document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
-
+    
     try {
       let progress = 0;
       const progressInterval = setInterval(() => {
         if (progress < 90) {
           progress += Math.random() * 8;
           if (progress > 90) progress = 90;
-          modalProgressFill.style.width = progress + '%';
-          modalProgressLabel.textContent = Math.round(progress) + '%';
+          document.getElementById('modalProgressFill').style.width = progress + '%';
+          document.getElementById('modalProgressLabel').textContent = Math.round(progress) + '%';
         }
       }, 100);
 
       if (item.isVideo) {
-        modalVideoContainer.style.display = 'block';
-        modalVideoSource.src = item.mediaUrl;
-        modalVideo.load();
+        document.getElementById('modalVideoContainer').style.display = 'block';
+        document.getElementById('modalVideoSource').src = item.mediaUrl;
+        document.getElementById('modalVideo').load();
         
-        modalVideo.onloadeddata = function() {
+        document.getElementById('modalVideo').onloadeddata = function() {
           clearInterval(progressInterval);
-          modalProgressFill.style.width = '100%';
-          modalProgressLabel.textContent = '100%';
-          modalVideoContainer.classList.add('loaded');
-          setTimeout(() => modalProgress.classList.remove('show'), 500);
-        };
-        modalVideo.onerror = function() {
-          clearInterval(progressInterval);
-          modalProgress.classList.remove('show');
-          alert('Erro ao carregar o vídeo. Tente novamente.');
+          document.getElementById('modalProgressFill').style.width = '100%';
+          document.getElementById('modalProgressLabel').textContent = '100%';
+          document.getElementById('modalVideoContainer').classList.add('loaded');
+          setTimeout(() => {
+            document.getElementById('modalProgress').classList.remove('show');
+          }, 500);
         };
       } else {
-        modalImage.style.display = 'block';
+        document.getElementById('modalImage').style.display = 'block';
         const img = new Image();
         img.onload = function() {
           clearInterval(progressInterval);
-          modalProgressFill.style.width = '100%';
-          modalProgressLabel.textContent = '100%';
-          modalImage.src = item.mediaUrl;
-          modalImage.classList.add('loaded');
-          modalImage.style.opacity = '1';
-          setTimeout(() => modalProgress.classList.remove('show'), 500);
-        };
-        img.onerror = function() {
-          clearInterval(progressInterval);
-          modalProgress.classList.remove('show');
-          modalImage.alt = 'Erro ao carregar';
+          document.getElementById('modalProgressFill').style.width = '100%';
+          document.getElementById('modalProgressLabel').textContent = '100%';
+          document.getElementById('modalImage').src = item.mediaUrl;
+          document.getElementById('modalImage').classList.add('loaded');
+          document.getElementById('modalImage').style.opacity = '1';
+          setTimeout(() => {
+            document.getElementById('modalProgress').classList.remove('show');
+          }, 500);
         };
         img.src = item.mediaUrl;
       }
     } catch (error) {
       console.error('Erro ao abrir modal:', error);
-      modalProgress.classList.remove('show');
+      document.getElementById('modalProgress').classList.remove('show');
     }
-
+    
     document.addEventListener('keydown', handleModalKeydown);
   }
 
   function closeModal() {
-    modalOverlay.classList.remove('active');
+    document.getElementById('modalOverlay').classList.remove('active');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', handleModalKeydown);
-    if (modalVideo) {
-      modalVideo.pause();
-    }
+    const video = document.getElementById('modalVideo');
+    if (video) video.pause();
   }
 
   function handleModalKeydown(e) {
@@ -1742,10 +1862,8 @@
       const filteredItems = currentFilter === 'all' 
         ? allMedia 
         : allMedia.filter(item => item.type === currentFilter);
-      
       const currentFilteredIndex = filteredItems.indexOf(allMedia[currentModalIndex]);
       const newFilteredIndex = currentFilteredIndex + direction;
-      
       if (newFilteredIndex >= 0 && newFilteredIndex < filteredItems.length) {
         const newRealIndex = allMedia.indexOf(filteredItems[newFilteredIndex]);
         if (newRealIndex !== -1) {
@@ -1758,284 +1876,379 @@
   function updateNavButtons() {
     const prevBtn = document.getElementById('modalPrev');
     const nextBtn = document.getElementById('modalNext');
-    if (prevBtn) {
-      prevBtn.disabled = currentModalIndex === 0;
-      prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
-    }
-    if (nextBtn) {
-      nextBtn.disabled = currentModalIndex === allMedia.length - 1;
-      nextBtn.style.opacity = currentModalIndex === allMedia.length - 1 ? '0.3' : '1';
-    }
+    prevBtn.disabled = currentModalIndex === 0;
+    nextBtn.disabled = currentModalIndex === allMedia.length - 1;
+    prevBtn.style.opacity = currentModalIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentModalIndex === allMedia.length - 1 ? '0.3' : '1';
   }
 
   // ============================================================
-  // DOWNLOAD DO ARQUIVO
+  // DOWNLOAD UNIVERSAL
   // ============================================================
-  async function downloadMedia(item) {
+  async function downloadFromModal() {
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
+
+    const cost = getItemCost(item);
+
+    if (credits < cost) {
+      alert(`❌ Você precisa de ${cost} créditos para baixar este ${item.isVideo ? 'vídeo' : 'foto'}. Seus créditos atuais: ${credits}`);
+      updateModalButtons(false);
+      return;
+    }
+
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado.');
+      return;
+    }
+
+    const btn = document.getElementById('modalDownloadBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
+
     try {
       const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
       const downloadUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
 
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        // Debita múltiplos créditos para vídeos
+        for (let i = 0; i < cost; i++) {
+          await fetch(`${API_BASE_URL}/api/auth/debit-credit`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ imageKey: item.key })
+          });
+        }
+        await fetchUserCredits();
+      }
+
       const filename = item.key.split('/').pop();
       
-      const response = await fetch(downloadUrl);
-      const blob = await response.blob();
-      let mimeType = item.isVideo ? 'video/mp4' : 'image/jpeg';
-      const blobWithType = new Blob([blob], { type: mimeType });
-      
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blobWithType);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      setTimeout(() => {
-        URL.revokeObjectURL(link.href);
-      }, 5000);
-      
-      console.log(`✅ Download iniciado: ${filename}`);
-      
-    } catch (error) {
-      console.error('❌ Erro no download:', error);
-      alert('❌ Erro ao baixar o arquivo. Tente novamente.');
-    }
-  }
-
-  // ============================================================
-  // COMPRA - COM CÓDIGO DE CONFIRMAÇÃO
-  // ============================================================
-  function buyMedia() {
-    const item = allMedia[currentModalIndex];
-    if (!item) return;
-
-    if (downloadedItems.includes(item.id)) {
-      alert('✅ Este item já foi baixado.');
-      return;
-    }
-
-    const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
-    const typeName = item.isVideo ? 'vídeo' : 'foto';
-    const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
-    
-    // 🔥 GERA CÓDIGO DE CONFIRMAÇÃO ÚNICO
-    const codigoConfirmacao = gerarCodigoConfirmacao();
-    
-    pendingPurchase = {
-      id: item.id,
-      type: item.type,
-      key: item.key,
-      title: item.title,
-      price: item.price,
-      timestamp: Date.now(),
-      codigo: codigoConfirmacao
-    };
-    localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
-
-    const confirmMsg = 
-      `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\n` +
-      `📌 CÓDIGO DE CONFIRMAÇÃO: ${codigoConfirmacao}\n\n` +
-      `🔗 Clique em OK para ir para o pagamento (Mercado Pago).\n\n` +
-      `⚠️ GUARDE O CÓDIGO ACIMA!\n` +
-      `Após o pagamento, você precisará deste código para liberar o download.`;
-
-    if (confirm(confirmMsg)) {
-      window.open(paymentUrl, '_blank');
-      
-      if (modalBuyBtn) {
-        modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
-        modalBuyBtn.style.background = '#FFD700';
-        modalBuyBtn.style.color = '#2C0714';
-        modalBuyBtn.disabled = true;
-      }
-      
-      updatePaymentStatus(`⏳ Código: ${codigoConfirmacao} - Aguardando pagamento`, 'warning');
-      
-      setTimeout(() => {
-        updatePaymentStatus(`💡 Código: ${codigoConfirmacao} - Após pagar, informe o código`, 'info');
-      }, 2000);
-
-      alert(
-        `📌 GUARDE ESTE CÓDIGO:\n\n` +
-        `🔐 ${codigoConfirmacao}\n\n` +
-        `Após realizar o pagamento, clique em "Já realizei o pagamento" e informe este código.\n\n` +
-        `⚠️ Não compartilhe este código com ninguém!`
-      );
-
-      console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
-      console.log(`🔗 Link: ${paymentUrl}`);
-      console.log(`🔐 Código: ${codigoConfirmacao}`);
-    }
-  }
-
-  // ============================================================
-  // CONFIRMAR PAGAMENTO - COM VALIDAÇÃO DE CÓDIGO
-  // ============================================================
-  function confirmPayment() {
-    const item = allMedia[currentModalIndex];
-    if (!item) return;
-
-    if (downloadedItems.includes(item.id)) {
-      alert('✅ Este item já foi baixado.');
-      return;
-    }
-
-    const pendingData = localStorage.getItem('pendingMedia');
-    
-    if (!pendingData) {
-      alert('ℹ️ Nenhum pagamento pendente encontrado.\n\nVocê precisa primeiro clicar em "Comprar" para gerar um pagamento.');
-      return;
-    }
-
-    try {
-      const pending = JSON.parse(pendingData);
-      
-      if (pending.id !== item.id) {
-        const confirmar = confirm(
-          `⚠️ Você tem um pagamento pendente para "${pending.title}" (${pending.type}).\n\n` +
-          `Deseja liberar este item "${item.title}" no lugar?`
-        );
-        if (!confirmar) return;
+      try {
+        const response = await fetch(downloadUrl);
+        const blob = await response.blob();
+        let mimeType = item.isVideo ? 'video/mp4' : 'image/jpeg';
+        const blobWithType = new Blob([blob], { type: mimeType });
         
-        pending.id = item.id;
-        pending.type = item.type;
-        pending.title = item.title;
-        pending.key = item.key;
-        pending.price = item.price;
-        localStorage.setItem('pendingMedia', JSON.stringify(pending));
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blobWithType);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href);
+        }, 5000);
+        
+        console.log(`✅ Download iniciado: ${filename} (${item.isVideo ? 'vídeo' : 'foto'}) - Custo: ${cost} créditos`);
+        
+      } catch (blobError) {
+        console.warn('⚠️ Fallback para método alternativo:', blobError);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
 
-      // 🔥 SOLICITA O CÓDIGO DE CONFIRMAÇÃO
-      const codigoInformado = prompt(
-        `🔐 Para confirmar o pagamento de "${item.title}" (${item.type}), digite o código de confirmação:\n\n` +
-        `📌 Seu código: ${pending.codigo || 'Não definido'}\n\n` +
-        `⚠️ Este código foi mostrado na hora da compra.\n` +
-        `Se você não tem o código, aguarde a confirmação manual do administrador.`
-      );
-
-      if (!codigoInformado) {
-        alert('❌ Confirmação cancelada.');
-        return;
-      }
-
-      // 🔥 VERIFICA O CÓDIGO
-      if (codigoInformado !== pending.codigo) {
-        alert(`❌ Código de confirmação inválido!\n\nCódigo correto: ${pending.codigo}\n\nTente novamente ou aguarde a confirmação manual.`);
-        return;
-      }
-
-      // 🔥 CÓDIGO VÁLIDO - LIBERA O DOWNLOAD
       if (!downloadedItems.includes(item.id)) {
         downloadedItems.push(item.id);
-        localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
-        
-        updateDownloadBadge(item.id);
-        updateDownloadedDisplay();
-        updateModalButtons(true);
-        
-        localStorage.removeItem('pendingMedia');
-        pendingPurchase = null;
-        
-        downloadMedia(item);
-        
-        alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
-        
-        const btn = document.getElementById('modalConfirmPaymentBtn');
-        if (btn) {
-          btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
-          btn.style.background = '#2E7D32';
-          btn.style.color = '#ffffff';
-          btn.disabled = true;
+        await saveDownloadedItems();
+      }
+
+      updateCreditsDisplay();
+      updateDownloadBadge(item.id);
+      updateModalButtons(true);
+      
+      btn.className = 'modal-btn-download downloaded';
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
+      btn.disabled = true;
+
+      alert(`✅ Download iniciado! ${cost} crédito${cost > 1 ? 's' : ''} utilizado${cost > 1 ? 's' : ''}.`);
+
+    } catch (error) {
+      console.error('❌ Erro no download:', error);
+      alert('❌ Erro ao baixar. Tente novamente.');
+      btn.disabled = false;
+      const cost = getItemCost(item);
+      btn.innerHTML = `<i class="fas fa-download"></i> Baixar = utilizar ${cost} crédito${cost > 1 ? 's' : ''}`;
+    }
+  }
+
+  function updateDownloadBadge(id) {
+    document.querySelectorAll('.watermark-item').forEach(item => {
+      if (item.dataset.id === id) {
+        const badge = item.querySelector('.badge-status');
+        if (badge) {
+          badge.className = 'badge-status downloaded';
+          badge.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
         }
+      }
+    });
+  }
+
+  // ============================================================
+  // CRÉDITOS
+  // ============================================================
+  function updateCreditsDisplay() {
+    const displayElements = [
+      document.getElementById('creditsDisplay'),
+      document.getElementById('creditsDisplayHeader'),
+      document.getElementById('modalCreditsCount'),
+      document.getElementById('mobileCreditsDisplay')
+    ];
+    displayElements.forEach(el => {
+      if (el) el.textContent = credits;
+    });
+    updateModalButtons();
+    updateMenuCtaVisibility();
+  }
+
+  function updateModalButtons(isDownloaded = false) {
+    const downloadBtn = document.getElementById('modalDownloadBtn');
+    const buyCreditsDiv = document.getElementById('modalBuyCredits');
+    const item = allMedia[currentModalIndex];
+    const cost = item ? getItemCost(item) : 1;
+    
+    if (isDownloaded) {
+      downloadBtn.className = 'modal-btn-download downloaded';
+      downloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
+      downloadBtn.disabled = true;
+      downloadBtn.style.display = 'flex';
+      buyCreditsDiv.classList.remove('show');
+    } else if (credits < cost) {
+      downloadBtn.style.display = 'none';
+      buyCreditsDiv.classList.add('show');
+    } else {
+      const isVideo = item && item.isVideo;
+      downloadBtn.className = `modal-btn-download ${isVideo ? 'video-btn' : ''}`;
+      downloadBtn.innerHTML = `<i class="fas fa-download"></i> Baixar = utilizar ${cost} crédito${cost > 1 ? 's' : ''}`;
+      downloadBtn.style.display = 'flex';
+      downloadBtn.disabled = false;
+      buyCreditsDiv.classList.remove('show');
+    }
+  }
+
+  // ============================================================
+  // COMPRAR CRÉDITOS
+  // ============================================================
+  function buyCredits(amount) {
+    const paymentLinks = {
+      5: 'https://mpago.la/2fSQufA',
+      10: 'https://mpago.la/28Aw32a',
+      20: 'https://mpago.la/2ZCXNZq',
+      50: 'https://mpago.la/1H3q1Rk'
+    };
+    
+    const targetUrl = paymentLinks[amount];
+    if (targetUrl) {
+      const pendingOrder = {
+        amount: amount,
+        timestamp: Date.now(),
+        username: localStorage.getItem('userName') || 'cliente'
+      };
+      localStorage.setItem('pending_credits', JSON.stringify(pendingOrder));
+      
+      window.open(targetUrl, '_blank');
+      
+      alert(`💳 Pacote de ${amount} créditos selecionado!\n\nApós realizar o pagamento, clique em "Já realizei o pagamento" para atualizar seus créditos automaticamente.`);
+    } else {
+      alert('⚠️ Pacote não encontrado. Entre em contato com o suporte.');
+    }
+  }
+
+  // ============================================================
+  // CONFIRMAR PAGAMENTO - CONSULTA O BACKEND
+  // ============================================================
+  async function handlePaymentConfirmation() {
+    const btn = document.querySelector('.btn-sync-action');
+    const originalText = btn.innerHTML;
+    
+    try {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando pagamento...';
+      
+      const pendingData = localStorage.getItem('pending_credits');
+      let pendingOrder = null;
+      
+      if (pendingData) {
+        try {
+          pendingOrder = JSON.parse(pendingData);
+        } catch (e) {
+          console.warn('⚠️ Dados pendentes inválidos:', e);
+        }
+      }
+      
+      if (!pendingOrder) {
+        alert('ℹ️ Nenhum pagamento pendente encontrado. Por favor, faça um novo pedido.');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      const timeElapsed = Date.now() - pendingOrder.timestamp;
+      const hoursElapsed = timeElapsed / (1000 * 60 * 60);
+      
+      if (hoursElapsed > 24) {
+        alert('⏰ Este pedido expirou. Por favor, faça um novo pedido.');
+        localStorage.removeItem('pending_credits');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        alert('❌ Sessão expirada. Faça login novamente.');
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+      
+      // 🔥 CONSULTA O BACKEND PARA VERIFICAR CRÉDITOS ATUALIZADOS
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        const oldCredits = credits;
+        credits = data.credits;
         
-        updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
+        if (credits > oldCredits) {
+          localStorage.removeItem('pending_credits');
+          updateCreditsDisplay();
+          updateModalButtons(false);
+          
+          document.getElementById('modalBuyCredits').classList.remove('show');
+          
+          alert(`✅ Pagamento confirmado! ${credits - oldCredits} créditos adicionados com sucesso.\n\nSaldo atual: ${credits} créditos`);
+          
+          // Recarrega a página para atualizar tudo
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          
+          btn.innerHTML = '✅ Pagamento confirmado!';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }, 3000);
+          
+          return;
+        } else {
+          const confirmar = confirm(
+            `ℹ️ Seus créditos atuais: ${credits}\n\n` +
+            `O pagamento pode levar alguns minutos para ser processado.\n\n` +
+            `Deseja tentar verificar novamente?`
+          );
+          
+          if (confirmar) {
+            setTimeout(() => {
+              handlePaymentConfirmation();
+            }, 5000);
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+          return;
+        }
+      } else {
+        alert('❌ Erro ao verificar créditos: ' + (data.message || 'Tente novamente.'));
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
       
     } catch (error) {
       console.error('❌ Erro ao confirmar pagamento:', error);
-      alert('❌ Erro ao verificar o pagamento. Tente novamente.');
+      alert('❌ Erro ao verificar pagamento. Por favor, tente novamente ou entre em contato com o suporte.');
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
   }
 
-  // ============================================================
-  // VERIFICAÇÃO DE PAGAMENTO PENDENTE
-  // ============================================================
-  function checkPendingPurchase() {
-    const pending = localStorage.getItem('pendingMedia');
-    if (pending) {
-      try {
-        const data = JSON.parse(pending);
-        if (Date.now() - data.timestamp > 2 * 60 * 60 * 1000) {
-          localStorage.removeItem('pendingMedia');
-          pendingPurchase = null;
-          if (paymentStatus) {
-            paymentStatus.textContent = '⏰ Pedido expirado (2h)';
-            paymentStatus.style.color = '#ff6b6b';
-          }
-        } else {
-          pendingPurchase = data;
-          if (paymentStatus && modalOverlay.classList.contains('active')) {
-            paymentStatus.textContent = `⏳ Código: ${data.codigo} - Aguardando confirmação`;
-            paymentStatus.style.color = '#FFD700';
-          }
-        }
-      } catch (e) {
-        localStorage.removeItem('pendingMedia');
-      }
-    }
+  function updateDownloadedDisplay() {
+    const count = downloadedItems.length;
+    const displayElements = [
+      document.getElementById('desktopDownloadedDisplay'),
+      document.getElementById('downloadedCountDisplay'),
+      document.getElementById('mobileDownloadedDisplay')
+    ];
+    displayElements.forEach(el => {
+      if (el) el.textContent = `${count} / ${totalItems}`;
+    });
+  }
+
+  function updateCounters() {
+    document.getElementById('totalCount').textContent = totalItems;
+    document.getElementById('totalCountDisplay').textContent = totalItems;
+    document.getElementById('totalPhotosDisplay').textContent = totalItems;
+    updateDownloadedDisplay();
   }
 
   // ============================================================
   // MENU MOBILE
   // ============================================================
-  function toggleMobileMenu() {
-    if (!mobileMenu || !hamburgerBtn || !navbar) return;
-    mobileMenu.classList.toggle('open');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const statusBar = document.getElementById('statusBar');
+
+  function toggleMenu() {
+    const isOpen = mobileMenu.classList.contains('open');
+    
     hamburgerBtn.classList.toggle('active');
-    if (mobileMenu.classList.contains('open')) {
-      navbar.classList.add('hidden');
-      document.body.style.overflow = 'hidden';
+    mobileMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('active');
+    
+    if (!isOpen) {
+      statusBar.classList.add('hidden');
     } else {
-      navbar.classList.remove('hidden');
-      document.body.style.overflow = '';
+      statusBar.classList.remove('hidden');
     }
+    
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   }
 
-  function closeMobileMenu() {
-    if (!mobileMenu || !hamburgerBtn || !navbar) return;
-    mobileMenu.classList.remove('open');
+  function closeMenu() {
     hamburgerBtn.classList.remove('active');
-    navbar.classList.remove('hidden');
+    mobileMenu.classList.remove('open');
+    menuOverlay.classList.remove('active');
+    statusBar.classList.remove('hidden');
     document.body.style.overflow = '';
   }
 
+  hamburgerBtn.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.mobile-menu .menu-links a').forEach(el => {
+    el.addEventListener('click', closeMenu);
+  });
+
+  // ============================================================
+  // FUNÇÕES AUXILIARES
+  // ============================================================
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
-
-  // ============================================================
-  // BLOQUEIOS DE SEGURANÇA
-  // ============================================================
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) {
-      e.preventDefault();
-      alert('🔒 A proteção de conteúdo está ativa.');
-    }
-  });
-
-  document.addEventListener('contextmenu', function(e) {
-    if (e.target.closest('.watermark-item') || e.target.closest('.modal-overlay')) {
-      e.preventDefault();
-      alert('🔒 Clique direito bloqueado.');
-    }
-  });
+  function checkMobile() {}
+  function updateMenuCtaVisibility() {}
 
   // ============================================================
   // NAVBAR SCROLL
   // ============================================================
   window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('mainNavbar');
     if (!navbar) return;
     if (window.scrollY > 50) {
       navbar.classList.add('scrolled');
@@ -2047,19 +2260,26 @@
   // ============================================================
   // INICIALIZAÇÃO
   // ============================================================
-  async function init() {
-    await loadMediaFromS3();
-    checkPendingPurchase();
-    setInterval(checkPendingPurchase, 10000);
+  document.addEventListener('DOMContentLoaded', function() {
+    checkSession();
+  });
 
-    console.log('📸 Galeria de Fotos e Vídeos carregada!');
-    console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
-    console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
-    console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log('🔐 Sistema de confirmação com código ativo!');
-  }
-
-  init();
+  // ============================================================
+  // EXPORTA FUNÇÕES GLOBAIS
+  // ============================================================
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.downloadFromModal = downloadFromModal;
+  window.navigateModal = navigateModal;
+  window.buyCredits = buyCredits;
+  window.handlePaymentConfirmation = handlePaymentConfirmation;
+  window.setFilter = setFilter;
+  window.scrollToTop = scrollToTop;
+  window.closeMenu = closeMenu;
+  window.toggleMenu = toggleMenu;
+  window.onMediaLoad = onMediaLoad;
+  window.handleImageError = handleImageError;
 </script>
+
 </body>
 </html>
