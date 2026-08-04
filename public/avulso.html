@@ -1,1275 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Fotos e Vídeos · Studio Rassi</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
-  <style>
-    /* ===== RESET ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #2C0714;
-      color: #f5edea;
-      font-family: 'Work Sans', sans-serif;
-      min-height: 100vh;
-      padding-top: 80px;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 32px;
-    }
-
-    /* ===== NAVBAR ===== */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 12px 0;
-      background: rgba(44, 7, 20, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .navbar.scrolled {
-      padding: 8px 0;
-      background: rgba(44, 7, 20, 0.96);
-      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
-    }
-    .navbar-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .logo {
-      display: inline-block;
-      line-height: 0;
-      text-decoration: none;
-    }
-    .logo img {
-      display: block;
-      width: auto;
-      height: 45px;
-      max-width: 150px;
-      transition: all 0.3s ease;
-    }
-    .navbar.scrolled .logo img { height: 40px; }
-    .logo img:hover { opacity: 0.85; transform: scale(1.02); }
-    .nav-info {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .nav-info .user {
-      color: #d4c5c0;
-      font-size: 0.85rem;
-    }
-    .nav-info .user i { color: #D4A3B3; margin-right: 6px; }
-    .btn-logout {
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #d4c5c0;
-      padding: 8px 20px;
-      border-radius: 40px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: 0.3s;
-    }
-    .btn-logout:hover {
-      border-color: #D4A3B3;
-      color: #D4A3B3;
-    }
-
-    /* ===== MENU MOBILE ===== */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      z-index: 1001;
-    }
-    .hamburger span {
-      display: block;
-      width: 28px;
-      height: 2px;
-      background: #f5edea;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      max-width: 380px;
-      height: 100vh;
-      background: rgba(44, 7, 20, 0.98);
-      backdrop-filter: blur(20px);
-      z-index: 999;
-      padding: 80px 28px 40px;
-      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      border-left: 1px solid rgba(212, 163, 179, 0.08);
-    }
-    .mobile-menu.open { transform: translateX(0); }
-    .mobile-menu .menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: -1;
-      display: none;
-    }
-    .mobile-menu.open .menu-overlay { display: block; }
-
-    .mobile-menu .menu-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.08);
-    }
-    .mobile-menu .menu-header .user-info {
-      font-size: 0.9rem;
-      color: #d4c5c0;
-    }
-    .mobile-menu .menu-header .user-info strong {
-      color: #f5edea;
-      display: block;
-      font-size: 1.1rem;
-      margin-top: 4px;
-    }
-    .mobile-menu .menu-header .close-menu {
-      background: transparent;
-      border: none;
-      color: #f5edea;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 8px;
-      transition: 0.3s;
-    }
-    .mobile-menu .menu-header .close-menu:hover {
-      color: #D4A3B3;
-      transform: rotate(90deg);
-    }
-
-    .mobile-menu .menu-status {
-      background: rgba(31, 5, 16, 0.6);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .mobile-menu .menu-status .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #d4c5c0;
-    }
-    .mobile-menu .menu-status .status-row .label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .mobile-menu .menu-status .status-row .label i {
-      color: #D4A3B3;
-      font-size: 1rem;
-    }
-    .mobile-menu .menu-status .status-row .value {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .mobile-menu .menu-links {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 8px;
-    }
-    .mobile-menu .menu-links a {
-      color: #d4c5c0;
-      text-decoration: none;
-      padding: 14px 16px;
-      border-radius: 12px;
-      transition: 0.3s;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .mobile-menu .menu-links a i {
-      color: #D4A3B3;
-      width: 20px;
-      text-align: center;
-    }
-    .mobile-menu .menu-links a:hover {
-      background: rgba(212, 163, 179, 0.08);
-      color: #f5edea;
-    }
-    .mobile-menu .menu-links .logout-link {
-      margin-top: 12px;
-      border-top: 1px solid rgba(212, 163, 179, 0.06);
-      padding-top: 16px;
-      color: #7a5f5a;
-    }
-    .mobile-menu .menu-links .logout-link:hover {
-      color: #D4A3B3;
-      background: transparent;
-    }
-
-    /* ===== STATUS FLUTUANTE ===== */
-    .floating-status {
-      position: sticky;
-      top: 72px;
-      z-index: 99;
-      background: rgba(44, 7, 20, 0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
-      padding: 12px 0;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
-    }
-    .floating-status .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 32px;
-    }
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.85rem;
-      color: #d4c5c0;
-    }
-    .status-item i {
-      color: #D4A3B3;
-      font-size: 1.1rem;
-    }
-    .status-item .value {
-      color: #D4A3B3;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    /* ===== PROGRESS BAR ===== */
-    .progress-bar-container {
-      position: sticky;
-      top: 132px;
-      z-index: 98;
-      background: rgba(31, 5, 16, 0.6);
-      backdrop-filter: blur(8px);
-      padding: 8px 0;
-      margin-bottom: 8px;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
-      display: none;
-    }
-    .progress-bar-container .container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .progress-bar-container .progress-track {
-      flex: 1;
-      height: 6px;
-      background: rgba(212, 163, 179, 0.12);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .progress-bar-container .progress-track .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #D4A3B3, #f5edea);
-      border-radius: 10px;
-      transition: width 0.3s ease;
-    }
-    .progress-bar-container .progress-label {
-      font-size: 0.75rem;
-      color: #d4c5c0;
-      white-space: nowrap;
-      min-width: 90px;
-      text-align: right;
-    }
-    .progress-bar-container .progress-label strong {
-      color: #D4A3B3;
-    }
-
-    /* ===== FILTROS ===== */
-    .filter-bar {
-      position: sticky;
-      top: 174px;
-      z-index: 97;
-      background: rgba(44, 7, 20, 0.92);
-      backdrop-filter: blur(12px);
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(212, 163, 179, 0.06);
-      margin-bottom: 16px;
-    }
-    .filter-bar .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    .filter-btn {
-      background: rgba(31, 5, 16, 0.6);
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      color: #d4c5c0;
-      padding: 8px 24px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .filter-btn:hover {
-      border-color: #D4A3B3;
-      color: #f5edea;
-    }
-    .filter-btn.active {
-      background: #D4A3B3;
-      color: #2C0714;
-      border-color: #D4A3B3;
-    }
-
-    /* ===== INFO ===== */
-    .credits-info {
-      background: rgba(31, 5, 16, 0.6);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin: 12px auto 8px;
-      max-width: 700px;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 8px 16px;
-      text-align: center;
-    }
-    .credits-info .heart {
-      color: #D4A3B3;
-      font-size: 1.1rem;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-    .credits-info .label {
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.8rem;
-      color: #d4c5c0;
-      font-weight: 300;
-    }
-    .credits-info .label strong {
-      color: #D4A3B3;
-      font-weight: 600;
-    }
-    .credits-info .highlight {
-      color: #D4A3B3;
-      font-weight: 500;
-    }
-
-    /* ===== SKELETON ===== */
-    .skeleton {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #1a0510 25%, #2C0714 50%, #1a0510 75%);
-      background-size: 400% 400%;
-      animation: skeletonLoading 1.5s ease-in-out infinite;
-      z-index: 1;
-      border-radius: 20px;
-    }
-    @keyframes skeletonLoading {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .skeleton .spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #D4A3B3;
-      font-size: 1.5rem;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    /* ===== GALERIA ===== */
-    .gallery-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin: 16px 0 20px;
-    }
-    .gallery-header h2 {
-      font-family: 'Fraunces', serif;
-      font-weight: 600;
-      font-size: 1.6rem;
-      letter-spacing: -0.02em;
-    }
-    .gallery-header h2 span { color: #D4A3B3; }
-    .watermark-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-    }
-    .watermark-item {
-      background: #1f0510;
-      border-radius: 20px;
-      padding: 0;
-      text-align: center;
-      border: 1px solid rgba(212, 163, 179, 0.06);
-      position: relative;
-      user-select: none;
-      transition: 0.3s;
-      overflow: hidden;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      cursor: pointer;
-    }
-    .watermark-item:hover {
-      border-color: rgba(212, 163, 179, 0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    }
-    .watermark-item .real-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 2;
-      transition: opacity 0.5s ease, transform 0.3s ease;
-    }
-    .watermark-item .real-image.loaded { opacity: 0.85; }
-    .watermark-item .real-image:hover { transform: scale(1.03); }
-    .watermark-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: linear-gradient(to top, rgba(44, 7, 20, 0.95), transparent);
-      z-index: 3;
-      pointer-events: none;
-    }
-    .watermark-item .watermark-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-20deg);
-      opacity: 0.12;
-      pointer-events: none;
-      user-select: none;
-      width: 120px;
-      height: auto;
-      filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(0,0,0,0.5));
-      z-index: 1;
-    }
-    .watermark-item .watermark-text {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.5rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 1px;
-      background: rgba(0,0,0,0.4);
-      padding: 3px 10px;
-      border-radius: 20px;
-      backdrop-filter: blur(4px);
-      pointer-events: none;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      z-index: 4;
-    }
-
-    .watermark-item .badge-status {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      font-size: 0.65rem;
-      padding: 6px 10px;
-      border-radius: 50%;
-      backdrop-filter: blur(4px);
-      z-index: 4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: all 0.3s ease;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-      border: none;
-      cursor: default;
-      min-width: 32px;
-      min-height: 32px;
-    }
-    .watermark-item .badge-status.locked {
-      background: rgba(44, 7, 20, 0.8);
-      color: #D4A3B3;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-    }
-    .watermark-item .badge-status.downloaded {
-      background: rgba(46, 125, 50, 0.9);
-      color: #ffffff;
-      border: 1px solid rgba(76, 175, 80, 0.4);
-      box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 0.6rem;
-      cursor: default;
-      min-width: auto;
-    }
-    .watermark-item .badge-status.downloaded i {
-      font-size: 0.7rem;
-      margin-right: 4px;
-    }
-    .watermark-item .price-tag {
-      position: absolute;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(44, 7, 20, 0.85);
-      backdrop-filter: blur(8px);
-      padding: 4px 16px;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      color: #D4A3B3;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      z-index: 5;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .watermark-item .type-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      font-size: 0.6rem;
-      padding: 3px 12px;
-      border-radius: 40px;
-      z-index: 4;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(4px);
-    }
-    .watermark-item .type-badge.photo {
-      background: rgba(212, 163, 179, 0.2);
-      color: #D4A3B3;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-    }
-    .watermark-item .type-badge.video {
-      background: rgba(46, 125, 50, 0.2);
-      color: #4CAF50;
-      border: 1px solid rgba(76, 175, 80, 0.2);
-    }
-    .watermark-item .play-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3rem;
-      color: rgba(255,255,255,0.8);
-      z-index: 3;
-      text-shadow: 0 0 30px rgba(0,0,0,0.8);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .watermark-item:hover .play-icon {
-      opacity: 1;
-    }
-    .watermark-item.video-item .real-image {
-      opacity: 0.7;
-    }
-    .watermark-item.video-item .real-image.loaded {
-      opacity: 0.7;
-    }
-
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.92);
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(8px);
-      padding: 20px;
-    }
-    .modal-overlay.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    .modal-content {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .modal-content .watermark-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 10;
-    }
-    .modal-content .watermark-container .watermark-logo-modal {
-      width: 80%;
-      max-width: 700px;
-      height: auto;
-      user-select: none;
-      pointer-events: none;
-      opacity: 0.5;
-    }
-    @media (max-width: 768px) {
-      .modal-content .watermark-container .watermark-logo-modal {
-        width: 85%;
-        max-width: 500px;
-        opacity: 0.4;
-      }
-    }
-    @media (max-width: 480px) {
-      .modal-content .watermark-container .watermark-logo-modal {
-        width: 90%;
-        max-width: 350px;
-        opacity: 0.35;
-      }
-    }
-
-    .modal-content .modal-image {
-      width: auto;
-      height: auto;
-      max-width: 90vw;
-      max-height: 75vh;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      position: relative;
-      z-index: 1;
-    }
-    .modal-content .modal-image.loaded { opacity: 1; }
-    .modal-content .modal-video {
-      max-width: 90vw;
-      max-height: 75vh;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      position: relative;
-      z-index: 1;
-      background: #000;
-    }
-    .modal-content .modal-video.loaded { opacity: 1; }
-    .modal-content .modal-video video {
-      max-width: 100%;
-      max-height: 75vh;
-      border-radius: 12px;
-      display: block;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: -40px;
-      right: -40px;
-      background: rgba(44, 7, 20, 0.8);
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #f5edea;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-    .modal-close:hover {
-      background: #D4A3B3;
-      color: #2C0714;
-      transform: rotate(90deg);
-    }
-
-    .modal-progress {
-      position: absolute;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      max-width: 300px;
-      background: rgba(44, 7, 20, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 40px;
-      padding: 8px 16px;
-      display: none;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      z-index: 10;
-    }
-    .modal-progress.show { display: flex; }
-    .modal-progress .track {
-      flex: 1;
-      height: 4px;
-      background: rgba(212, 163, 179, 0.15);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .modal-progress .track .fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #D4A3B3, #f5edea);
-      border-radius: 10px;
-      transition: width 0.3s ease;
-    }
-    .modal-progress .label {
-      font-size: 0.65rem;
-      color: #d4c5c0;
-      white-space: nowrap;
-      min-width: 35px;
-    }
-
-    .modal-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(44, 7, 20, 0.6);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(212, 163, 179, 0.15);
-      color: #f5edea;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      z-index: 10;
-    }
-    .modal-nav:hover {
-      background: #D4A3B3;
-      color: #2C0714;
-      transform: translateY(-50%) scale(1.1);
-    }
-    .modal-nav.prev { left: -24px; }
-    .modal-nav.next { right: -24px; }
-    .modal-nav:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      transform: translateY(-50%) scale(1);
-    }
-
-    .modal-counter {
-      position: absolute;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(44, 7, 20, 0.7);
-      backdrop-filter: blur(8px);
-      padding: 6px 20px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      color: #D4A3B3;
-      border: 1px solid rgba(212, 163, 179, 0.1);
-      z-index: 10;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
-    .modal-counter span {
-      color: #f5edea;
-      font-weight: 700;
-    }
-
-    .modal-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
-      z-index: 10;
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .modal-btn-buy {
-      background: #D4A3B3;
-      color: #2C0714;
-      border: none;
-      padding: 14px 32px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      width: 100%;
-    }
-    .modal-btn-buy:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 163, 179, 0.3);
-      background: #c08b9e;
-    }
-    .modal-btn-buy:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .modal-btn-buy.downloaded {
-      background: #2E7D32;
-      color: #ffffff;
-      cursor: default;
-    }
-    .modal-btn-buy.downloaded:hover {
-      transform: none;
-      box-shadow: none;
-    }
-    .modal-btn-buy i {
-      font-size: 1.1rem;
-    }
-    .modal-btn-buy .spinner {
-      animation: spin 1s linear infinite;
-      display: inline-block;
-    }
-
-    /* 🔥 NOVO: BOTÃO DE CONFIRMAR PAGAMENTO */
-    .modal-btn-confirm-payment {
-      background: #1565C0;
-      color: #ffffff;
-      border: none;
-      padding: 12px 32px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: center;
-      width: 100%;
-    }
-    .modal-btn-confirm-payment:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(21, 101, 192, 0.3);
-      background: #0d47a1;
-    }
-    .modal-btn-confirm-payment:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .modal-btn-confirm-payment .spinner {
-      animation: spin 1s linear infinite;
-      display: inline-block;
-    }
-
-    .modal-btn-close {
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #d4c5c0;
-      padding: 12px 24px;
-      border-radius: 40px;
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.3s;
-      width: 100%;
-    }
-    .modal-btn-close:hover {
-      border-color: #D4A3B3;
-      color: #f5edea;
-    }
-
-    .modal-price {
-      color: #D4A3B3;
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-top: 8px;
-      text-align: center;
-      z-index: 10;
-    }
-    .modal-price strong {
-      font-size: 1.2rem;
-    }
-    .modal-price .media-type {
-      display: inline-block;
-      padding: 2px 12px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      margin-left: 8px;
-    }
-    .modal-price .media-type.photo {
-      background: rgba(212, 163, 179, 0.15);
-      color: #D4A3B3;
-    }
-    .modal-price .media-type.video {
-      background: rgba(46, 125, 50, 0.15);
-      color: #4CAF50;
-    }
-    .modal-price .payment-status {
-      display: block;
-      margin-top: 4px;
-      font-size: 0.75rem;
-      color: #7a5f5a;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      text-align: center;
-      padding: 32px 0 20px;
-      border-top: 1px solid rgba(212, 163, 179, 0.04);
-      margin-top: 40px;
-    }
-    footer p {
-      font-weight: 300;
-      font-size: 0.8rem;
-      color: #7a5f5a;
-    }
-
-    /* ===== RESPONSIVO ===== */
-    @media (max-width: 768px) {
-      body { padding-top: 70px; }
-      .container { padding: 0 20px; }
-      .hamburger { display: flex; }
-      .floating-status { display: none; }
-      .navbar { padding: 10px 0; }
-      .navbar .logo img { height: 38px; max-width: 120px; }
-      .navbar.scrolled .logo img { height: 34px; }
-      .mobile-menu { display: block; }
-      .progress-bar-container { top: 118px; }
-      .filter-bar { top: 160px; }
-      .progress-bar-container .container { flex-wrap: wrap; gap: 8px; }
-      .progress-bar-container .progress-label { min-width: 70px; font-size: 0.65rem; }
-      .credits-info { flex-direction: column; gap: 4px; padding: 12px 16px; font-size: 0.75rem; }
-      .watermark-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-      .watermark-item { min-height: 220px; }
-      .watermark-item .watermark-logo { width: 70px; }
-      .watermark-item .badge-status.downloaded { font-size: 0.5rem; padding: 3px 8px; top: 6px; right: 6px; }
-      .watermark-item .badge-status.downloaded i { font-size: 0.6rem; }
-      .watermark-item .price-tag { font-size: 0.65rem; bottom: 50px; padding: 3px 12px; }
-      .watermark-item .type-badge { font-size: 0.5rem; padding: 2px 10px; top: 8px; left: 8px; }
-      .watermark-item .play-icon { font-size: 2rem; }
-      .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
-      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
-      .nav-info .user span { display: inline; }
-      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
-      .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
-      .modal-nav.prev { left: -10px; }
-      .modal-nav.next { right: -10px; }
-      .modal-content .modal-image { max-height: 60vh; }
-      .modal-content .modal-video { max-height: 60vh; }
-      .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
-      .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
-      .modal-btn-buy { padding: 10px 20px; font-size: 0.85rem; }
-      .modal-progress { width: 80%; bottom: 80px; }
-      .filter-bar { padding: 8px 0; }
-      .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
-    }
-    @media (max-width: 480px) {
-      body { padding-top: 60px; }
-      .watermark-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .watermark-item { min-height: 180px; }
-      .watermark-item .watermark-logo { width: 50px; }
-      .watermark-item .watermark-text { font-size: 0.4rem; padding: 2px 8px; bottom: 8px; left: 8px; }
-      .watermark-item .badge-status.downloaded { font-size: 0.4rem; padding: 2px 6px; top: 4px; right: 4px; }
-      .watermark-item .badge-status.downloaded i { font-size: 0.5rem; }
-      .watermark-item .price-tag { font-size: 0.55rem; bottom: 40px; padding: 2px 10px; }
-      .watermark-item .type-badge { font-size: 0.45rem; padding: 2px 8px; top: 6px; left: 6px; }
-      .watermark-item .play-icon { font-size: 1.5rem; }
-      .navbar .logo img { height: 32px; max-width: 100px; }
-      .navbar.scrolled .logo img { height: 28px; }
-      .progress-bar-container { top: 98px; }
-      .filter-bar { top: 140px; }
-      .modal-content .modal-image { max-height: 50vh; }
-      .modal-content .modal-video { max-height: 50vh; }
-      .modal-actions { flex-direction: column; align-items: center; }
-      .modal-nav { width: 30px; height: 30px; font-size: 0.7rem; }
-      .modal-nav.prev { left: -4px; }
-      .modal-nav.next { right: -4px; }
-      .credits-info { font-size: 0.65rem; padding: 10px 12px; }
-      .mobile-menu { max-width: 100%; padding: 70px 20px 30px; }
-      .mobile-menu .menu-status .status-row { font-size: 0.75rem; }
-      .mobile-menu .menu-links a { font-size: 0.85rem; padding: 12px 14px; }
-      .filter-bar { padding: 6px 0; }
-      .filter-btn { padding: 4px 12px; font-size: 0.65rem; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar" id="mainNavbar">
-  <div class="container navbar-content">
-    <a href="https://studiorassi.github.io/home/index.html" class="logo">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo-header.png" alt="Studio Rassi" width="150" height="45" loading="lazy">
-    </a>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="nav-info">
-      <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Convidado</strong> · 
-        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
-          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
-          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
-        </span>
-      </span>
-      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- ===== MENU MOBILE ===== -->
-<div class="mobile-menu" id="mobileMenu">
-  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
-  <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Convidado</strong></div>
-    <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="mobile-menu menu-status">
-    <div class="status-row">
-      <span class="label"><i class="fas fa-camera"></i> Fotos</span>
-      <span class="value">R$ 15,00</span>
-    </div>
-    <div class="status-row">
-      <span class="label"><i class="fas fa-video"></i> Vídeos</span>
-      <span class="value">R$ 40,00</span>
-    </div>
-    <div class="status-row">
-      <span class="label"><i class="fas fa-images"></i> Baixados</span>
-      <span class="value" id="mobileDownloadedDisplay">0 / 0</span>
-    </div>
-  </div>
-  <div class="menu-links">
-    <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
-    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
-  </div>
-</div>
-
-<!-- ===== STATUS ===== -->
-<div class="floating-status" id="statusBar">
-  <div class="container">
-    <div class="status-item">
-      <i class="fas fa-camera"></i>
-      <span>Fotos: <strong class="value">R$ 15,00</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="fas fa-video"></i>
-      <span>Vídeos: <strong class="value">R$ 40,00</strong></span>
-    </div>
-    <div class="status-item">
-      <i class="fas fa-images"></i>
-      <span>Baixados: <strong class="value" id="desktopDownloadedDisplay">0 / 0</strong></span>
-    </div>
-  </div>
-</div>
-
-<!-- ===== PROGRESS BAR ===== -->
-<div class="progress-bar-container" id="progressContainer">
-  <div class="container">
-    <span style="font-size:0.8rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-label">Carregando <strong id="loadedCount">0</strong>/<span id="totalCount">0</span></div>
-  </div>
-</div>
-
-<!-- ===== FILTROS ===== -->
-<div class="filter-bar" id="filterBar">
-  <div class="container">
-    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">
-      <i class="fas fa-th"></i> Todos
-    </button>
-    <button class="filter-btn" data-filter="foto" onclick="setFilter('foto')">
-      <i class="fas fa-camera"></i> Fotos
-    </button>
-    <button class="filter-btn" data-filter="video" onclick="setFilter('video')">
-      <i class="fas fa-video"></i> Vídeos
-    </button>
-  </div>
-</div>
-
-<!-- ===== INFO ===== -->
-<div class="container">
-  <div class="credits-info">
-    <span class="heart">💖</span>
-    <span class="label">
-      <strong>Como funciona:</strong> Fotos <span class="highlight">R$ 15,00</span> · 
-      Vídeos <span class="highlight">R$ 40,00</span> · 
-      Clique no item, visualize com marca d'água e compre a versão em <span class="highlight">alta definição</span>
-    </span>
-  </div>
-</div>
-
-<!-- ===== GALERIA ===== -->
-<div class="container">
-  <div class="gallery-header">
-    <h2>📸 <span>Memórias em Fotos e Vídeos</span></h2>
-    <span style="font-weight:300; color:#d4c5c0; font-size:0.85rem;">
-      <i class="fas fa-shield-alt" style="color:#D4A3B3;"></i> Protegido com marca d'água
-    </span>
-  </div>
-  <div class="watermark-grid" id="galleryGrid"></div>
-</div>
-
-<!-- ===== MODAL ===== -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-content">
-    
-    <!-- MARCA D'ÁGUA -->
-    <div class="watermark-container">
-      <img src="https://studiorassi.github.io/home/assets/images/logo/logo_branco.png" alt="Studio Rassi" class="watermark-logo-modal">
-    </div>
-    
-    <!-- PROGRESS -->
-    <div class="modal-progress" id="modalProgress">
-      <span style="font-size:0.7rem; color:#D4A3B3;"><i class="fas fa-spinner fa-spin"></i></span>
-      <div class="track"><div class="fill" id="modalProgressFill"></div></div>
-      <span class="label" id="modalProgressLabel">0%</span>
-    </div>
-    
-    <!-- CONTADOR -->
-    <div class="modal-counter" id="modalCounter">
-      <span id="currentIndexDisplay">1</span> de <span id="totalCountDisplay">0</span>
-    </div>
-    
-    <!-- NAVEGAÇÃO -->
-    <button class="modal-nav prev" id="modalPrev" onclick="navigateModal(-1)">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    <button class="modal-nav next" id="modalNext" onclick="navigateModal(1)">
-      <i class="fas fa-chevron-right"></i>
-    </button>
-    
-    <!-- FECHAR -->
-    <button class="modal-close" onclick="closeModal()">
-      <i class="fas fa-times"></i>
-    </button>
-    
-    <!-- IMAGEM / VÍDEO -->
-    <div id="modalMediaContainer">
-      <img id="modalImage" class="modal-image" src="" alt="Foto" style="display:none;">
-      <div id="modalVideoContainer" class="modal-video" style="display:none;">
-        <video id="modalVideo" controls playsinline preload="metadata">
-          <source id="modalVideoSource" src="" type="video/mp4">
-          Seu navegador não suporta vídeos.
-        </video>
-      </div>
-    </div>
-    
-    <!-- AÇÕES -->
-    <div class="modal-actions">
-      <button class="modal-btn-buy" id="modalBuyBtn" onclick="buyMedia()">
-        <i class="fas fa-shopping-cart"></i> Comprar · <span id="modalPriceDisplay">R$ 15,00</span>
-      </button>
-      
-      <!-- 🔥 NOVO: BOTÃO DE CONFIRMAR PAGAMENTO -->
-      <button class="modal-btn-confirm-payment" id="modalConfirmPaymentBtn" onclick="confirmPayment()">
-        <i class="fas fa-check-circle"></i> Já realizei o pagamento
-      </button>
-      
-      <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
-    </div>
-    
-    <div class="modal-price" id="modalPrice">
-      <i class="fas fa-lock" style="color:#7a5f5a;"></i> 
-      Com marca d'água · <strong id="modalPriceStrong">R$ 15,00</strong> para alta definição sem marca
-      <span class="media-type" id="modalMediaType">📷 Foto</span>
-      <span class="payment-status" id="paymentStatus"></span>
-    </div>
-  </div>
-</div>
-
-<!-- ===== FOOTER ===== -->
-<footer><div class="container"><p>Studio Rassi · Photo & Video · © 2026 · Fotos e Vídeos</p></div></footer>
-
-<!-- ===== SCRIPT ===== -->
 <script>
   // ============================================================
   // CONFIGURAÇÕES
@@ -1279,138 +7,18 @@
   const VIDEO_PRICE = 40.00;
 
   // 🔥 LINKS DO MERCADO PAGO
-  const MP_URL_PHOTO = 'https://mpago.la/1Poyp16';   // R$ 15,00 - Foto avulsa
-  const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';   // R$ 40,00 - Vídeo avulso
+  const MP_URL_PHOTO = 'https://mpago.la/1Poyp16';
+  const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';
 
   // ============================================================
-  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
+  // DADOS
   // ============================================================
   let allMedia = [];
   let totalItems = 0;
-
-  // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3
-  // ============================================================
-  async function loadMediaFromS3() {
-    try {
-      console.log('📡 Buscando lista de fotos no S3...');
-      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
-      
-      if (!fotosResponse.ok) {
-        throw new Error('Erro ao buscar lista de fotos');
-      }
-      
-      const fotosData = await fotosResponse.json();
-      console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
-      
-      const photoFiles = fotosData.files.filter(file => 
-        file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
-      );
-      
-      const fotos = photoFiles.map((file, index) => {
-        const filename = file.filename;
-        const numMatch = filename.match(/(\d+)/);
-        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        const title = filename.replace(/\.[^.]+$/, '');
-        return {
-          id: `foto_${num}`,
-          type: 'foto',
-          key: `fotos/${filename}`,
-          price: PHOTO_PRICE,
-          title: title,
-          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
-          isVideo: false
-        };
-      });
-
-      console.log('📡 Buscando lista de vídeos no S3...');
-      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
-      
-      if (!videosResponse.ok) {
-        throw new Error('Erro ao buscar lista de vídeos');
-      }
-      
-      const videosData = await videosResponse.json();
-      console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
-      
-      const videoFiles = videosData.files.filter(file => 
-        file.filename.endsWith('.mp4')
-      );
-      
-      function createVideoPlaceholder(title) {
-        const svg = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-            <rect width="400" height="300" fill="#1f0510"/>
-            <rect x="20" y="20" width="360" height="260" rx="10" fill="#2C0714" stroke="#D4A3B3" stroke-width="1" opacity="0.5"/>
-            <circle cx="200" cy="130" r="45" fill="#D4A3B3" opacity="0.2"/>
-            <polygon points="185,110 185,150 225,130" fill="#D4A3B3"/>
-            <text x="200" y="210" font-family="Arial, sans-serif" font-size="16" fill="#D4A3B3" text-anchor="middle" font-weight="bold">${title}</text>
-            <text x="200" y="235" font-family="Arial, sans-serif" font-size="12" fill="#7a5f5a" text-anchor="middle">🎬 Clique para assistir</text>
-          </svg>
-        `;
-        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-      }
-      
-      const videos = videoFiles.map((file, index) => {
-        const filename = file.filename;
-        const numMatch = filename.match(/(\d+)/);
-        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        const title = filename.replace(/\.[^.]+$/, '');
-        
-        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
-        
-        return {
-          id: `video_${num}`,
-          type: 'video',
-          key: `videos/${filename}`,
-          price: VIDEO_PRICE,
-          title: title,
-          thumbnail: thumbnailUrl,
-          fallbackThumbnail: createVideoPlaceholder(title),
-          mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
-          isVideo: true
-        };
-      });
-
-      allMedia = [...fotos, ...videos];
-      totalItems = allMedia.length;
-      
-      console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
-      
-      updateCounters();
-      renderGallery();
-      
-    } catch (error) {
-      console.error('❌ Erro ao carregar mídias:', error);
-      alert('Erro ao carregar a galeria. Tente novamente.');
-    }
-  }
-
-  // ============================================================
-  // ATUALIZAR CONTADORES
-  // ============================================================
-  function updateCounters() {
-    const elements = [
-      document.getElementById('totalCount'),
-      document.getElementById('totalCountDisplay'),
-      document.getElementById('totalPhotosDisplay')
-    ];
-    elements.forEach(el => {
-      if (el) el.textContent = totalItems;
-    });
-    updateDownloadedDisplay();
-  }
-
-  // ============================================================
-  // ESTADO
-  // ============================================================
   let currentModalIndex = 0;
   let imagesLoaded = 0;
   let currentFilter = 'all';
   let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
-
-  // 🔥 CONTROLE DE PAGAMENTO PENDENTE
   let pendingPurchase = null;
 
   // ============================================================
@@ -1440,7 +48,7 @@
   const navbar = document.getElementById('mainNavbar');
 
   // ============================================================
-  // FUNÇÕES DE UI
+  // FUNÇÕES AUXILIARES
   // ============================================================
   function updateDownloadedDisplay() {
     const count = downloadedItems.length;
@@ -1460,9 +68,7 @@
       modalBuyBtn.className = 'modal-btn-buy downloaded';
       modalBuyBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
       modalBuyBtn.disabled = true;
-      
       modalConfirmPaymentBtn.style.display = 'none';
-      
       if (paymentStatus) {
         paymentStatus.textContent = '✅ Item já baixado';
         paymentStatus.style.color = '#4CAF50';
@@ -1473,10 +79,7 @@
       modalBuyBtn.className = 'modal-btn-buy';
       modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · R$ ${price.toFixed(2)}`;
       modalBuyBtn.disabled = false;
-      
-      // Mostra botão de confirmação de pagamento
       modalConfirmPaymentBtn.style.display = 'flex';
-      
       if (paymentStatus) {
         paymentStatus.textContent = '⏳ Aguardando pagamento';
         paymentStatus.style.color = '#FFD700';
@@ -1511,54 +114,115 @@
     }
   }
 
-  // ============================================================
-  // FILTROS
-  // ============================================================
-  let filterButtons = document.querySelectorAll('.filter-btn');
-
-  function setFilter(filter) {
-    currentFilter = filter;
-    filterButtons.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.filter === filter);
+  function updateCounters() {
+    const elements = [
+      document.getElementById('totalCount'),
+      document.getElementById('totalCountDisplay'),
+      document.getElementById('totalPhotosDisplay')
+    ];
+    elements.forEach(el => {
+      if (el) el.textContent = totalItems;
     });
-    renderGallery();
+    updateDownloadedDisplay();
   }
 
   // ============================================================
-  // FUNÇÃO PARA TRATAR ERRO DE CARREGAMENTO
+  // GERAR CÓDIGO DE CONFIRMAÇÃO
   // ============================================================
-  function handleImageError(index, fallbackSrc) {
-    const img = document.querySelector(`.real-image[data-index="${index}"]`);
-    if (img) {
-      if (fallbackSrc) {
-        img.src = fallbackSrc;
-        img.onerror = null;
-      } else {
-        img.style.display = 'none';
-        const container = img.parentElement;
-        const unavailableDiv = document.createElement('div');
-        unavailableDiv.style.cssText = `
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: #D4A3B3;
-          font-size: 0.9rem;
-          text-align: center;
-          z-index: 10;
-          background: rgba(44, 7, 20, 0.8);
-          padding: 20px;
-          border-radius: 12px;
-          border: 1px solid rgba(212, 163, 179, 0.1);
-        `;
-        unavailableDiv.innerHTML = `
-          <i class="fas fa-video" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
-          ${img.alt || 'Indisponível'}
-        `;
-        container.appendChild(unavailableDiv);
-      }
+  function gerarCodigoConfirmacao() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let codigo = '';
+    for (let i = 0; i < 8; i++) {
+      codigo += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    onMediaLoad(index);
+    return codigo;
+  }
+
+  // ============================================================
+  // CARREGAR MÍDIAS
+  // ============================================================
+  async function loadMediaFromS3() {
+    try {
+      console.log('📡 Buscando lista de fotos no S3...');
+      const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
+      if (!fotosResponse.ok) throw new Error('Erro ao buscar lista de fotos');
+      const fotosData = await fotosResponse.json();
+      
+      const photoFiles = fotosData.files.filter(file => 
+        file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
+      );
+      
+      const fotos = photoFiles.map((file, index) => {
+        const filename = file.filename;
+        const numMatch = filename.match(/(\d+)/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        const title = filename.replace(/\.[^.]+$/, '');
+        return {
+          id: `foto_${num}`,
+          type: 'foto',
+          key: `fotos/${filename}`,
+          price: PHOTO_PRICE,
+          title: title,
+          thumbnail: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/fotos/${filename}`,
+          isVideo: false
+        };
+      });
+
+      console.log('📡 Buscando lista de vídeos no S3...');
+      const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
+      if (!videosResponse.ok) throw new Error('Erro ao buscar lista de vídeos');
+      const videosData = await videosResponse.json();
+      
+      const videoFiles = videosData.files.filter(file => 
+        file.filename.endsWith('.mp4')
+      );
+      
+      function createVideoPlaceholder(title) {
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+            <rect width="400" height="300" fill="#1f0510"/>
+            <rect x="20" y="20" width="360" height="260" rx="10" fill="#2C0714" stroke="#D4A3B3" stroke-width="1" opacity="0.5"/>
+            <circle cx="200" cy="130" r="45" fill="#D4A3B3" opacity="0.2"/>
+            <polygon points="185,110 185,150 225,130" fill="#D4A3B3"/>
+            <text x="200" y="210" font-family="Arial, sans-serif" font-size="16" fill="#D4A3B3" text-anchor="middle" font-weight="bold">${title}</text>
+            <text x="200" y="235" font-family="Arial, sans-serif" font-size="12" fill="#7a5f5a" text-anchor="middle">🎬 Clique para assistir</text>
+          </svg>
+        `;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      }
+      
+      const videos = videoFiles.map((file, index) => {
+        const filename = file.filename;
+        const numMatch = filename.match(/(\d+)/);
+        const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
+        const title = filename.replace(/\.[^.]+$/, '');
+        const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
+        return {
+          id: `video_${num}`,
+          type: 'video',
+          key: `videos/${filename}`,
+          price: VIDEO_PRICE,
+          title: title,
+          thumbnail: thumbnailUrl,
+          fallbackThumbnail: createVideoPlaceholder(title),
+          mediaUrl: `${API_BASE_URL}/api/gallery/view/videos/${filename}`,
+          isVideo: true
+        };
+      });
+
+      allMedia = [...fotos, ...videos];
+      totalItems = allMedia.length;
+      
+      console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
+      
+      updateCounters();
+      renderGallery();
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar mídias:', error);
+      alert('Erro ao carregar a galeria. Tente novamente.');
+    }
   }
 
   // ============================================================
@@ -1644,6 +308,53 @@
         }
       }
     }
+  }
+
+  function handleImageError(index, fallbackSrc) {
+    const img = document.querySelector(`.real-image[data-index="${index}"]`);
+    if (img) {
+      if (fallbackSrc) {
+        img.src = fallbackSrc;
+        img.onerror = null;
+      } else {
+        img.style.display = 'none';
+        const container = img.parentElement;
+        const unavailableDiv = document.createElement('div');
+        unavailableDiv.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #D4A3B3;
+          font-size: 0.9rem;
+          text-align: center;
+          z-index: 10;
+          background: rgba(44, 7, 20, 0.8);
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid rgba(212, 163, 179, 0.1);
+        `;
+        unavailableDiv.innerHTML = `
+          <i class="fas fa-video" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+          ${img.alt || 'Indisponível'}
+        `;
+        container.appendChild(unavailableDiv);
+      }
+    }
+    onMediaLoad(index);
+  }
+
+  // ============================================================
+  // FILTROS
+  // ============================================================
+  let filterButtons = document.querySelectorAll('.filter-btn');
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    filterButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    renderGallery();
   }
 
   // ============================================================
@@ -1787,169 +498,7 @@
   }
 
   // ============================================================
-  // 🔥 COMPRA - REDIRECIONA PARA MERCADO PAGO
-  // ============================================================
-  function buyMedia() {
-    const item = allMedia[currentModalIndex];
-    if (!item) return;
-
-    if (downloadedItems.includes(item.id)) {
-      alert('✅ Este item já foi baixado.');
-      return;
-    }
-
-    const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
-    const typeName = item.isVideo ? 'vídeo' : 'foto';
-    
-    const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
-    
-    // 🔥 SALVA A INTENÇÃO DE COMPRA
-    pendingPurchase = {
-      id: item.id,
-      type: item.type,
-      key: item.key,
-      title: item.title,
-      price: item.price,
-      timestamp: Date.now()
-    };
-    localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
-
-    const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
-
-    if (confirm(confirmMsg)) {
-      window.open(paymentUrl, '_blank');
-      
-      modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
-      modalBuyBtn.style.background = '#FFD700';
-      modalBuyBtn.style.color = '#2C0714';
-      modalBuyBtn.disabled = true;
-      
-      updatePaymentStatus('⏳ Aguardando confirmação do pagamento', 'warning');
-      
-      // Mostra instruções
-      setTimeout(() => {
-        updatePaymentStatus('💡 Após pagar, clique em "Já realizei o pagamento"', 'info');
-      }, 2000);
-
-      console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
-      console.log(`🔗 Link: ${paymentUrl}`);
-    }
-  }
-
-  // ============================================================
-  // 🔥 CONFIRMAR PAGAMENTO - CORAÇÃO DO SISTEMA
-  // ============================================================
-  function confirmPayment() {
-    const item = allMedia[currentModalIndex];
-    if (!item) return;
-
-    if (downloadedItems.includes(item.id)) {
-      alert('✅ Este item já foi baixado.');
-      return;
-    }
-
-    const btn = document.getElementById('modalConfirmPaymentBtn');
-    const originalHTML = btn.innerHTML;
-    
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"><i class="fas fa-spinner"></i></span> Verificando...';
-
-    // 🔥 VERIFICA O PAGAMENTO PENDENTE
-    const pendingData = localStorage.getItem('pendingMedia');
-    
-    if (!pendingData) {
-      alert('ℹ️ Nenhum pagamento pendente encontrado.\n\nVocê precisa primeiro clicar em "Comprar" para gerar um pagamento.');
-      btn.disabled = false;
-      btn.innerHTML = originalHTML;
-      return;
-    }
-
-    try {
-      const pending = JSON.parse(pendingData);
-      
-      // Verifica se o pagamento pendente é para o item atual
-      if (pending.id !== item.id) {
-        const confirmar = confirm(
-          `⚠️ Você tem um pagamento pendente para "${pending.title}" (${pending.type}).\n\n` +
-          `Deseja liberar este item "${item.title}" no lugar?`
-        );
-        if (!confirmar) {
-          btn.disabled = false;
-          btn.innerHTML = originalHTML;
-          return;
-        }
-        // Atualiza o pendente para o item atual
-        pending.id = item.id;
-        pending.type = item.type;
-        pending.title = item.title;
-        pending.key = item.key;
-        pending.price = item.price;
-        localStorage.setItem('pendingMedia', JSON.stringify(pending));
-      }
-
-      // 🔥 LIBERA O DOWNLOAD (COMPENSAÇÃO AUTOMÁTICA)
-      const timeElapsed = Date.now() - pending.timestamp;
-      const minutesElapsed = Math.floor(timeElapsed / (1000 * 60));
-
-      // Verifica se o pagamento foi feito há menos de 2 minutos
-      // (Simula confirmação de pagamento - na prática, o admin confirmaria manualmente)
-      if (minutesElapsed < 30) {
-        // 🔥 COMPENSAÇÃO AUTOMÁTICA - LIBERA O DOWNLOAD
-        if (!downloadedItems.includes(item.id)) {
-          downloadedItems.push(item.id);
-          localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
-          
-          // Atualiza a interface
-          updateDownloadBadge(item.id);
-          updateDownloadedDisplay();
-          updateModalButtons(true);
-          
-          // Remove o pendente
-          localStorage.removeItem('pendingMedia');
-          pendingPurchase = null;
-          
-          // 🔥 BAIXA AUTOMATICAMENTE O ARQUIVO
-          downloadMedia(item);
-          
-          alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
-          
-          btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
-          btn.style.background = '#2E7D32';
-          btn.style.color = '#ffffff';
-          
-          updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
-          
-          setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            btn.style.background = '';
-            btn.style.color = '';
-          }, 5000);
-        }
-      } else {
-        // Pagamento antigo - pede para refazer
-        alert(
-          `⏰ O pagamento pendente expirou.\n\n` +
-          `Por favor, clique novamente em "Comprar" para gerar um novo pagamento.\n\n` +
-          `(Tempo limite: 30 minutos)`
-        );
-        localStorage.removeItem('pendingMedia');
-        pendingPurchase = null;
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
-        updatePaymentStatus('⏰ Pagamento expirado. Clique em "Comprar" novamente.', 'error');
-      }
-      
-    } catch (error) {
-      console.error('❌ Erro ao confirmar pagamento:', error);
-      alert('❌ Erro ao verificar o pagamento. Tente novamente.');
-      btn.disabled = false;
-      btn.innerHTML = originalHTML;
-    }
-  }
-
-  // ============================================================
-  // 🔥 FUNÇÃO PARA BAIXAR O ARQUIVO
+  // 🔥 DOWNLOAD DO ARQUIVO
   // ============================================================
   async function downloadMedia(item) {
     try {
@@ -1983,25 +532,178 @@
   }
 
   // ============================================================
-  // 🔥 VERIFICAÇÃO AUTOMÁTICA DE PAGAMENTO PENDENTE
+  // 🔥 COMPRA - COM CÓDIGO DE CONFIRMAÇÃO
+  // ============================================================
+  function buyMedia() {
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
+
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado.');
+      return;
+    }
+
+    const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
+    const typeName = item.isVideo ? 'vídeo' : 'foto';
+    const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
+    
+    const codigoConfirmacao = gerarCodigoConfirmacao();
+    
+    pendingPurchase = {
+      id: item.id,
+      type: item.type,
+      key: item.key,
+      title: item.title,
+      price: item.price,
+      timestamp: Date.now(),
+      codigo: codigoConfirmacao
+    };
+    localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
+
+    const confirmMsg = 
+      `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\n` +
+      `📌 CÓDIGO DE CONFIRMAÇÃO: ${codigoConfirmacao}\n\n` +
+      `🔗 Clique em OK para ir para o pagamento (Mercado Pago).\n\n` +
+      `⚠️ GUARDE O CÓDIGO ACIMA!\n` +
+      `Após o pagamento, você precisará deste código para liberar o download.`;
+
+    if (confirm(confirmMsg)) {
+      window.open(paymentUrl, '_blank');
+      
+      if (modalBuyBtn) {
+        modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
+        modalBuyBtn.style.background = '#FFD700';
+        modalBuyBtn.style.color = '#2C0714';
+        modalBuyBtn.disabled = true;
+      }
+      
+      updatePaymentStatus(`⏳ Código: ${codigoConfirmacao} - Aguardando pagamento`, 'warning');
+      
+      setTimeout(() => {
+        updatePaymentStatus(`💡 Código: ${codigoConfirmacao} - Após pagar, informe o código`, 'info');
+      }, 2000);
+
+      alert(
+        `📌 GUARDE ESTE CÓDIGO:\n\n` +
+        `🔐 ${codigoConfirmacao}\n\n` +
+        `Após realizar o pagamento, clique em "Já realizei o pagamento" e informe este código.\n\n` +
+        `⚠️ Não compartilhe este código com ninguém!`
+      );
+
+      console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
+      console.log(`🔗 Link: ${paymentUrl}`);
+      console.log(`🔐 Código: ${codigoConfirmacao}`);
+    }
+  }
+
+  // ============================================================
+  // 🔥 CONFIRMAR PAGAMENTO - COM VALIDAÇÃO DE CÓDIGO
+  // ============================================================
+  function confirmPayment() {
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
+
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado.');
+      return;
+    }
+
+    const pendingData = localStorage.getItem('pendingMedia');
+    
+    if (!pendingData) {
+      alert('ℹ️ Nenhum pagamento pendente encontrado.\n\nVocê precisa primeiro clicar em "Comprar" para gerar um pagamento.');
+      return;
+    }
+
+    try {
+      const pending = JSON.parse(pendingData);
+      
+      if (pending.id !== item.id) {
+        const confirmar = confirm(
+          `⚠️ Você tem um pagamento pendente para "${pending.title}" (${pending.type}).\n\n` +
+          `Deseja liberar este item "${item.title}" no lugar?`
+        );
+        if (!confirmar) return;
+        
+        pending.id = item.id;
+        pending.type = item.type;
+        pending.title = item.title;
+        pending.key = item.key;
+        pending.price = item.price;
+        localStorage.setItem('pendingMedia', JSON.stringify(pending));
+      }
+
+      // 🔥 SOLICITA O CÓDIGO DE CONFIRMAÇÃO
+      const codigoInformado = prompt(
+        `🔐 Para confirmar o pagamento de "${item.title}" (${item.type}), digite o código de confirmação:\n\n` +
+        `📌 Seu código: ${pending.codigo || 'Não definido'}\n\n` +
+        `⚠️ Este código foi mostrado na hora da compra.\n` +
+        `Se você não tem o código, aguarde a confirmação manual do administrador.`
+      );
+
+      if (!codigoInformado) {
+        alert('❌ Confirmação cancelada.');
+        return;
+      }
+
+      // 🔥 VERIFICA O CÓDIGO
+      if (codigoInformado !== pending.codigo) {
+        alert(`❌ Código de confirmação inválido!\n\nCódigo correto: ${pending.codigo}\n\nTente novamente ou aguarde a confirmação manual.`);
+        return;
+      }
+
+      // 🔥 CÓDIGO VÁLIDO - LIBERA O DOWNLOAD
+      if (!downloadedItems.includes(item.id)) {
+        downloadedItems.push(item.id);
+        localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
+        
+        updateDownloadBadge(item.id);
+        updateDownloadedDisplay();
+        updateModalButtons(true);
+        
+        localStorage.removeItem('pendingMedia');
+        pendingPurchase = null;
+        
+        downloadMedia(item);
+        
+        alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
+        
+        const btn = document.getElementById('modalConfirmPaymentBtn');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
+          btn.style.background = '#2E7D32';
+          btn.style.color = '#ffffff';
+          btn.disabled = true;
+        }
+        
+        updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao confirmar pagamento:', error);
+      alert('❌ Erro ao verificar o pagamento. Tente novamente.');
+    }
+  }
+
+  // ============================================================
+  // 🔥 VERIFICAÇÃO DE PAGAMENTO PENDENTE
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingMedia');
     if (pending) {
       try {
         const data = JSON.parse(pending);
-        // Se passou mais de 30 minutos, remove
-        if (Date.now() - data.timestamp > 30 * 60 * 1000) {
+        if (Date.now() - data.timestamp > 2 * 60 * 60 * 1000) {
           localStorage.removeItem('pendingMedia');
           pendingPurchase = null;
           if (paymentStatus) {
-            paymentStatus.textContent = '⏰ Pagamento expirado';
+            paymentStatus.textContent = '⏰ Pedido expirado (2h)';
             paymentStatus.style.color = '#ff6b6b';
           }
         } else {
           pendingPurchase = data;
           if (paymentStatus && modalOverlay.classList.contains('active')) {
-            paymentStatus.textContent = '⏳ Pagamento pendente. Clique em "Já realizei o pagamento" após efetuar o pagamento.';
+            paymentStatus.textContent = `⏳ Código: ${data.codigo} - Aguardando confirmação`;
             paymentStatus.style.color = '#FFD700';
           }
         }
@@ -2076,18 +778,14 @@
   async function init() {
     await loadMediaFromS3();
     checkPendingPurchase();
-    
-    // Verifica a cada 10 segundos
     setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Galeria de Fotos e Vídeos carregada!');
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log('✅ Sistema de compensação automática ativo!');
+    console.log('🔐 Sistema de confirmação com código ativo!');
   }
 
   init();
 </script>
-</body>
-</html>
