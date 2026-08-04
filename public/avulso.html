@@ -1096,7 +1096,7 @@
     </button>
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Convidado</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Carregando...</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
           Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
@@ -1113,7 +1113,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <div class="menu-overlay" onclick="closeMobileMenu()"></div>
   <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Convidado</strong></div>
+    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Carregando...</strong></div>
     <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
   <div class="mobile-menu menu-status">
@@ -1252,7 +1252,7 @@
         <i class="fas fa-shopping-cart"></i> Comprar · <span id="modalPriceDisplay">R$ 15,00</span>
       </button>
       
-      <!-- BOTÃO DE CONFIRMAR PAGAMENTO (WEBHOOK) -->
+      <!-- BOTÃO DE CONFIRMAR PAGAMENTO -->
       <button class="modal-btn-confirm-payment" id="modalConfirmPaymentBtn" onclick="confirmPayment()">
         <i class="fas fa-check-circle"></i> Já realizei o pagamento
       </button>
@@ -1281,11 +1281,6 @@
   const PHOTO_PRICE = 15.00;
   const VIDEO_PRICE = 40.00;
 
-  // 🔥 LINKS DO MERCADO PAGO (COM INTEGRAÇÃO WEBHOOK)
-  // Estes links devem ser configurados com o webhook do seu backend
-  const MP_URL_PHOTO = 'https://mpago.la/1Poyp16';
-  const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';
-
   // ============================================================
   // DADOS
   // ============================================================
@@ -1294,8 +1289,9 @@
   let currentModalIndex = 0;
   let imagesLoaded = 0;
   let currentFilter = 'all';
-  let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
+  let downloadedItems = [];
   let pendingPurchase = null;
+  let currentUser = null;
 
   // ============================================================
   // DOM ELEMENTS
@@ -1322,6 +1318,105 @@
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
+
+  // ============================================================
+  // AUTENTICAÇÃO
+  // ============================================================
+  async function checkSession() {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        localStorage.removeItem('authToken');
+        window.location.href = 'https://studiorassi.github.io/home/login.html';
+        return;
+      }
+
+      const userName = localStorage.getItem('userName') || 'Usuário';
+      
+      currentUser = {
+        username: userName
+      };
+      
+      document.getElementById('clienteNome').textContent = userName;
+      document.getElementById('mobileUserName').textContent = userName;
+      
+      // Carrega downloads do usuário
+      await loadDownloadedItems();
+      
+      initSite();
+
+    } catch (error) {
+      console.error('❌ Erro ao verificar sessão:', error);
+      localStorage.removeItem('authToken');
+      window.location.href = 'https://studiorassi.github.io/home/login.html';
+    }
+  }
+
+  // ============================================================
+  // CARREGAR DOWNLOADS DO USUÁRIO DO BACKEND
+  // ============================================================
+  async function loadDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        downloadedItems = data.downloads || [];
+        const username = localStorage.getItem('userName') || 'user';
+        localStorage.setItem(`downloaded_${username}`, JSON.stringify(downloadedItems));
+        console.log(`📥 Downloads carregados: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao carregar downloads:', error);
+    }
+    return false;
+  }
+
+  // ============================================================
+  // SALVAR DOWNLOADS NO BACKEND
+  // ============================================================
+  async function saveDownloadedItems() {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ downloads: downloadedItems })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log(`✅ Downloads salvos: ${downloadedItems.length} itens`);
+        return true;
+      }
+    } catch (error) {
+      console.warn('⚠️ Erro ao salvar downloads:', error);
+    }
+    return false;
+  }
 
   // ============================================================
   // FUNÇÕES AUXILIARES
@@ -1796,9 +1891,9 @@
   }
 
   // ============================================================
-  // 🔥 COMPRA - REDIRECIONA PARA MERCADO PAGO
+  // 🔥 COMPRA - CRIA PEDIDO NO BACKEND E REDIRECIONA
   // ============================================================
-  function buyMedia() {
+  async function buyMedia() {
     const item = allMedia[currentModalIndex];
     if (!item) return;
 
@@ -1810,43 +1905,74 @@
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
-    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO
-    const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
-    
-    // 🔥 SALVA A INTENÇÃO DE COMPRA
-    pendingPurchase = {
-      id: item.id,
-      type: item.type,
-      key: item.key,
-      title: item.title,
-      price: item.price,
-      timestamp: Date.now()
-    };
-    localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
-
-    const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
-
-    if (confirm(confirmMsg)) {
-      window.open(paymentUrl, '_blank');
+    try {
+      // 🔥 CRIA O PEDIDO NO BACKEND
+      const token = localStorage.getItem('authToken');
       
-      modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
-      modalBuyBtn.style.background = '#FFD700';
-      modalBuyBtn.style.color = '#2C0714';
-      modalBuyBtn.disabled = true;
-      
-      updatePaymentStatus('⏳ Aguardando confirmação do pagamento', 'warning');
-      
-      setTimeout(() => {
-        updatePaymentStatus('💡 Após pagar, clique em "Já realizei o pagamento"', 'info');
-      }, 2000);
+      const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({
+          itemId: item.id,
+          itemType: item.type,
+          itemTitle: item.title,
+          itemKey: item.key,
+          price: item.price,
+          cliente_nome: localStorage.getItem('userName') || 'Cliente',
+          cliente_email: localStorage.getItem('userEmail') || 'cliente@email.com'
+        })
+      });
 
-      console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
-      console.log(`🔗 Link: ${paymentUrl}`);
+      const data = await response.json();
+      
+      if (!data.success) {
+        alert('❌ Erro ao criar pedido: ' + (data.message || 'Tente novamente.'));
+        return;
+      }
+
+      // 🔥 SALVA O ID DO PEDIDO PARA CONSULTA POSTERIOR
+      pendingPurchase = {
+        id: data.pedido_id,
+        itemId: item.id,
+        type: item.type,
+        key: item.key,
+        title: item.title,
+        price: item.price,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
+
+      const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
+
+      if (confirm(confirmMsg)) {
+        // 🔥 ABRE O LINK DE PAGAMENTO DO MERCADO PAGO
+        window.open(data.checkout_url, '_blank');
+        
+        modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
+        modalBuyBtn.style.background = '#FFD700';
+        modalBuyBtn.style.color = '#2C0714';
+        modalBuyBtn.disabled = true;
+        
+        updatePaymentStatus(`⏳ Pedido #${data.pedido_id} - Aguardando pagamento`, 'warning');
+        
+        setTimeout(() => {
+          updatePaymentStatus(`💡 Pedido #${data.pedido_id} - Após pagar, clique em "Já realizei o pagamento"`, 'info');
+        }, 2000);
+
+        console.log(`📊 Pedido criado: ${data.pedido_id} - ${item.type} - ${item.title}`);
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao criar pedido:', error);
+      alert('❌ Erro ao processar a compra. Tente novamente.');
     }
   }
 
   // ============================================================
-  // 🔥 CONFIRMAR PAGAMENTO - VERIFICAÇÃO VIA WEBHOOK
+  // 🔥 CONFIRMAR PAGAMENTO - CONSULTA STATUS NO BACKEND
   // ============================================================
   async function confirmPayment() {
     const item = allMedia[currentModalIndex];
@@ -1863,7 +1989,7 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"><i class="fas fa-spinner"></i></span> Verificando...';
 
-    // 🔥 VERIFICA O PAGAMENTO PENDENTE
+    // 🔥 VERIFICA O PEDIDO PENDENTE
     const pendingData = localStorage.getItem('pendingMedia');
     
     if (!pendingData) {
@@ -1876,81 +2002,58 @@
     try {
       const pending = JSON.parse(pendingData);
       
-      // Verifica se o pagamento pendente é para o item atual
-      if (pending.id !== item.id) {
-        const confirmar = confirm(
-          `⚠️ Você tem um pagamento pendente para "${pending.title}" (${pending.type}).\n\n` +
-          `Deseja liberar este item "${item.title}" no lugar?`
-        );
-        if (!confirmar) {
+      // 🔥 CONSULTA O BACKEND PARA VERIFICAR O STATUS REAL DO PEDIDO
+      const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso/${pending.id}`);
+      const data = await response.json();
+
+      if (data.success) {
+        // 🔥 VERIFICA SE O PAGAMENTO FOI CONFIRMADO PELO WEBHOOK
+        if (data.status === 'confirmado' || data.payment_status === 'approved' || data.isPaid === true) {
+          // ✅ PAGAMENTO CONFIRMADO - LIBERA O DOWNLOAD
+          if (!downloadedItems.includes(item.id)) {
+            downloadedItems.push(item.id);
+            await saveDownloadedItems();
+            
+            updateDownloadBadge(item.id);
+            updateDownloadedDisplay();
+            updateModalButtons(true);
+            
+            localStorage.removeItem('pendingMedia');
+            pendingPurchase = null;
+            
+            downloadMedia(item);
+            
+            alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
+            
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
+            btn.style.background = '#2E7D32';
+            btn.style.color = '#ffffff';
+            
+            updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
+            
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.innerHTML = originalHTML;
+              btn.style.background = '';
+              btn.style.color = '';
+            }, 5000);
+          }
+        } else {
+          // ⏳ PAGAMENTO AINDA NÃO CONFIRMADO
+          alert(
+            `⏳ Aguardando confirmação do pagamento.\n\n` +
+            `Status atual: ${data.status || 'pendente'}\n\n` +
+            `O pagamento pode levar alguns minutos para ser processado.\n\n` +
+            `Tente novamente em alguns minutos.`
+          );
           btn.disabled = false;
           btn.innerHTML = originalHTML;
-          return;
-        }
-        // Atualiza o pendente para o item atual
-        pending.id = item.id;
-        pending.type = item.type;
-        pending.title = item.title;
-        pending.key = item.key;
-        pending.price = item.price;
-        localStorage.setItem('pendingMedia', JSON.stringify(pending));
-      }
-
-      // 🔥 CONSULTA O BACKEND PARA VERIFICAR SE O PAGAMENTO FOI CONFIRMADO
-      // Aqui você pode verificar se o pedido foi pago via webhook
-      // Por enquanto, vamos simular a verificação com base no tempo
-      
-      // NA PRÁTICA, VOCÊ DEVERIA CONSULTAR O BACKEND:
-      // const response = await fetch(`${API_BASE_URL}/api/pedidos/${pending.id}`);
-      // const data = await response.json();
-      // if (data.status === 'pago') { liberar download }
-      
-      // 🔥 SIMULAÇÃO: Verifica se o pagamento foi feito (na prática, o webhook atualiza o status)
-      const timeElapsed = Date.now() - pending.timestamp;
-      const minutesElapsed = Math.floor(timeElapsed / (1000 * 60));
-
-      // 🔥 IMPORTANTE: Na versão real, você deve verificar no backend se o webhook confirmou o pagamento
-      // Esta simulação apenas libera após 30 segundos para demonstração
-      if (minutesElapsed >= 1) {
-        // 🔥 COMPENSAÇÃO AUTOMÁTICA - LIBERA O DOWNLOAD
-        if (!downloadedItems.includes(item.id)) {
-          downloadedItems.push(item.id);
-          localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
-          
-          updateDownloadBadge(item.id);
-          updateDownloadedDisplay();
-          updateModalButtons(true);
-          
-          localStorage.removeItem('pendingMedia');
-          pendingPurchase = null;
-          
-          downloadMedia(item);
-          
-          alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
-          
-          btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
-          btn.style.background = '#2E7D32';
-          btn.style.color = '#ffffff';
-          
-          updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
-          
-          setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            btn.style.background = '';
-            btn.style.color = '';
-          }, 5000);
+          updatePaymentStatus(`⏳ Status: ${data.status || 'pendente'} - Aguardando confirmação`, 'warning');
         }
       } else {
-        // Pagamento ainda não processado
-        alert(
-          `⏳ Aguardando confirmação do pagamento.\n\n` +
-          `O pagamento pode levar alguns minutos para ser processado.\n\n` +
-          `Clique em "Já realizei o pagamento" novamente após 1 minuto.`
-        );
+        alert('❌ Erro ao verificar o status do pedido: ' + (data.message || 'Tente novamente.'));
         btn.disabled = false;
         btn.innerHTML = originalHTML;
-        updatePaymentStatus(`⏳ Aguardando processamento (${minutesElapsed}/1 min)`, 'warning');
       }
       
     } catch (error) {
@@ -1974,14 +2077,32 @@
           localStorage.removeItem('pendingMedia');
           pendingPurchase = null;
           if (paymentStatus) {
-            paymentStatus.textContent = '⏰ Pagamento expirado';
+            paymentStatus.textContent = '⏰ Pagamento expirado (30min)';
             paymentStatus.style.color = '#ff6b6b';
           }
         } else {
           pendingPurchase = data;
+          // Se o modal estiver aberto, atualiza o status
           if (paymentStatus && modalOverlay.classList.contains('active')) {
-            paymentStatus.textContent = '⏳ Pagamento pendente. Clique em "Já realizei o pagamento" após efetuar o pagamento.';
-            paymentStatus.style.color = '#FFD700';
+            // Tenta verificar o status automaticamente a cada 30 segundos
+            if (!window._checkingStatus) {
+              window._checkingStatus = true;
+              setTimeout(async () => {
+                try {
+                  const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso/${data.id}`);
+                  const result = await response.json();
+                  if (result.success && (result.status === 'confirmado' || result.payment_status === 'approved')) {
+                    // Se o pagamento foi confirmado, recarrega a página ou chama confirmPayment()
+                    updatePaymentStatus('✅ Pagamento confirmado! Clique em "Já realizei o pagamento" para baixar.', 'success');
+                  } else {
+                    updatePaymentStatus(`⏳ Pedido #${data.id} - Aguardando pagamento`, 'warning');
+                  }
+                } catch (e) {
+                  console.log('⏳ Aguardando processamento do pagamento...');
+                }
+                window._checkingStatus = false;
+              }, 30000);
+            }
           }
         }
       } catch (e) {
@@ -2064,9 +2185,30 @@
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
     console.log('✅ Sistema de confirmação via webhook ativo!');
+    console.log('🔗 Rota: /api/pedidos/avulso');
   }
 
-  init();
+  // ============================================================
+  // INICIALIZAÇÃO COM AUTENTICAÇÃO
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    checkSession();
+  });
+
+  // ============================================================
+  // EXPORTA FUNÇÕES GLOBAIS
+  // ============================================================
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.navigateModal = navigateModal;
+  window.buyMedia = buyMedia;
+  window.confirmPayment = confirmPayment;
+  window.setFilter = setFilter;
+  window.scrollToTop = scrollToTop;
+  window.closeMobileMenu = closeMobileMenu;
+  window.toggleMobileMenu = toggleMobileMenu;
+  window.onMediaLoad = onMediaLoad;
+  window.handleImageError = handleImageError;
 </script>
 </body>
 </html>
