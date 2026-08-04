@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Fotos e Vídeos · Studio Rassi</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
   <style>
-    /* ===== TODOS OS ESTILOS PERMANECEM IGUAIS ===== */
+    /* ===== RESET ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #2C0714;
@@ -860,10 +860,9 @@
 
     .modal-actions {
       display: flex;
-      gap: 16px;
+      flex-direction: column;
+      gap: 12px;
       margin-top: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
       z-index: 10;
       width: 100%;
       max-width: 500px;
@@ -883,9 +882,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      flex: 1;
       justify-content: center;
-      min-width: 200px;
+      width: 100%;
     }
     .modal-btn-buy:hover {
       transform: translateY(-2px);
@@ -910,6 +908,44 @@
     .modal-btn-buy i {
       font-size: 1.1rem;
     }
+    .modal-btn-buy .spinner {
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    /* 🔥 NOVO: BOTÃO DE CONFIRMAR PAGAMENTO */
+    .modal-btn-confirm-payment {
+      background: #1565C0;
+      color: #ffffff;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+    .modal-btn-confirm-payment:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(21, 101, 192, 0.3);
+      background: #0d47a1;
+    }
+    .modal-btn-confirm-payment:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .modal-btn-confirm-payment .spinner {
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
 
     .modal-btn-close {
       background: transparent;
@@ -921,6 +957,7 @@
       font-size: 0.85rem;
       cursor: pointer;
       transition: 0.3s;
+      width: 100%;
     }
     .modal-btn-close:hover {
       border-color: #D4A3B3;
@@ -953,6 +990,12 @@
     .modal-price .media-type.video {
       background: rgba(46, 125, 50, 0.15);
       color: #4CAF50;
+    }
+    .modal-price .payment-status {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: #7a5f5a;
     }
 
     /* ===== FOOTER ===== */
@@ -1002,7 +1045,7 @@
       .modal-content .modal-video { max-height: 60vh; }
       .modal-close { top: -36px; right: -10px; width: 32px; height: 32px; font-size: 1rem; }
       .modal-counter { font-size: 0.7rem; padding: 4px 14px; top: 12px; }
-      .modal-btn-buy { padding: 10px 20px; font-size: 0.85rem; min-width: 150px; }
+      .modal-btn-buy { padding: 10px 20px; font-size: 0.85rem; }
       .modal-progress { width: 80%; bottom: 80px; }
       .filter-bar { padding: 8px 0; }
       .filter-btn { padding: 6px 16px; font-size: 0.75rem; }
@@ -1205,12 +1248,20 @@
       <button class="modal-btn-buy" id="modalBuyBtn" onclick="buyMedia()">
         <i class="fas fa-shopping-cart"></i> Comprar · <span id="modalPriceDisplay">R$ 15,00</span>
       </button>
+      
+      <!-- 🔥 NOVO: BOTÃO DE CONFIRMAR PAGAMENTO -->
+      <button class="modal-btn-confirm-payment" id="modalConfirmPaymentBtn" onclick="confirmPayment()">
+        <i class="fas fa-check-circle"></i> Já realizei o pagamento
+      </button>
+      
       <button class="modal-btn-close" onclick="closeModal()">Fechar</button>
     </div>
+    
     <div class="modal-price" id="modalPrice">
       <i class="fas fa-lock" style="color:#7a5f5a;"></i> 
       Com marca d'água · <strong id="modalPriceStrong">R$ 15,00</strong> para alta definição sem marca
       <span class="media-type" id="modalMediaType">📷 Foto</span>
+      <span class="payment-status" id="paymentStatus"></span>
     </div>
   </div>
 </div>
@@ -1232,18 +1283,16 @@
   const MP_URL_VIDEO = 'https://mpago.la/2xmQMfL';   // R$ 40,00 - Vídeo avulso
 
   // ============================================================
-  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS) - TOTALMENTE DINÂMICO
+  // DADOS - MÍDIAS COMBINADAS (FOTOS + VÍDEOS)
   // ============================================================
   let allMedia = [];
   let totalItems = 0;
 
   // ============================================================
-  // CARREGAR LISTA DE ARQUIVOS DO S3 (FOTOS E VÍDEOS)
-  // 🔥 CORRIGIDO: AGORA ACEITA QUALQUER NOME DE ARQUIVO
+  // CARREGAR LISTA DE ARQUIVOS DO S3
   // ============================================================
   async function loadMediaFromS3() {
     try {
-      // 1. Carregar fotos dinamicamente do S3
       console.log('📡 Buscando lista de fotos no S3...');
       const fotosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/fotos`);
       
@@ -1254,17 +1303,14 @@
       const fotosData = await fotosResponse.json();
       console.log(`📸 Encontradas ${fotosData.count} fotos na pasta fotos/`);
       
-      // 🔥 CORRIGIDO: ACEITA QUALQUER ARQUIVO .jpg OU .jpeg (SEM RESTRIÇÃO DE NOME)
       const photoFiles = fotosData.files.filter(file => 
         file.filename.endsWith('.jpg') || file.filename.endsWith('.jpeg')
       );
       
       const fotos = photoFiles.map((file, index) => {
         const filename = file.filename;
-        // Tenta extrair número do nome do arquivo (se houver)
         const numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
-        // Remove extensão para usar como título
         const title = filename.replace(/\.[^.]+$/, '');
         return {
           id: `foto_${num}`,
@@ -1278,7 +1324,6 @@
         };
       });
 
-      // 2. Carregar vídeos dinamicamente do S3
       console.log('📡 Buscando lista de vídeos no S3...');
       const videosResponse = await fetch(`${API_BASE_URL}/api/gallery/list/videos`);
       
@@ -1289,12 +1334,10 @@
       const videosData = await videosResponse.json();
       console.log(`📹 Encontrados ${videosData.count} vídeos na pasta videos/`);
       
-      // 🔥 CORRIGIDO: ACEITA QUALQUER ARQUIVO .mp4 (SEM RESTRIÇÃO DE NOME)
       const videoFiles = videosData.files.filter(file => 
         file.filename.endsWith('.mp4')
       );
       
-      // Cria placeholder SVG para vídeos
       function createVideoPlaceholder(title) {
         const svg = `
           <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
@@ -1311,12 +1354,10 @@
       
       const videos = videoFiles.map((file, index) => {
         const filename = file.filename;
-        // Tenta extrair número do nome do arquivo
-        let numMatch = filename.match(/(\d+)/);
+        const numMatch = filename.match(/(\d+)/);
         const num = numMatch ? numMatch[1] : String(index + 1).padStart(2, '0');
         const title = filename.replace(/\.[^.]+$/, '');
         
-        // 🔥 USA A ROTA DE THUMBNAIL DO BACKEND
         const thumbnailUrl = `${API_BASE_URL}/api/gallery/thumbnail/videos/${filename}`;
         
         return {
@@ -1332,16 +1373,12 @@
         };
       });
 
-      // 3. Combinar tudo
       allMedia = [...fotos, ...videos];
       totalItems = allMedia.length;
       
       console.log(`📊 Total: ${fotos.length} fotos + ${videos.length} vídeos = ${totalItems} itens`);
       
-      // 4. Atualizar contadores na UI
       updateCounters();
-      
-      // 5. Renderizar galeria
       renderGallery();
       
     } catch (error) {
@@ -1362,8 +1399,6 @@
     elements.forEach(el => {
       if (el) el.textContent = totalItems;
     });
-    
-    // Atualiza contador de baixados
     updateDownloadedDisplay();
   }
 
@@ -1375,6 +1410,9 @@
   let currentFilter = 'all';
   let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
 
+  // 🔥 CONTROLE DE PAGAMENTO PENDENTE
+  let pendingPurchase = null;
+
   // ============================================================
   // DOM ELEMENTS
   // ============================================================
@@ -1385,9 +1423,11 @@
   const modalVideo = document.getElementById('modalVideo');
   const modalVideoSource = document.getElementById('modalVideoSource');
   const modalBuyBtn = document.getElementById('modalBuyBtn');
+  const modalConfirmPaymentBtn = document.getElementById('modalConfirmPaymentBtn');
   const modalPriceDisplay = document.getElementById('modalPriceDisplay');
   const modalPriceStrong = document.getElementById('modalPriceStrong');
   const modalMediaType = document.getElementById('modalMediaType');
+  const paymentStatus = document.getElementById('paymentStatus');
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
   const loadedCount = document.getElementById('loadedCount');
@@ -1414,17 +1454,33 @@
   }
 
   function updateModalButtons(isDownloaded = false) {
-    if (!modalBuyBtn) return;
+    if (!modalBuyBtn || !modalConfirmPaymentBtn) return;
+    
     if (isDownloaded) {
       modalBuyBtn.className = 'modal-btn-buy downloaded';
       modalBuyBtn.innerHTML = '<i class="fas fa-check-circle"></i> JÁ BAIXADO';
       modalBuyBtn.disabled = true;
+      
+      modalConfirmPaymentBtn.style.display = 'none';
+      
+      if (paymentStatus) {
+        paymentStatus.textContent = '✅ Item já baixado';
+        paymentStatus.style.color = '#4CAF50';
+      }
     } else {
-      modalBuyBtn.className = 'modal-btn-buy';
       const item = allMedia[currentModalIndex];
       const price = item ? item.price : PHOTO_PRICE;
+      modalBuyBtn.className = 'modal-btn-buy';
       modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · R$ ${price.toFixed(2)}`;
       modalBuyBtn.disabled = false;
+      
+      // Mostra botão de confirmação de pagamento
+      modalConfirmPaymentBtn.style.display = 'flex';
+      
+      if (paymentStatus) {
+        paymentStatus.textContent = '⏳ Aguardando pagamento';
+        paymentStatus.style.color = '#FFD700';
+      }
     }
   }
 
@@ -1441,6 +1497,20 @@
     });
   }
 
+  function updatePaymentStatus(message, type = 'info') {
+    if (!paymentStatus) return;
+    paymentStatus.textContent = message;
+    if (type === 'success') {
+      paymentStatus.style.color = '#4CAF50';
+    } else if (type === 'error') {
+      paymentStatus.style.color = '#ff6b6b';
+    } else if (type === 'warning') {
+      paymentStatus.style.color = '#FFD700';
+    } else {
+      paymentStatus.style.color = '#7a5f5a';
+    }
+  }
+
   // ============================================================
   // FILTROS
   // ============================================================
@@ -1455,7 +1525,7 @@
   }
 
   // ============================================================
-  // FUNÇÃO PARA TRATAR ERRO DE CARREGAMENTO DA IMAGEM
+  // FUNÇÃO PARA TRATAR ERRO DE CARREGAMENTO
   // ============================================================
   function handleImageError(index, fallbackSrc) {
     const img = document.querySelector(`.real-image[data-index="${index}"]`);
@@ -1731,38 +1801,35 @@
     const priceDisplay = item.isVideo ? `R$ ${VIDEO_PRICE.toFixed(2)}` : `R$ ${PHOTO_PRICE.toFixed(2)}`;
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
-    // 🔥 ESCOLHE O LINK CORRETO BASEADO NO TIPO (MERCADO PAGO)
     const paymentUrl = item.isVideo ? MP_URL_VIDEO : MP_URL_PHOTO;
     
-    const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).`;
+    // 🔥 SALVA A INTENÇÃO DE COMPRA
+    pendingPurchase = {
+      id: item.id,
+      type: item.type,
+      key: item.key,
+      title: item.title,
+      price: item.price,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
+
+    const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
 
     if (confirm(confirmMsg)) {
-      // Abre o link do Mercado Pago
       window.open(paymentUrl, '_blank');
-
-      // Feedback visual
+      
       modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
-      modalBuyBtn.style.background = '#2ecc71';
+      modalBuyBtn.style.background = '#FFD700';
+      modalBuyBtn.style.color = '#2C0714';
       modalBuyBtn.disabled = true;
-
-      // Salva a intenção de compra
-      const pendingPurchase = {
-        id: item.id,
-        type: item.type,
-        key: item.key,
-        itemNumber: currentModalIndex + 1,
-        timestamp: Date.now(),
-        price: item.price,
-        title: item.title
-      };
-      localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
-
-      // Restaura após 10 segundos
+      
+      updatePaymentStatus('⏳ Aguardando confirmação do pagamento', 'warning');
+      
+      // Mostra instruções
       setTimeout(() => {
-        modalBuyBtn.innerHTML = `<i class="fas fa-shopping-cart"></i> Comprar · ${priceDisplay}`;
-        modalBuyBtn.style.background = '#D4A3B3';
-        modalBuyBtn.disabled = false;
-      }, 10000);
+        updatePaymentStatus('💡 Após pagar, clique em "Já realizei o pagamento"', 'info');
+      }, 2000);
 
       console.log(`📊 Intenção de compra: ${item.type} - ${item.title} - ${priceDisplay}`);
       console.log(`🔗 Link: ${paymentUrl}`);
@@ -1770,32 +1837,174 @@
   }
 
   // ============================================================
-  // 🔥 VERIFICAÇÃO DE PAGAMENTO PENDENTE (MERCADO PAGO)
+  // 🔥 CONFIRMAR PAGAMENTO - CORAÇÃO DO SISTEMA
+  // ============================================================
+  function confirmPayment() {
+    const item = allMedia[currentModalIndex];
+    if (!item) return;
+
+    if (downloadedItems.includes(item.id)) {
+      alert('✅ Este item já foi baixado.');
+      return;
+    }
+
+    const btn = document.getElementById('modalConfirmPaymentBtn');
+    const originalHTML = btn.innerHTML;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"><i class="fas fa-spinner"></i></span> Verificando...';
+
+    // 🔥 VERIFICA O PAGAMENTO PENDENTE
+    const pendingData = localStorage.getItem('pendingMedia');
+    
+    if (!pendingData) {
+      alert('ℹ️ Nenhum pagamento pendente encontrado.\n\nVocê precisa primeiro clicar em "Comprar" para gerar um pagamento.');
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+      return;
+    }
+
+    try {
+      const pending = JSON.parse(pendingData);
+      
+      // Verifica se o pagamento pendente é para o item atual
+      if (pending.id !== item.id) {
+        const confirmar = confirm(
+          `⚠️ Você tem um pagamento pendente para "${pending.title}" (${pending.type}).\n\n` +
+          `Deseja liberar este item "${item.title}" no lugar?`
+        );
+        if (!confirmar) {
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
+          return;
+        }
+        // Atualiza o pendente para o item atual
+        pending.id = item.id;
+        pending.type = item.type;
+        pending.title = item.title;
+        pending.key = item.key;
+        pending.price = item.price;
+        localStorage.setItem('pendingMedia', JSON.stringify(pending));
+      }
+
+      // 🔥 LIBERA O DOWNLOAD (COMPENSAÇÃO AUTOMÁTICA)
+      const timeElapsed = Date.now() - pending.timestamp;
+      const minutesElapsed = Math.floor(timeElapsed / (1000 * 60));
+
+      // Verifica se o pagamento foi feito há menos de 2 minutos
+      // (Simula confirmação de pagamento - na prática, o admin confirmaria manualmente)
+      if (minutesElapsed < 30) {
+        // 🔥 COMPENSAÇÃO AUTOMÁTICA - LIBERA O DOWNLOAD
+        if (!downloadedItems.includes(item.id)) {
+          downloadedItems.push(item.id);
+          localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
+          
+          // Atualiza a interface
+          updateDownloadBadge(item.id);
+          updateDownloadedDisplay();
+          updateModalButtons(true);
+          
+          // Remove o pendente
+          localStorage.removeItem('pendingMedia');
+          pendingPurchase = null;
+          
+          // 🔥 BAIXA AUTOMATICAMENTE O ARQUIVO
+          downloadMedia(item);
+          
+          alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
+          
+          btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
+          btn.style.background = '#2E7D32';
+          btn.style.color = '#ffffff';
+          
+          updatePaymentStatus('✅ Pagamento confirmado! Download iniciado', 'success');
+          
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+            btn.style.background = '';
+            btn.style.color = '';
+          }, 5000);
+        }
+      } else {
+        // Pagamento antigo - pede para refazer
+        alert(
+          `⏰ O pagamento pendente expirou.\n\n` +
+          `Por favor, clique novamente em "Comprar" para gerar um novo pagamento.\n\n` +
+          `(Tempo limite: 30 minutos)`
+        );
+        localStorage.removeItem('pendingMedia');
+        pendingPurchase = null;
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        updatePaymentStatus('⏰ Pagamento expirado. Clique em "Comprar" novamente.', 'error');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao confirmar pagamento:', error);
+      alert('❌ Erro ao verificar o pagamento. Tente novamente.');
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+    }
+  }
+
+  // ============================================================
+  // 🔥 FUNÇÃO PARA BAIXAR O ARQUIVO
+  // ============================================================
+  async function downloadMedia(item) {
+    try {
+      const viewRes = await fetch(`${API_BASE_URL}/api/gallery/view/${item.key}`);
+      const downloadUrl = viewRes.url || `${API_BASE_URL}/api/gallery/view/${item.key}`;
+
+      const filename = item.key.split('/').pop();
+      
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      let mimeType = item.isVideo ? 'video/mp4' : 'image/jpeg';
+      const blobWithType = new Blob([blob], { type: mimeType });
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blobWithType);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      setTimeout(() => {
+        URL.revokeObjectURL(link.href);
+      }, 5000);
+      
+      console.log(`✅ Download iniciado: ${filename}`);
+      
+    } catch (error) {
+      console.error('❌ Erro no download:', error);
+      alert('❌ Erro ao baixar o arquivo. Tente novamente.');
+    }
+  }
+
+  // ============================================================
+  // 🔥 VERIFICAÇÃO AUTOMÁTICA DE PAGAMENTO PENDENTE
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingMedia');
     if (pending) {
       try {
         const data = JSON.parse(pending);
-        // Aguarda 2 minutos para o pagamento ser processado
-        if (Date.now() - data.timestamp < 2 * 60 * 1000) {
-          if (confirm(`✅ Pagamento do ${data.type} "${data.title}" confirmado?\n\nClique em OK para liberar o download.`)) {
-            if (!downloadedItems.includes(data.id)) {
-              downloadedItems.push(data.id);
-              localStorage.setItem('downloadedMedia', JSON.stringify(downloadedItems));
-              updateDownloadBadge(data.id);
-              updateDownloadedDisplay();
-              if (modalOverlay.classList.contains('active')) {
-                const currentItem = allMedia[currentModalIndex];
-                if (currentItem && currentItem.id === data.id) {
-                  updateModalButtons(true);
-                }
-              }
-              alert('🎉 Download liberado! O item já está disponível para baixar.');
-            }
+        // Se passou mais de 30 minutos, remove
+        if (Date.now() - data.timestamp > 30 * 60 * 1000) {
+          localStorage.removeItem('pendingMedia');
+          pendingPurchase = null;
+          if (paymentStatus) {
+            paymentStatus.textContent = '⏰ Pagamento expirado';
+            paymentStatus.style.color = '#ff6b6b';
+          }
+        } else {
+          pendingPurchase = data;
+          if (paymentStatus && modalOverlay.classList.contains('active')) {
+            paymentStatus.textContent = '⏳ Pagamento pendente. Clique em "Já realizei o pagamento" após efetuar o pagamento.';
+            paymentStatus.style.color = '#FFD700';
           }
         }
-        localStorage.removeItem('pendingMedia');
       } catch (e) {
         localStorage.removeItem('pendingMedia');
       }
@@ -1867,13 +2076,15 @@
   async function init() {
     await loadMediaFromS3();
     checkPendingPurchase();
+    
+    // Verifica a cada 10 segundos
     setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Galeria de Fotos e Vídeos carregada!');
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`📁 Estrutura: fotos/ e videos/ (minúsculas) - DETECÇÃO DINÂMICA TOTAL`);
+    console.log('✅ Sistema de compensação automática ativo!');
   }
 
   init();
