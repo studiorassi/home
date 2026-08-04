@@ -68,31 +68,6 @@
     }
     .navbar.scrolled .logo img { height: 40px; }
     .logo img:hover { opacity: 0.85; transform: scale(1.02); }
-    .nav-info {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .nav-info .user {
-      color: #d4c5c0;
-      font-size: 0.85rem;
-    }
-    .nav-info .user i { color: #D4A3B3; margin-right: 6px; }
-    .btn-logout {
-      background: transparent;
-      border: 1px solid rgba(212, 163, 179, 0.2);
-      color: #d4c5c0;
-      padding: 8px 20px;
-      border-radius: 40px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: 0.3s;
-    }
-    .btn-logout:hover {
-      border-color: #D4A3B3;
-      color: #D4A3B3;
-    }
 
     /* ===== MENU MOBILE ===== */
     .hamburger {
@@ -1038,9 +1013,6 @@
       .watermark-item .type-badge { font-size: 0.5rem; padding: 2px 10px; top: 8px; left: 8px; }
       .watermark-item .play-icon { font-size: 2rem; }
       .navbar-content { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
-      .nav-info .user { font-size: 0.7rem; display: flex; flex-wrap: wrap; gap: 4px; }
-      .nav-info .user span { display: inline; }
-      .btn-logout { padding: 6px 14px; font-size: 0.7rem; }
       .modal-nav { width: 36px; height: 36px; font-size: 0.9rem; }
       .modal-nav.prev { left: -10px; }
       .modal-nav.next { right: -10px; }
@@ -1094,21 +1066,6 @@
     <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu">
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-info">
-      <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Visitante</strong> · 
-        <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
-          <i class="fas fa-images" style="font-size: 0.8rem;"></i>
-          Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
-        </span>
-        <span style="color: #7a5f5a; font-size: 0.7rem; margin-left: 8px;">
-          <i class="fas fa-info-circle"></i> Compre sem login
-        </span>
-      </span>
-      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/login.html'" style="border-color: rgba(212, 163, 179, 0.1);">
-        <i class="fas fa-sign-in-alt"></i> Login
-      </button>
-    </div>
   </div>
 </nav>
 
@@ -1116,7 +1073,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <div class="menu-overlay" onclick="closeMobileMenu()"></div>
   <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Visitante</strong></div>
+    <div class="user-info"><i class="fas fa-image" style="color: #D4A3B3;"></i> Galeria de Fotos e Vídeos</div>
     <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
   <div class="mobile-menu menu-status">
@@ -1135,7 +1092,6 @@
   </div>
   <div class="menu-links">
     <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
-    <a href="https://studiorassi.github.io/home/login.html" class="logout-link"><i class="fas fa-sign-in-alt"></i> Fazer Login</a>
   </div>
 </div>
 
@@ -1292,9 +1248,8 @@
   let currentModalIndex = 0;
   let imagesLoaded = 0;
   let currentFilter = 'all';
-  let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
+  let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia_avulso') || '[]');
   let pendingPurchase = null;
-  let isLoggedIn = false;
 
   // ============================================================
   // DOM ELEMENTS
@@ -1321,98 +1276,6 @@
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   const navbar = document.getElementById('mainNavbar');
-
-  // ============================================================
-  // VERIFICA SE O USUÁRIO ESTÁ LOGADO (SEM REDIRECIONAR)
-  // ============================================================
-  function checkLoginStatus() {
-    const token = localStorage.getItem('authToken');
-    const userName = localStorage.getItem('userName');
-    
-    if (token && userName) {
-      isLoggedIn = true;
-      document.getElementById('clienteNome').textContent = userName;
-      document.getElementById('mobileUserName').textContent = userName;
-      
-      // Muda o botão de login para logout
-      const btnLogout = document.querySelector('.btn-logout');
-      if (btnLogout) {
-        btnLogout.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
-        btnLogout.onclick = function() {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userName');
-          window.location.reload();
-        };
-      }
-      
-      // Carrega downloads do usuário
-      loadDownloadedItems();
-    } else {
-      isLoggedIn = false;
-      document.getElementById('clienteNome').textContent = 'Visitante';
-      document.getElementById('mobileUserName').textContent = 'Visitante';
-    }
-  }
-
-  // ============================================================
-  // CARREGAR DOWNLOADS DO USUÁRIO (SE LOGADO)
-  // ============================================================
-  async function loadDownloadedItems() {
-    if (!isLoggedIn) {
-      downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia_guest') || '[]');
-      return;
-    }
-    
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) return;
-
-      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        downloadedItems = data.downloads || [];
-        const username = localStorage.getItem('userName') || 'user';
-        localStorage.setItem(`downloaded_${username}`, JSON.stringify(downloadedItems));
-        console.log(`📥 Downloads carregados: ${downloadedItems.length} itens`);
-      }
-    } catch (error) {
-      console.warn('⚠️ Erro ao carregar downloads:', error);
-    }
-  }
-
-  // ============================================================
-  // SALVAR DOWNLOADS (LOCAL OU NO BACKEND)
-  // ============================================================
-  async function saveDownloadedItems() {
-    if (!isLoggedIn) {
-      localStorage.setItem('downloadedMedia_guest', JSON.stringify(downloadedItems));
-      return;
-    }
-    
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) return;
-
-      const response = await fetch(`${API_BASE_URL}/api/auth/downloads`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ downloads: downloadedItems })
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        console.log(`✅ Downloads salvos: ${downloadedItems.length} itens`);
-      }
-    } catch (error) {
-      console.warn('⚠️ Erro ao salvar downloads:', error);
-    }
-  }
 
   // ============================================================
   // FUNÇÕES AUXILIARES
@@ -1902,14 +1765,11 @@
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
     try {
-      // 🔥 CRIA O PEDIDO NO BACKEND (NÃO REQUER LOGIN)
-      const token = localStorage.getItem('authToken');
-      
+      // 🔥 CRIA O PEDIDO NO BACKEND (SEM LOGIN)
       const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` })
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           itemId: item.id,
@@ -1917,7 +1777,7 @@
           itemTitle: item.title,
           itemKey: item.key,
           price: item.price,
-          cliente_nome: localStorage.getItem('userName') || 'Visitante',
+          cliente_nome: 'Visitante',
           cliente_email: 'visitante@email.com'
         })
       });
@@ -1939,7 +1799,7 @@
         price: item.price,
         timestamp: Date.now()
       };
-      localStorage.setItem('pendingMedia', JSON.stringify(pendingPurchase));
+      localStorage.setItem('pendingMedia_avulso', JSON.stringify(pendingPurchase));
 
       const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
 
@@ -1984,7 +1844,7 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"><i class="fas fa-spinner"></i></span> Verificando...';
 
-    const pendingData = localStorage.getItem('pendingMedia');
+    const pendingData = localStorage.getItem('pendingMedia_avulso');
     
     if (!pendingData) {
       alert('ℹ️ Nenhum pagamento pendente encontrado.\n\nVocê precisa primeiro clicar em "Comprar" para gerar um pagamento.');
@@ -2005,13 +1865,13 @@
           // ✅ PAGAMENTO CONFIRMADO
           if (!downloadedItems.includes(item.id)) {
             downloadedItems.push(item.id);
-            await saveDownloadedItems();
+            localStorage.setItem('downloadedMedia_avulso', JSON.stringify(downloadedItems));
             
             updateDownloadBadge(item.id);
             updateDownloadedDisplay();
             updateModalButtons(true);
             
-            localStorage.removeItem('pendingMedia');
+            localStorage.removeItem('pendingMedia_avulso');
             pendingPurchase = null;
             
             downloadMedia(item);
@@ -2059,12 +1919,12 @@
   // 🔥 VERIFICAÇÃO AUTOMÁTICA
   // ============================================================
   function checkPendingPurchase() {
-    const pending = localStorage.getItem('pendingMedia');
+    const pending = localStorage.getItem('pendingMedia_avulso');
     if (pending) {
       try {
         const data = JSON.parse(pending);
         if (Date.now() - data.timestamp > 30 * 60 * 1000) {
-          localStorage.removeItem('pendingMedia');
+          localStorage.removeItem('pendingMedia_avulso');
           pendingPurchase = null;
           if (paymentStatus) {
             paymentStatus.textContent = '⏰ Pagamento expirado (30min)';
@@ -2077,7 +1937,7 @@
           }
         }
       } catch (e) {
-        localStorage.removeItem('pendingMedia');
+        localStorage.removeItem('pendingMedia_avulso');
       }
     }
   }
@@ -2145,19 +2005,14 @@
   // INICIALIZAÇÃO
   // ============================================================
   async function init() {
-    // Verifica login sem redirecionar
-    checkLoginStatus();
-    
     await loadMediaFromS3();
     checkPendingPurchase();
-    
     setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Galeria de Fotos e Vídeos carregada!');
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
-    console.log(`👤 Usuário: ${isLoggedIn ? 'Logado' : 'Visitante'}`);
     console.log('✅ Sistema de confirmação via webhook ativo!');
   }
 
