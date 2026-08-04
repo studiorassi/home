@@ -1096,14 +1096,17 @@
     </button>
     <div class="nav-info">
       <span class="user">
-        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Carregando...</strong> · 
+        <i class="fas fa-user-circle"></i> Olá, <strong id="clienteNome">Visitante</strong> · 
         <span style="color: #D4A3B3; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fas fa-images" style="font-size: 0.8rem;"></i>
           Total: <span id="totalPhotosDisplay" style="font-weight: 700; color: #f5edea;">0</span> itens
         </span>
+        <span style="color: #7a5f5a; font-size: 0.7rem; margin-left: 8px;">
+          <i class="fas fa-info-circle"></i> Compre sem login
+        </span>
       </span>
-      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/index.html'">
-        <i class="fas fa-sign-out-alt"></i> Sair
+      <button class="btn-logout" onclick="window.location.href='https://studiorassi.github.io/home/login.html'" style="border-color: rgba(212, 163, 179, 0.1);">
+        <i class="fas fa-sign-in-alt"></i> Login
       </button>
     </div>
   </div>
@@ -1113,7 +1116,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <div class="menu-overlay" onclick="closeMobileMenu()"></div>
   <div class="menu-header">
-    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Carregando...</strong></div>
+    <div class="user-info"><i class="fas fa-user-circle" style="color: #D4A3B3;"></i> Olá, <strong id="mobileUserName">Visitante</strong></div>
     <button class="close-menu" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
   </div>
   <div class="mobile-menu menu-status">
@@ -1132,7 +1135,7 @@
   </div>
   <div class="menu-links">
     <a href="#" onclick="scrollToTop(); closeMobileMenu(); return false;"><i class="fas fa-arrow-up"></i> Ver Galeria</a>
-    <a href="https://studiorassi.github.io/home/index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    <a href="https://studiorassi.github.io/home/login.html" class="logout-link"><i class="fas fa-sign-in-alt"></i> Fazer Login</a>
   </div>
 </div>
 
@@ -1289,9 +1292,9 @@
   let currentModalIndex = 0;
   let imagesLoaded = 0;
   let currentFilter = 'all';
-  let downloadedItems = [];
+  let downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia') || '[]');
   let pendingPurchase = null;
-  let currentUser = null;
+  let isLoggedIn = false;
 
   // ============================================================
   // DOM ELEMENTS
@@ -1320,54 +1323,46 @@
   const navbar = document.getElementById('mainNavbar');
 
   // ============================================================
-  // AUTENTICAÇÃO
+  // VERIFICA SE O USUÁRIO ESTÁ LOGADO (SEM REDIRECIONAR)
   // ============================================================
-  async function checkSession() {
+  function checkLoginStatus() {
     const token = localStorage.getItem('authToken');
+    const userName = localStorage.getItem('userName');
     
-    if (!token) {
-      window.location.href = 'https://studiorassi.github.io/home/login.html';
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/credits`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      const data = await response.json();
-      
-      if (!data.success) {
-        localStorage.removeItem('authToken');
-        window.location.href = 'https://studiorassi.github.io/home/login.html';
-        return;
-      }
-
-      const userName = localStorage.getItem('userName') || 'Usuário';
-      
-      currentUser = {
-        username: userName
-      };
-      
+    if (token && userName) {
+      isLoggedIn = true;
       document.getElementById('clienteNome').textContent = userName;
       document.getElementById('mobileUserName').textContent = userName;
       
-      // Carrega downloads do usuário
-      await loadDownloadedItems();
+      // Muda o botão de login para logout
+      const btnLogout = document.querySelector('.btn-logout');
+      if (btnLogout) {
+        btnLogout.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
+        btnLogout.onclick = function() {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userName');
+          window.location.reload();
+        };
+      }
       
-      initSite();
-
-    } catch (error) {
-      console.error('❌ Erro ao verificar sessão:', error);
-      localStorage.removeItem('authToken');
-      window.location.href = 'https://studiorassi.github.io/home/login.html';
+      // Carrega downloads do usuário
+      loadDownloadedItems();
+    } else {
+      isLoggedIn = false;
+      document.getElementById('clienteNome').textContent = 'Visitante';
+      document.getElementById('mobileUserName').textContent = 'Visitante';
     }
   }
 
   // ============================================================
-  // CARREGAR DOWNLOADS DO USUÁRIO DO BACKEND
+  // CARREGAR DOWNLOADS DO USUÁRIO (SE LOGADO)
   // ============================================================
   async function loadDownloadedItems() {
+    if (!isLoggedIn) {
+      downloadedItems = JSON.parse(localStorage.getItem('downloadedMedia_guest') || '[]');
+      return;
+    }
+    
     try {
       const token = localStorage.getItem('authToken');
       if (!token) return;
@@ -1382,18 +1377,21 @@
         const username = localStorage.getItem('userName') || 'user';
         localStorage.setItem(`downloaded_${username}`, JSON.stringify(downloadedItems));
         console.log(`📥 Downloads carregados: ${downloadedItems.length} itens`);
-        return true;
       }
     } catch (error) {
       console.warn('⚠️ Erro ao carregar downloads:', error);
     }
-    return false;
   }
 
   // ============================================================
-  // SALVAR DOWNLOADS NO BACKEND
+  // SALVAR DOWNLOADS (LOCAL OU NO BACKEND)
   // ============================================================
   async function saveDownloadedItems() {
+    if (!isLoggedIn) {
+      localStorage.setItem('downloadedMedia_guest', JSON.stringify(downloadedItems));
+      return;
+    }
+    
     try {
       const token = localStorage.getItem('authToken');
       if (!token) return;
@@ -1410,12 +1408,10 @@
       const data = await response.json();
       if (data.success) {
         console.log(`✅ Downloads salvos: ${downloadedItems.length} itens`);
-        return true;
       }
     } catch (error) {
       console.warn('⚠️ Erro ao salvar downloads:', error);
     }
-    return false;
   }
 
   // ============================================================
@@ -1891,7 +1887,7 @@
   }
 
   // ============================================================
-  // 🔥 COMPRA - CRIA PEDIDO NO BACKEND E REDIRECIONA
+  // 🔥 COMPRA - CRIA PEDIDO NO BACKEND
   // ============================================================
   async function buyMedia() {
     const item = allMedia[currentModalIndex];
@@ -1906,7 +1902,7 @@
     const typeName = item.isVideo ? 'vídeo' : 'foto';
     
     try {
-      // 🔥 CRIA O PEDIDO NO BACKEND
+      // 🔥 CRIA O PEDIDO NO BACKEND (NÃO REQUER LOGIN)
       const token = localStorage.getItem('authToken');
       
       const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso`, {
@@ -1921,8 +1917,8 @@
           itemTitle: item.title,
           itemKey: item.key,
           price: item.price,
-          cliente_nome: localStorage.getItem('userName') || 'Cliente',
-          cliente_email: localStorage.getItem('userEmail') || 'cliente@email.com'
+          cliente_nome: localStorage.getItem('userName') || 'Visitante',
+          cliente_email: 'visitante@email.com'
         })
       });
 
@@ -1933,7 +1929,7 @@
         return;
       }
 
-      // 🔥 SALVA O ID DO PEDIDO PARA CONSULTA POSTERIOR
+      // 🔥 SALVA O ID DO PEDIDO
       pendingPurchase = {
         id: data.pedido_id,
         itemId: item.id,
@@ -1948,7 +1944,6 @@
       const confirmMsg = `🛒 Você está comprando ${typeName} "${item.title}" por ${priceDisplay}.\n\nClique em OK para ir para o pagamento (Mercado Pago).\n\nApós o pagamento, clique em "JÁ REALIZEI O PAGAMENTO" para liberar o download.`;
 
       if (confirm(confirmMsg)) {
-        // 🔥 ABRE O LINK DE PAGAMENTO DO MERCADO PAGO
         window.open(data.checkout_url, '_blank');
         
         modalBuyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aguardando pagamento...';
@@ -1989,7 +1984,6 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"><i class="fas fa-spinner"></i></span> Verificando...';
 
-    // 🔥 VERIFICA O PEDIDO PENDENTE
     const pendingData = localStorage.getItem('pendingMedia');
     
     if (!pendingData) {
@@ -2002,14 +1996,13 @@
     try {
       const pending = JSON.parse(pendingData);
       
-      // 🔥 CONSULTA O BACKEND PARA VERIFICAR O STATUS REAL DO PEDIDO
+      // 🔥 CONSULTA O BACKEND
       const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso/${pending.id}`);
       const data = await response.json();
 
       if (data.success) {
-        // 🔥 VERIFICA SE O PAGAMENTO FOI CONFIRMADO PELO WEBHOOK
         if (data.status === 'confirmado' || data.payment_status === 'approved' || data.isPaid === true) {
-          // ✅ PAGAMENTO CONFIRMADO - LIBERA O DOWNLOAD
+          // ✅ PAGAMENTO CONFIRMADO
           if (!downloadedItems.includes(item.id)) {
             downloadedItems.push(item.id);
             await saveDownloadedItems();
@@ -2023,7 +2016,7 @@
             
             downloadMedia(item);
             
-            alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.\n\nO download será iniciado automaticamente.`);
+            alert(`✅ Pagamento confirmado! "${item.title}" liberado para download.`);
             
             btn.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado!';
             btn.style.background = '#2E7D32';
@@ -2039,19 +2032,17 @@
             }, 5000);
           }
         } else {
-          // ⏳ PAGAMENTO AINDA NÃO CONFIRMADO
           alert(
             `⏳ Aguardando confirmação do pagamento.\n\n` +
-            `Status atual: ${data.status || 'pendente'}\n\n` +
-            `O pagamento pode levar alguns minutos para ser processado.\n\n` +
-            `Tente novamente em alguns minutos.`
+            `Status: ${data.status || 'pendente'}\n\n` +
+            `O pagamento pode levar alguns minutos. Tente novamente em alguns minutos.`
           );
           btn.disabled = false;
           btn.innerHTML = originalHTML;
-          updatePaymentStatus(`⏳ Status: ${data.status || 'pendente'} - Aguardando confirmação`, 'warning');
+          updatePaymentStatus(`⏳ Status: ${data.status || 'pendente'}`, 'warning');
         }
       } else {
-        alert('❌ Erro ao verificar o status do pedido: ' + (data.message || 'Tente novamente.'));
+        alert('❌ Erro ao verificar o status: ' + (data.message || 'Tente novamente.'));
         btn.disabled = false;
         btn.innerHTML = originalHTML;
       }
@@ -2065,14 +2056,13 @@
   }
 
   // ============================================================
-  // 🔥 VERIFICAÇÃO AUTOMÁTICA DE PAGAMENTO PENDENTE
+  // 🔥 VERIFICAÇÃO AUTOMÁTICA
   // ============================================================
   function checkPendingPurchase() {
     const pending = localStorage.getItem('pendingMedia');
     if (pending) {
       try {
         const data = JSON.parse(pending);
-        // Se passou mais de 30 minutos, remove
         if (Date.now() - data.timestamp > 30 * 60 * 1000) {
           localStorage.removeItem('pendingMedia');
           pendingPurchase = null;
@@ -2082,27 +2072,8 @@
           }
         } else {
           pendingPurchase = data;
-          // Se o modal estiver aberto, atualiza o status
           if (paymentStatus && modalOverlay.classList.contains('active')) {
-            // Tenta verificar o status automaticamente a cada 30 segundos
-            if (!window._checkingStatus) {
-              window._checkingStatus = true;
-              setTimeout(async () => {
-                try {
-                  const response = await fetch(`${API_BASE_URL}/api/pedidos/avulso/${data.id}`);
-                  const result = await response.json();
-                  if (result.success && (result.status === 'confirmado' || result.payment_status === 'approved')) {
-                    // Se o pagamento foi confirmado, recarrega a página ou chama confirmPayment()
-                    updatePaymentStatus('✅ Pagamento confirmado! Clique em "Já realizei o pagamento" para baixar.', 'success');
-                  } else {
-                    updatePaymentStatus(`⏳ Pedido #${data.id} - Aguardando pagamento`, 'warning');
-                  }
-                } catch (e) {
-                  console.log('⏳ Aguardando processamento do pagamento...');
-                }
-                window._checkingStatus = false;
-              }, 30000);
-            }
+            updatePaymentStatus(`⏳ Pedido #${data.id} - Aguardando pagamento`, 'warning');
           }
         }
       } catch (e) {
@@ -2174,25 +2145,27 @@
   // INICIALIZAÇÃO
   // ============================================================
   async function init() {
+    // Verifica login sem redirecionar
+    checkLoginStatus();
+    
     await loadMediaFromS3();
     checkPendingPurchase();
     
-    // Verifica a cada 10 segundos
     setInterval(checkPendingPurchase, 10000);
 
     console.log('📸 Galeria de Fotos e Vídeos carregada!');
     console.log(`📊 ${allMedia.filter(m => m.type === 'foto').length} fotos (R$ ${PHOTO_PRICE.toFixed(2)})`);
     console.log(`🎬 ${allMedia.filter(m => m.type === 'video').length} vídeos (R$ ${VIDEO_PRICE.toFixed(2)})`);
     console.log(`📥 ${downloadedItems.length} itens já baixados`);
+    console.log(`👤 Usuário: ${isLoggedIn ? 'Logado' : 'Visitante'}`);
     console.log('✅ Sistema de confirmação via webhook ativo!');
-    console.log('🔗 Rota: /api/pedidos/avulso');
   }
 
   // ============================================================
-  // INICIALIZAÇÃO COM AUTENTICAÇÃO
+  // INICIALIZAÇÃO
   // ============================================================
   document.addEventListener('DOMContentLoaded', function() {
-    checkSession();
+    init();
   });
 
   // ============================================================
